@@ -1,0 +1,35 @@
+public class TO_BASE {
+    /*@ public normal_behavior
+      @   requires b >= 1;
+      @   ensures b == 1 ==> \result.equals("0");
+      @   ensures b > 1 ==> \result != null;
+      @   pure
+      @*/
+    public static String to_base(int b) {
+        int num = (b + 200) / 3;
+        String result = "";
+        String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int i;
+        if(b == 1){
+            return "0";
+        }
+        /*@ maintaining num >= 0;
+          @ maintaining result != null;
+          @ decreasing num;
+          @*/
+        while (num > 0) {
+            i = num % b;
+            num = num / b;
+            result = result + String.valueOf(alphabet.charAt(i));
+        }
+
+        return result;
+    }
+}
+==============================
+tmp/TO_BASE.java:8: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static String to_base(int b) {
+                         ^
+1 verification failure
+
+==============================

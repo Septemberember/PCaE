@@ -1,0 +1,123 @@
+public class TO_BASE {
+    /*@ public normal_behavior
+      @   requires 1 <= b && b <= 36;
+      @   ensures (b == 1) ==> \result.equals("0");
+      @   ensures (b != 1) ==> (
+      @            \result.length() > 0
+      @         && (\forall int k; 0 <= k && k < \result.length();
+      @                \result.charAt(k)
+      @                  == ("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ").charAt(
+      @                       (int)(((\bigint)((b + 200) / 3) / \pow((\bigint)b, k)) % (\bigint)b)))
+      @         && ((\bigint)((b + 200) / 3) / \pow((\bigint)b, \result.length()) == 0)
+      @         && ((\bigint)((b + 200) / 3) / \pow((\bigint)b, \result.length() - 1) > 0)
+      @       );
+      @*/
+    public static String to_base(int b) {
+        int num = (b + 200) / 3;
+        /*@ ghost int origNum = num; @*/
+        String result = "";
+        String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int i;
+        if(b == 1){
+            return "0";
+        }
+        /*@ maintaining b > 1 && b <= 36;
+          @ maintaining result != null;
+          @ maintaining 0 <= num;
+          @ maintaining (\bigint)num == ((\bigint)origNum / \pow((\bigint)b, result.length()));
+          @ maintaining (\forall int k; 0 <= k && k < result.length();
+          @                result.charAt(k)
+          @                  == ("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ").charAt(
+          @                       (int)(((\bigint)origNum / \pow((\bigint)b, k)) % (\bigint)b)));
+          @ decreases num;
+          @*/
+        while (num > 0) {
+            i = num % b;
+            num = num / b;
+            result = result + String.valueOf(alphabet.charAt(i));
+        }
+
+        return result;
+    }
+}
+==============================
+tmp/TO_BASE.java:10: error: This backslash token is unknown: \pow
+      @                       (int)(((\bigint)((b + 200) / 3) / \pow((\bigint)b, k)) % (\bigint)b)))
+                                                                ^
+tmp/TO_BASE.java:11: error: This backslash token is unknown: \pow
+      @         && ((\bigint)((b + 200) / 3) / \pow((\bigint)b, \result.length()) == 0)
+                                               ^
+tmp/TO_BASE.java:12: error: This backslash token is unknown: \pow
+      @         && ((\bigint)((b + 200) / 3) / \pow((\bigint)b, \result.length() - 1) > 0)
+                                               ^
+tmp/TO_BASE.java:27: error: This backslash token is unknown: \pow
+          @ maintaining (\bigint)num == ((\bigint)origNum / \pow((\bigint)b, result.length()));
+                                                            ^
+tmp/TO_BASE.java:31: error: This backslash token is unknown: \pow
+          @                       (int)(((\bigint)origNum / \pow((\bigint)b, k)) % (\bigint)b)));
+                                                            ^
+5 errors
+
+==============================
+public class TO_BASE {
+    /*@ public normal_behavior
+      @   requires 1 <= b && b <= 36;
+      @   ensures (b == 1) ==> \result.equals("0");
+      @   ensures (b != 1) ==> (
+      @            \result.length() > 0
+      @         && (\forall int k; 0 <= k && k < \result.length();
+      @                \result.charAt(k)
+      @                  == ("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ").charAt(
+      @                       (int)(((\bigint)((b + 200) / 3) / \pow((\bigint)b, k)) % (\bigint)b)))
+      @         && ((\bigint)((b + 200) / 3) / \pow((\bigint)b, \result.length()) == 0)
+      @         && ((\bigint)((b + 200) / 3) / \pow((\bigint)b, \result.length() - 1) > 0)
+      @       );
+      @*/
+    public static String to_base(int b) {
+        int num = (b + 200) / 3;
+        /*@ ghost int origNum = num; @*/
+        String result = "";
+        String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int i;
+        if(b == 1){
+            return "0";
+        }
+        /*@ maintaining b > 1 && b <= 36;
+          @ maintaining result != null;
+          @ maintaining 0 <= num;
+          @ maintaining (\bigint)num == ((\bigint)origNum / \pow((\bigint)b, result.length()));  
+          @ maintaining (\forall int k; 0 <= k && k < result.length();
+          @                result.charAt(k)
+          @                  == ("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ").charAt(
+          @                       (int)(((\bigint)origNum / \pow((\bigint)b, k)) % (\bigint)b)));
+          @ decreases num;
+          @*/
+        while (num > 0) {
+            i = num % b;
+            num = num / b;
+            result = result + String.valueOf(alphabet.charAt(i));
+        }
+
+        return result;
+    }
+}
+
+==============================
+tmp/TO_BASE.java:10: error: This backslash token is unknown: \pow
+      @                       (int)(((\bigint)((b + 200) / 3) / \pow((\bigint)b, k)) % (\bigint)b)))
+                                                                ^
+tmp/TO_BASE.java:11: error: This backslash token is unknown: \pow
+      @         && ((\bigint)((b + 200) / 3) / \pow((\bigint)b, \result.length()) == 0)
+                                               ^
+tmp/TO_BASE.java:12: error: This backslash token is unknown: \pow
+      @         && ((\bigint)((b + 200) / 3) / \pow((\bigint)b, \result.length() - 1) > 0)
+                                               ^
+tmp/TO_BASE.java:27: error: This backslash token is unknown: \pow
+          @ maintaining (\bigint)num == ((\bigint)origNum / \pow((\bigint)b, result.length()));  
+                                                            ^
+tmp/TO_BASE.java:31: error: This backslash token is unknown: \pow
+          @                       (int)(((\bigint)origNum / \pow((\bigint)b, k)) % (\bigint)b)));
+                                                            ^
+5 errors
+
+==============================

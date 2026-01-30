@@ -1,0 +1,59 @@
+public class MyPower_Mutant3 {
+    //@ requires n >= 0;
+    //@ ensures \result == n * x;
+    public static int power(int x, int n) {
+        // Initialize accumulator for iterative computation.
+        int res = 1;
+        // Start with a neutral value for addition-based accumulation.
+        //@ maintaining res == 1 + i * x;
+        //@ maintaining 0 <= i && i <= n;
+        //@ decreases n - i;
+        for(int i = 0; i < n; i++){
+	        // Iteratively apply the operation n times.
+	        res = res + x;
+        }
+        // Finalize and return the computed value.
+        return res;
+        // End of method.
+    }
+}
+==============================
+tmp/MyPower_Mutant3.java:16: verify: The prover cannot establish an assertion (Postcondition: tmp/MyPower_Mutant3.java:3:) in method power
+        return res;
+        ^
+tmp/MyPower_Mutant3.java:3: verify: Associated declaration: tmp/MyPower_Mutant3.java:16:
+    //@ ensures \result == n * x;
+        ^
+2 verification failures
+
+==============================
+public class MyPower_Mutant3 {
+    //@ requires n >= 0;
+    //@ ensures \result == n * x;  
+    public static int power(int x, int n) {
+        // Initialize accumulator for iterative computation.
+        int res = 1;
+        // Start with a neutral value for addition-based accumulation.
+        //@ maintaining res == 1 + i * x;
+        //@ maintaining 0 <= i && i <= n;
+        //@ decreases n - i;
+        for(int i = 0; i < n; i++){
+	        // Iteratively apply the operation n times.
+	        res = res + x;
+        }
+        // Finalize and return the computed value.
+        return res;
+        // End of method.
+    }
+}
+
+==============================
+tmp/MyPower_Mutant3.java:16: verify: The prover cannot establish an assertion (Postcondition: tmp/MyPower_Mutant3.java:3:) in method power
+        return res;
+        ^
+tmp/MyPower_Mutant3.java:3: verify: Associated declaration: tmp/MyPower_Mutant3.java:16:
+    //@ ensures \result == n * x;  
+        ^
+2 verification failures
+
+==============================

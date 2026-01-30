@@ -1,0 +1,33 @@
+// GetUpCaseLoop_Mutant4: ASCII lowercase to uppercase conversion utility
+// This class provides a tiny, loop-based mapping from 'a'-'z' to 'A'-'Z'.
+// If the input is not a lowercase ASCII letter, the method returns 0 to indicate invalid input.
+// The getUpCase method uses a simple linear search over the uppercase alphabet.
+
+public class GetUpCaseLoop_Mutant4 {
+    /*@ public normal_behavior
+      @ requires Character.isLowerCase(c) && c >= 'a' && c <= 'z';
+      @ ensures \result == Character.toUpperCase(c);
+      @ also
+      @ public normal_behavior
+      @ requires !(Character.isLowerCase(c) && c >= 'a' && c <= 'z');
+      @ ensures \result == 0;
+      @*/
+    public static char getUpCase(char c) {
+        if(c < 'a' || c > 'z') {
+            return 0;
+        }
+        char t = 'A';
+        /*@ maintaining 'A' <= t && t <= 'Z' + 1;
+          @ maintaining (\forall char ch; 'A' <= ch && ch < t; 
+          @               ch != c - 'a' + 'A');
+          @ decreasing 'Z' - t + 1;
+          @*/
+        while(t <= 'Z' && t != c - 'a' + 'A') {
+            t++;
+        }
+        return t;
+    }
+}
+==============================
+TimeoutException
+==============================

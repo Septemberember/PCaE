@@ -1,0 +1,87 @@
+public class AddHalfSelf_Mutant4{
+    // Adjustment utility for the addHalfSelf method
+    // Computes the final value by adding an even-step based amount.
+    //@ ensures x >= 0 ==> \result == x + (x / 2);
+    //@ ensures x < 0 ==> \result == x - ((-x) / 2);
+    public static int addHalfSelf(int x){
+        int n = x;
+        // accumulator for total addition
+        int addNum = 0;
+        if(x < 0){
+            n = -x;
+        }
+        // Iterate while processing absolute value
+        //@ maintaining n >= 0;
+        //@ maintaining addNum == 2 * ((x < 0 ? -x : x) - n) / 2;
+        //@ decreases n;
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum += 2;
+            }
+            // advance to the next number
+            n--;
+        }
+        // Apply the accumulated adjustment based on sign
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+    // End of addHalfSelf logic
+}
+==============================
+tmp/AddHalfSelf_Mutant4.java:26: verify: The prover cannot establish an assertion (Postcondition: tmp/AddHalfSelf_Mutant4.java:5:) in method addHalfSelf
+            return x - addNum;
+            ^
+tmp/AddHalfSelf_Mutant4.java:5: verify: Associated declaration: tmp/AddHalfSelf_Mutant4.java:26:
+    //@ ensures x < 0 ==> \result == x - ((-x) / 2);
+        ^
+2 verification failures
+
+==============================
+public class AddHalfSelf_Mutant4{
+    // Adjustment utility for the addHalfSelf method
+    // Computes the final value by adding an even-step based amount.
+    //@ ensures x >= 0 ==> \result == x + (x / 2);
+    //@ ensures x < 0 ==> \result == x - ((-x) / 2);  
+    public static int addHalfSelf(int x){
+        int n = x;
+        // accumulator for total addition
+        int addNum = 0;
+        if(x < 0){
+            n = -x;
+        }
+        // Iterate while processing absolute value
+        //@ maintaining n >= 0;
+        //@ maintaining addNum == 2 * ((x < 0 ? -x : x) - n) / 2;
+        //@ decreases n;
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum += 2;
+            }
+            // advance to the next number
+            n--;
+        }
+        // Apply the accumulated adjustment based on sign
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+    // End of addHalfSelf logic
+}
+
+==============================
+tmp/AddHalfSelf_Mutant4.java:26: verify: The prover cannot establish an assertion (Postcondition: tmp/AddHalfSelf_Mutant4.java:5:) in method addHalfSelf
+            return x - addNum;
+            ^
+tmp/AddHalfSelf_Mutant4.java:5: verify: Associated declaration: tmp/AddHalfSelf_Mutant4.java:26:
+    //@ ensures x < 0 ==> \result == x - ((-x) / 2);  
+        ^
+2 verification failures
+
+==============================

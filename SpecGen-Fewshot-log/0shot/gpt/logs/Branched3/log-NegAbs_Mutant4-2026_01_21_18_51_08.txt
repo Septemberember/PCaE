@@ -1,0 +1,26 @@
+public class NegAbs_Mutant4 {
+    
+    // Absolute value computation without using Math.abs
+    /*@ public normal_behavior
+      @   ensures \result == (num > 0 ? num : -num);
+      @   ensures (num > 0) ==> (\result == num);
+      @   ensures (num <= 0) ==> (\result == -num);
+      @   assignable \nothing;
+      @   pure;
+      @*/
+    public static int negAbs(int num) {
+        // If the input is positive, return it unchanged
+        if (num > 0)
+            return num;
+        // For zero or negative input, negate to obtain the absolute value
+        else
+            return -num;
+    }
+}
+==============================
+tmp/NegAbs_Mutant4.java:9: error: Orphaned modifiers found before an empty declaration
+      @   pure;
+              ^
+1 error
+
+==============================

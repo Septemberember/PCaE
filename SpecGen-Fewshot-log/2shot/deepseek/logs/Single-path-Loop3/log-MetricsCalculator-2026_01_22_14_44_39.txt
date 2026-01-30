@@ -1,0 +1,117 @@
+public class MetricsCalculator {
+    //@ ensures \result == (double) ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + ( ( -26 + (the number of times limit was positive) ) % 10 ) + ( (value + 1) - (limit + 2) + ( ( (value + (value < 0 ? -1 : 1) ) % 3 ) * (the number of times limit was positive) + ( (the number of times limit was positive) * ( (the number of times limit was positive) + 1 ) ) / 2 ) ) + ( ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + value ) - limit ) );
+    public static double computeScore(int value, int limit) {
+        int result = 0;
+        int iteration = -26;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = -value;
+            polarity = polarity * -1;
+        }
+
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ maintaining limit >= 0 ==> (limit - value) / 2 < \old(limit);
+        //@ maintaining iteration == \old(iteration) + ( \old(limit) - limit );
+        //@ maintaining adjustment == \old(adjustment) + shift;
+        //@ maintaining shift == \old(shift) + 1;
+        //@ decreases limit;
+        while (limit > 0) {
+            limit = (limit - value) / 2;
+            iteration = iteration + 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = iteration % 10;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator.java:2: error: ',', ')', or '[' expected
+    //@ ensures \result == (double) ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + ( ( -26 + (the number of times limit was positive) ) % 10 ) + ( (value + 1) - (limit + 2) + ( ( (value + (value < 0 ? -1 : 1) ) % 3 ) * (the number of times limit was positive) + ( (the number of times limit was positive) * ( (the number of times limit was positive) + 1 ) ) / 2 ) ) + ( ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + value ) - limit ) );
+                                                                      ^
+tmp/MetricsCalculator.java:2: error: ')' expected
+    //@ ensures \result == (double) ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + ( ( -26 + (the number of times limit was positive) ) % 10 ) + ( (value + 1) - (limit + 2) + ( ( (value + (value < 0 ? -1 : 1) ) % 3 ) * (the number of times limit was positive) + ( (the number of times limit was positive) * ( (the number of times limit was positive) + 1 ) ) / 2 ) ) + ( ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + value ) - limit ) );
+                                                                         ^
+tmp/MetricsCalculator.java:2: error: Incorrectly formed or terminated ensures statement near here
+    //@ ensures \result == (double) ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + ( ( -26 + (the number of times limit was positive) ) % 10 ) + ( (value + 1) - (limit + 2) + ( ( (value + (value < 0 ? -1 : 1) ) % 3 ) * (the number of times limit was positive) + ( (the number of times limit was positive) * ( (the number of times limit was positive) + 1 ) ) / 2 ) ) + ( ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + value ) - limit ) );
+                                                                          ^
+3 errors
+
+==============================
+public class MetricsCalculator {
+    //@ ensures \result == (double) ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + ( ( -26 + (the number of times limit was positive) ) % 10 ) + ( (value + 1) + (limit + 2) + ( ( (value + (value < 0 ? -1 : 1) ) % 3 ) * (the number of times limit was positive) + ( (the number of times limit was positive) * ( (the number of times limit was positive) + 1 ) ) / 2 ) ) + ( ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + value ) + limit ) );  
+    public static double computeScore(int value, int limit) {
+        int result = 0;
+        int iteration = -26;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = -value;
+            polarity = polarity * -1;
+        }
+
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ maintaining limit >= 0 ==> (limit - value) / 2 < \old(limit);
+        //@ maintaining iteration == \old(iteration) + ( \old(limit) - limit );
+        //@ maintaining adjustment == \old(adjustment) + shift;
+        //@ maintaining shift == \old(shift) + 1;
+        //@ decreases limit;
+        while (limit > 0) {
+            limit = (limit - value) / 2;
+            iteration = iteration + 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = iteration % 10;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+
+==============================
+tmp/MetricsCalculator.java:2: error: ',', ')', or '[' expected
+    //@ ensures \result == (double) ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + ( ( -26 + (the number of times limit was positive) ) % 10 ) + ( (value + 1) + (limit + 2) + ( ( (value + (value < 0 ? -1 : 1) ) % 3 ) * (the number of times limit was positive) + ( (the number of times limit was positive) * ( (the number of times limit was positive) + 1 ) ) / 2 ) ) + ( ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + value ) + limit ) );  
+                                                                      ^
+tmp/MetricsCalculator.java:2: error: ')' expected
+    //@ ensures \result == (double) ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + ( ( -26 + (the number of times limit was positive) ) % 10 ) + ( (value + 1) + (limit + 2) + ( ( (value + (value < 0 ? -1 : 1) ) % 3 ) * (the number of times limit was positive) + ( (the number of times limit was positive) * ( (the number of times limit was positive) + 1 ) ) / 2 ) ) + ( ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + value ) + limit ) );  
+                                                                         ^
+tmp/MetricsCalculator.java:2: error: Incorrectly formed or terminated ensures statement near here
+    //@ ensures \result == (double) ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + ( ( -26 + (the number of times limit was positive) ) % 10 ) + ( (value + 1) + (limit + 2) + ( ( (value + (value < 0 ? -1 : 1) ) % 3 ) * (the number of times limit was positive) + ( (the number of times limit was positive) * ( (the number of times limit was positive) + 1 ) ) / 2 ) ) + ( ( (value / ( ( ( -26 + (the number of times limit was positive) ) % 10 ) ) ) + value ) + limit ) );  
+                                                                          ^
+3 errors
+
+==============================

@@ -1,0 +1,107 @@
+public class WaterFee_Mutant3 {
+    // This class provides a simple fee calculation based on water consumption.
+    /*@ public normal_behavior
+      @   // Prevent overflow in the returned int value for large positive inputs.
+      @   requires tons <= 429496733;
+      @   assignable \nothing;
+      @   ensures (tons <= 0) ==> (\result == 0);
+      @   ensures (0 < tons && tons <= 3) ==> (\result == tons);
+      @   ensures (3 < tons && tons <= 10) ==> (\result == 4 * tons - 9);
+      @   ensures (10 < tons) ==> (\result == 5 * tons - 19);
+      @   ensures \result >= 0;
+      @*/
+    public static int calcWaterFee(int tons) {
+        // Use a local copy to avoid modifying the input parameter directly
+        int n = tons;
+
+        // Track the accumulated fee
+        int fee = 0;
+
+        // Iterate per ton to compute fee with tiered pricing
+        /*@ maintaining (tons <= 0) ==> (fee == 0 && n == tons);
+          @ maintaining (tons > 0) ==> (0 <= n && n <= tons);
+          @ maintaining fee >= 0;
+          @ maintaining fee ==
+          @   (tons <= 0
+          @     ? 0
+          @     : (\sum int k; n < k && k <= tons;
+          @            (k > 10 ? 5 : (k > 3 ? 4 : 1))));
+          @ decreases n;
+          @*/
+        while (n > 0) {
+            if (n > 10) {
+                fee += 5;
+            } else if (n > 3) {
+                fee += 4;
+            } else {
+                fee += 1;
+            }
+            // Move to the next ton
+            n--;
+        }
+
+        // Return the computed total fee
+        return fee;
+    }
+}
+==============================
+tmp/WaterFee_Mutant3.java:24: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method calcWaterFee
+          @ maintaining fee ==
+            ^
+1 verification failure
+
+==============================
+public class WaterFee_Mutant3 {
+    // This class provides a simple fee calculation based on water consumption.
+    /*@ public normal_behavior
+      @   // Prevent overflow in the returned int value for large positive inputs.
+      @   requires tons <= 429496733;
+      @   assignable \nothing;
+      @   ensures (tons <= 0) ==> (\result == 0);
+      @   ensures (0 < tons && tons <= 3) ==> (\result == tons);
+      @   ensures (3 < tons && tons <= 10) ==> (\result == 4 * tons - 9);
+      @   ensures (10 < tons) ==> (\result == 5 * tons - 19);
+      @   ensures \result >= 0;
+      @*/
+    public static int calcWaterFee(int tons) {
+        // Use a local copy to avoid modifying the input parameter directly
+        int n = tons;
+
+        // Track the accumulated fee
+        int fee = 0;
+
+        // Iterate per ton to compute fee with tiered pricing
+        /*@ maintaining (tons <= 0) ==> (fee == 0 && n == tons);
+          @ maintaining (tons > 0) ==> (0 <= n && n <= tons);
+          @ maintaining fee >= 0;
+          @ maintaining fee ==  
+          @   (tons <= 0
+          @     ? 0
+          @     : (\sum int k; n < k && k <= tons;
+          @            (k > 10 ? 5 : (k > 3 ? 4 : 1))));
+          @ decreases n;
+          @*/
+        while (n > 0) {
+            if (n > 10) {
+                fee += 5;
+            } else if (n > 3) {
+                fee += 4;
+            } else {
+                fee += 1;
+            }
+            // Move to the next ton
+            n--;
+        }
+
+        // Return the computed total fee
+        return fee;
+    }
+}
+
+==============================
+tmp/WaterFee_Mutant3.java:24: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method calcWaterFee
+          @ maintaining fee ==  
+            ^
+1 verification failure
+
+==============================

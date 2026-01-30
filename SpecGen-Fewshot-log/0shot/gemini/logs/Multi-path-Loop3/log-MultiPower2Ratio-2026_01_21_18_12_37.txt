@@ -1,0 +1,94 @@
+public class MultiPower2Ratio {
+    /*@ public normal_behavior
+      @   requires sum + tmpFactor != 0;
+      @   ensures \result == ((x * y) / ((\old(sum) < 0 ? -\old(sum) : \old(sum)) + \old(tmpFactor))) * \old(tmpFactor);
+      @   assignable \nothing;
+      @*/
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            /*@ maintaining n >= 0;
+              @ maintaining factor >= 1;
+              @ decreasing n;
+              @*/
+            while (n > 0) {
+                sum = sum + 1;
+                n = n / 2;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            /*@ maintaining n >= 0;
+              @ maintaining factor >= 1;
+              @ decreasing n;
+              @*/
+            while (n > 0) {
+                sum = sum - 1;
+                n = n / 2;
+                factor += n;
+            }
+        }
+        int tmpFactor = 1;
+        /*@ maintaining factor >= 0;
+          @ maintaining tmpFactor >= 1;
+          @ decreasing factor;
+          @*/
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        if(sum < 0){
+            sum = sum * -1;
+        }
+        sum = sum + tmpFactor;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+==============================
+tmp/MultiPower2Ratio.java:3: error: cannot find symbol
+      @   requires sum + tmpFactor != 0;
+                   ^
+  symbol:   variable sum
+  location: class MultiPower2Ratio
+tmp/MultiPower2Ratio.java:3: error: cannot find symbol
+      @   requires sum + tmpFactor != 0;
+                         ^
+  symbol:   variable tmpFactor
+  location: class MultiPower2Ratio
+tmp/MultiPower2Ratio.java:4: error: cannot find symbol
+      @   ensures \result == ((x * y) / ((\old(sum) < 0 ? -\old(sum) : \old(sum)) + \old(tmpFactor))) * \old(tmpFactor);
+                                               ^
+  symbol:   variable sum
+  location: class MultiPower2Ratio
+tmp/MultiPower2Ratio.java:4: error: cannot find symbol
+      @   ensures \result == ((x * y) / ((\old(sum) < 0 ? -\old(sum) : \old(sum)) + \old(tmpFactor))) * \old(tmpFactor);
+                                                                ^
+  symbol:   variable sum
+  location: class MultiPower2Ratio
+tmp/MultiPower2Ratio.java:4: error: cannot find symbol
+      @   ensures \result == ((x * y) / ((\old(sum) < 0 ? -\old(sum) : \old(sum)) + \old(tmpFactor))) * \old(tmpFactor);
+                                                                            ^
+  symbol:   variable sum
+  location: class MultiPower2Ratio
+tmp/MultiPower2Ratio.java:4: error: cannot find symbol
+      @   ensures \result == ((x * y) / ((\old(sum) < 0 ? -\old(sum) : \old(sum)) + \old(tmpFactor))) * \old(tmpFactor);
+                                                                                         ^
+  symbol:   variable tmpFactor
+  location: class MultiPower2Ratio
+tmp/MultiPower2Ratio.java:4: error: cannot find symbol
+      @   ensures \result == ((x * y) / ((\old(sum) < 0 ? -\old(sum) : \old(sum)) + \old(tmpFactor))) * \old(tmpFactor);
+                                                                                                             ^
+  symbol:   variable tmpFactor
+  location: class MultiPower2Ratio
+7 errors
+
+==============================

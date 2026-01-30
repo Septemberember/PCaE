@@ -1,0 +1,41 @@
+public class AltitudeController_Mutant1 {
+    // Mutation note: addition-based error calculation.
+    // This variant preserves behavior while increasing source line count through comments.
+    /*@ public normal_behavior
+      @   // Prevent overflow in computing: error = targetHeight + currentHeight
+      @   requires (long)targetHeight + (long)currentHeight <= Integer.MAX_VALUE
+      @         && (long)targetHeight + (long)currentHeight >= Integer.MIN_VALUE;
+      @   // Prevent overflow in computing absError when error == Integer.MIN_VALUE (since -error would overflow)
+      @   requires targetHeight + currentHeight != Integer.MIN_VALUE;
+      @   assignable \nothing;
+      @   ensures (\let int error = targetHeight + currentHeight;
+      @            \let int absError = (error < 0 ? -error : error);
+      @              (absError > 30 ==> \result == (error > 0 ? 5 : -5))
+      @           && (absError <= 30 && absError > 20 ==> \result == (error > 0 ? 3 : -3))
+      @           && (absError <= 20 && absError > 10 ==> \result == (error > 0 ? 2 : -2))
+      @           && (absError <= 10 ==> \result == error));
+      @*/
+    public static int altitudeController(int currentHeight,int targetHeight) {
+        // Mutation detail: error is computed using addition (targetHeight + currentHeight) instead of subtraction.
+        // This comment clarifies the intentional mutation for line-count purposes.
+        // The rest of the logic remains unchanged.
+        int error = targetHeight + currentHeight; //Changed subtraction to addition
+        int absError = 0;
+        absError = error < 0 ? -error : error;
+        int controlSignal = 0;
+        if (absError > 30) {
+            controlSignal = error > 0 ? 5 : -5;
+        } else if (absError > 20) {
+            controlSignal = error > 0 ? 3 : -3;
+        } else if (absError > 10) {
+            controlSignal = error > 0 ? 2 : -2;
+        } else {
+            controlSignal = error;
+        }
+        return controlSignal;
+        // End of altitudeController execution.
+    }
+}
+==============================
+
+==============================

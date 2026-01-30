@@ -1,0 +1,327 @@
+public class FlowCalculator {
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures \result ==
+      @     (\let int p = pressure;
+      @      \let int r = rate;
+      @      \let int a0 = 2*p + 15; /* after: adjusted+=7; adjusted*=2; adjusted-=3; adjusted+=4 */
+      @
+      @      (a0 > 40)
+      @        ? ( /* adjusted path: a0 + 6 */
+      @            (r >= 5)
+      @              ? ( /* adjusted path: a0 + 6 + r, then maybe +8 depending on pressure */
+      @                  (p <= 14)
+      @                    ? ( /* stable == true */
+      @                        (\let int aFinal = (a0 + 6 + r);
+      @                         \let double flow0 = ((double)aFinal) / (r - 5);
+      @                         \let double flow1 = (flow0 > 80.0d ? flow0 * 0.9d : flow0 + 10.0d);
+      @                         flow1 * 1.1d + aFinal * 0.05d)
+      @                      )
+      @                    : ( /* stable == false */
+      @                        (\let int aFinal = (a0 + 6 + r + 8);
+      @                         \let double flow0 = aFinal * 0.95d;
+      @                         \let double flow1 = (flow0 > 80.0d ? flow0 * 0.9d : flow0 + 10.0d);
+      @                         flow1 * 0.85d + aFinal * 0.05d)
+      @                      )
+      @                )
+      @              : ( /* r < 5, stable == false, adjusted path: a0 + 6 - 4 */
+      @                  (\let int aFinal = (a0 + 6 - 4);
+      @                   \let double flow1 = aFinal * 1.1d;
+      @                   flow1 * 0.85d + aFinal * 0.05d)
+      @                )
+      @          )
+      @        : ( /* a0 <= 40, adjusted path: a0 - 6, then maybe +5 depending on rate */
+      @            (r < 3)
+      @              ? ( /* stable == true */
+      @                  (\let int aFinal = (a0 - 6 + 5);
+      @                   \let double flow0 = aFinal * 0.7d;
+      @                   \let double flow1 = (flow0 < 20.0d ? flow0 + 5.0d : flow0 * 0.95d);
+      @                   flow1 * 1.1d + aFinal * 0.05d)
+      @                )
+      @              : ( /* stable == false */
+      @                  (\let int aFinal = (a0 - 6);
+      @                   \let double flow0 = aFinal * 0.8d;
+      @                   \let double flow1 = (flow0 < 20.0d ? flow0 + 5.0d : flow0 * 0.95d);
+      @                   flow1 * 0.85d + aFinal * 0.05d)
+      @                )
+      @          )
+      @     );
+      @*/
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure ;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+        int sheld = 14;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure <= sheld) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+tmp/FlowCalculator.java:8: error: Block comments may not be embedded inside JML block comments
+      @      \let int a0 = 2*p + 15; /* after: adjusted+=7; adjusted*=2; adjusted-=3; adjusted+=4 */
+                                     ^
+tmp/FlowCalculator.java:8: error: The type or expression near here is invalid (or not implemented): ( token ? in JmlParser.term3())
+      @      \let int a0 = 2*p + 15; /* after: adjusted+=7; adjusted*=2; adjusted-=3; adjusted+=4 */
+                                                                                                  ^
+tmp/FlowCalculator.java:9: error: <identifier> expected
+      @
+       ^
+tmp/FlowCalculator.java:10: error: <identifier> expected
+      @      (a0 > 40)
+       ^
+tmp/FlowCalculator.java:11: error: <identifier> expected
+      @        ? ( /* adjusted path: a0 + 6 */
+       ^
+tmp/FlowCalculator.java:12: error: <identifier> expected
+      @            (r >= 5)
+       ^
+tmp/FlowCalculator.java:13: error: <identifier> expected
+      @              ? ( /* adjusted path: a0 + 6 + r, then maybe +8 depending on pressure */
+       ^
+tmp/FlowCalculator.java:13: error: illegal start of expression
+      @              ? ( /* adjusted path: a0 + 6 + r, then maybe +8 depending on pressure */
+                     ^
+tmp/FlowCalculator.java:14: error: <identifier> expected
+      @                  (p <= 14)
+       ^
+tmp/FlowCalculator.java:15: error: <identifier> expected
+      @                    ? ( /* stable == true */
+       ^
+tmp/FlowCalculator.java:15: error: illegal start of expression
+      @                    ? ( /* stable == true */
+                           ^
+tmp/FlowCalculator.java:16: error: illegal character: '\'
+      @                        (\let int aFinal = (a0 + 6 + r);
+                                ^
+tmp/FlowCalculator.java:17: error: illegal character: '\'
+      @                         \let double flow0 = ((double)aFinal) / (r - 5);
+                                ^
+tmp/FlowCalculator.java:17: error: Method specs may not precede a variable declaration
+      @                         \let double flow0 = ((double)aFinal) / (r - 5);
+                                            ^
+tmp/FlowCalculator.java:18: error: illegal character: '\'
+      @                         \let double flow1 = (flow0 > 80.0d ? flow0 * 0.9d : flow0 + 10.0d);
+                                ^
+tmp/FlowCalculator.java:19: error: illegal start of type
+      @                         flow1 * 1.1d + aFinal * 0.05d)
+                                      ^
+tmp/FlowCalculator.java:19: error: <identifier> expected
+      @                         flow1 * 1.1d + aFinal * 0.05d)
+                                                     ^
+tmp/FlowCalculator.java:20: error: <identifier> expected
+      @                      )
+       ^
+tmp/FlowCalculator.java:20: error: illegal start of type
+      @                      )
+                             ^
+tmp/FlowCalculator.java:21: error: <identifier> expected
+      @                    : ( /* stable == false */
+       ^
+tmp/FlowCalculator.java:21: error: illegal start of type
+      @                    : ( /* stable == false */
+                           ^
+tmp/FlowCalculator.java:22: error: <identifier> expected
+      @                        (\let int aFinal = (a0 + 6 + r + 8);
+       ^
+tmp/FlowCalculator.java:22: error: illegal character: '\'
+      @                        (\let int aFinal = (a0 + 6 + r + 8);
+                                ^
+tmp/FlowCalculator.java:23: error: illegal character: '\'
+      @                         \let double flow0 = aFinal * 0.95d;
+                                ^
+tmp/FlowCalculator.java:24: error: illegal character: '\'
+      @                         \let double flow1 = (flow0 > 80.0d ? flow0 * 0.9d : flow0 + 10.0d);
+                                ^
+tmp/FlowCalculator.java:25: error: illegal start of type
+      @                         flow1 * 0.85d + aFinal * 0.05d)
+                                      ^
+tmp/FlowCalculator.java:25: error: <identifier> expected
+      @                         flow1 * 0.85d + aFinal * 0.05d)
+                                                      ^
+tmp/FlowCalculator.java:26: error: <identifier> expected
+      @                      )
+       ^
+tmp/FlowCalculator.java:26: error: illegal start of type
+      @                      )
+                             ^
+tmp/FlowCalculator.java:27: error: <identifier> expected
+      @                )
+       ^
+tmp/FlowCalculator.java:27: error: illegal start of type
+      @                )
+                       ^
+tmp/FlowCalculator.java:28: error: <identifier> expected
+      @              : ( /* r < 5, stable == false, adjusted path: a0 + 6 - 4 */
+       ^
+tmp/FlowCalculator.java:28: error: illegal start of type
+      @              : ( /* r < 5, stable == false, adjusted path: a0 + 6 - 4 */
+                     ^
+tmp/FlowCalculator.java:29: error: <identifier> expected
+      @                  (\let int aFinal = (a0 + 6 - 4);
+       ^
+tmp/FlowCalculator.java:29: error: illegal character: '\'
+      @                  (\let int aFinal = (a0 + 6 - 4);
+                          ^
+tmp/FlowCalculator.java:30: error: illegal character: '\'
+      @                   \let double flow1 = aFinal * 1.1d;
+                          ^
+tmp/FlowCalculator.java:31: error: illegal start of type
+      @                   flow1 * 0.85d + aFinal * 0.05d)
+                                ^
+tmp/FlowCalculator.java:31: error: <identifier> expected
+      @                   flow1 * 0.85d + aFinal * 0.05d)
+                                                ^
+tmp/FlowCalculator.java:32: error: <identifier> expected
+      @                )
+       ^
+tmp/FlowCalculator.java:32: error: illegal start of type
+      @                )
+                       ^
+tmp/FlowCalculator.java:33: error: <identifier> expected
+      @          )
+       ^
+tmp/FlowCalculator.java:33: error: illegal start of type
+      @          )
+                 ^
+tmp/FlowCalculator.java:34: error: <identifier> expected
+      @        : ( /* a0 <= 40, adjusted path: a0 - 6, then maybe +5 depending on rate */
+       ^
+tmp/FlowCalculator.java:34: error: illegal start of type
+      @        : ( /* a0 <= 40, adjusted path: a0 - 6, then maybe +5 depending on rate */
+               ^
+tmp/FlowCalculator.java:35: error: <identifier> expected
+      @            (r < 3)
+       ^
+tmp/FlowCalculator.java:36: error: <identifier> expected
+      @              ? ( /* stable == true */
+       ^
+tmp/FlowCalculator.java:36: error: illegal start of type
+      @              ? ( /* stable == true */
+                     ^
+tmp/FlowCalculator.java:37: error: <identifier> expected
+      @                  (\let int aFinal = (a0 - 6 + 5);
+       ^
+tmp/FlowCalculator.java:37: error: illegal character: '\'
+      @                  (\let int aFinal = (a0 - 6 + 5);
+                          ^
+tmp/FlowCalculator.java:38: error: illegal character: '\'
+      @                   \let double flow0 = aFinal * 0.7d;
+                          ^
+tmp/FlowCalculator.java:39: error: illegal character: '\'
+      @                   \let double flow1 = (flow0 < 20.0d ? flow0 + 5.0d : flow0 * 0.95d);
+                          ^
+tmp/FlowCalculator.java:40: error: illegal start of type
+      @                   flow1 * 1.1d + aFinal * 0.05d)
+                                ^
+tmp/FlowCalculator.java:40: error: <identifier> expected
+      @                   flow1 * 1.1d + aFinal * 0.05d)
+                                               ^
+tmp/FlowCalculator.java:41: error: <identifier> expected
+      @                )
+       ^
+tmp/FlowCalculator.java:41: error: illegal start of type
+      @                )
+                       ^
+tmp/FlowCalculator.java:42: error: <identifier> expected
+      @              : ( /* stable == false */
+       ^
+tmp/FlowCalculator.java:42: error: illegal start of type
+      @              : ( /* stable == false */
+                     ^
+tmp/FlowCalculator.java:43: error: <identifier> expected
+      @                  (\let int aFinal = (a0 - 6);
+       ^
+tmp/FlowCalculator.java:43: error: illegal character: '\'
+      @                  (\let int aFinal = (a0 - 6);
+                          ^
+tmp/FlowCalculator.java:44: error: illegal character: '\'
+      @                   \let double flow0 = aFinal * 0.8d;
+                          ^
+tmp/FlowCalculator.java:45: error: illegal character: '\'
+      @                   \let double flow1 = (flow0 < 20.0d ? flow0 + 5.0d : flow0 * 0.95d);
+                          ^
+tmp/FlowCalculator.java:46: error: illegal start of type
+      @                   flow1 * 0.85d + aFinal * 0.05d)
+                                ^
+tmp/FlowCalculator.java:46: error: <identifier> expected
+      @                   flow1 * 0.85d + aFinal * 0.05d)
+                                                ^
+tmp/FlowCalculator.java:47: error: <identifier> expected
+      @                )
+       ^
+tmp/FlowCalculator.java:47: error: illegal start of type
+      @                )
+                       ^
+tmp/FlowCalculator.java:48: error: <identifier> expected
+      @          )
+       ^
+tmp/FlowCalculator.java:48: error: illegal start of type
+      @          )
+                 ^
+tmp/FlowCalculator.java:49: error: <identifier> expected
+      @     );
+       ^
+tmp/FlowCalculator.java:49: error: illegal start of type
+      @     );
+            ^
+tmp/FlowCalculator.java:50: error: <identifier> expected
+      @*/
+       ^
+70 errors
+
+==============================

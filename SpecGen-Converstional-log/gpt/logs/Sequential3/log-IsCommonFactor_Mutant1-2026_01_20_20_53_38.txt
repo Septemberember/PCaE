@@ -1,0 +1,37 @@
+public class IsCommonFactor_Mutant1 {
+
+    //@ requires factor != 0;
+    //@ ensures \result <==> (a % factor == 0 && b % factor == 0);
+    public static boolean isCommonFactor(int a, int b, int factor) {
+        return a % factor == 0 || b % factor == 0; // changed from '&&' to '||'
+    }
+}
+==============================
+tmp/IsCommonFactor_Mutant1.java:6: verify: The prover cannot establish an assertion (Postcondition: tmp/IsCommonFactor_Mutant1.java:4:) in method isCommonFactor
+        return a % factor == 0 || b % factor == 0; // changed from '&&' to '||'
+        ^
+tmp/IsCommonFactor_Mutant1.java:4: verify: Associated declaration: tmp/IsCommonFactor_Mutant1.java:6:
+    //@ ensures \result <==> (a % factor == 0 && b % factor == 0);
+        ^
+2 verification failures
+
+==============================
+public class IsCommonFactor_Mutant1 {
+
+    //@ requires factor != 0;
+    //@ ensures \result <==> (a % factor == 0 && b % factor == 0);  
+    public static boolean isCommonFactor(int a, int b, int factor) {
+        return a % factor == 0 || b % factor == 0; // changed from '&&' to '||'
+    }
+}
+
+==============================
+tmp/IsCommonFactor_Mutant1.java:6: verify: The prover cannot establish an assertion (Postcondition: tmp/IsCommonFactor_Mutant1.java:4:) in method isCommonFactor
+        return a % factor == 0 || b % factor == 0; // changed from '&&' to '||'
+        ^
+tmp/IsCommonFactor_Mutant1.java:4: verify: Associated declaration: tmp/IsCommonFactor_Mutant1.java:6:
+    //@ ensures \result <==> (a % factor == 0 && b % factor == 0);  
+        ^
+2 verification failures
+
+==============================

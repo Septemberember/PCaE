@@ -1,0 +1,27 @@
+start role user
+Please generate an FSF for the program below:
+```
+/**** Simple parity utility for DivisorGame_Mutant4. */
+public class DivisorGame_Mutant4 {
+    // Entry point: computes parity of n
+    public static int divisorGame(int n) {
+        // Parity: 0 if even, 1 if odd
+        return n % 2;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: n % 2 == 0
+D1: return_value == 0
+
+T2: n % 2 == 1 || n % 2 == -1
+D2: return_value == n % 2
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

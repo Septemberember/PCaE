@@ -1,0 +1,331 @@
+import java.util.*;
+public class MixCollectSum_2 {
+    //@ ensures \result >= 0;
+    //@ ensures \result <= Integer.MAX_VALUE;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        //@ assume x <= 3000 ==> x == \old(x);
+        //@ assume x > 3000 ==> x == 3000;
+        if(x > 3000){
+            x = 3000;
+        }
+        //@ maintaining x >= 1000 ==> x <= 3000;
+        //@ maintaining x >= 1000 ==> x <= \old(x);
+        //@ maintaining x >= 1000 ==> (\forall int i; 0 <= i && i < list.size(); list.get(i) == \old(x) - 100*(i+1));
+        //@ maintaining x >= 1000 ==> list.size() == (\old(x) - x)/100;
+        //@ decreases x - 1000;
+        while(x >= 1000){
+           if(x == 1000){
+               sum = tmp / x;
+           }
+           x = x - 100;
+           list.add(x);
+        }
+        //@ maintaining 0 <= \count && \count <= list.size();
+        //@ maintaining sum == (\sum int i; 0 <= i && i < \count; list.get(i));
+        //@ decreases list.size() - \count;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+tmp/MixCollectSum_2.java:28: error: variable i is already defined in method mixSum(int)
+        //@ maintaining sum == (\sum int i; 0 <= i && i < \count; list.get(i));
+                                         ^
+1 error
+
+==============================
+import java.util.*;
+public class MixCollectSum_2 {
+    //@ ensures \result >= 0;
+    //@ ensures \result <= Integer.MAX_VALUE;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        //@ assume x <= 3000 ==> x == \old(x);
+        //@ assume x > 3000 ==> x == 3000;
+        if(x > 3000){
+            x = 3000;
+        }
+        //@ maintaining x >= 1000 ==> x <= 3000;
+        //@ maintaining x >= 1000 ==> x <= \old(x);
+        //@ maintaining x >= 1000 ==> (\forall int j; 0 <= j && j < list.size(); list.get(j) == \old(x) - 100*(j+1));
+        //@ maintaining x >= 1000 ==> list.size() == (\old(x) - x)/100;
+        //@ decreases x - 1000;
+        while(x >= 1000){
+           if(x == 1000){
+               sum = tmp / x;
+           }
+           x = x - 100;
+           list.add(x);
+        }
+        //@ maintaining 0 <= \count && \count <= list.size();
+        //@ maintaining sum == (\sum int j; 0 <= j && j < \count; list.get(j));
+        //@ decreases list.size() - \count;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+TimeoutException
+==============================
+import java.util.*;
+public class MixCollectSum_2 {
+    //@ ensures \result >= 0;
+    //@ ensures \old(x) < 1000 ==> \result == 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        //@ ghost int x0;
+        if(x > 3000){
+            x = 3000;
+        }
+        //@ set x0 = x;
+        //@ maintaining x >= 1000 ==> x == x0 - 100 * list.size();
+        //@ maintaining x >= 1000 ==> (\forall int i; 0 <= i && i < list.size(); list.get(i) == x0 - 100*(i+1));
+        //@ maintaining x >= 1000 ==> list.size() == (x0 - x)/100;
+        //@ decreases x - 1000;
+        while(x >= 1000){
+           if(x == 1000){
+               sum = tmp / x;
+           }
+           x = x - 100;
+           list.add(x);
+        }
+        //@ maintaining sum == (\sum int j; 0 <= j && j < \count; list.get(j));
+        //@ decreases list.size() - \count;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+TimeoutException
+==============================
+import java.util.*;
+public class MixCollectSum_2 {
+    //@ ensures \result >= 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 3000){
+            x = 3000;
+        }
+        //@ maintaining x >= 1000 ==> x == \old(x) - 100 * list.size();
+        //@ maintaining x >= 1000 ==> (\forall int j; 0 <= j && j < list.size(); list.get(j) == \old(x) - 100*(j+1));
+        //@ decreases x - 1000;
+        while(x >= 1000){
+           if(x == 1000){
+               sum = tmp / x;
+           }
+           x = x - 100;
+           list.add(x);
+        }
+        //@ maintaining 0 <= \count && \count <= list.size();
+        //@ maintaining sum == (\sum int j; 0 <= j && j < \count; list.get(j));
+        //@ decreases list.size() - \count;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+TimeoutException
+==============================
+import java.util.*;
+public class MixCollectSum_2 {
+    //@ ensures \result >= 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 3000){
+            x = 3000;
+        }
+        //@ maintaining x >= 1000;
+        //@ decreases x - 1000;
+        while(x >= 1000){
+           if(x == 1000){
+               sum = tmp / x;
+           }
+           x = x - 100;
+           list.add(x);
+        }
+        //@ maintaining sum >= 0;
+        //@ decreases list.size() - \count;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+TimeoutException
+==============================
+import java.util.*;
+public class MixCollectSum_2 {
+    //@ ensures \result >= 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 3000){
+            x = 3000;
+        }
+        //@ loop_invariant x >= 1000;
+        //@ decreases x - 1000;
+        while(x >= 1000){
+           if(x == 1000){
+               sum = tmp / x;
+           }
+           x = x - 100;
+           list.add(x);
+        }
+        //@ loop_invariant sum >= 0;
+        //@ decreases list.size() - \count;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+TimeoutException
+==============================
+import java.util.*;
+public class MixCollectSum_2 {
+    //@ ensures \result >= 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 3000){
+            x = 3000;
+        }
+        //@ maintaining x >= 1000;
+        //@ decreasing x;
+        while(x >= 1000){
+           if(x == 1000){
+               sum = tmp / x;
+           }
+           x = x - 100;
+           list.add(x);
+        }
+        //@ maintaining sum >= 0;
+        //@ decreasing list.size() - \count;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+TimeoutException
+==============================
+import java.util.*;
+public class MixCollectSum_2 {
+    //@ ensures \result >= 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 3000){
+            x = 3000;
+        }
+        //@ loop_invariant true;
+        //@ decreases x;
+        while(x >= 1000){
+           if(x == 1000){
+               sum = tmp / x;
+           }
+           x = x - 100;
+           list.add(x);
+        }
+        //@ loop_invariant true;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+TimeoutException
+==============================
+import java.util.*;
+public class MixCollectSum_2 {
+    //@ ensures \result >= 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 3000){
+            x = 3000;
+        }
+        //@ loop_invariant x >= 1000;
+        //@ decreases x;
+        while(x >= 1000){
+           if(x == 1000){
+               sum = tmp / x;
+           }
+           x = x - 100;
+           list.add(x);
+        }
+        //@ loop_invariant sum >= 0;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+TimeoutException
+==============================
+import java.util.*;
+public class MixCollectSum_2 {
+    //@ ensures \result >= 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 3000){
+            x = 3000;
+        }
+        //@ maintaining x >= 1000;
+        while(x >= 1000){
+           if(x == 1000){
+               sum = tmp / x;
+           }
+           x = x - 100;
+           list.add(x);
+        }
+        //@ maintaining sum >= 0;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+TimeoutException
+==============================

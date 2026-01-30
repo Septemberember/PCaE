@@ -1,0 +1,172 @@
+public class TO_BASE {
+    /*@ public normal_behavior
+      @   requires 1 <= b && b <= 36;
+      @   ensures (b == 1) ==> \result.equals("0");
+      @   ensures (b != 1) ==> \result.length() > 0;
+      @   ensures (\forall int k; 0 <= k && k < \result.length();
+      @               (\exists int j; 0 <= j && j < b;
+      @                   \result.charAt(k) == "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(j)));
+      @*/
+    public static String to_base(int b) {
+        int num = (b + 200) / 3;
+        String result = "";
+        String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int i;
+        if(b == 1){
+            return "0";
+        }
+        /*@ maintaining b >= 2;
+          @ maintaining num >= 0;
+          @ maintaining result != null;
+          @ maintaining (\forall int k; 0 <= k && k < result.length();
+          @                 (\exists int j; 0 <= j && j < b;
+          @                     result.charAt(k) == alphabet.charAt(j)));
+          @ decreases num;
+          @*/
+        while (num > 0) {
+            i = num % b;
+            num = num / b;
+            result = result + String.valueOf(alphabet.charAt(i));
+        }
+
+        return result;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class TO_BASE {
+    /*@ public normal_behavior
+      @   requires 1 <= b && b <= 36;
+      @   ensures \result != null;
+      @   ensures (b == 1) ==> \result.equals("0");
+      @   ensures (b != 1) ==> \result.length() >= 0;
+      @*/
+    public static String to_base(int b) {
+        int num = (b + 200) / 3;
+        String result = "";
+        String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int i;
+        if(b == 1){
+            return "0";
+        }
+        /*@ maintaining num >= 0;
+          @ maintaining result != null;
+          @ decreases num;
+          @*/
+        while (num > 0) {
+            i = num % b;
+            num = num / b;
+            result = result + String.valueOf(alphabet.charAt(i));
+        }
+
+        return result;
+    }
+}
+==============================
+tmp/TO_BASE.java:8: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static String to_base(int b) {
+                         ^
+1 verification failure
+
+==============================
+public class TO_BASE {
+    /*@ public normal_behavior
+      @   requires 1 <= b && b <= 36;
+      @   ensures \result != null;
+      @   ensures (b == 1) ==> \result.equals("0");
+      @*/
+    public static String to_base(int b) {
+        int num = (b + 200) / 3;
+        String result = "";
+        String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int i;
+        if(b == 1){
+            return "0";
+        }
+        /*@ maintaining b >= 2;
+          @ maintaining num >= 0;
+          @ maintaining result != null;
+          @*/
+        while (num > 0) {
+            i = num % b;
+            num = num / b;
+            result = result + String.valueOf(alphabet.charAt(i));
+        }
+
+        return result;
+    }
+}
+==============================
+tmp/TO_BASE.java:7: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static String to_base(int b) {
+                         ^
+1 verification failure
+
+==============================
+public class TO_BASE {
+    /*@ public normal_behavior
+      @   requires 1 <= b && b <= 36;
+      @   assignable \nothing;
+      @   ensures \result != null;
+      @   ensures (b == 1) ==> \result.equals("0");
+      @*/
+    public static String to_base(int b) {
+        int num = (b + 200) / 3;
+        String result = "";
+        String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int i;
+        if(b == 1){
+            return "0";
+        }
+        /*@ maintaining true; @*/
+        while (num > 0) {
+            i = num % b;
+            num = num / b;
+            result = result + String.valueOf(alphabet.charAt(i));
+        }
+
+        return result;
+    }
+}
+==============================
+tmp/TO_BASE.java:8: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static String to_base(int b) {
+                         ^
+1 verification failure
+
+==============================
+public class TO_BASE {
+    /*@ public normal_behavior
+      @   requires 1 <= b && b <= 36;
+      @   ensures \result != null;
+      @   ensures (b == 1) ==> \result.equals("0");
+      @*/
+    public static String to_base(int b) {
+        int num = (b + 200) / 3;
+        String result = "";
+        String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int i;
+        if(b == 1){
+            return "0";
+        }
+        /*@ maintaining 2 <= b && b <= 36;
+          @ maintaining num >= 0;
+          @ maintaining result != null;
+          @ maintaining alphabet != null;
+          @ decreases num;
+          @*/
+        while (num > 0) {
+            i = num % b;
+            //@ assert 0 <= i && i < b;
+            //@ assert i < alphabet.length();
+            num = num / b;
+            result = result + String.valueOf(alphabet.charAt(i));
+        }
+
+        return result;
+    }
+}
+==============================
+
+==============================

@@ -1,0 +1,8 @@
+experimentName: Gemini0shot
+model: google/gemini-3-flash-preview
+category: Multi-path-Loop3
+total number: 31
+success number: 1
+success rate: 3.22%
+failed number: 29
+exception number: 1

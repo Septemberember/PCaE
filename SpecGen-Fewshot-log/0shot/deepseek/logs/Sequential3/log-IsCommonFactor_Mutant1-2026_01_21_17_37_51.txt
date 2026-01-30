@@ -1,0 +1,20 @@
+public class IsCommonFactor_Mutant1 {
+
+    /*@ public normal_behavior
+      @   requires factor != 0;
+      @   ensures \result == (a % factor == 0 || b % factor == 0);
+      @   also
+      @   requires factor == 0;
+      @   ensures \result == false;
+      @*/
+    public static boolean isCommonFactor(int a, int b, int factor) {
+        return a % factor == 0 || b % factor == 0; // changed from '&&' to '||'
+    }
+}
+==============================
+tmp/IsCommonFactor_Mutant1.java:11: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method isCommonFactor
+        return a % factor == 0 || b % factor == 0; // changed from '&&' to '||'
+                 ^
+1 verification failure
+
+==============================

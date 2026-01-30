@@ -1,0 +1,267 @@
+// PassPillow calculation utility
+public class PassPillowBranch_Original {
+    //@ requires n >= 1;
+    //@ requires time >= 0;
+    //@ ensures \result >= 1 && \result <= n;
+    //@ ensures \result == (\forall int t; 0 <= t && t < (n-1)*2; 
+    //@                     (t < n ? t+1 : n*2 - t - 1) == passPillow(n, t));
+    public static int passPillow(int n, int time) {
+        // Guard against invalid input: n must be at least 1
+        if(n - 1 < 0){
+            throw new IllegalArgumentException("n is less than 1");
+        }
+        // Normalize the time within the two-phase cycle to handle wrap-around
+        time = time % ((n - 1) * 2);
+        if (time < n) {
+            // Phase 1: time within first half of the cycle
+            return time + 1;
+        }
+        // Phase 2: time in second half of the cycle, symmetric mapping
+        return n * 2 - time - 1;
+    }
+    // End of passPillow method
+}
+==============================
+tmp/PassPillowBranch_Original.java:6: error: incomparable types: int and boolean
+    //@ ensures \result == (\forall int t; 0 <= t && t < (n-1)*2; 
+                        ^
+1 error
+
+==============================
+// PassPillow calculation utility
+public class PassPillowBranch_Original {
+    //@ requires n >= 1;
+    //@ requires time >= 0;
+    //@ ensures \result >= 1 && \result <= n;
+    //@ ensures (\forall int t; 0 <= t && t < (n-1)*2; 
+    //@         passPillow(n, t) == (t < n ? t+1 : n*2 - t - 1));
+    public static int passPillow(int n, int time) {
+        // Guard against invalid input: n must be at least 1
+        if(n - 1 < 0){
+            throw new IllegalArgumentException("n is less than 1");
+        }
+        // Normalize the time within the two-phase cycle to handle wrap-around
+        time = time % ((n - 1) * 2);
+        if (time < n) {
+            // Phase 1: time within first half of the cycle
+            return time + 1;
+        }
+        // Phase 2: time in second half of the cycle, symmetric mapping
+        return n * 2 - time - 1;
+    }
+    // End of passPillow method
+}
+==============================
+TimeoutException
+==============================
+// PassPillow calculation utility
+public class PassPillowBranch_Original {
+    //@ requires n >= 1;
+    //@ requires time >= 0;
+    //@ ensures \result >= 1 && \result <= n;
+    //@ ensures \result == (time % ((n - 1) * 2) < n ? (time % ((n - 1) * 2)) + 1 : n * 2 - (time % ((n - 1) * 2)) - 1);
+    public static int passPillow(int n, int time) {
+        // Guard against invalid input: n must be at least 1
+        if(n - 1 < 0){
+            throw new IllegalArgumentException("n is less than 1");
+        }
+        // Normalize the time within the two-phase cycle to handle wrap-around
+        time = time % ((n - 1) * 2);
+        if (time < n) {
+            // Phase 1: time within first half of the cycle
+            return time + 1;
+        }
+        // Phase 2: time in second half of the cycle, symmetric mapping
+        return n * 2 - time - 1;
+    }
+    // End of passPillow method
+}
+==============================
+TimeoutException
+==============================
+// PassPillow calculation utility
+public class PassPillowBranch_Original {
+    //@ requires n >= 1;
+    //@ requires time >= 0;
+    //@ ensures \result >= 1 && \result <= n;
+    public static int passPillow(int n, int time) {
+        // Guard against invalid input: n must be at least 1
+        if(n - 1 < 0){
+            throw new IllegalArgumentException("n is less than 1");
+        }
+        // Normalize the time within the two-phase cycle to handle wrap-around
+        time = time % ((n - 1) * 2);
+        if (time < n) {
+            // Phase 1: time within first half of the cycle
+            return time + 1;
+        }
+        // Phase 2: time in second half of the cycle, symmetric mapping
+        return n * 2 - time - 1;
+    }
+    // End of passPillow method
+}
+==============================
+TimeoutException
+==============================
+// PassPillow calculation utility
+public class PassPillowBranch_Original {
+    //@ requires n >= 1;
+    //@ requires time >= 0;
+    //@ ensures \result >= 1 && \result <= n;
+    //@ ensures time % ((n - 1) * 2) < n ==> \result == time % ((n - 1) * 2) + 1;
+    //@ ensures time % ((n - 1) * 2) >= n ==> \result == n * 2 - (time % ((n - 1) * 2)) - 1;
+    public static int passPillow(int n, int time) {
+        // Guard against invalid input: n must be at least 1
+        if(n - 1 < 0){
+            throw new IllegalArgumentException("n is less than 1");
+        }
+        // Normalize the time within the two-phase cycle to handle wrap-around
+        time = time % ((n - 1) * 2);
+        if (time < n) {
+            // Phase 1: time within first half of the cycle
+            return time + 1;
+        }
+        // Phase 2: time in second half of the cycle, symmetric mapping
+        return n * 2 - time - 1;
+    }
+    // End of passPillow method
+}
+==============================
+TimeoutException
+==============================
+// PassPillow calculation utility
+public class PassPillowBranch_Original {
+    //@ requires n >= 1;
+    //@ requires time >= 0;
+    //@ ensures \result >= 1 && \result <= n;
+    //@ ensures \result == (time % ((n - 1) * 2) < n ? (time % ((n - 1) * 2)) + 1 : n * 2 - (time % ((n - 1) * 2)) - 1);
+    public static int passPillow(int n, int time) {
+        // Guard against invalid input: n must be at least 1
+        if(n - 1 < 0){
+            throw new IllegalArgumentException("n is less than 1");
+        }
+        //@ assume time % ((n - 1) * 2) >= 0;
+        // Normalize the time within the two-phase cycle to handle wrap-around
+        time = time % ((n - 1) * 2);
+        if (time < n) {
+            // Phase 1: time within first half of the cycle
+            return time + 1;
+        }
+        // Phase 2: time in second half of the cycle, symmetric mapping
+        return n * 2 - time - 1;
+    }
+    // End of passPillow method
+}
+==============================
+TimeoutException
+==============================
+// PassPillow calculation utility
+public class PassPillowBranch_Original {
+    //@ requires n >= 1;
+    //@ requires time >= 0;
+    //@ ensures \result >= 1 && \result <= n;
+    public static int passPillow(int n, int time) {
+        // Guard against invalid input: n must be at least 1
+        if(n - 1 < 0){
+            throw new IllegalArgumentException("n is less than 1");
+        }
+        // Normalize the time within the two-phase cycle to handle wrap-around
+        //@ maintaining time >= 0;
+        time = time % ((n - 1) * 2);
+        if (time < n) {
+            // Phase 1: time within first half of the cycle
+            return time + 1;
+        }
+        // Phase 2: time in second half of the cycle, symmetric mapping
+        return n * 2 - time - 1;
+    }
+    // End of passPillow method
+}
+==============================
+tmp/PassPillowBranch_Original.java:12: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining time >= 0;
+            ^
+1 error
+
+==============================
+// PassPillow calculation utility
+public class PassPillowBranch_Original {
+    //@ requires n >= 1;
+    //@ requires time >= 0;
+    //@ ensures \result >= 1 && \result <= n;
+    public static int passPillow(int n, int time) {
+        // Guard against invalid input: n must be at least 1
+        if(n - 1 < 0){
+            throw new IllegalArgumentException("n is less than 1");
+        }
+        // Normalize the time within the two-phase cycle to handle wrap-around
+        time = time % ((n - 1) * 2);
+        //@ assert time >= 0 && time < (n - 1) * 2;
+        if (time < n) {
+            // Phase 1: time within first half of the cycle
+            return time + 1;
+        }
+        // Phase 2: time in second half of the cycle, symmetric mapping
+        return n * 2 - time - 1;
+    }
+    // End of passPillow method
+}
+==============================
+TimeoutException
+==============================
+// PassPillow calculation utility
+public class PassPillowBranch_Original {
+    //@ requires n > 1;
+    //@ requires time >= 0;
+    //@ ensures \result >= 1 && \result <= n;
+    //@ ensures \result == (time % ((n - 1) * 2) < n ? (time % ((n - 1) * 2)) + 1 : n * 2 - (time % ((n - 1) * 2)) - 1);
+    public static int passPillow(int n, int time) {
+        // Guard against invalid input: n must be at least 1
+        if(n - 1 < 0){
+            throw new IllegalArgumentException("n is less than 1");
+        }
+        // Normalize the time within the two-phase cycle to handle wrap-around
+        time = time % ((n - 1) * 2);
+        if (time < n) {
+            // Phase 1: time within first half of the cycle
+            return time + 1;
+        }
+        // Phase 2: time in second half of the cycle, symmetric mapping
+        return n * 2 - time - 1;
+    }
+    // End of passPillow method
+}
+==============================
+tmp/PassPillowBranch_Original.java:7: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static int passPillow(int n, int time) {
+                      ^
+1 verification failure
+
+==============================
+// PassPillow calculation utility
+public class PassPillowBranch_Original {
+    //@ requires n >= 1;
+    //@ requires time >= 0;
+    //@ ensures \result >= 1 && \result <= n;
+    public static int passPillow(int n, int time) {
+        // Guard against invalid input: n must be at least 1
+        if(n - 1 < 0){
+            throw new IllegalArgumentException("n is less than 1");
+        }
+        // Normalize the time within the two-phase cycle to handle wrap-around
+        time = time % ((n - 1) * 2);
+        //@ assert time >= 0;
+        if (time < n) {
+            // Phase 1: time within first half of the cycle
+            //@ assert time + 1 >= 1 && time + 1 <= n;
+            return time + 1;
+        }
+        // Phase 2: time in second half of the cycle, symmetric mapping
+        //@ assert n * 2 - time - 1 >= 1 && n * 2 - time - 1 <= n;
+        return n * 2 - time - 1;
+    }
+    // End of passPillow method
+}
+==============================
+TimeoutException
+==============================

@@ -1,0 +1,85 @@
+public class SafeLanding_Mutant2 {
+    // Entry point for evaluating landing safety
+    //@ requires Integer.MIN_VALUE <= height && height <= Integer.MAX_VALUE;
+    //@ requires Integer.MIN_VALUE <= speed && speed <= Integer.MAX_VALUE;
+    //@ requires Integer.MIN_VALUE <= tilt && tilt <= Integer.MAX_VALUE;
+    //@ ensures \result == 0 || \result == 1;
+    //@ ensures (height > 5 || speed >= 3 || tilt > 10) ==> \result == 0;
+    //@ ensures (height <= 5 && speed < 3 && tilt <= 10) ==> \result == 1;
+    public static int safeLanding(int height, int speed, int tilt) {
+        int safe = 1;
+        // Check height threshold; taller than expected threshold reduces safety
+        //@ maintaining safe == 0 || safe == 1;
+        if (height > 5) {
+            safe = 0;
+        }
+        // Enforce speed constraint for a safe landing
+        //@ maintaining safe == 0 || safe == 1;
+        if (speed >= 3) {
+            safe = 0;
+        }
+        // Tilt constraint to ensure stable descent
+        //@ maintaining safe == 0 || safe == 1;
+        if (tilt > 10) {
+            safe = 0;
+        }
+        // Final safety outcome based on the evaluated conditions
+        return safe;
+    }
+}
+==============================
+tmp/SafeLanding_Mutant2.java:12: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining safe == 0 || safe == 1;
+            ^
+tmp/SafeLanding_Mutant2.java:17: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining safe == 0 || safe == 1;
+            ^
+tmp/SafeLanding_Mutant2.java:22: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining safe == 0 || safe == 1;
+            ^
+3 errors
+
+==============================
+public class SafeLanding_Mutant2 {
+    // Entry point for evaluating landing safety
+    //@ requires Integer.MIN_VALUE <= height && height <= Integer.MAX_VALUE;
+    //@ requires Integer.MIN_VALUE <= speed && speed <= Integer.MAX_VALUE;
+    //@ requires Integer.MIN_VALUE <= tilt && tilt <= Integer.MAX_VALUE;
+    //@ ensures \result == 0 || \result == 1;
+    //@ ensures (height > 5 || speed >= 3 || tilt > 10) ==> \result == 0;
+    //@ ensures (height <= 5 && speed < 3 && tilt <= 10) ==> \result == 1;
+    public static int safeLanding(int height, int speed, int tilt) {
+        int safe = 1;
+        // Check height threshold; taller than expected threshold reduces safety
+        //@ maintaining safe == 0 || safe == 1;  
+        if (height > 5) {
+            safe = 0;
+        }
+        // Enforce speed constraint for a safe landing
+        //@ maintaining safe == 0 || safe == 1;  
+        if (speed >= 3) {
+            safe = 0;
+        }
+        // Tilt constraint to ensure stable descent
+        //@ maintaining safe == 0 || safe == 1;  
+        if (tilt > 10) {
+            safe = 0;
+        }
+        // Final safety outcome based on the evaluated conditions
+        return safe;
+    }
+}
+
+==============================
+tmp/SafeLanding_Mutant2.java:12: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining safe == 0 || safe == 1;  
+            ^
+tmp/SafeLanding_Mutant2.java:17: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining safe == 0 || safe == 1;  
+            ^
+tmp/SafeLanding_Mutant2.java:22: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining safe == 0 || safe == 1;  
+            ^
+3 errors
+
+==============================

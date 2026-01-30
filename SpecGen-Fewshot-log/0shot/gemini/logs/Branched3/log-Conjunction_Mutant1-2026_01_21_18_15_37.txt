@@ -1,0 +1,85 @@
+public class Conjunction_Mutant1 {
+
+    // This method implements a basic conjunction with explicit guards
+    /*@ public normal_behavior
+      @   ensures \result == (b1 && b2);
+      @ also
+      @  public normal_behavior
+      @   requires b1 == true;
+      @   ensures \result == false;
+      @ also
+      @  public normal_behavior
+      @   requires b1 == false && b2 == false;
+      @   ensures \result == false;
+      @ also
+      @  public normal_behavior
+      @   requires b1 == false && b2 == true;
+      @   ensures \result == true;
+      @*/
+    public static boolean conjunctOf(boolean b1, boolean b2) {
+
+        // Short-circuit: evaluate based on the first operand
+        if(b1 == true)
+            return false;
+
+        // Short-circuit: if the second operand is false, the conjunction is false
+        if(b2 == false)
+            return false;
+
+        // If both operands are true, the conjunction evaluates to true
+        return true;
+    }
+}
+==============================
+tmp/Conjunction_Mutant1.java:30: verify: The prover cannot establish an assertion (Postcondition: tmp/Conjunction_Mutant1.java:5:) in method conjunctOf
+        return true;
+        ^
+tmp/Conjunction_Mutant1.java:5: verify: Associated declaration: tmp/Conjunction_Mutant1.java:30:
+      @   ensures \result == (b1 && b2);
+          ^
+2 verification failures
+
+==============================
+public class Conjunction_Mutant1 {
+
+    // This method implements a basic conjunction with explicit guards
+    /*@ public normal_behavior
+      @   ensures \result == (b1 && b2);  
+      @ also
+      @  public normal_behavior
+      @   requires b1 == true;
+      @   ensures \result == false;
+      @ also
+      @  public normal_behavior
+      @   requires b1 == false && b2 == false;
+      @   ensures \result == false;
+      @ also
+      @  public normal_behavior
+      @   requires b1 == false && b2 == true;
+      @   ensures \result == true;
+      @*/
+    public static boolean conjunctOf(boolean b1, boolean b2) {
+
+        // Short-circuit: evaluate based on the first operand
+        if(b1 == true)
+            return false;
+
+        // Short-circuit: if the second operand is false, the conjunction is false
+        if(b2 == false)
+            return false;
+
+        // If both operands are true, the conjunction evaluates to true
+        return true;
+    }
+}
+
+==============================
+tmp/Conjunction_Mutant1.java:30: verify: The prover cannot establish an assertion (Postcondition: tmp/Conjunction_Mutant1.java:5:) in method conjunctOf
+        return true;
+        ^
+tmp/Conjunction_Mutant1.java:5: verify: Associated declaration: tmp/Conjunction_Mutant1.java:30:
+      @   ensures \result == (b1 && b2);  
+          ^
+2 verification failures
+
+==============================

@@ -1,0 +1,71 @@
+public class MetricsCalculator_2 {
+    /*@ public normal_behavior
+      @   requires limit > 0;
+      @   ensures \result == (((((limit - 100) < 0 ? -((limit - 100)) : (limit - 100)) % 10) + 1) / 
+      @             (((\num_iterations(limit, ((limit - 100) < 0 ? -((limit - 100)) : (limit - 100)) % 10) + 1)) % 10 + 1)) + 
+      @             (((\num_iterations(limit, ((limit - 100) < 0 ? -((limit - 100)) : (limit - 100)) % 10) + 1)) % 10 + 1) + 
+      @             ((((limit - 100) + 1) - (limit + 2)) + \sum_loop_shift(limit, ((limit - 100) < 0 ? -((limit - 100)) : (limit - 100)) % 10) + 1) + 
+      @             ((((((limit - 100) < 0 ? -((limit - 100)) : (limit - 100)) % 10) + 1) / 
+      @             (((\num_iterations(limit, ((limit - 100) < 0 ? -((limit - 100)) : (limit - 100)) % 10) + 1)) % 10 + 1)) + (limit - 100)) - limit;
+      @   assignable \nothing;
+      @*/
+    public static double computeScore( int limit) {
+        int value = limit - 100;
+        int result = 0;
+        int iteration = 17;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = value * -1;
+            polarity = polarity * -1;
+        }
+        value = (value % 10) + 1;
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        /*@ maintaining limit <= originalLimit;
+          @ maintaining iteration <= 17;
+          @ maintaining value == (((originalValue < 0 ? -originalValue : originalValue) % 10) + 1);
+          @ decreases limit;
+          @*/
+        while (limit > 0) {
+            limit = limit - value;
+            iteration = iteration - 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = (iteration % 10) + 1;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator_2.java:5: error: This backslash token is unknown: \num_iterations
+      @             (((\num_iterations(limit, ((limit - 100) < 0 ? -((limit - 100)) : (limit - 100)) % 10) + 1)) % 10 + 1)) + 
+                       ^
+tmp/MetricsCalculator_2.java:6: error: This backslash token is unknown: \num_iterations
+      @             (((\num_iterations(limit, ((limit - 100) < 0 ? -((limit - 100)) : (limit - 100)) % 10) + 1)) % 10 + 1) + 
+                       ^
+tmp/MetricsCalculator_2.java:7: error: This backslash token is unknown: \sum_loop_shift
+      @             ((((limit - 100) + 1) - (limit + 2)) + \sum_loop_shift(limit, ((limit - 100) < 0 ? -((limit - 100)) : (limit - 100)) % 10) + 1) + 
+                                                           ^
+tmp/MetricsCalculator_2.java:9: error: This backslash token is unknown: \num_iterations
+      @             (((\num_iterations(limit, ((limit - 100) < 0 ? -((limit - 100)) : (limit - 100)) % 10) + 1)) % 10 + 1)) + (limit - 100)) - limit;
+                       ^
+4 errors
+
+==============================

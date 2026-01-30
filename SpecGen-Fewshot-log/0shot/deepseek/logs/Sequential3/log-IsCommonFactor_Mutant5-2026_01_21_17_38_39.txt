@@ -1,0 +1,22 @@
+public class IsCommonFactor_Mutant5 {
+
+    // This class provides a minimal example to test factor-related logic.
+    // The isCommonFactor method checks divisibility of 'a' by 'factor' and evaluates 'b' against 'factor'.
+    // The original code contains a simple mutation scenario for demonstration.
+    
+    /*@ public normal_behavior
+      @   requires factor != 0;
+      @   ensures \result == (a % factor == 0 && b / factor == 0);
+      @   signals (ArithmeticException) factor == 0;
+      @*/
+    public static boolean isCommonFactor(int a, int b, int factor) {
+        return a % factor == 0 && b / factor == 0; // changed '%' to '/' at b % factor
+    }
+}
+==============================
+tmp/IsCommonFactor_Mutant5.java:10: error: Signals clauses are not permitted in normal specification cases
+      @   signals (ArithmeticException) factor == 0;
+          ^
+1 error
+
+==============================

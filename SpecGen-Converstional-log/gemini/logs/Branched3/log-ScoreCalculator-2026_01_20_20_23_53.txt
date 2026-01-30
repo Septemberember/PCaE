@@ -1,0 +1,93 @@
+public class ScoreCalculator {
+    //@ ensures ((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15 > 34) ==> \result == ((((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) * 3 - 21) % 5) + (\old(baseScore) < 5 ? -3 : (\old(baseScore) > 40 ? 6 : 1)) * 5;
+    //@ ensures !(((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15 > 34)) && ((((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) >= 13 && ((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) <= 21)) ==> \result == ((((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) - 8) * (\old(baseScore) < 5 ? -3 : (\old(baseScore) > 40 ? 6 : 1)) + (\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) > 45 ? 45 : ((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15 - 8) * (\old(baseScore) < 5 ? -3 : (\old(baseScore) > 40 ? 6 : 1)) + (\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))));
+    //@ ensures !(((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15 > 34)) && !((((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) >= 13 && ((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) <= 21)) ==> \result == (((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) % 5) + (\old(baseScore) < 5 ? -3 : (\old(baseScore) > 40 ? 6 : 1)) * 5;
+    public static int calculateBonus(int baseScore) {
+        int bonusBrackets[] = new int[5];
+        int bracket = 0;
+        int multiplier = 0;
+
+        if (baseScore < 5) {
+            baseScore = 5;
+            multiplier = multiplier - 3;
+        } else {
+            multiplier = multiplier + 1;
+        }
+
+        if (baseScore > 40) {
+            baseScore = 40;
+            multiplier = multiplier + 5;
+        }
+
+        int bonus = baseScore * 2 - 15;
+
+        if(bonus > 34){
+            bonus = bonus * 3 - 21;
+        }
+
+        if (bonus >= 13 && bonus <= 21) {
+            bracket = bonus / 4;
+            bonus = (bonus - 8) * multiplier;
+            bonus += baseScore;
+            bonus = bonus > 45 ? 45 : bonus;
+            bonusBrackets[bracket] = bonus + multiplier;
+        } else {
+            bracket = bonus % 5;
+            bonus = bracket + multiplier * 5;
+        }
+
+        return bonus;
+    }
+}
+==============================
+tmp/ScoreCalculator.java:33: verify: The prover cannot establish an assertion (PossiblyTooLargeIndex) in method calculateBonus
+            bonusBrackets[bracket] = bonus + multiplier;
+                         ^
+1 verification failure
+
+==============================
+public class ScoreCalculator {
+    //@ ensures ((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15 > 34) ==> \result == ((((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) * 3 - 21) % 5) + (\old(baseScore) < 5 ? -3 : (\old(baseScore) > 40 ? 6 : 1)) * 5;
+    //@ ensures !(((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15 > 34)) && ((((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) >= 13 && ((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) <= 21)) ==> \result == ((((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) - 8) * (\old(baseScore) < 5 ? -3 : (\old(baseScore) > 40 ? 6 : 1)) + (\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) > 45 ? 45 : ((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15 - 8) * (\old(baseScore) < 5 ? -3 : (\old(baseScore) > 40 ? 6 : 1)) + (\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))));
+    //@ ensures !(((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15 > 34)) && !((((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) >= 13 && ((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) <= 21)) ==> \result == (((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) % 5) + (\old(baseScore) < 5 ? -3 : (\old(baseScore) > 40 ? 6 : 1)) * 5;
+    public static int calculateBonus(int baseScore) {
+        int bonusBrackets[] = new int[5];
+        int bracket = 0;
+        int multiplier = 0;
+
+        if (baseScore < 5) {
+            baseScore = 5;
+            multiplier = multiplier - 3;
+        } else {
+            multiplier = multiplier + 1;
+        }
+
+        if (baseScore > 40) {
+            baseScore = 40;
+            multiplier = multiplier + 5;
+        }
+
+        int bonus = baseScore * 2 - 15;
+
+        if(bonus > 34){
+            bonus = bonus * 3 - 21;
+        }
+
+        if (bonus >= 13 && bonus <= 21) {
+            bracket = bonus / 4;
+            bonus = (bonus - 8) * multiplier;
+            bonus += baseScore;
+            bonus = bonus > 45 ? 45 : bonus;
+            //@ assume bracket >= 0 && bracket < bonusBrackets.length;
+            bonusBrackets[bracket] = bonus + multiplier;
+        } else {
+            bracket = bonus % 5;
+            bonus = bracket + multiplier * 5;
+        }
+
+        return bonus;
+    }
+}
+==============================
+
+==============================

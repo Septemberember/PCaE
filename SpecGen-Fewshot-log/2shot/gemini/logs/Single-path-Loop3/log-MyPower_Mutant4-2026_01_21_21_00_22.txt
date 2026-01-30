@@ -1,0 +1,119 @@
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    //@ requires n >= 0;
+    //@ ensures \result == \product(int j; 0 <= j && j <= n; x);
+    public static int power(int x, int n) {
+        int res = 1;
+        //@ maintaining 0 <= i && i <= n + 1;
+        //@ maintaining res == \product(int j; 0 <= j && j < i; x);
+        //@ decreases n + 1 - i;
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Mutant4.java:7: error: illegal start of type
+    //@ ensures \result == \product(int j; 0 <= j && j <= n; x);
+                                   ^
+tmp/MyPower_Mutant4.java:7: error: illegal start of type
+    //@ ensures \result == \product(int j; 0 <= j && j <= n; x);
+                                           ^
+tmp/MyPower_Mutant4.java:7: error: <identifier> expected
+    //@ ensures \result == \product(int j; 0 <= j && j <= n; x);
+                                                 ^
+tmp/MyPower_Mutant4.java:7: error: <identifier> expected
+    //@ ensures \result == \product(int j; 0 <= j && j <= n; x);
+                                                      ^
+tmp/MyPower_Mutant4.java:7: error: <identifier> expected
+    //@ ensures \result == \product(int j; 0 <= j && j <= n; x);
+                                                           ^
+tmp/MyPower_Mutant4.java:7: error: <identifier> expected
+    //@ ensures \result == \product(int j; 0 <= j && j <= n; x);
+                                                              ^
+tmp/MyPower_Mutant4.java:11: error: illegal start of type
+        //@ maintaining res == \product(int j; 0 <= j && j < i; x);
+                                       ^
+tmp/MyPower_Mutant4.java:11: error: not a statement
+        //@ maintaining res == \product(int j; 0 <= j && j < i; x);
+                                                      ^
+tmp/MyPower_Mutant4.java:11: error: Expected a declaration or a JML construct inside the JML annotation here
+        //@ maintaining res == \product(int j; 0 <= j && j < i; x);
+                                               ^
+tmp/MyPower_Mutant4.java:10: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining 0 <= i && i <= n + 1;
+            ^
+tmp/MyPower_Mutant4.java:11: error: not a statement
+        //@ maintaining res == \product(int j; 0 <= j && j < i; x);
+                                                                ^
+tmp/MyPower_Mutant4.java:11: error: ';' expected
+        //@ maintaining res == \product(int j; 0 <= j && j < i; x);
+                                                                 ^
+12 errors
+
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    //@ requires n >= 0;
+    //@ ensures \result == \product(int j; 0 <= j && j - 1 <= n; x);  
+    public static int power(int x, int n) {
+        int res = 1;
+        //@ maintaining 0 < i && i < n + 1;  
+        //@ maintaining res == \product(int j; 0 - 1 <= j && j < i; x);  
+        //@ decreases n + 1 - i;
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+}
+
+==============================
+tmp/MyPower_Mutant4.java:7: error: illegal start of type
+    //@ ensures \result == \product(int j; 0 <= j && j - 1 <= n; x);  
+                                   ^
+tmp/MyPower_Mutant4.java:7: error: illegal start of type
+    //@ ensures \result == \product(int j; 0 <= j && j - 1 <= n; x);  
+                                           ^
+tmp/MyPower_Mutant4.java:7: error: <identifier> expected
+    //@ ensures \result == \product(int j; 0 <= j && j - 1 <= n; x);  
+                                                 ^
+tmp/MyPower_Mutant4.java:7: error: <identifier> expected
+    //@ ensures \result == \product(int j; 0 <= j && j - 1 <= n; x);  
+                                                      ^
+tmp/MyPower_Mutant4.java:7: error: <identifier> expected
+    //@ ensures \result == \product(int j; 0 <= j && j - 1 <= n; x);  
+                                                               ^
+tmp/MyPower_Mutant4.java:7: error: <identifier> expected
+    //@ ensures \result == \product(int j; 0 <= j && j - 1 <= n; x);  
+                                                                  ^
+tmp/MyPower_Mutant4.java:11: error: illegal start of type
+        //@ maintaining res == \product(int j; 0 - 1 <= j && j < i; x);  
+                                       ^
+tmp/MyPower_Mutant4.java:11: error: not a statement
+        //@ maintaining res == \product(int j; 0 - 1 <= j && j < i; x);  
+                                                          ^
+tmp/MyPower_Mutant4.java:11: error: Expected a declaration or a JML construct inside the JML annotation here
+        //@ maintaining res == \product(int j; 0 - 1 <= j && j < i; x);  
+                                               ^
+tmp/MyPower_Mutant4.java:10: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining 0 < i && i < n + 1;  
+            ^
+tmp/MyPower_Mutant4.java:11: error: not a statement
+        //@ maintaining res == \product(int j; 0 - 1 <= j && j < i; x);  
+                                                                    ^
+tmp/MyPower_Mutant4.java:11: error: ';' expected
+        //@ maintaining res == \product(int j; 0 - 1 <= j && j < i; x);  
+                                                                     ^
+12 errors
+
+==============================

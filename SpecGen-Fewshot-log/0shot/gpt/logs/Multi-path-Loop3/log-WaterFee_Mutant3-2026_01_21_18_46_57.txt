@@ -1,0 +1,119 @@
+public class WaterFee_Mutant3 {
+    // This class provides a simple fee calculation based on water consumption.
+    /*@ public normal_behavior
+      @   // Prevent arithmetic overflow of the returned int (fee grows at most by 5 per ton).
+      @   requires tons <= 429496729; // floor(Integer.MAX_VALUE / 5)
+      @   assignable \nothing;
+      @
+      @   ensures (tons <= 0) ==> (\result == 0);
+      @   ensures (tons > 0) ==>
+      @            (\result ==
+      @               (\sum int k; 1 <= k && k <= tons;
+      @                   (k > 10 ? 5 : (k > 3 ? 4 : 1))));
+      @
+      @   // Equivalent closed-form characterization (useful for provers).
+      @   ensures \result ==
+      @           (tons <= 0 ? 0 :
+      @             (tons <= 3 ? tons :
+      @               (tons <= 10 ? (4 * tons - 9) :
+      @                 (5 * tons - 19))));
+      @*/
+    public static int calcWaterFee(int tons) {
+        // Use a local copy to avoid modifying the input parameter directly
+        int n = tons;
+
+        // Track the accumulated fee
+        int fee = 0;
+
+        // Iterate per ton to compute fee with tiered pricing
+        /*@ maintaining n <= tons;
+          @ maintaining (tons >= 0) ==> (0 <= n);
+          @ maintaining fee >= 0;
+          @ maintaining fee ==
+          @    (\sum int k; n < k && k <= tons;
+          @        (k > 10 ? 5 : (k > 3 ? 4 : 1)));
+          @ decreasing n;
+          @*/
+        while (n > 0) {
+            if (n > 10) {
+                fee += 5;
+            } else if (n > 3) {
+                fee += 4;
+            } else {
+                fee += 1;
+            }
+            // Move to the next ton
+            n--;
+        }
+
+        // Return the computed total fee
+        return fee;
+    }
+}
+==============================
+tmp/WaterFee_Mutant3.java:32: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method calcWaterFee
+          @ maintaining fee ==
+            ^
+1 verification failure
+
+==============================
+public class WaterFee_Mutant3 {
+    // This class provides a simple fee calculation based on water consumption.
+    /*@ public normal_behavior
+      @   // Prevent arithmetic overflow of the returned int (fee grows at most by 5 per ton).
+      @   requires tons <= 429496729; // floor(Integer.MAX_VALUE / 5)
+      @   assignable \nothing;
+      @
+      @   ensures (tons <= 0) ==> (\result == 0);
+      @   ensures (tons > 0) ==>
+      @            (\result ==
+      @               (\sum int k; 1 <= k && k <= tons;
+      @                   (k > 10 ? 5 : (k > 3 ? 4 : 1))));
+      @
+      @   // Equivalent closed-form characterization (useful for provers).
+      @   ensures \result ==
+      @           (tons <= 0 ? 0 :
+      @             (tons <= 3 ? tons :
+      @               (tons <= 10 ? (4 * tons - 9) :
+      @                 (5 * tons - 19))));
+      @*/
+    public static int calcWaterFee(int tons) {
+        // Use a local copy to avoid modifying the input parameter directly
+        int n = tons;
+
+        // Track the accumulated fee
+        int fee = 0;
+
+        // Iterate per ton to compute fee with tiered pricing
+        /*@ maintaining n <= tons;
+          @ maintaining (tons >= 0) ==> (0 <= n);
+          @ maintaining fee >= 0;
+          @ maintaining fee ==  
+          @    (\sum int k; n < k && k <= tons;
+          @        (k > 10 ? 5 : (k > 3 ? 4 : 1)));
+          @ decreasing n;
+          @*/
+        while (n > 0) {
+            if (n > 10) {
+                fee += 5;
+            } else if (n > 3) {
+                fee += 4;
+            } else {
+                fee += 1;
+            }
+            // Move to the next ton
+            n--;
+        }
+
+        // Return the computed total fee
+        return fee;
+    }
+}
+
+==============================
+tmp/WaterFee_Mutant3.java:32: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method calcWaterFee
+          @ maintaining fee ==  
+            ^
+1 verification failure
+
+==============================

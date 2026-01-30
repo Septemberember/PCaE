@@ -1,0 +1,53 @@
+public class GyroHealthCheck_Mutant4 {
+    // Performs a health check by comparing pairwise gyro differences.
+
+    //@ ensures (\result == 0) || (\result == 2);
+    //@ ensures (\result == 2) <==>
+    //@            (\abs((\bigint)x - (\bigint)y) > 10
+    //@          || \abs((\bigint)y - (\bigint)z) > 10
+    //@          || \abs((\bigint)x - (\bigint)z) > 10);
+    //@ ensures (\result == 0) <==>
+    //@            (\abs((\bigint)x - (\bigint)y) <= 10
+    //@          && \abs((\bigint)y - (\bigint)z) <= 10
+    //@          && \abs((\bigint)x - (\bigint)z) <= 10);
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // Normalize to absolute difference for XY
+        if (diffXY < 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // Normalize to absolute difference for YZ
+        if (diffYZ < 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // Normalize to absolute difference for XZ
+        if (diffXZ < 0) diffXZ = -diffXZ;
+
+        int alarm = 0;
+        // Trigger alarm if any pair differs by more than 10
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 2;
+        }
+        return alarm;
+    }
+}
+==============================
+tmp/GyroHealthCheck_Mutant4.java:6: error: This backslash token is unknown: \abs
+    //@            (\abs((\bigint)x - (\bigint)y) > 10
+                    ^
+tmp/GyroHealthCheck_Mutant4.java:7: error: This backslash token is unknown: \abs
+    //@          || \abs((\bigint)y - (\bigint)z) > 10
+                    ^
+tmp/GyroHealthCheck_Mutant4.java:8: error: This backslash token is unknown: \abs
+    //@          || \abs((\bigint)x - (\bigint)z) > 10);
+                    ^
+tmp/GyroHealthCheck_Mutant4.java:10: error: This backslash token is unknown: \abs
+    //@            (\abs((\bigint)x - (\bigint)y) <= 10
+                    ^
+tmp/GyroHealthCheck_Mutant4.java:11: error: This backslash token is unknown: \abs
+    //@          && \abs((\bigint)y - (\bigint)z) <= 10
+                    ^
+tmp/GyroHealthCheck_Mutant4.java:12: error: This backslash token is unknown: \abs
+    //@          && \abs((\bigint)x - (\bigint)z) <= 10);
+                    ^
+6 errors
+
+==============================

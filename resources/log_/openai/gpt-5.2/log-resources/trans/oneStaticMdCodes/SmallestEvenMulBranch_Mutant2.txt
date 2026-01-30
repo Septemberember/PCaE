@@ -1,0 +1,32 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class SmallestEvenMulBranch_Mutant2 {
+
+    // Utility: document the behavior of the smallestEvenMultiple mutation.
+    // This variant uses an odd parity rule for even inputs (returns n + 1).
+    // The traditional definition would return n when n is even, and 2*n when odd.
+
+    public static int smallestEvenMultiple(int n) {
+        if (n % 2 == 0) {
+            return n + 1;
+        }
+        return 2 * n;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: n % 2 == 0
+D1: return_value == n + 1
+
+T2: n % 2 != 0
+D2: return_value == 2 * n
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

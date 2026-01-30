@@ -1,0 +1,85 @@
+public class FuelEfficiencyAnalyzer {
+
+    /*@ public normal_behavior
+      @   requires !((distance >= 3 && distance <= 7) && fuelUsed == 3);
+      @   ensures \result ==
+      @     (\let int ad0 = (distance + 10) * 2;
+      @      (ad0 > 10) ?
+      @        (\let int amt0 = fuelUsed - 3;
+      @         ((ad0 > 25 && ad0 < 35) ?
+      @            (\let int amt = (amt0 < 0 ? 1 : amt0);
+      @             \let boolean valid = (amt0 < 0 ? false : true);
+      @             \let double eff0 = ((double) ad0) / amt;
+      @             \let double eff = (eff0 > 50.0 ? eff0 * 0.9 : eff0 + 3.0);
+      @             \let double corr = (valid ? 1.2 : 0.8);
+      @             eff * corr + ad0 * 0.05)
+      @          :
+      @            (\let int ad = ad0 + 5;
+      @             \let double eff0 = ((double) (ad - 2)) + amt0;
+      @             \let double eff = (eff0 > 50.0 ? eff0 * 0.9 : eff0 + 3.0);
+      @             \let double corr = 1.2;
+      @             eff * corr + ad * 0.05)
+      @         ))
+      @      :
+      @        (\let int ad = ad0 + 20;
+      @         (fuelUsed > 10) ?
+      @           ((ad * 0.5) * 1.2 + ad * 0.05)
+      @         :
+      @           ((ad * 0.3) * 0.8 + ad * 0.05));
+      @*/
+    public static double analyzeEfficiency(int distance, int fuelUsed) {
+        int adjustedDistance = distance;
+        int threshold = 10;
+        double efficiency = 0.0;
+        boolean valid = true;
+
+        adjustedDistance += 10;
+        adjustedDistance = adjustedDistance * 2;
+
+        if (adjustedDistance > threshold) {
+            int amt = fuelUsed - 3;
+
+            if (adjustedDistance < 35 && adjustedDistance > 25) {
+                if (amt < 0) {
+                    System.out.println("Warning: invalid fuel input.");
+                    amt = 1;
+                    valid = false;
+                }
+
+                efficiency = (double) adjustedDistance / amt;
+
+            } else {
+                adjustedDistance += 5;
+                efficiency = (double) (adjustedDistance - 2) + amt;
+            }
+
+            if (efficiency > 50) {
+                efficiency = efficiency * 0.9;
+            } else {
+                efficiency = efficiency + 3.0;
+            }
+
+        } else {
+            adjustedDistance += 20;
+
+            if (fuelUsed > 10) {
+                efficiency = adjustedDistance * 0.5;
+            } else {
+                efficiency = adjustedDistance * 0.3;
+                valid = false;
+            }
+        }
+
+        double correction = valid ? 1.2 : 0.8;
+        double finalValue = efficiency * correction + adjustedDistance * 0.05;
+
+        return finalValue;
+    }
+}
+==============================
+tmp/FuelEfficiencyAnalyzer.java:28: error: ')' expected
+      @           ((ad * 0.3) * 0.8 + ad * 0.05));
+                                                 ^
+1 error
+
+==============================

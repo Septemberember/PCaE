@@ -1,0 +1,8 @@
+experimentName: deepseekv30shot
+model: deepseek/deepseek-v3.2
+category: Nested-Loop3
+total number: 35
+success number: 12
+success rate: 34.28%
+failed number: 23
+exception number: 0

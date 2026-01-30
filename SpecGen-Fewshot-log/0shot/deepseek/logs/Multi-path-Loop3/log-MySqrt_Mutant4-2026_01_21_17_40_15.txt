@@ -1,0 +1,81 @@
+// Integer square root via binary search (comment header)
+// This file preserves existing logic and adds commentary only.
+
+public class MySqrt_Mutant4 {
+    // Binary search to find the floor of the square root.
+    /*@ requires x >= 0;
+      @ ensures \result >= -1 && \result <= x;
+      @ ensures (\result == -1) || ((\long)\result * \result <= x && (long)(\result + 1) * (\result + 1) > x);
+      @*/
+    public static int mySqrt(int x) {
+        // Initialize search range and last valid candidate.
+        int l = 0, r = x, ans = -1;
+        // Typical binary search loop to converge on the result.
+        /*@ maintaining 0 <= l && l <= r + 1 && r <= x;
+          @ maintaining ans >= -1 && ans <= x;
+          @ maintaining (ans == -1) || ((long)ans * ans <= x);
+          @ maintaining (\forall int i; 0 <= i && i < l; (long)i * i <= x);
+          @ maintaining (\forall int i; r < i && i <= x; (long)i * i > x);
+          @ decreasing r - l;
+          @*/
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            // Use 64-bit multiplication to avoid overflow when squaring mid.
+            if ((long) mid * mid < x) {
+                ans = mid;
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+        return ans;
+    }
+}
+==============================
+tmp/MySqrt_Mutant4.java:8: error: This backslash token is unknown: \long
+      @ ensures (\result == -1) || ((\long)\result * \result <= x && (long)(\result + 1) * (\result + 1) > x);
+                                     ^
+1 error
+
+==============================
+// Integer square root via binary search (comment header)
+// This file preserves existing logic and adds commentary only.
+
+public class MySqrt_Mutant4 {
+    // Binary search to find the floor of the square root.
+    /*@ requires x >= 0;
+      @ ensures \result >= -1 && \result <= x;
+      @ ensures (\result == -1) || ((\long)\result * \result < x && (long)(\result + 1) * (\result + 1) > x);  
+      @*/
+    public static int mySqrt(int x) {
+        // Initialize search range and last valid candidate.
+        int l = 0, r = x, ans = -1;
+        // Typical binary search loop to converge on the result.
+        /*@ maintaining 0 <= l && l <= r + 1 && r <= x;
+          @ maintaining ans >= -1 && ans <= x;
+          @ maintaining (ans == -1) || ((long)ans * ans <= x);
+          @ maintaining (\forall int i; 0 <= i && i < l; (long)i * i <= x);
+          @ maintaining (\forall int i; r < i && i <= x; (long)i * i > x);
+          @ decreasing r - l;
+          @*/
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            // Use 64-bit multiplication to avoid overflow when squaring mid.
+            if ((long) mid * mid < x) {
+                ans = mid;
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+        return ans;
+    }
+}
+
+==============================
+tmp/MySqrt_Mutant4.java:8: error: This backslash token is unknown: \long
+      @ ensures (\result == -1) || ((\long)\result * \result < x && (long)(\result + 1) * (\result + 1) > x);  
+                                     ^
+1 error
+
+==============================

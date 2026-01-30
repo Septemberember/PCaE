@@ -1,0 +1,63 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class MultiPower2Ratio {
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n / 2;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n / 2;
+                factor += n;
+            }
+        }
+        int tmpFactor = 1;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        if(sum < 0){
+            sum = sum * -1;
+        }
+        sum = sum + tmpFactor;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: y == 0 || x == 0
+D1: return_value == 0
+
+T2: x != 0 && y != 0 && sum == 0
+D2: Exception
+
+T3: x != 0 && y != 0 && sum != 0
+D3: return_value == (x * y) / sum * tmpFactor
+```
+*end* role assistant
+start role user
+There exist variables which do not belong to input params of the program:sum, please regenerate the FSF, avoiding these variables!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

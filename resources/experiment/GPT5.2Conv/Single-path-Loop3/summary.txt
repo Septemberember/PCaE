@@ -1,0 +1,8 @@
+experimentName: GPT5.2Conv
+model: openai/gpt-5.2
+category: Single-path-Loop3
+total number: 21
+success number: 17
+success rate: 80.95%
+failed number: 4
+exception number: 0

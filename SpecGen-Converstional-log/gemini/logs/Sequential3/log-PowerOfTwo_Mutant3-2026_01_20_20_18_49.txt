@@ -1,0 +1,12 @@
+public class PowerOfTwo_Mutant3 {
+ // Utility: power-of-two check utility class
+
+    //@ ensures \result <==> (n > 1 && (\exists int i; 0 <= i && i < 31; n == (1 << i)));
+    public static boolean isPowerOfTwo(int n) {
+        // Fast check using bitwise trick
+        return n > 1 && (n & (n - 1)) == 0;
+    }
+}
+==============================
+
+==============================

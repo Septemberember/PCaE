@@ -1,0 +1,59 @@
+public class SpeedCalculator {
+
+    //@ spec_public
+    private static int MAX_TIME = 50;
+    //@ spec_public
+    private static int MIN_TIME = 5;
+
+    /*@ requires time >= Integer.MIN_VALUE && time <= Integer.MAX_VALUE;
+      @ ensures \result >= 52 && \result <= 90;
+      @ ensures (\forall int i; 0 <= i && i < 6; i == \old(offset) ==> buffer[i] == \old(speed + adjustment));
+      @*/
+    public static int calculateSpeed(int time) {
+        int[] buffer = new int[6];
+        int offset = 0;
+        int adjustment = 0;
+        if (time < MIN_TIME) {
+            time = MIN_TIME;
+            adjustment = adjustment - 10;
+        } else {
+            adjustment = adjustment + 5;
+        }
+        if (time > MAX_TIME) {
+            time = MAX_TIME;
+            adjustment = adjustment * 2;
+        }
+        int speed = 100 - time * 2;
+        if (speed >= 10 && speed <= 24) {
+            offset = speed / 4;
+        } else {
+            offset = speed % 6;
+        }
+        buffer[offset] = speed + adjustment;
+        return speed;
+    }
+}
+==============================
+tmp/SpeedCalculator.java:10: error: cannot find symbol
+      @ ensures (\forall int i; 0 <= i && i < 6; i == \old(offset) ==> buffer[i] == \old(speed + adjustment));
+                                                           ^
+  symbol:   variable offset
+  location: class SpeedCalculator
+tmp/SpeedCalculator.java:10: error: cannot find symbol
+      @ ensures (\forall int i; 0 <= i && i < 6; i == \old(offset) ==> buffer[i] == \old(speed + adjustment));
+                                                                       ^
+  symbol:   variable buffer
+  location: class SpeedCalculator
+tmp/SpeedCalculator.java:10: error: cannot find symbol
+      @ ensures (\forall int i; 0 <= i && i < 6; i == \old(offset) ==> buffer[i] == \old(speed + adjustment));
+                                                                                         ^
+  symbol:   variable speed
+  location: class SpeedCalculator
+tmp/SpeedCalculator.java:10: error: cannot find symbol
+      @ ensures (\forall int i; 0 <= i && i < 6; i == \old(offset) ==> buffer[i] == \old(speed + adjustment));
+                                                                                                 ^
+  symbol:   variable adjustment
+  location: class SpeedCalculator
+4 errors
+
+==============================

@@ -1,0 +1,66 @@
+public class ScoreCalculator {
+    //@ ensures ((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15 > 34) ==> (\result == ((((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15) * 3 - 21) % 5) + (\old(baseScore) < 5 ? -3 : (\old(baseScore) > 40 ? 6 : 1)) * 5);
+    //@ ensures ((\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15 <= 34) ==> 
+    //@         (let b = (\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15;
+    //@          let m = (\old(baseScore) < 5 ? -3 : (\old(baseScore) > 40 ? 6 : 1));
+    //@          let s = (\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore)));
+    //@          (b >= 13 && b <= 21) ? (\result == ((b - 8) * m + s > 45 ? 45 : (b - 8) * m + s)) : (\result == (b % 5) + m * 5));
+    public static int calculateBonus(int baseScore) {
+        int bonusBrackets[] = new int[5];
+        int bracket = 0;
+        int multiplier = 0;
+
+        if (baseScore < 5) {
+            baseScore = 5;
+            multiplier = multiplier - 3;
+        } else {
+            multiplier = multiplier + 1;
+        }
+
+        if (baseScore > 40) {
+            baseScore = 40;
+            multiplier = multiplier + 5;
+        }
+
+        int bonus = baseScore * 2 - 15;
+
+        if(bonus > 34){
+            bonus = bonus * 3 - 21;
+        }
+
+        if (bonus >= 13 && bonus <= 21) {
+            bracket = bonus / 4;
+            bonus = (bonus - 8) * multiplier;
+            bonus += baseScore;
+            bonus = bonus > 45 ? 45 : bonus;
+            bonusBrackets[bracket] = bonus + multiplier;
+        } else {
+            bracket = bonus % 5;
+            bonus = bracket + multiplier * 5;
+        }
+
+        return bonus;
+    }
+}
+==============================
+tmp/ScoreCalculator.java:4: error: ',', ')', or '[' expected
+    //@         (let b = (\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15;
+                      ^
+tmp/ScoreCalculator.java:4: error: illegal start of expression
+    //@         (let b = (\old(baseScore) < 5 ? 5 : (\old(baseScore) > 40 ? 40 : \old(baseScore))) * 2 - 15;
+                       ^
+tmp/ScoreCalculator.java:5: error: Method specs may not precede a variable declaration
+    //@          let m = (\old(baseScore) < 5 ? -3 : (\old(baseScore) > 40 ? 6 : 1));
+                     ^
+tmp/ScoreCalculator.java:7: error: illegal start of type
+    //@          (b >= 13 && b <= 21) ? (\result == ((b - 8) * m + s > 45 ? 45 : (b - 8) * m + s)) : (\result == (b % 5) + m * 5));
+                 ^
+tmp/ScoreCalculator.java:7: error: <identifier> expected
+    //@          (b >= 13 && b <= 21) ? (\result == ((b - 8) * m + s > 45 ? 45 : (b - 8) * m + s)) : (\result == (b % 5) + m * 5));
+                   ^
+tmp/ScoreCalculator.java:7: error: ';' expected
+    //@          (b >= 13 && b <= 21) ? (\result == ((b - 8) * m + s > 45 ? 45 : (b - 8) * m + s)) : (\result == (b % 5) + m * 5));
+                                     ^
+6 errors
+
+==============================

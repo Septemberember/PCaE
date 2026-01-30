@@ -1,0 +1,293 @@
+public class DensityEvaluator {
+
+    /*@ 
+      @ assignable \nothing;
+      @ ensures
+      @   (\let int d0 = mass - volume;
+      @    (\let int a1 = 2*mass + 9;  // after: adjusted +=5; adjusted*=2; adjusted-=4; adjusted=adjusted+3;
+      @      \result ==
+      @        (a1 > 40
+      @          ? (\let int a2 = a1 + 6;
+      @              ( (volume > 2 && mass < 20)
+      @                ? (\let int a3 = a2 + volume;
+      @                    ( volume < 8
+      @                      ? (\let int d  = volume - 5;
+      @                          (\let double density0 = ((double)a3) / ((double)d);
+      @                           (\let double density1 = (density0 > 60.0 ? density0 * 0.9 : density0 + 10.0);
+      @                            (\let double correction = 1.1 * ((double)d);
+      @                              density1 * correction + ((double)a3) * 0.05
+      @                            )
+      @                           )
+      @                          )
+      @                        )
+      @                      : (\let int a4 = a3 + 5;
+      @                          (\let double density0 = ((double)a4) * 1.3;
+      @                           (\let double density1 = (density0 > 60.0 ? density0 * 0.9 : density0 + 10.0);
+      @                            (\let double correction = 0.85 * ((double)d0);
+      @                              density1 * correction + ((double)a4) * 0.05
+      @                            )
+      @                           )
+      @                          )
+      @                        )
+      @                      )
+      @                    )
+      @                  )
+      @                : (\let int a5 = a2 + 2;
+      @                    (\let double density0 = ((double)a5) * 0.8;
+      @                     (\let double correction = 0.85 * ((double)d0);
+      @                       density0 * correction + ((double)a5) * 0.05
+      @                     )
+      @                    )
+      @                  )
+      @                )
+      @            )
+      @          : (\let int a6 = a1 - 5;
+      @              (\let int d1 = d0 + 1;
+      @                ( mass < 20
+      @                  ? (\let int a7 = a6 + 4;
+      @                      (\let double density0 = ((double)a7) * 0.5;
+      @                       (\let double density1 = (density0 < 30.0 ? density0 + 6.0 : density0 * 0.95);
+      @                        (\let double correction = 1.1 * ((double)d1);
+      @                          density1 * correction + ((double)a7) * 0.05
+      @                        )
+      @                       )
+      @                      )
+      @                    )
+      @                  : (\let double density0 = ((double)a6) * 0.6;
+      @                      (\let double density1 = (density0 < 30.0 ? density0 + 6.0 : density0 * 0.95);
+      @                       (\let double correction = 0.85 * ((double)d1);
+      @                         density1 * correction + ((double)a6) * 0.05
+      @                       )
+      @                      )
+      @                    )
+      @                  )
+      @                )
+      @              )
+      @            )
+      @        )
+      @    )
+      @   );
+      @*/
+    public static double calculateDensity(int mass, int volume) {
+        int adjusted = mass;
+        double density = 0.0;
+        boolean valid = true;
+        int factor = 4;
+        int divisor = 0;
+        divisor = mass - volume;
+
+        adjusted += 5;
+        adjusted *= 2;
+        adjusted -= factor;
+        adjusted = adjusted + 3;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (volume > 2 && mass < 20) {
+                adjusted = adjusted + volume;
+
+                if (volume < 8) {
+                    divisor = volume - 5;
+                    density = (double) adjusted / divisor;
+                } else {
+                    adjusted += 5;
+                    density = adjusted * 1.3;
+                    valid = false;
+                }
+
+                if (density > 60) {
+                    density = density * 0.9;
+                } else {
+                    density = density + 10;
+                }
+
+            } else {
+                adjusted += 2;
+                density = adjusted * 0.8;
+                valid = false;
+            }
+
+        } else {
+            adjusted -= 5;
+            divisor++;
+            if (mass < 20) {
+                adjusted += 4;
+                density = adjusted * 0.5;
+            } else {
+                density = adjusted * 0.6;
+                valid = false;
+            }
+
+            if (density < 30) {
+                density = density + 6;
+            } else {
+                density = density * 0.95;
+            }
+        }
+
+        double correction = (valid ? 1.1 : 0.85) * divisor;
+        double finalDensity = density * correction + adjusted * 0.05;
+        return finalDensity;
+    }
+}
+==============================
+tmp/DensityEvaluator.java:33: error: : expected
+      @                    )
+                            ^
+tmp/DensityEvaluator.java:34: error: illegal start of expression
+      @                  )
+                         ^
+tmp/DensityEvaluator.java:34: error: ')' expected
+      @                  )
+                          ^
+tmp/DensityEvaluator.java:43: error: ')' expected
+      @            )
+                    ^
+tmp/DensityEvaluator.java:44: error: Incorrectly formed or terminated ensures statement near here
+      @          : (\let int a6 = a1 - 5;
+                 ^
+tmp/DensityEvaluator.java:45: error: illegal start of type
+      @              (\let int d1 = d0 + 1;
+                     ^
+tmp/DensityEvaluator.java:45: error: Token \let is not a type
+      @              (\let int d1 = d0 + 1;
+                      ^
+tmp/DensityEvaluator.java:45: error: ',', ')', or '[' expected
+      @              (\let int d1 = d0 + 1;
+                                          ^
+tmp/DensityEvaluator.java:46: error: illegal start of type
+      @                ( mass < 20
+                       ^
+tmp/DensityEvaluator.java:46: error: illegal start of type
+      @                ( mass < 20
+                                ^
+tmp/DensityEvaluator.java:47: error: ',', ')', or '[' expected
+      @                  ? (\let int a7 = a6 + 4;
+                                                ^
+tmp/DensityEvaluator.java:48: error: illegal start of type
+      @                      (\let double density0 = ((double)a7) * 0.5;
+                             ^
+tmp/DensityEvaluator.java:48: error: Token \let is not a type
+      @                      (\let double density0 = ((double)a7) * 0.5;
+                              ^
+tmp/DensityEvaluator.java:48: error: ';' expected
+      @                      (\let double density0 = ((double)a7) * 0.5;
+                                                              ^
+tmp/DensityEvaluator.java:49: error: illegal start of type
+      @                       (\let double density1 = (density0 < 30.0 ? density0 + 6.0 : density0 * 0.95);
+                              ^
+tmp/DensityEvaluator.java:49: error: Token \let is not a type
+      @                       (\let double density1 = (density0 < 30.0 ? density0 + 6.0 : density0 * 0.95);
+                               ^
+tmp/DensityEvaluator.java:50: error: illegal start of type
+      @                        (\let double correction = 1.1 * ((double)d1);
+                               ^
+tmp/DensityEvaluator.java:50: error: Token \let is not a type
+      @                        (\let double correction = 1.1 * ((double)d1);
+                                ^
+tmp/DensityEvaluator.java:50: error: ';' expected
+      @                        (\let double correction = 1.1 * ((double)d1);
+                                                                        ^
+tmp/DensityEvaluator.java:51: error: <identifier> expected
+      @                          density1 * correction + ((double)a7) * 0.05
+                                         ^
+tmp/DensityEvaluator.java:51: error: <identifier> expected
+      @                          density1 * correction + ((double)a7) * 0.05
+                                                      ^
+tmp/DensityEvaluator.java:51: error: <identifier> expected
+      @                          density1 * correction + ((double)a7) * 0.05
+                                                                 ^
+tmp/DensityEvaluator.java:51: error: <identifier> expected
+      @                          density1 * correction + ((double)a7) * 0.05
+                                                                    ^
+tmp/DensityEvaluator.java:56: error: Token \let is not a type
+      @                  : (\let double density0 = ((double)a6) * 0.6;
+                            ^
+tmp/DensityEvaluator.java:56: error: ';' expected
+      @                  : (\let double density0 = ((double)a6) * 0.6;
+                                ^
+tmp/DensityEvaluator.java:57: error: illegal start of type
+      @                      (\let double density1 = (density0 < 30.0 ? density0 + 6.0 : density0 * 0.95);
+                             ^
+tmp/DensityEvaluator.java:57: error: Token \let is not a type
+      @                      (\let double density1 = (density0 < 30.0 ? density0 + 6.0 : density0 * 0.95);
+                              ^
+tmp/DensityEvaluator.java:58: error: illegal start of type
+      @                       (\let double correction = 0.85 * ((double)d1);
+                              ^
+tmp/DensityEvaluator.java:58: error: Token \let is not a type
+      @                       (\let double correction = 0.85 * ((double)d1);
+                               ^
+tmp/DensityEvaluator.java:58: error: ';' expected
+      @                       (\let double correction = 0.85 * ((double)d1);
+                                                                        ^
+tmp/DensityEvaluator.java:59: error: <identifier> expected
+      @                         density1 * correction + ((double)a6) * 0.05
+                                        ^
+tmp/DensityEvaluator.java:59: error: <identifier> expected
+      @                         density1 * correction + ((double)a6) * 0.05
+                                                     ^
+tmp/DensityEvaluator.java:59: error: <identifier> expected
+      @                         density1 * correction + ((double)a6) * 0.05
+                                                                ^
+tmp/DensityEvaluator.java:59: error: <identifier> expected
+      @                         density1 * correction + ((double)a6) * 0.05
+                                                                   ^
+34 errors
+
+==============================
+public class DensityEvaluator {
+
+    /*@ public normal_behavior
+      @   // prevent int overflow in the intermediate int computations:
+      @   requires a1 >= Integer.MIN_VALUE + 5;      // for (a1 - 5)
+      @   requires d0 <= Integer.MAX_VALUE - 1;      // for (d0 + 1)
+      @
+      @   ensures \result ==
+      @     (mass < 20
+      @       ? (
+      @           (
+      @             (
+      @               (((double)(a1 - 1)) * 0.5) < 30.0
+      @                 ? (((double)(a1 - 1)) * 0.5) + 6.0
+      @                 : (((double)(a1 - 1)) * 0.5) * 0.95
+      @             )
+      @             * (1.1 * ((double)(d0 + 1)))
+      @           )
+      @           + ((double)(a1 - 1)) * 0.05
+      @         )
+      @       : (
+      @           (
+      @             (
+      @               (((double)(a1 - 5)) * 0.6) < 30.0
+      @                 ? (((double)(a1 - 5)) * 0.6) + 6.0
+      @                 : (((double)(a1 - 5)) * 0.6) * 0.95
+      @             )
+      @             * (0.85 * ((double)(d0 + 1)))
+      @           )
+      @           + ((double)(a1 - 5)) * 0.05
+      @         )
+      @     );
+      @*/
+    public static double evaluateDensity(int mass, int a1, int d0) {
+        int a6 = a1 - 5;
+        int d1 = d0 + 1;
+
+        if (mass < 20) {
+            int a7 = a6 + 4; // == a1 - 1
+            double density0 = ((double) a7) * 0.5;
+            double density1 = (density0 < 30.0) ? (density0 + 6.0) : (density0 * 0.95);
+            double correction = 1.1 * ((double) d1);
+            return density1 * correction + ((double) a7) * 0.05;
+        } else {
+            double density0 = ((double) a6) * 0.6;
+            double density1 = (density0 < 30.0) ? (density0 + 6.0) : (density0 * 0.95);
+            double correction = 0.85 * ((double) d1);
+            return density1 * correction + ((double) a6) * 0.05;
+        }
+    }
+}
+==============================
+
+==============================

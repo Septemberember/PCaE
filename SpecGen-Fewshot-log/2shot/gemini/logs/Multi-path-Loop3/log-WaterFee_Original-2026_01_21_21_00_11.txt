@@ -1,0 +1,109 @@
+public class WaterFee_Original {
+    // WaterFee_Original: a simple tiered water fee calculator.
+    // It computes a running total fee from an input amount of tons.
+    // The algorithm uses fixed increments per tier.
+
+    /*@ requires tons >= 0;
+      @ ensures (tons <= 10) ==> (\result == 3 * tons);
+      @ ensures (tons > 10 && tons <= 30) ==> (\result == 30 + 4 * (tons - 10));
+      @ ensures (tons > 30) ==> (\result == 30 + 80 + 5 * (tons - 30));
+      @*/
+    public static int calcWaterFee(int tons) {
+        // Start with the provided amount of tons and a running total.
+        // The calculation uses a tiered pricing structure based on remaining tons.
+        int n = tons;
+        // Initialize the running fee counter.
+        int fee = 0;
+
+        //@ maintaining 0 <= n && n <= tons;
+        //@ maintaining (n <= 10) ==> (fee == (tons <= 10 ? 3 * (tons - n) : (tons <= 30 ? 30 + 4 * (tons - 10) : 110 + 5 * (tons - 30)) + 3 * (10 - n)));
+        //@ maintaining (n > 10 && n <= 30) ==> (fee == (tons <= 30 ? 4 * (tons - n) : 5 * (tons - 30) + 4 * (30 - n)));
+        //@ maintaining (n > 30) ==> (fee == 5 * (tons - n));
+        //@ decreases n;
+        while (n > 0) {
+            // Determine the tier for the current remaining ton
+            if (n > 30) {
+                // Tier 1: more than 30 tons
+                fee += 5;
+            } else if (n > 10) {
+                // Tier 2: 11 to 30 tons
+                fee += 4;
+            } else {
+                // Tier 3: 10 or fewer tons
+                fee += 3;
+            }
+            n--;
+        }
+
+        // End of loop. Return the accumulated fee.
+        return fee;
+    }
+
+    // End of calcWaterFee method
+}
+// End of WaterFee_Original class
+==============================
+tmp/WaterFee_Original.java:39: verify: The prover cannot establish an assertion (Postcondition: tmp/WaterFee_Original.java:9:) in method calcWaterFee
+        return fee;
+        ^
+tmp/WaterFee_Original.java:9: verify: Associated declaration: tmp/WaterFee_Original.java:39:
+      @ ensures (tons > 30) ==> (\result == 30 + 80 + 5 * (tons - 30));
+        ^
+2 verification failures
+
+==============================
+public class WaterFee_Original {
+    // WaterFee_Original: a simple tiered water fee calculator.
+    // It computes a running total fee from an input amount of tons.
+    // The algorithm uses fixed increments per tier.
+
+    /*@ requires tons >= 0;
+      @ ensures (tons <= 10) ==> (\result == 3 * tons);
+      @ ensures (tons > 10 && tons <= 30) ==> (\result == 30 + 4 * (tons - 10));
+      @ ensures (tons > 30) ==> (\result == 30 + 80 + 5 * (tons - 30));  
+      @*/
+    public static int calcWaterFee(int tons) {
+        // Start with the provided amount of tons and a running total.
+        // The calculation uses a tiered pricing structure based on remaining tons.
+        int n = tons;
+        // Initialize the running fee counter.
+        int fee = 0;
+
+        //@ maintaining 0 <= n && n <= tons;
+        //@ maintaining (n <= 10) ==> (fee == (tons <= 10 ? 3 * (tons - n) : (tons <= 30 ? 30 + 4 * (tons - 10) : 110 + 5 * (tons - 30)) + 3 * (10 - n)));
+        //@ maintaining (n > 10 && n <= 30) ==> (fee == (tons <= 30 ? 4 * (tons - n) : 5 * (tons - 30) + 4 * (30 - n)));
+        //@ maintaining (n > 30) ==> (fee == 5 * (tons - n));
+        //@ decreases n;
+        while (n > 0) {
+            // Determine the tier for the current remaining ton
+            if (n > 30) {
+                // Tier 1: more than 30 tons
+                fee += 5;
+            } else if (n > 10) {
+                // Tier 2: 11 to 30 tons
+                fee += 4;
+            } else {
+                // Tier 3: 10 or fewer tons
+                fee += 3;
+            }
+            n--;
+        }
+
+        // End of loop. Return the accumulated fee.
+        return fee;
+    }
+
+    // End of calcWaterFee method
+}
+// End of WaterFee_Original class
+
+==============================
+tmp/WaterFee_Original.java:39: verify: The prover cannot establish an assertion (Postcondition: tmp/WaterFee_Original.java:9:) in method calcWaterFee
+        return fee;
+        ^
+tmp/WaterFee_Original.java:9: verify: Associated declaration: tmp/WaterFee_Original.java:39:
+      @ ensures (tons > 30) ==> (\result == 30 + 80 + 5 * (tons - 30));  
+        ^
+2 verification failures
+
+==============================

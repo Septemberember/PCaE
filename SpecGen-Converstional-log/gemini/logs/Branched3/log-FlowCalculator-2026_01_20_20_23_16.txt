@@ -1,0 +1,179 @@
+public class FlowCalculator {
+
+    //@ requires rate >= 5 && pressure <= 14 ==> rate != 5;
+    //@ ensures \result == ((( ( (pressure + 7) * 2 - 3 + 4 > 40 ) ? ( (rate >= 5) ? ( (pressure <= 14) ? ( ( (double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5) > 80 ) ? ( (double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5) * 0.9 ) : ( (double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5) + 10 ) ) : ( ( (double)((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95 > 80 ) ? ( (double)((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95 * 0.9 ) : ( (double)((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95 + 10 ) ) ) : ( (double)((pressure + 7) * 2 - 3 + 4 + 6 - 4) * 1.1 ) ) : ( ( (rate < 3) ? ( (double)((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 ) : ( (double)((pressure + 7) * 2 - 3 + 4 - 6) * 0.8 ) ) < 20 ? ( ( (rate < 3) ? ( (double)((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 ) : ( (double)((pressure + 7) * 2 - 3 + 4 - 6) * 0.8 ) ) + 5 ) : ( ( (rate < 3) ? ( (double)((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 ) : ( (double)((pressure + 7) * 2 - 3 + 4 - 6) * 0.8 ) ) * 0.95 ) ) ) * ( ( (pressure + 7) * 2 - 3 + 4 > 40 && rate >= 5 && pressure <= 14) || ( (pressure + 7) * 2 - 3 + 4 > 40 && rate < 5 && false ) || ( (pressure + 7) * 2 - 3 + 4 <= 40 && rate < 3 ) ? 1.1 : 0.85 ) + ( (pressure + 7) * 2 - 3 + 4 + ( (pressure + 7) * 2 - 3 + 4 > 40 ? (6 + (rate >= 5 ? (rate + (pressure <= 14 ? 0 : 8)) : -4)) : (-6 + (rate < 3 ? 5 : 0)) ) ) * 0.05 );
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure ;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+        int sheld = 14;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure <= sheld) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+tmp/FlowCalculator.java:4: error: ')' expected
+    //@ ensures \result == ((( ( (pressure + 7) * 2 - 3 + 4 > 40 ) ? ( (rate >= 5) ? ( (pressure <= 14) ? ( ( (double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5) > 80 ) ? ( (double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5) * 0.9 ) : ( (double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5) + 10 ) ) : ( ( (double)((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95 > 80 ) ? ( (double)((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95 * 0.9 ) : ( (double)((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95 + 10 ) ) ) : ( (double)((pressure + 7) * 2 - 3 + 4 + 6 - 4) * 1.1 ) ) : ( ( (rate < 3) ? ( (double)((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 ) : ( (double)((pressure + 7) * 2 - 3 + 4 - 6) * 0.8 ) ) < 20 ? ( ( (rate < 3) ? ( (double)((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 ) : ( (double)((pressure + 7) * 2 - 3 + 4 - 6) * 0.8 ) ) + 5 ) : ( ( (rate < 3) ? ( (double)((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 ) : ( (double)((pressure + 7) * 2 - 3 + 4 - 6) * 0.8 ) ) * 0.95 ) ) ) * ( ( (pressure + 7) * 2 - 3 + 4 > 40 && rate >= 5 && pressure <= 14) || ( (pressure + 7) * 2 - 3 + 4 > 40 && rate < 5 && false ) || ( (pressure + 7) * 2 - 3 + 4 <= 40 && rate < 3 ) ? 1.1 : 0.85 ) + ( (pressure + 7) * 2 - 3 + 4 + ( (pressure + 7) * 2 - 3 + 4 > 40 ? (6 + (rate >= 5 ? (rate + (pressure <= 14 ? 0 : 8)) : -4)) : (-6 + (rate < 3 ? 5 : 0)) ) ) * 0.05 );
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ^
+1 error
+
+==============================
+public class FlowCalculator {
+
+    /*@ 
+      @ requires rate >= 5 && pressure <= 14 ==> rate != 5;
+      @
+      @ ensures \result == (\let double flow_val = (
+      @   ((pressure + 7) * 2 - 3 + 4 > 40) ? (
+      @     (rate >= 5) ? (
+      @       (pressure <= 14) ? (
+      @         (((double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5)) > 80 ? 
+      @           ((double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5)) * 0.9 : 
+      @           ((double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5)) + 10)
+      @       ) : (
+      @         (((double)((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95) > 80 ? 
+      @           ((double)((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95) * 0.9 : 
+      @           ((double)((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95) + 10)
+      @       )
+      @     ) : (
+      @       (double)((pressure + 7) * 2 - 3 + 4 + 6 - 4) * 1.1
+      @     )
+      @   ) : (
+      @     ((rate < 3 ? (double)((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 : (double)((pressure + 7) * 2 - 3 + 4 - 6) * 0.8) < 20) ?
+      @       (rate < 3 ? (double)((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 : (double)((pressure + 7) * 2 - 3 + 4 - 6) * 0.8) + 5 :
+      @       (rate < 3 ? (double)((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 : (double)((pressure + 7) * 2 - 3 + 4 - 6) * 0.8) * 0.95
+      @   )
+      @ );
+      @ \let boolean is_stable = (
+      @   ((pressure + 7) * 2 - 3 + 4 > 40) ? (rate >= 5 && pressure <= 14) : (rate < 3)
+      @ );
+      @ \let int adj_final = (
+      @   ((pressure + 7) * 2 - 3 + 4 > 40) ? (
+      @     (rate >= 5) ? ((pressure <= 14) ? ((pressure + 7) * 2 - 3 + 4 + 6 + rate) : ((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8)) : 
+      @     ((pressure + 7) * 2 - 3 + 4 + 6 - 4)
+      @   ) : (
+      @     (rate < 3) ? ((pressure + 7) * 2 - 3 + 4 - 6 + 5) : ((pressure + 7) * 2 - 3 + 4 - 6)
+      @   )
+      @ );
+      @ flow_val * (is_stable ? 1.1 : 0.85) + adj_final * 0.05);
+      @*/
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure ;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+        int sheld = 14;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure <= sheld) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+
+==============================

@@ -1,0 +1,111 @@
+public class WaterFee_Original {
+    // WaterFee_Original: a simple tiered water fee calculator.
+    // It computes a running total fee from an input amount of tons.
+    // The algorithm uses fixed increments per tier.
+
+    //@ ensures \result == (tons <= 0 ? 0
+    //@     : 3 * (tons <= 10 ? tons : 10)
+    //@       + 4 * (tons <= 10 ? 0 : (tons <= 30 ? tons - 10 : 20))
+    //@       + 5 * (tons <= 30 ? 0 : tons - 30));
+    public static int calcWaterFee(int tons) {
+        // Start with the provided amount of tons and a running total.
+        // The calculation uses a tiered pricing structure based on remaining tons.
+        int n = tons;
+        // Initialize the running fee counter.
+        int fee = 0;
+
+        //@ maintaining 0 <= n && n <= tons;
+        //@ maintaining fee == ((tons <= 0 ? 0
+        //@     : 3 * (tons <= 10 ? tons : 10)
+        //@       + 4 * (tons <= 10 ? 0 : (tons <= 30 ? tons - 10 : 20))
+        //@       + 5 * (tons <= 30 ? 0 : tons - 30))
+        //@   - (n <= 0 ? 0
+        //@     : 3 * (n <= 10 ? n : 10)
+        //@       + 4 * (n <= 10 ? 0 : (n <= 30 ? n - 10 : 20))
+        //@       + 5 * (n <= 30 ? 0 : n - 30)));
+        //@ decreases n;
+        while (n > 0) {
+            // Determine the tier for the current remaining ton
+            if (n > 30) {
+                // Tier 1: more than 30 tons
+                fee += 5;
+            } else if (n > 10) {
+                // Tier 2: 11 to 30 tons
+                fee += 4;
+            } else {
+                // Tier 3: 10 or fewer tons
+                fee += 3;
+            }
+            n--;
+        }
+
+        // End of loop. Return the accumulated fee.
+        return fee;
+    }
+
+    // End of calcWaterFee method
+}
+// End of WaterFee_Original class
+==============================
+tmp/WaterFee_Original.java:17: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method calcWaterFee
+        //@ maintaining 0 <= n && n <= tons;
+            ^
+1 verification failure
+
+==============================
+public class WaterFee_Original {
+    // WaterFee_Original: a simple tiered water fee calculator.
+    // It computes a running total fee from an input amount of tons.
+    // The algorithm uses fixed increments per tier.
+
+    //@ ensures \result == (tons <= 0 ? 0
+    //@     : 3 * (tons <= 10 ? tons : 10)
+    //@       + 4 * (tons <= 10 ? 0 : (tons <= 30 ? tons - 10 : 20))
+    //@       + 5 * (tons <= 30 ? 0 : tons - 30));
+    public static int calcWaterFee(int tons) {
+        // Start with the provided amount of tons and a running total.
+        // The calculation uses a tiered pricing structure based on remaining tons.
+        int n = tons;
+        // Initialize the running fee counter.
+        int fee = 0;
+
+        //@ maintaining 0 < n && n < tons;  
+        //@ maintaining fee == ((tons <= 0 ? 0
+        //@     : 3 * (tons <= 10 ? tons : 10)
+        //@       + 4 * (tons <= 10 ? 0 : (tons <= 30 ? tons - 10 : 20))
+        //@       + 5 * (tons <= 30 ? 0 : tons - 30))
+        //@   - (n <= 0 ? 0
+        //@     : 3 * (n <= 10 ? n : 10)
+        //@       + 4 * (n <= 10 ? 0 : (n <= 30 ? n - 10 : 20))
+        //@       + 5 * (n <= 30 ? 0 : n - 30)));
+        //@ decreases n;
+        while (n > 0) {
+            // Determine the tier for the current remaining ton
+            if (n > 30) {
+                // Tier 1: more than 30 tons
+                fee += 5;
+            } else if (n > 10) {
+                // Tier 2: 11 to 30 tons
+                fee += 4;
+            } else {
+                // Tier 3: 10 or fewer tons
+                fee += 3;
+            }
+            n--;
+        }
+
+        // End of loop. Return the accumulated fee.
+        return fee;
+    }
+
+    // End of calcWaterFee method
+}
+// End of WaterFee_Original class
+
+==============================
+tmp/WaterFee_Original.java:17: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method calcWaterFee
+        //@ maintaining 0 < n && n < tons;  
+            ^
+1 verification failure
+
+==============================

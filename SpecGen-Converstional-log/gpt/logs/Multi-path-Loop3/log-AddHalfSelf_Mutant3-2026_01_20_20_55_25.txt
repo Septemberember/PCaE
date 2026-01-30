@@ -1,0 +1,210 @@
+public class AddHalfSelf_Mutant3{
+    /*@ public normal_behavior
+      @   // To avoid 32-bit signed integer overflow in the final addition/subtraction.
+      @   requires -1431655765 <= x && x <= 1431655765;
+      @   assignable \nothing;
+      @   ensures (\let int start = (x > 0 ? -x : x);
+      @            \let int cnt = (\num_of int k; start <= k && k < 0 && k % 2 == 0);
+      @              (x < 0 ==> \result == x - cnt)
+      @           && (x >= 0 ==> \result == x + cnt));
+      @*/
+    public static int addHalfSelf(int x){
+        // Prepare working variables
+        // addNum serves as the delta accumulator
+        int n = x;
+        int addNum = 0;
+        // Initialize and adjust inputs to drive the loop
+        if(x > 0){
+            // If x is positive, negate to ensure the subsequent loop processes negatives
+            n = -x;
+        }
+
+        //@ ghost int start = (x > 0 ? -x : x);
+
+        // End pre-processing; begin counting parity inside the loop
+        /*@ maintaining start <= n && n <= 0;
+          @ maintaining addNum == (\num_of int k; start <= k && k < n && k % 2 == 0);
+          @ decreases -n;
+          @*/
+        while(n < 0){
+            // Count an even n value by incrementing addNum
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n++;
+        }
+        // Exiting the counting loop; addNum holds the adjustments
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            // Compute final result based on the sign of the original x
+            return x + addNum;
+        }
+    }
+}
+==============================
+tmp/AddHalfSelf_Mutant3.java:7: error: incompatible types: \bigint cannot be converted to int
+      @            \let int cnt = (\num_of int k; start <= k && k < 0 && k % 2 == 0);
+                                   ^
+1 error
+
+==============================
+public class AddHalfSelf_Mutant3{
+    /*@ public normal_behavior
+      @   // Prevent overflow in the final x +/- cnt computation (cnt <= |x|), and avoid -x overflow.
+      @   requires x != Integer.MIN_VALUE;
+      @   requires -1431655765 <= x && x <= 1431655765;
+      @   assignable \nothing;
+      @   ensures (\let int start = (x > 0 ? -x : x);
+      @            \let \bigint cnt = (\num_of int k; start <= k && k < 0 && k % 2 == 0);
+      @              (x < 0 ==> \result == x - (int)cnt)
+      @           && (x >= 0 ==> \result == x + (int)cnt));
+      @*/
+    public static int addHalfSelf(int x){
+        // Prepare working variables
+        // addNum serves as the delta accumulator
+        int n = x;
+        int addNum = 0;
+        // Initialize and adjust inputs to drive the loop
+        if(x > 0){
+            // If x is positive, negate to ensure the subsequent loop processes negatives
+            n = -x;
+        }
+
+        //@ ghost int start = (x > 0 ? -x : x);
+
+        // End pre-processing; begin counting parity inside the loop
+        /*@ maintaining start <= n && n <= 0;
+          @ maintaining (\bigint)addNum == (\num_of int k; start <= k && k < n && k % 2 == 0);
+          @ decreases -n;
+          @*/
+        while(n < 0){
+            // Count an even n value by incrementing addNum
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n++;
+        }
+        // Exiting the counting loop; addNum holds the adjustments
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            // Compute final result based on the sign of the original x
+            return x + addNum;
+        }
+    }
+}
+==============================
+TimeoutException
+==============================
+public class AddHalfSelf_Mutant3{
+    /*@ public normal_behavior
+      @   requires x != Integer.MIN_VALUE;
+      @   // Prevent overflow of the final x +/- (|x|/2) computation.
+      @   requires -1431655765 <= x && x <= 1431655765;
+      @   assignable \nothing;
+      @   ensures (x < 0  ==> \result == x - ((-x) / 2));
+      @   ensures (x >= 0 ==> \result == x + (x / 2));
+      @*/
+    public static int addHalfSelf(int x){
+        // Prepare working variables
+        // addNum serves as the delta accumulator
+        int n = x;
+        int addNum = 0;
+        // Initialize and adjust inputs to drive the loop
+        if(x > 0){
+            // If x is positive, negate to ensure the subsequent loop processes negatives
+            n = -x;
+        }
+
+        //@ ghost int start = n;
+
+        // End pre-processing; begin counting parity inside the loop
+        /*@ maintaining start <= n && n <= 0;
+          @ maintaining 0 <= addNum && addNum <= n - start;
+          @ decreases -n;
+          @*/
+        while(n < 0){
+            // Count an even n value by incrementing addNum
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n++;
+        }
+        // Exiting the counting loop; addNum holds the adjustments
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            // Compute final result based on the sign of the original x
+            return x + addNum;
+        }
+    }
+}
+==============================
+tmp/AddHalfSelf_Mutant3.java:41: verify: The prover cannot establish an assertion (Postcondition: tmp/AddHalfSelf_Mutant3.java:8:) in method addHalfSelf
+            return x + addNum;
+            ^
+tmp/AddHalfSelf_Mutant3.java:8: verify: Associated declaration: tmp/AddHalfSelf_Mutant3.java:41:
+      @   ensures (x >= 0 ==> \result == x + (x / 2));
+          ^
+2 verification failures
+
+==============================
+public class AddHalfSelf_Mutant3{
+    /*@ public normal_behavior
+      @   requires x != Integer.MIN_VALUE;
+      @   // Prevent overflow of the final x +/- (|x|/2) computation.
+      @   requires -1431655765 <= x && x <= 1431655765;
+      @   assignable \nothing;
+      @   ensures (x < 0  ==> \result == x - ((-x) / 2));
+      @   ensures (x > 0 ==> \result == x + (x / 2));  
+      @*/
+    public static int addHalfSelf(int x){
+        // Prepare working variables
+        // addNum serves as the delta accumulator
+        int n = x;
+        int addNum = 0;
+        // Initialize and adjust inputs to drive the loop
+        if(x > 0){
+            // If x is positive, negate to ensure the subsequent loop processes negatives
+            n = -x;
+        }
+
+        //@ ghost int start = n;
+
+        // End pre-processing; begin counting parity inside the loop
+        /*@ maintaining start <= n && n <= 0;
+          @ maintaining 0 <= addNum && addNum <= n - start;
+          @ decreases -n;
+          @*/
+        while(n < 0){
+            // Count an even n value by incrementing addNum
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n++;
+        }
+        // Exiting the counting loop; addNum holds the adjustments
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            // Compute final result based on the sign of the original x
+            return x + addNum;
+        }
+    }
+}
+
+==============================
+tmp/AddHalfSelf_Mutant3.java:41: verify: The prover cannot establish an assertion (Postcondition: tmp/AddHalfSelf_Mutant3.java:8:) in method addHalfSelf
+            return x + addNum;
+            ^
+tmp/AddHalfSelf_Mutant3.java:8: verify: Associated declaration: tmp/AddHalfSelf_Mutant3.java:41:
+      @   ensures (x > 0 ==> \result == x + (x / 2));  
+          ^
+2 verification failures
+
+==============================

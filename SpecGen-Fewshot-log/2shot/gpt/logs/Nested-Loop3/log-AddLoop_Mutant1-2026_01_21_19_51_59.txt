@@ -1,0 +1,55 @@
+public class AddLoop_Mutant1 {
+
+    /*@  public normal_behavior
+      @    requires y != Integer.MIN_VALUE; // to avoid overflow in "int n = -y" when y == MIN_VALUE
+      @    ensures (y > 0)  ==> ((\bigint)\result == (\bigint)x + (((\bigint)y + 1) / 2));
+      @    ensures (y <= 0) ==> ((\bigint)\result == (\bigint)x - ((((-(\bigint)y) + 1)) / 2));
+      @*/
+    public static int AddLoop(int x, int y) {
+        int sum = x;
+        // Initialize accumulator with x
+        // Branch on sign of y
+        if (y > 0) {
+            int n = y;
+            // Positive-y path: increment sum
+            // Each iteration increases sum by 1
+            // Decrement n by 2
+            /*@ maintaining y > 0;
+              @ maintaining (\bigint)n <= (\bigint)y;
+              @ maintaining (\bigint)n >= -1;
+              @ maintaining (((\bigint)y - (\bigint)n) % 2 == 0);
+              @ maintaining (\bigint)sum == (\bigint)x + (((\bigint)y - (\bigint)n) / 2);
+              @ decreases n;
+              @*/
+            while (n > 0) {
+                sum = sum + 1;
+                // Move toward termination
+                n = n - 2;
+            }
+            // End of positive-y loop
+        } else {
+            int n = -y;
+            // Negative-y path: decrement sum
+            // Each iteration decreases sum by 1
+            // Decrement n by 2
+            /*@ maintaining y <= 0;
+              @ maintaining (\bigint)n <= (-(\bigint)y);
+              @ maintaining (\bigint)n >= -1;
+              @ maintaining (((-(\bigint)y) - (\bigint)n) % 2 == 0);
+              @ maintaining (\bigint)sum == (\bigint)x - (((-(\bigint)y) - (\bigint)n) / 2);
+              @ decreases n;
+              @*/
+            while (n > 0) {
+                sum = sum - 1;
+                // Move toward termination
+                n = n - 2;
+            }
+            // End of negative-y path
+        }
+        // Return final computed sum
+        return sum;
+    }
+}
+==============================
+
+==============================

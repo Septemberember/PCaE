@@ -1,0 +1,89 @@
+public class AltitudeController_Mutant4 {
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures (\let int error = targetHeight - currentHeight;
+      @            int absError = (error < 0 ? -error : error);
+      @            (absError >= 30 ==> \result == (error > 0 ? 5 : -5)) &&
+      @            (absError < 30 && absError > 20 ==> \result == (error > 0 ? 3 : -3)) &&
+      @            (absError <= 20 && absError > 10 ==> \result == (error > 0 ? 2 : -2)) &&
+      @            (absError <= 10 ==> \result == error));
+      @   ensures -10 <= \result && \result <= 10;
+      @*/
+    public static int altitudeController(int currentHeight,int targetHeight) {
+        int error = targetHeight - currentHeight;
+        int absError = 0;
+        absError = error < 0 ? -error : error;
+        int controlSignal = 0;
+        if (absError >= 30) { //Changed > to >=
+            controlSignal = error > 0 ? 5 : -5;
+        } else if (absError > 20) {
+            controlSignal = error > 0 ? 3 : -3;
+        } else if (absError > 10) {
+            controlSignal = error > 0 ? 2 : -2;
+        } else {
+            controlSignal = error;
+        }
+        return controlSignal;
+    }
+}
+==============================
+tmp/AltitudeController_Mutant4.java:5: error: '.class' expected
+      @            int absError = (error < 0 ? -error : error);
+                       ^
+tmp/AltitudeController_Mutant4.java:6: error: illegal start of type
+      @            (absError >= 30 ==> \result == (error > 0 ? 5 : -5)) &&
+                   ^
+tmp/AltitudeController_Mutant4.java:6: error: <identifier> expected
+      @            (absError >= 30 ==> \result == (error > 0 ? 5 : -5)) &&
+                            ^
+tmp/AltitudeController_Mutant4.java:6: error: ';' expected
+      @            (absError >= 30 ==> \result == (error > 0 ? 5 : -5)) &&
+                                                                      ^
+tmp/AltitudeController_Mutant4.java:7: error: <identifier> expected
+      @            (absError < 30 && absError > 20 ==> \result == (error > 0 ? 3 : -3)) &&
+                              ^
+tmp/AltitudeController_Mutant4.java:7: error: illegal start of type
+      @            (absError < 30 && absError > 20 ==> \result == (error > 0 ? 3 : -3)) &&
+                               ^
+tmp/AltitudeController_Mutant4.java:7: error: <identifier> expected
+      @            (absError < 30 && absError > 20 ==> \result == (error > 0 ? 3 : -3)) &&
+                                             ^
+tmp/AltitudeController_Mutant4.java:7: error: Token \result is not a type
+      @            (absError < 30 && absError > 20 ==> \result == (error > 0 ? 3 : -3)) &&
+                                                       ^
+tmp/AltitudeController_Mutant4.java:7: error: ';' expected
+      @            (absError < 30 && absError > 20 ==> \result == (error > 0 ? 3 : -3)) &&
+                                                              ^
+tmp/AltitudeController_Mutant4.java:7: error: <identifier> expected
+      @            (absError < 30 && absError > 20 ==> \result == (error > 0 ? 3 : -3)) &&
+                                                                        ^
+tmp/AltitudeController_Mutant4.java:8: error: <identifier> expected
+      @            (absError <= 20 && absError > 10 ==> \result == (error > 0 ? 2 : -2)) &&
+                            ^
+tmp/AltitudeController_Mutant4.java:8: error: <identifier> expected
+      @            (absError <= 20 && absError > 10 ==> \result == (error > 0 ? 2 : -2)) &&
+                                              ^
+tmp/AltitudeController_Mutant4.java:8: error: Token \result is not a type
+      @            (absError <= 20 && absError > 10 ==> \result == (error > 0 ? 2 : -2)) &&
+                                                        ^
+tmp/AltitudeController_Mutant4.java:8: error: ';' expected
+      @            (absError <= 20 && absError > 10 ==> \result == (error > 0 ? 2 : -2)) &&
+                                                               ^
+tmp/AltitudeController_Mutant4.java:8: error: <identifier> expected
+      @            (absError <= 20 && absError > 10 ==> \result == (error > 0 ? 2 : -2)) &&
+                                                                         ^
+tmp/AltitudeController_Mutant4.java:9: error: <identifier> expected
+      @            (absError <= 10 ==> \result == error));
+                            ^
+tmp/AltitudeController_Mutant4.java:9: error: Token \result is not a type
+      @            (absError <= 10 ==> \result == error));
+                                       ^
+tmp/AltitudeController_Mutant4.java:9: error: ';' expected
+      @            (absError <= 10 ==> \result == error));
+                                              ^
+tmp/AltitudeController_Mutant4.java:9: error: <identifier> expected
+      @            (absError <= 10 ==> \result == error));
+                                                       ^
+19 errors
+
+==============================

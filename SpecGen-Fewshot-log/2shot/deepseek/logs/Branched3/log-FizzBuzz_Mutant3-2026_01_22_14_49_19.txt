@@ -1,0 +1,27 @@
+/**
+ * Minimal FizzBuzz variant with simple additive logic.
+ * The method computes a sum based on divisibility by 2 and 5.
+ */
+ 
+public class FizzBuzz_Mutant3 {
+    //@ requires n >= 0;
+    //@ ensures \result == (n % 2 == 0 ? 3 : 0) + (n % 5 == 0 ? 5 : 0);
+    /*@ pure @*/ public static int fizzBuzz(int n) {
+        int res = 0;
+        // Initialize accumulator for contributions from divisibility checks.
+        if (n % 2 == 0) { // changed from 3 to 2
+            res += 3;
+        }
+        // Completed handling of divisibility by 2.
+
+        if (n % 5 == 0) {
+            res += 5;
+        }
+        // Check divisibility by 5 and accumulate.
+        // Return accumulated result.
+        return res;
+    }
+}
+==============================
+
+==============================

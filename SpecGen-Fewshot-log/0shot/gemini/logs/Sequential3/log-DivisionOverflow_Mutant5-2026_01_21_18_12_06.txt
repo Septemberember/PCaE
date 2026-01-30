@@ -1,0 +1,27 @@
+public class DivisionOverflow_Mutant5 {
+    /*@ public normal_behavior
+      @   requires nom != 0;
+      @   requires !(denom == Integer.MIN_VALUE && nom == -1);
+      @   ensures \result == denom / nom;
+      @ also
+      @ public exceptional_behavior
+      @   requires nom == 0;
+      @   signals (ArithmeticException) true;
+      @*/
+    public static int division_test_fail_overflow(int nom, int denom) {
+    
+        // Mutation: swapped operands to exercise edge cases in integer division
+        // This variant documents the intent of this mutant variation
+
+        //~should_fail
+        int tmp = denom / nom; // swapping numerator and denominator
+        return tmp;
+    }
+}
+==============================
+tmp/DivisionOverflow_Mutant5.java:17: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method division_test_fail_overflow
+        int tmp = denom / nom; // swapping numerator and denominator
+                        ^
+1 verification failure
+
+==============================

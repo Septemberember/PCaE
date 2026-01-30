@@ -1,0 +1,8 @@
+experimentName: Deepseek2shot
+model: deepseek/deepseek-v3.2
+category: Single-path-Loop3
+total number: 21
+success number: 11
+success rate: 52.38%
+failed number: 10
+exception number: 0

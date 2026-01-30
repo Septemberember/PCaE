@@ -1,0 +1,63 @@
+public class MyPower_Mutant2 {
+    // Utility: computes x raised to the power n using iterative multiplication.
+    //@ requires n >= 0;
+    //@ requires (\forall int t; 0 <= t && t <= n;
+    //@             Integer.MIN_VALUE <= (\product int k; 1 <= k && k <= t; (\bigint)x) &&
+    //@             (\product int k; 1 <= k && k <= t; (\bigint)x) <= Integer.MAX_VALUE);
+    //@ ensures \result == (int)(\product int k; 1 <= k && k <= n; (\bigint)x);
+    //@ ensures n == 0 ==> \result == 1;
+    public static int power(int x, int n) {
+        // Start with multiplicative identity
+        int res = 1;
+        // Multiply x by itself n times
+        //@ maintaining 1 <= i && i <= n + 1;
+        //@ maintaining res == (int)(\product int k; 1 <= k && k < i; (\bigint)x);
+        //@ decreases n - i + 1;
+        for(int i = 1; i <= n; i++){
+            res = res * x;
+        }
+        // End of power computation
+        return res;
+    }
+
+    // Class ends
+}
+==============================
+tmp/MyPower_Mutant2.java:14: verify: The prover cannot establish an assertion (ArithmeticCastRange) in method power
+        //@ maintaining res == (int)(\product int k; 1 <= k && k < i; (\bigint)x);
+                               ^
+1 verification failure
+
+==============================
+public class MyPower_Mutant2 {
+    // Utility: computes x raised to the power n using iterative multiplication.
+    //@ requires n >= 0;
+    //@ requires (\forall int t; 0 <= t && t <= n;
+    //@             Integer.MIN_VALUE <= (\product int k; 1 <= k && k <= t; (\bigint)x) &&
+    //@             (\product int k; 1 <= k && k <= t; (\bigint)x) <= Integer.MAX_VALUE);
+    //@ ensures \result == (int)(\product int k; 1 <= k && k <= n; (\bigint)x);
+    //@ ensures n == 0 ==> \result == 1;
+    public static int power(int x, int n) {
+        // Start with multiplicative identity
+        int res = 1;
+        // Multiply x by itself n times
+        //@ maintaining 1 <= i && i <= n + 1;
+        //@ maintaining res == (int)(\product int k; 1 < k && k < i; (\bigint)x);  
+        //@ decreases n - i + 1;
+        for(int i = 1; i <= n; i++){
+            res = res * x;
+        }
+        // End of power computation
+        return res;
+    }
+
+    // Class ends
+}
+
+==============================
+tmp/MyPower_Mutant2.java:14: verify: The prover cannot establish an assertion (ArithmeticCastRange) in method power
+        //@ maintaining res == (int)(\product int k; 1 < k && k < i; (\bigint)x);  
+                               ^
+1 verification failure
+
+==============================

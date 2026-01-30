@@ -1,0 +1,8 @@
+experimentName: GPT5.2Conv
+model: openai/gpt-5.2
+category: Sequential3
+total number: 63
+success number: 63
+success rate: 100.0%
+failed number: 0
+exception number: 0

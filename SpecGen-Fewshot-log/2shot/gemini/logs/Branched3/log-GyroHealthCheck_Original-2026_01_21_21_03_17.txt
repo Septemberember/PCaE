@@ -1,0 +1,30 @@
+public class GyroHealthCheck_Original {
+    // GyroHealthCheck: compare axis differences and flag high variation
+    //@ requires x > Integer.MIN_VALUE && y > Integer.MIN_VALUE && z > Integer.MIN_VALUE;
+    //@ requires x < Integer.MAX_VALUE / 2 && y < Integer.MAX_VALUE / 2 && z < Integer.MAX_VALUE / 2;
+    //@ requires x > Integer.MIN_VALUE / 2 && y > Integer.MIN_VALUE / 2 && z > Integer.MIN_VALUE / 2;
+    //@ ensures ((\num_of int a, b; (a == x && b == y) || (a == y && b == z) || (a == x && b == z); (a - b > 10 || b - a > 10)) > 0) ==> \result == 1;
+    //@ ensures ((\forall int a, b; (a == x && b == y) || (a == y && b == z) || (a == x && b == z); (a - b <= 10 && b - a <= 10))) ==> \result == 0;
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // Absolute difference for X and Y
+        if (diffXY < 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // Absolute difference for Y and Z
+        if (diffYZ < 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // Absolute difference for X and Z
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        int alarm = 0;
+        // Trigger alarm if any pairwise difference exceeds threshold
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        return alarm;
+        // End of gyroHealthCheck calculations
+    }
+    // End of GyroHealthCheck_Original class
+}
+==============================
+TimeoutException
+==============================

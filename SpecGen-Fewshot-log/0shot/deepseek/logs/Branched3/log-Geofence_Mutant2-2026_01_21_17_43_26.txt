@@ -1,0 +1,32 @@
+//@ model import org.jmlspecs.models.JMLType;
+
+public class Geofence_Mutant2 {
+    // Geofence boundary checks for coordinate validity
+    // x must be within [0, limitX], inclusive
+    // y must be within (0, limitY), i.e., 1..limitY-1
+
+    /*@ public normal_behavior
+      @ requires limitX >= 0 && limitY >= 0;
+      @ ensures \result == 0 <==> 
+      @         (x >= 0 && x <= limitX && y > 0 && y < limitY);
+      @ ensures \result == 1 <==> 
+      @         (x < 0 || x > limitX || y <= 0 || y >= limitY);
+      @*/
+    public static int geofence(int x, int y, int limitX, int limitY) {
+        int alarm = 0;
+        if (x < 0 || x > limitX) {
+            alarm = 1;
+        }
+        if (y <= 0 || y >= limitY) {
+            alarm = 1;
+        }
+        return alarm;
+    }
+}
+==============================
+tmp/Geofence_Mutant2.java:1: error: package org.jmlspecs.models does not exist
+//@ model import org.jmlspecs.models.JMLType;
+                                    ^
+1 error
+
+==============================

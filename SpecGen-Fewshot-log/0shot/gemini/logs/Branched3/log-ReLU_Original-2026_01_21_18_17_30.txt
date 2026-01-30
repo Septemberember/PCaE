@@ -1,0 +1,59 @@
+public class ReLU_Original {
+    // ReLU_Original: a minimal ReLU implementation example
+    // This class exposes a single static method to compute the rectified linear unit.
+
+    /*@ public normal_behavior
+      @   ensures (x >= 0.0 ==> \result == x);
+      @   ensures (x < 0.0 ==> \result == 0.0);
+      @   ensures Double.isNaN(x) ==> Double.isNaN(\result);
+      @*/
+    public static double computeReLU(double x) {
+        // Computes the ReLU activation: returns x if x is non-negative, otherwise 0.0.
+        if(x >= 0.0) {
+            return x;
+        }
+        // If the input is negative, the activation clamps to zero.
+        return 0.0;
+    }
+    // End of computeReLU method
+}
+==============================
+tmp/ReLU_Original.java:16: verify: The prover cannot establish an assertion (Postcondition: tmp/ReLU_Original.java:8:) in method computeReLU
+        return 0.0;
+        ^
+tmp/ReLU_Original.java:8: verify: Associated declaration: tmp/ReLU_Original.java:16:
+      @   ensures Double.isNaN(x) ==> Double.isNaN(\result);
+          ^
+2 verification failures
+
+==============================
+public class ReLU_Original {
+    // ReLU_Original: a minimal ReLU implementation example
+    // This class exposes a single static method to compute the rectified linear unit.
+
+    /*@ public normal_behavior
+      @   ensures (x >= 0.0 ==> \result == x);
+      @   ensures (x < 0.0 ==> \result == 0.0);
+      @   ensures Double.isNaN(x) ==> Double.isNaN(\result);  
+      @*/
+    public static double computeReLU(double x) {
+        // Computes the ReLU activation: returns x if x is non-negative, otherwise 0.0.
+        if(x >= 0.0) {
+            return x;
+        }
+        // If the input is negative, the activation clamps to zero.
+        return 0.0;
+    }
+    // End of computeReLU method
+}
+
+==============================
+tmp/ReLU_Original.java:16: verify: The prover cannot establish an assertion (Postcondition: tmp/ReLU_Original.java:8:) in method computeReLU
+        return 0.0;
+        ^
+tmp/ReLU_Original.java:8: verify: Associated declaration: tmp/ReLU_Original.java:16:
+      @   ensures Double.isNaN(x) ==> Double.isNaN(\result);  
+          ^
+2 verification failures
+
+==============================

@@ -1,0 +1,165 @@
+public class VoltageCalculator {
+
+    /*@ public normal_behavior
+      @   requires resistance != 8;
+      @   ensures \result == (\let int current = 22, bias = 3;
+      @     (\let int adj1 = (current + resistance) * 2 - bias + 5;
+      @       (\let int adj2 = (adj1 > 60) ? (adj1 + 9) : (adj1 - 7);
+      @         (\let boolean isStable = (adj1 > 60) ? (resistance != 0) : (resistance < 5);
+      @           (\let double v1 = (adj1 > 60) ? 
+      @             (resistance != 0 ? (double)adj2 / (resistance - 8) : (adj2 + 6) * 1.25) :
+      @             (resistance < 5 ? (adj2 + 4) * 0.7 : adj2 * 0.5);
+      @             (\let double v2 = (adj1 > 60) ?
+      @               (v1 > 80 ? v1 * 0.88 : v1 + 12) :
+      @               (v1 < 30 ? v1 + 8 : v1 * 0.92);
+      @               v2 * (isStable ? 1.12 : 0.83) + adj2 * 0.04))))));
+      @   assignable \nothing;
+      @ also
+      @ public exceptional_behavior
+      @   requires resistance == 8;
+      @   signals (ArithmeticException) (2 * (22 + resistance) - 3 + 5 > 60 && resistance != 0);
+      @*/
+    public static double computeVoltage(int resistance) {
+        int current = 22;
+        int adjusted = current;
+        double voltage = 0.0;
+        boolean stable = true;
+        int bias = 3;
+
+        adjusted += resistance;
+        adjusted *= 2;
+        adjusted -= bias;
+        adjusted = adjusted + 5;
+
+        if (adjusted > 60) {
+            adjusted += 9;
+
+            if (resistance != 0) {
+                int divisor = resistance - 8;
+                voltage = (double) adjusted / divisor;
+            } else {
+                adjusted = adjusted + 6;
+                voltage = adjusted * 1.25;
+                stable = false;
+            }
+
+            if (voltage > 80) {
+                voltage = voltage * 0.88;
+            } else {
+                voltage = voltage + 12;
+            }
+
+        } else {
+            adjusted -= 7;
+
+            if (resistance < 5) {
+                adjusted += 4;
+                voltage = adjusted * 0.7;
+            } else {
+                voltage = adjusted * 0.5;
+                stable = false;
+            }
+
+            if (voltage < 30) {
+                voltage = voltage + 8;
+            } else {
+                voltage = voltage * 0.92;
+            }
+        }
+
+        double correction = stable ? 1.12 : 0.83;
+        double finalVoltage = voltage * correction + adjusted * 0.04;
+        System.out.println("Voltage result: " + finalVoltage);
+        return finalVoltage;
+    }
+}
+==============================
+tmp/VoltageCalculator.java:5: error: <identifier> expected
+      @   ensures \result == (\let int current = 22, bias = 3;
+                                                         ^
+1 error
+
+==============================
+public class VoltageCalculator {
+
+    /*@ public normal_behavior
+      @   requires resistance != 8;
+      @   ensures \result == (\let int current = 22, bias = 3;  
+      @     (\let int adj1 = (current + resistance) * 2 - bias + 5;
+      @       (\let int adj2 = (adj1 > 60) ? (adj1 + 9) : (adj1 - 7);
+      @         (\let boolean isStable = (adj1 > 60) ? (resistance != 0) : (resistance < 5);
+      @           (\let double v1 = (adj1 > 60) ? 
+      @             (resistance != 0 ? (double)adj2 / (resistance - 8) : (adj2 + 6) * 1.25) :
+      @             (resistance < 5 ? (adj2 + 4) * 0.7 : adj2 * 0.5);
+      @             (\let double v2 = (adj1 > 60) ?
+      @               (v1 > 80 ? v1 * 0.88 : v1 + 12) :
+      @               (v1 < 30 ? v1 + 8 : v1 * 0.92);
+      @               v2 * (isStable ? 1.12 : 0.83) + adj2 * 0.04))))));
+      @   assignable \nothing;
+      @ also
+      @ public exceptional_behavior
+      @   requires resistance == 8;
+      @   signals (ArithmeticException) (2 * (22 + resistance) - 3 + 5 > 60 && resistance != 0);
+      @*/
+    public static double computeVoltage(int resistance) {
+        int current = 22;
+        int adjusted = current;
+        double voltage = 0.0;
+        boolean stable = true;
+        int bias = 3;
+
+        adjusted += resistance;
+        adjusted *= 2;
+        adjusted -= bias;
+        adjusted = adjusted + 5;
+
+        if (adjusted > 60) {
+            adjusted += 9;
+
+            if (resistance != 0) {
+                int divisor = resistance - 8;
+                voltage = (double) adjusted / divisor;
+            } else {
+                adjusted = adjusted + 6;
+                voltage = adjusted * 1.25;
+                stable = false;
+            }
+
+            if (voltage > 80) {
+                voltage = voltage * 0.88;
+            } else {
+                voltage = voltage + 12;
+            }
+
+        } else {
+            adjusted -= 7;
+
+            if (resistance < 5) {
+                adjusted += 4;
+                voltage = adjusted * 0.7;
+            } else {
+                voltage = adjusted * 0.5;
+                stable = false;
+            }
+
+            if (voltage < 30) {
+                voltage = voltage + 8;
+            } else {
+                voltage = voltage * 0.92;
+            }
+        }
+
+        double correction = stable ? 1.12 : 0.83;
+        double finalVoltage = voltage * correction + adjusted * 0.04;
+        System.out.println("Voltage result: " + finalVoltage);
+        return finalVoltage;
+    }
+}
+
+==============================
+tmp/VoltageCalculator.java:5: error: <identifier> expected
+      @   ensures \result == (\let int current = 22, bias = 3;  
+                                                         ^
+1 error
+
+==============================

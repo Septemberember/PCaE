@@ -1,0 +1,107 @@
+public class AddHalfSelf_Mutant2{
+    // AddHalfSelf: computes a small adjustment based on the number of set bits in |x|
+
+    /*@
+      @ assignable \nothing;
+      @ ensures \result
+      @      == (x < 0
+      @          ? (x - (((x == Integer.MIN_VALUE ? 0 : -x) + 1) / 2))
+      @          : (x + (((x == Integer.MIN_VALUE ? 0 :  x) + 1) / 2)));
+      @*/
+    public static int addHalfSelf(int x){
+        // Read original input
+        int n = x;
+        // Accumulator for the count of 1-bits in the magnitude
+        int addNum = 0;
+        if(x < 0){
+            n = -x;
+        }
+
+        // Count set bits in the magnitude of n
+        /*@
+          @ maintaining (x == Integer.MIN_VALUE) ==> (n == x && addNum == 0);
+          @ maintaining (x != Integer.MIN_VALUE) ==> (0 <= n && n <= (x < 0 ? -x : x));
+          @ maintaining 0 <= addNum;
+          @ maintaining (x != Integer.MIN_VALUE) ==>
+          @   (addNum == (\num_of int k; n < k && k <= (x < 0 ? -x : x); k % 2 == 1));
+          @ decreases (n > 0 ? n : 0);
+          @*/
+        while(n > 0){
+            // If the least significant bit is 1, count it
+            if(n % 2 == 1){
+                addNum++;
+            }
+            // Move to the next magnitude value
+            n--;
+        }
+
+        // Apply the accumulated offset with correct sign
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+}
+==============================
+tmp/AddHalfSelf_Mutant2.java:25: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method addHalfSelf
+          @ maintaining (x != Integer.MIN_VALUE) ==>
+            ^
+1 verification failure
+
+==============================
+public class AddHalfSelf_Mutant2{
+    // AddHalfSelf: computes a small adjustment based on the number of set bits in |x|
+
+    /*@
+      @ assignable \nothing;
+      @ ensures \result
+      @      == (x < 0
+      @          ? (x - (((x == Integer.MIN_VALUE ? 0 : -x) + 1) / 2))
+      @          : (x + (((x == Integer.MIN_VALUE ? 0 :  x) + 1) / 2)));
+      @*/
+    public static int addHalfSelf(int x){
+        // Read original input
+        int n = x;
+        // Accumulator for the count of 1-bits in the magnitude
+        int addNum = 0;
+        if(x < 0){
+            n = -x;
+        }
+
+        // Count set bits in the magnitude of n
+        /*@
+          @ maintaining (x == Integer.MIN_VALUE) ==> (n == x && addNum == 0);
+          @ maintaining (x != Integer.MIN_VALUE) ==> (0 <= n && n <= (x < 0 ? -x : x));
+          @ maintaining 0 <= addNum;
+          @ maintaining (x != Integer.MIN_VALUE) ==>  
+          @   (addNum == (\num_of int k; n < k && k <= (x < 0 ? -x : x); k % 2 == 1));
+          @ decreases (n > 0 ? n : 0);
+          @*/
+        while(n > 0){
+            // If the least significant bit is 1, count it
+            if(n % 2 == 1){
+                addNum++;
+            }
+            // Move to the next magnitude value
+            n--;
+        }
+
+        // Apply the accumulated offset with correct sign
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+}
+
+==============================
+tmp/AddHalfSelf_Mutant2.java:25: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method addHalfSelf
+          @ maintaining (x != Integer.MIN_VALUE) ==>  
+            ^
+1 verification failure
+
+==============================

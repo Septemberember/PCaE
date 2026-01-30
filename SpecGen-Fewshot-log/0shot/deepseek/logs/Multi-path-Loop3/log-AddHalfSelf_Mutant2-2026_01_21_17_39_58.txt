@@ -1,0 +1,143 @@
+public class AddHalfSelf_Mutant2{
+    // AddHalfSelf: computes a small adjustment based on the number of set bits in |x|
+
+    //@ ensures \result == (x < 0 ? x - countSetBits(-x) : x + countSetBits(x));
+    //@ ensures \result == (x < 0 ? x - countSetBits(Math.abs(x)) : x + countSetBits(Math.abs(x)));
+    //@ ensures \result == x + (x < 0 ? -countSetBits(-x) : countSetBits(x));
+    public static int addHalfSelf(int x){
+        // Read original input
+        int n = x;
+        // Accumulator for the count of 1-bits in the magnitude
+        int addNum = 0;
+        //@ maintaining x < 0 ==> n == -x;
+        //@ maintaining x >= 0 ==> n == x;
+        if(x < 0){
+            n = -x;
+        }
+
+        // Count set bits in the magnitude of n
+        //@ maintaining n >= 0;
+        //@ maintaining addNum == countSetBits(\old(n) - n);
+        //@ maintaining addNum <= \old(n);
+        //@ decreasing n;
+        while(n > 0){
+            // If the least significant bit is 1, count it
+            //@ maintaining n == \old(n);
+            if(n % 2 == 1){
+                addNum++;
+            }
+            // Move to the next magnitude value
+            n--;
+        }
+
+        // Apply the accumulated offset with correct sign
+        //@ maintaining x < 0 ==> addNum == countSetBits(-x);
+        //@ maintaining x >= 0 ==> addNum == countSetBits(x);
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+
+    //@ model pure static int countSetBits(int n) {
+    //@   requires n >= 0;
+    //@   ensures \result >= 0 && \result <= n;
+    //@   ensures n == 0 ==> \result == 0;
+    //@   ensures n > 0 ==> \result == (n % 2 == 1 ? 1 : 0) + countSetBits(n - 1);
+    //@   measured_by n;
+    //@   decreasing n;
+    //@ }
+}
+==============================
+tmp/AddHalfSelf_Mutant2.java:12: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining x < 0 ==> n == -x;
+            ^
+tmp/AddHalfSelf_Mutant2.java:25: error: Loop specifications must immediately precede a loop statement
+            //@ maintaining n == \old(n);
+                ^
+tmp/AddHalfSelf_Mutant2.java:34: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining x < 0 ==> addNum == countSetBits(-x);
+            ^
+tmp/AddHalfSelf_Mutant2.java:51: error: illegal start of statement
+    //@ }
+        ^
+tmp/AddHalfSelf_Mutant2.java:50: error: Loop specifications must immediately precede a loop statement
+    //@   decreasing n;
+          ^
+5 errors
+
+==============================
+public class AddHalfSelf_Mutant2{
+    // AddHalfSelf: computes a small adjustment based on the number of set bits in |x|
+
+    //@ ensures \result == (x < 0 ? x - countSetBits(-x) : x + countSetBits(x));
+    //@ ensures \result == (x < 0 ? x - countSetBits(Math.abs(x)) : x + countSetBits(Math.abs(x)));
+    //@ ensures \result == x + (x < 0 ? -countSetBits(-x) : countSetBits(x));
+    public static int addHalfSelf(int x){
+        // Read original input
+        int n = x;
+        // Accumulator for the count of 1-bits in the magnitude
+        int addNum = 0;
+        //@ maintaining x < 0 ==> n == -x;  
+        //@ maintaining x >= 0 ==> n == x;
+        if(x < 0){
+            n = -x;
+        }
+
+        // Count set bits in the magnitude of n
+        //@ maintaining n >= 0;
+        //@ maintaining addNum == countSetBits(\old(n) - n);
+        //@ maintaining addNum <= \old(n);
+        //@ decreasing n;
+        while(n > 0){
+            // If the least significant bit is 1, count it
+            //@ maintaining n == \old(n);  
+            if(n % 2 == 1){
+                addNum++;
+            }
+            // Move to the next magnitude value
+            n--;
+        }
+
+        // Apply the accumulated offset with correct sign
+        //@ maintaining x < 0 ==> addNum == countSetBits(-x);  
+        //@ maintaining x >= 0 ==> addNum == countSetBits(x);
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+
+    //@ model pure static int countSetBits(int n) {
+    //@   requires n >= 0;
+    //@   ensures \result >= 0 && \result <= n;
+    //@   ensures n == 0 ==> \result == 0;
+    //@   ensures n > 0 ==> \result == (n % 2 == 1 ? 1 : 0) + countSetBits(n - 1);
+    //@   measured_by n;
+    //@   decreasing n;
+    //@ }
+}
+
+==============================
+tmp/AddHalfSelf_Mutant2.java:12: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining x < 0 ==> n == -x;  
+            ^
+tmp/AddHalfSelf_Mutant2.java:25: error: Loop specifications must immediately precede a loop statement
+            //@ maintaining n == \old(n);  
+                ^
+tmp/AddHalfSelf_Mutant2.java:34: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining x < 0 ==> addNum == countSetBits(-x);  
+            ^
+tmp/AddHalfSelf_Mutant2.java:51: error: illegal start of statement
+    //@ }
+        ^
+tmp/AddHalfSelf_Mutant2.java:50: error: Loop specifications must immediately precede a loop statement
+    //@   decreasing n;
+          ^
+5 errors
+
+==============================

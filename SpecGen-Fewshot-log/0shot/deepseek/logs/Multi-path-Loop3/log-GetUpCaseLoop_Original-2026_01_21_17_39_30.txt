@@ -1,0 +1,38 @@
+public class GetUpCaseLoop {
+
+    // This utility maps a..f to their corresponding uppercase characters.
+    // It returns 0 for values outside the handled range.
+    // The mapping is achieved by a small downward scan from 'F'.
+    /*@
+      @ requires true;
+      @ ensures \result == 0 && (c < 'a' || c > 'f') ||
+      @         \result == (char)('A' + (c - 'a')) && ('a' <= c && c <= 'f');
+      @*/
+    public static char getUpCase(char c) {
+        // Validate input: only lowercase a..f are considered
+        // Return 0 for any other input value
+        if(c < 'a' || c > 'f') {
+            return 0;
+        }
+        // Start with the uppercase boundary corresponding to 'F'
+        char t = 'F';
+        // Move downward until reaching the target uppercase letter
+        /*@ maintaining t >= 'A' && t <= 'F';
+          @ maintaining ('a' <= c && c <= 'f') ==> 
+          @            (t == 'F' || t >= (char)('A' + (c - 'a')));
+          @ decreasing t;
+          @*/
+        while(t >= 'A' && t != c - 'a' + 'A') {
+            t--;
+        }
+        // t now holds the mapped uppercase character
+        return t;
+    }
+}
+==============================
+tmp/GetUpCaseLoop_Original.java:1: error: class GetUpCaseLoop is public, should be declared in a file named GetUpCaseLoop.java
+public class GetUpCaseLoop {
+       ^
+1 error
+
+==============================

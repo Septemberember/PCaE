@@ -1,0 +1,57 @@
+public class Abs_Mutant2 {
+
+    // This class provides a simple placeholder for absolute value logic.
+    // The Abs method currently returns the input as-is for all integers.
+
+    //@ requires true;
+    //@ ensures \result >= 0;
+    //@ ensures \result == (num < 0 ? -num : num);
+    public static int Abs(int num) {
+        // Compute absolute value (placeholder behavior)
+        if (num < 0)
+            // Negative input detected; in a full implementation this would negate the value
+            return num;
+        else
+            // Non-negative input; same as input for this placeholder
+            return num;
+    }
+}
+==============================
+tmp/Abs_Mutant2.java:13: verify: The prover cannot establish an assertion (Postcondition: tmp/Abs_Mutant2.java:7:) in method Abs
+            return num;
+            ^
+tmp/Abs_Mutant2.java:7: verify: Associated declaration: tmp/Abs_Mutant2.java:13:
+    //@ ensures \result >= 0;
+        ^
+2 verification failures
+
+==============================
+public class Abs_Mutant2 {
+
+    // This class provides a simple placeholder for absolute value logic.
+    // The Abs method currently returns the input as-is for all integers.
+
+    //@ requires true;
+    //@ ensures \result > 0;  
+    //@ ensures \result == (num < 0 ? -num : num);
+    public static int Abs(int num) {
+        // Compute absolute value (placeholder behavior)
+        if (num < 0)
+            // Negative input detected; in a full implementation this would negate the value
+            return num;
+        else
+            // Non-negative input; same as input for this placeholder
+            return num;
+    }
+}
+
+==============================
+tmp/Abs_Mutant2.java:13: verify: The prover cannot establish an assertion (Postcondition: tmp/Abs_Mutant2.java:7:) in method Abs
+            return num;
+            ^
+tmp/Abs_Mutant2.java:7: verify: Associated declaration: tmp/Abs_Mutant2.java:13:
+    //@ ensures \result > 0;  
+        ^
+2 verification failures
+
+==============================

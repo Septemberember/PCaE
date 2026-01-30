@@ -1,0 +1,78 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class ScoreCalculator {
+    public static int calculateBonus(int baseScore) {
+        int bonusBrackets[] = new int[5];
+        int bracket = 0;
+        int multiplier = 0;
+
+        if (baseScore < 5) {
+            baseScore = 5;
+            multiplier = multiplier - 3;
+        } else {
+            multiplier = multiplier + 1;
+        }
+
+        if (baseScore > 40) {
+            baseScore = 40;
+            multiplier = multiplier + 5;
+        }
+
+        int bonus = baseScore * 2 - 15;
+
+        if(bonus > 34){
+            bonus = bonus * 3 - 21;
+        }
+
+        if (bonus >= 13 && bonus <= 21) {
+            bracket = bonus / 4;
+            bonus = (bonus - 8) * multiplier;
+            bonus += baseScore;
+            bonus = bonus > 45 ? 45 : bonus;
+            bonusBrackets[bracket] = bonus + multiplier;
+        } else {
+            bracket = bonus % 5;
+            bonus = bracket + multiplier * 5;
+        }
+
+        return bonus;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: baseScore < 5
+D1: return_value == -10
+
+T2: baseScore >= 5 && baseScore <= 14
+D2: return_value == ((2 * baseScore - 15) % 5) + 5
+
+T3: baseScore >= 15 && baseScore <= 18 && (baseScore - 8) + 1 > 45
+D3: return_value == 45
+
+T4: baseScore >= 15 && baseScore <= 18 && (baseScore - 8) + 1 <= 45
+D4: return_value == baseScore - 7
+
+T5: baseScore >= 19 && baseScore <= 24
+D5: return_value == ((2 * baseScore - 15) % 5) + 5
+
+T6: baseScore >= 25 && baseScore <= 40 && (2 * baseScore - 15) * 3 - 21 <= 34
+D6: return_value == ((3 * (2 * baseScore - 15) - 21) % 5) + 5
+
+T7: baseScore >= 25 && baseScore <= 40 && (2 * baseScore - 15) * 3 - 21 > 34
+D7: return_value == (((3 * (2 * baseScore - 15) - 21) % 5) + 5)
+
+T8: baseScore > 40
+D8: return_value == (((3 * (2 * 40 - 15) - 21) % 5) + 30)
+```
+*end* role assistant
+start role user
+There exists baseScore >= 15 && baseScore <= 18 && (baseScore - 8) + 1 > 45 in the FSF, and it is a unsatisfiable，please regenerate the FSF，avoiding contains this kind of unsatisfiable T!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

@@ -1,0 +1,67 @@
+public class FizzBuzz_Mutant4 {
+    // Utility: FizzBuzz evaluation with a simple additive model.
+    // This method preserves the original control flow and result construction.
+    // Added lines are comments only; existing code remains unchanged.
+    // Begin core computation for fizzBuzz.
+    //@ ensures (n % 3 == 0 && n % 5 == 0) ==> \result == 8;
+    //@ ensures (n % 3 == 0 && n % 5 != 0) ==> \result == 3;
+    //@ ensures (n % 3 != 0 && n % 5 == 0) ==> \result == 5;
+    //@ ensures (n % 3 != 0 && n % 5 != 0) ==> \result == 0;
+    public static int fizzBuzz(int n) {
+        int res = 0;
+        // Initialize running total for the calculation.
+        if (n % 3 == 0) {
+            res += 3;
+        }
+        // Determine whether to include five as part of the score.
+        if (n % 5 != 0) { // changed == to !=
+            res += 5;
+        }
+        // Return the accumulated result for the given n.
+        return res;
+    }
+}
+==============================
+tmp/FizzBuzz_Mutant4.java:21: verify: The prover cannot establish an assertion (Postcondition: tmp/FizzBuzz_Mutant4.java:7:) in method fizzBuzz
+        return res;
+        ^
+tmp/FizzBuzz_Mutant4.java:7: verify: Associated declaration: tmp/FizzBuzz_Mutant4.java:21:
+    //@ ensures (n % 3 == 0 && n % 5 != 0) ==> \result == 3;
+        ^
+2 verification failures
+
+==============================
+public class FizzBuzz_Mutant4 {
+    // Utility: FizzBuzz evaluation with a simple additive model.
+    // This method preserves the original control flow and result construction.
+    // Added lines are comments only; existing code remains unchanged.
+    // Begin core computation for fizzBuzz.
+    //@ ensures (n % 3 == 0 && n % 5 == 0) ==> \result == 8;
+    //@ ensures (n % 3 == 0 && n % 5 != 0) ==> \result == 3;  
+    //@ ensures (n % 3 != 0 && n % 5 == 0) ==> \result == 5;
+    //@ ensures (n % 3 != 0 && n % 5 != 0) ==> \result == 0;
+    public static int fizzBuzz(int n) {
+        int res = 0;
+        // Initialize running total for the calculation.
+        if (n % 3 == 0) {
+            res += 3;
+        }
+        // Determine whether to include five as part of the score.
+        if (n % 5 != 0) { // changed == to !=
+            res += 5;
+        }
+        // Return the accumulated result for the given n.
+        return res;
+    }
+}
+
+==============================
+tmp/FizzBuzz_Mutant4.java:21: verify: The prover cannot establish an assertion (Postcondition: tmp/FizzBuzz_Mutant4.java:7:) in method fizzBuzz
+        return res;
+        ^
+tmp/FizzBuzz_Mutant4.java:7: verify: Associated declaration: tmp/FizzBuzz_Mutant4.java:21:
+    //@ ensures (n % 3 == 0 && n % 5 != 0) ==> \result == 3;  
+        ^
+2 verification failures
+
+==============================

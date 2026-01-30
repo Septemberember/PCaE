@@ -1,0 +1,17 @@
+public class SmallestEvenMulBranch_Original {
+    //@ requires 1 <= n && n <= 150;
+    //@ ensures \result % 2 == 0;
+    //@ ensures (\forall int k; 1 <= k && k <= 150; (k % 2 == 0 && n % k == 0) ==> \result % k == 0);
+    //@ ensures \result >= n && \result <= 2*n;
+    //@ ensures (n % 2 == 0) ==> \result == n;
+    //@ ensures (n % 2 != 0) ==> \result == 2*n;
+    public static int smallestEvenMultiple(int n) {
+        if (n % 2 == 0) {
+            return n;
+        }
+        return 2 * n;
+    }
+}
+==============================
+
+==============================

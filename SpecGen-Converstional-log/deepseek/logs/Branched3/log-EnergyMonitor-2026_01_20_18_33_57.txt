@@ -1,0 +1,225 @@
+public class EnergyMonitor {
+    //@ requires usage >= 0;
+    //@ ensures \result >= 0;
+    public static int calculateConsumption(int usage) {
+        int consumptionCoe[] = new int[4];
+        consumptionCoe[0] = 1;
+        consumptionCoe[1] = 2;
+        consumptionCoe[2] = 5;
+        consumptionCoe[3] = 6;
+
+        int payment = 0;
+        int penalty = 2;
+        int level = 0;
+        if(usage > 400){
+            //@ ensures \result == usage * 6;
+            return usage * consumptionCoe[3];
+        }
+        level = usage / 100;
+        if(level < 0){
+            //@ ensures \result == 0;
+            return 0;
+        }
+        if(level == 0){
+            payment = usage * consumptionCoe[0];
+            payment = payment - penalty * usage / 10;
+            //@ ensures \result == usage - (2 * usage / 10);
+        }
+        if(level == 1){
+            payment = (usage - 100) * consumptionCoe[1] + 50 * consumptionCoe[0];
+            payment = payment - penalty * usage / 30;
+            //@ ensures \result == (usage - 100) * 2 + 50 - (2 * usage / 30);
+        }
+        if(level == 2){
+            payment = (usage - 200) * consumptionCoe[2] + 50 * consumptionCoe[1] + 50 * consumptionCoe[0];
+            payment = payment - penalty * usage / 50;
+            //@ ensures \result == (usage - 200) * 5 + 50 * 2 + 50 - (2 * usage / 50);
+        }else{
+            payment = payment +  usage * consumptionCoe[level] + penalty * (usage - 300);
+            //@ ensures \result == payment + usage * consumptionCoe[level] + 2 * (usage - 300);
+        }
+        return payment;
+    }
+}
+==============================
+tmp/EnergyMonitor.java:26: error: Statement specs found at the end of a block (or before an erroneous statement)
+            //@ ensures \result == usage - (2 * usage / 10);
+                ^
+tmp/EnergyMonitor.java:31: error: Statement specs found at the end of a block (or before an erroneous statement)
+            //@ ensures \result == (usage - 100) * 2 + 50 - (2 * usage / 30);
+                ^
+tmp/EnergyMonitor.java:36: error: Statement specs found at the end of a block (or before an erroneous statement)
+            //@ ensures \result == (usage - 200) * 5 + 50 * 2 + 50 - (2 * usage / 50);
+                ^
+tmp/EnergyMonitor.java:39: error: Statement specs found at the end of a block (or before an erroneous statement)
+            //@ ensures \result == payment + usage * consumptionCoe[level] + 2 * (usage - 300);
+                ^
+4 errors
+
+==============================
+public class EnergyMonitor {
+    //@ requires usage >= 0;
+    //@ ensures \result >= 0;
+    public static int calculateConsumption(int usage) {
+        int consumptionCoe[] = new int[4];
+        consumptionCoe[0] = 1;
+        consumptionCoe[1] = 2;
+        consumptionCoe[2] = 5;
+        consumptionCoe[3] = 6;
+
+        int payment = 0;
+        int penalty = 2;
+        int level = 0;
+        if(usage > 400){
+            //@ ensures \result == usage * 6;
+            return usage * consumptionCoe[3];
+        }
+        level = usage / 100;
+        if(level < 0){
+            //@ ensures \result == 0;
+            return 0;
+        }
+        if(level == 0){
+            payment = usage * consumptionCoe[0];
+            payment = payment - penalty * usage / 10;
+            //@ assert payment == usage - (2 * usage / 10);
+        }
+        if(level == 1){
+            payment = (usage - 100) * consumptionCoe[1] + 50 * consumptionCoe[0];
+            payment = payment - penalty * usage / 30;
+            //@ assert payment == (usage - 100) * 2 + 50 - (2 * usage / 30);
+        }
+        if(level == 2){
+            payment = (usage - 200) * consumptionCoe[2] + 50 * consumptionCoe[1] + 50 * consumptionCoe[0];
+            payment = payment - penalty * usage / 50;
+            //@ assert payment == (usage - 200) * 5 + 50 * 2 + 50 - (2 * usage / 50);
+        }else{
+            payment = payment +  usage * consumptionCoe[level] + penalty * (usage - 300);
+            //@ assert payment == payment + usage * consumptionCoe[level] + 2 * (usage - 300);
+        }
+        return payment;
+    }
+}
+==============================
+tmp/EnergyMonitor.java:38: verify: The prover cannot establish an assertion (PossiblyTooLargeIndex) in method calculateConsumption
+            payment = payment +  usage * consumptionCoe[level] + penalty * (usage - 300);
+                                                       ^
+tmp/EnergyMonitor.java:38: verify: The prover cannot establish an assertion (PossiblyTooLargeIndex) in method calculateConsumption
+            payment = payment +  usage * consumptionCoe[level] + penalty * (usage - 300);
+                                                       ^
+tmp/EnergyMonitor.java:39: verify: The prover cannot establish an assertion (Assert) in method calculateConsumption
+            //@ assert payment == payment + usage * consumptionCoe[level] + 2 * (usage - 300);
+                ^
+tmp/EnergyMonitor.java:39: verify: The prover cannot establish an assertion (Assert) in method calculateConsumption
+            //@ assert payment == payment + usage * consumptionCoe[level] + 2 * (usage - 300);
+                ^
+4 verification failures
+
+==============================
+public class EnergyMonitor {
+    //@ requires usage >= 0;
+    //@ ensures \result >= 0;
+    public static int calculateConsumption(int usage) {
+        int consumptionCoe[] = new int[4];
+        consumptionCoe[0] = 1;
+        consumptionCoe[1] = 2;
+        consumptionCoe[2] = 5;
+        consumptionCoe[3] = 6;
+
+        int payment = 0;
+        int penalty = 2;
+        int level = 0;
+        if(usage > 400){
+            //@ ensures \result == usage * 6;
+            return usage * consumptionCoe[3];
+        }
+        level = usage / 100;
+        if(level < 0){
+            //@ ensures \result == 0;
+            return 0;
+        }
+        if(level == 0){
+            payment = usage * consumptionCoe[0];
+            payment = payment - penalty * usage / 10;
+            //@ assert payment == usage - (2 * usage / 10);
+        }
+        if(level == 1){
+            payment = (usage - 100) * consumptionCoe[1] + 50 * consumptionCoe[0];
+            payment = payment - penalty * usage / 30;
+            //@ assert payment == (usage - 100) * 2 + 50 - (2 * usage / 30);
+        }
+        if(level == 2){
+            payment = (usage - 200) * consumptionCoe[2] + 50 * consumptionCoe[1] + 50 * consumptionCoe[0];
+            payment = payment - penalty * usage / 50;
+            //@ assert payment == (usage - 200) * 5 + 50 * 2 + 50 - (2 * usage / 50);
+        }else{
+            //@ assume level >= 0 && level < consumptionCoe.length;
+            payment = payment +  usage * consumptionCoe[level] + penalty * (usage - 300);
+            //@ assert payment == payment + usage * consumptionCoe[level] + 2 * (usage - 300);
+        }
+        return payment;
+    }
+}
+==============================
+tmp/EnergyMonitor.java:40: verify: The prover cannot establish an assertion (Assert) in method calculateConsumption
+            //@ assert payment == payment + usage * consumptionCoe[level] + 2 * (usage - 300);
+                ^
+tmp/EnergyMonitor.java:40: verify: The prover cannot establish an assertion (Assert) in method calculateConsumption
+            //@ assert payment == payment + usage * consumptionCoe[level] + 2 * (usage - 300);
+                ^
+tmp/EnergyMonitor.java:40: verify: The prover cannot establish an assertion (Assert) in method calculateConsumption
+            //@ assert payment == payment + usage * consumptionCoe[level] + 2 * (usage - 300);
+                ^
+tmp/EnergyMonitor.java:40: verify: The prover cannot establish an assertion (Assert) in method calculateConsumption
+            //@ assert payment == payment + usage * consumptionCoe[level] + 2 * (usage - 300);
+                ^
+4 verification failures
+
+==============================
+public class EnergyMonitor {
+    //@ requires usage >= 0;
+    //@ ensures \result >= 0;
+    public static int calculateConsumption(int usage) {
+        int consumptionCoe[] = new int[4];
+        consumptionCoe[0] = 1;
+        consumptionCoe[1] = 2;
+        consumptionCoe[2] = 5;
+        consumptionCoe[3] = 6;
+
+        int payment = 0;
+        int penalty = 2;
+        int level = 0;
+        if(usage > 400){
+            //@ ensures \result == usage * 6;
+            return usage * consumptionCoe[3];
+        }
+        level = usage / 100;
+        if(level < 0){
+            //@ ensures \result == 0;
+            return 0;
+        }
+        if(level == 0){
+            payment = usage * consumptionCoe[0];
+            payment = payment - penalty * usage / 10;
+            //@ assert payment == usage - (2 * usage / 10);
+        }
+        if(level == 1){
+            payment = (usage - 100) * consumptionCoe[1] + 50 * consumptionCoe[0];
+            payment = payment - penalty * usage / 30;
+            //@ assert payment == (usage - 100) * 2 + 50 - (2 * usage / 30);
+        }
+        if(level == 2){
+            payment = (usage - 200) * consumptionCoe[2] + 50 * consumptionCoe[1] + 50 * consumptionCoe[0];
+            payment = payment - penalty * usage / 50;
+            //@ assert payment == (usage - 200) * 5 + 50 * 2 + 50 - (2 * usage / 50);
+        }else{
+            //@ assume level == 3;
+            payment = payment +  usage * consumptionCoe[level] + penalty * (usage - 300);
+            //@ assert payment == usage * consumptionCoe[level] + 2 * (usage - 300);
+        }
+        return payment;
+    }
+}
+==============================
+
+==============================

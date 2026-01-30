@@ -1,0 +1,170 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class TO_BASE {
+    public static String to_base(int b) {
+        int num = (b + 200) / 3;
+        String result = "";
+        String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int i;
+        if(b == 1){
+            return "0";
+        }
+        while (num > 0) {
+            i = num % b;
+            num = num / b;
+            result = result + String.valueOf(alphabet.charAt(i));
+        }
+
+        return result;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```fsf
+T1: b == 1
+D1:
+  return_value == "0"
+
+T2: b == 0
+D2:
+  Exception(ArithmeticException)
+
+T3: (-92 <= b && b <= -51) || (41 <= b && b <= 46) || (b >= 101)
+D3:
+  Exception(StringIndexOutOfBoundsException)
+
+T4: (b <= -198) || (-197 <= b && b <= -93) || (-50 <= b && b <= -1) || (2 <= b && b <= 40) || (47 <= b && b <= 100)
+D4:
+  exists int k, int num_0, String res_0 :
+    k >= 0 &&
+    num_0 == (b + 200) / 3 &&
+    res_0 == "" &&
+    (exists int num_1, int num_2, int num_3, int num_4, int num_5, int num_6, int num_7, int num_8, int num_9, int num_10,
+            int num_11, int num_12, int num_13, int num_14, int num_15, int num_16, int num_17, int num_18, int num_19, int num_20,
+            int i_0, int i_1, int i_2, int i_3, int i_4, int i_5, int i_6, int i_7, int i_8, int i_9, int i_10,
+            int i_11, int i_12, int i_13, int i_14, int i_15, int i_16, int i_17, int i_18, int i_19,
+            String res_1, String res_2, String res_3, String res_4, String res_5, String res_6, String res_7, String res_8, String res_9, String res_10,
+            String res_11, String res_12, String res_13, String res_14, String res_15, String res_16, String res_17, String res_18, String res_19, String res_20 :
+        (
+          (k == 0 && num_0 <= 0 && return_value == res_0) ||
+
+          (k == 1 &&
+            num_0 > 0 &&
+            i_0 == num_0 % b && 0 <= i_0 && i_0 < 36 &&
+            num_1 == num_0 / b &&
+            res_1 == res_0 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_0)) &&
+            num_1 <= 0 &&
+            return_value == res_1
+          ) ||
+
+          (k == 2 &&
+            num_0 > 0 &&
+            i_0 == num_0 % b && 0 <= i_0 && i_0 < 36 &&
+            num_1 == num_0 / b &&
+            res_1 == res_0 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_0)) &&
+            num_1 > 0 &&
+            i_1 == num_1 % b && 0 <= i_1 && i_1 < 36 &&
+            num_2 == num_1 / b &&
+            res_2 == res_1 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_1)) &&
+            num_2 <= 0 &&
+            return_value == res_2
+          ) ||
+
+          (k == 3 &&
+            num_0 > 0 &&
+            i_0 == num_0 % b && 0 <= i_0 && i_0 < 36 &&
+            num_1 == num_0 / b &&
+            res_1 == res_0 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_0)) &&
+            num_1 > 0 &&
+            i_1 == num_1 % b && 0 <= i_1 && i_1 < 36 &&
+            num_2 == num_1 / b &&
+            res_2 == res_1 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_1)) &&
+            num_2 > 0 &&
+            i_2 == num_2 % b && 0 <= i_2 && i_2 < 36 &&
+            num_3 == num_2 / b &&
+            res_3 == res_2 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_2)) &&
+            num_3 <= 0 &&
+            return_value == res_3
+          ) ||
+
+          (k == 4 &&
+            num_0 > 0 &&
+            i_0 == num_0 % b && 0 <= i_0 && i_0 < 36 &&
+            num_1 == num_0 / b &&
+            res_1 == res_0 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_0)) &&
+            num_1 > 0 &&
+            i_1 == num_1 % b && 0 <= i_1 && i_1 < 36 &&
+            num_2 == num_1 / b &&
+            res_2 == res_1 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_1)) &&
+            num_2 > 0 &&
+            i_2 == num_2 % b && 0 <= i_2 && i_2 < 36 &&
+            num_3 == num_2 / b &&
+            res_3 == res_2 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_2)) &&
+            num_3 > 0 &&
+            i_3 == num_3 % b && 0 <= i_3 && i_3 < 36 &&
+            num_4 == num_3 / b &&
+            res_4 == res_3 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_3)) &&
+            num_4 <= 0 &&
+            return_value == res_4
+          ) ||
+
+          (k == 5 &&
+            num_0 > 0 &&
+            i_0 == num_0 % b && 0 <= i_0 && i_0 < 36 &&
+            num_1 == num_0 / b &&
+            res_1 == res_0 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_0)) &&
+            num_1 > 0 &&
+            i_1 == num_1 % b && 0 <= i_1 && i_1 < 36 &&
+            num_2 == num_1 / b &&
+            res_2 == res_1 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_1)) &&
+            num_2 > 0 &&
+            i_2 == num_2 % b && 0 <= i_2 && i_2 < 36 &&
+            num_3 == num_2 / b &&
+            res_3 == res_2 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_2)) &&
+            num_3 > 0 &&
+            i_3 == num_3 % b && 0 <= i_3 && i_3 < 36 &&
+            num_4 == num_3 / b &&
+            res_4 == res_3 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_3)) &&
+            num_4 > 0 &&
+            i_4 == num_4 % b && 0 <= i_4 && i_4 < 36 &&
+            num_5 == num_4 / b &&
+            res_5 == res_4 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_4)) &&
+            num_5 <= 0 &&
+            return_value == res_5
+          ) ||
+
+          (k == 6 &&
+            num_0 > 0 &&
+            i_0 == num_0 % b && 0 <= i_0 && i_0 < 36 &&
+            num_1 == num_0 / b &&
+            res_1 == res_0 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_0)) &&
+            num_1 > 0 &&
+            i_1 == num_1 % b && 0 <= i_1 && i_1 < 36 &&
+            num_2 == num_1 / b &&
+            res_2 == res_1 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_1)) &&
+            num_2 > 0 &&
+            i_2 == num_2 % b && 0 <= i_2 && i_2 < 36 &&
+            num_3 == num_2 / b &&
+            res_3 == res_2 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_2)) &&
+            num_3 > 0 &&
+            i_3 == num_3 % b && 0 <= i_3 && i_3 < 36 &&
+            num_4 == num_3 / b &&
+            res_4 == res_3 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_3)) &&
+            num_4 > 0 &&
+            i_4 == num_4 % b && 0 <= i_4 && i_4 < 36 &&
+            num_5 == num_4 / b &&
+            res_5 == res_4 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_4)) &&
+            num_5 > 0 &&
+            i_5 == num_5 % b && 0 <= i_5 && i_5 < 36 &&
+            num_6 == num_5 / b &&
+            res_6 == res_5 + String.valueOf("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(i_5)) &&
+            num_6 <= 0 &&
+            return_value == res_6
+          )
+        )
+    )
+```
+*end* role assistant

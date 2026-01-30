@@ -1,0 +1,62 @@
+public class MyPower_Original {
+    // Simple utility to compute integer powers iteratively
+    // Keeps multiplication-based result straightforward and efficient
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   ensures \result == (int)\(\pow(x, n));
+      @   assignable \nothing;
+      @*/
+    public static int power(int x, int n) {
+        int res = 1;
+        // Begin iterative exponentiation: multiply x by itself n times
+        /*@ maintaining 0 <= i && i <= n;
+          @ maintaining res == (int)\(\pow(x, i));
+          @ decreasing n - i;
+          @*/
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Original.java:6: error: A backslash in a JML comment expects to be followed by a valid identifier
+      @   ensures \result == (int)\(\pow(x, n));
+                                  ^
+tmp/MyPower_Original.java:6: error: This backslash token is unknown: \pow
+      @   ensures \result == (int)\(\pow(x, n));
+                                    ^
+tmp/MyPower_Original.java:13: error: A backslash in a JML comment expects to be followed by a valid identifier
+          @ maintaining res == (int)\(\pow(x, i));
+                                    ^
+tmp/MyPower_Original.java:13: error: This backslash token is unknown: \pow
+          @ maintaining res == (int)\(\pow(x, i));
+                                      ^
+4 errors
+
+==============================
+public class MyPower_Original {
+    // Simple utility to compute integer powers iteratively
+    // Keeps multiplication-based result straightforward and efficient
+    /*@ public normal_behavior
+      @   requires n >= 0;
+ 
+      @   assignable \nothing;
+      @*/
+    public static int power(int x, int n) {
+        int res = 1;
+        // Begin iterative exponentiation: multiply x by itself n times
+        /*@ maintaining 0 <= i && i <= n;
+ 
+          @ decreasing n - i;
+          @*/
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        return res;
+    }
+}
+
+==============================
+
+==============================

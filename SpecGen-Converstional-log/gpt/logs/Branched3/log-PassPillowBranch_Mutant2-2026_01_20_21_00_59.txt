@@ -1,0 +1,132 @@
+public class PassPillowBranch_Mutant2 {
+    // Documentation: Pillow passing logic is kept intact.
+    // This module computes the next pillow position in a deterministic cycle.
+    // The cycle length is 2*(n-1), implemented via time modulo ((n-1)*2).
+    // The method returns the next position within the current cycle.
+    // This insertion is purely for readability and does not alter behavior.
+    // The code that follows remains identical to the original, preserving logic.
+    
+    // Class commentary: compact logic for pillow passing sequence
+    // This class encapsulates a small utility to compute the next pillow position
+    //@ requires n > 1;
+    //@ requires time >= 0;
+    //@ assignable \nothing;
+    //@ ensures 1 <= \result && \result <= n;
+    //@ ensures (\let int t = time % ((n - 1) * 2);
+    //@             (t <= n ==> \result == t + 1)
+    //@          && (t >  n ==> \result == n * 2 - t - 1));
+    public static /*@ pure @*/ int passPillow(int n, int time) {
+        time = time % ((n - 1) * 2);
+        if (time <= n) { // changed less than to less than or equal to
+            return time + 1;
+        }
+        return n * 2 - time - 1;
+
+}
+==============================
+tmp/PassPillowBranch_Mutant2.java:25: error: reached end of file while parsing
+}
+ ^
+1 error
+
+==============================
+public class PassPillowBranch_Mutant2 {
+    // Documentation: Pillow passing logic is kept intact.
+    // This module computes the next pillow position in a deterministic cycle.
+    // The cycle length is 2*(n-1), implemented via time modulo ((n-1)*2).
+    // The method returns the next position within the current cycle.
+    // This insertion is purely for readability and does not alter behavior.
+    // The code that follows remains identical to the original, preserving logic.
+    
+    // Class commentary: compact logic for pillow passing sequence
+    // This class encapsulates a small utility to compute the next pillow position
+    //@ requires n > 1;
+    //@ requires time >= 0;
+    //@ assignable \nothing;
+    //@ ensures 1 <= \result && \result <= n;
+    //@ ensures (\let int t = time % ((n - 1) * 2);
+    //@            (t <= n ==> \result == t + 1)
+    //@         && (t >  n ==> \result == n * 2 - t - 1));
+    public static /*@ pure @*/ int passPillow(int n, int time) {
+        time = time % ((n - 1) * 2);
+        if (time <= n) { // changed less than to less than or equal to
+            return time + 1;
+        }
+        return n * 2 - time - 1;
+
+    }
+}
+==============================
+tmp/PassPillowBranch_Mutant2.java:18: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static /*@ pure @*/ int passPillow(int n, int time) {
+                                   ^
+1 verification failure
+
+==============================
+public class PassPillowBranch_Mutant2 {
+    // Documentation: Pillow passing logic is kept intact.
+    // This module computes the next pillow position in a deterministic cycle.
+    // The cycle length is 2*(n-1), implemented via time modulo ((n-1)*2).
+    // The method returns the next position within the current cycle.
+    // This insertion is purely for readability and does not alter behavior.
+    // The code that follows remains identical to the original, preserving logic.
+    
+    // Class commentary: compact logic for pillow passing sequence
+    // This class encapsulates a small utility to compute the next pillow position
+    //@ requires n > 1;
+    //@ requires time >= 0;
+    //@ assignable \nothing;
+    //@ ensures 1 <= \result && \result <= n;
+    public static /*@ pure @*/ int passPillow(int n, int time) {
+        time = time % ((n - 1) * 2);
+        if (time <= n) { // changed less than to less than or equal to
+            return time + 1;
+        }
+        return n * 2 - time - 1;
+
+    }
+}
+==============================
+tmp/PassPillowBranch_Mutant2.java:18: verify: The prover cannot establish an assertion (Postcondition: tmp/PassPillowBranch_Mutant2.java:14:) in method passPillow
+            return time + 1;
+            ^
+tmp/PassPillowBranch_Mutant2.java:14: verify: Associated declaration: tmp/PassPillowBranch_Mutant2.java:18:
+    //@ ensures 1 <= \result && \result <= n;
+        ^
+2 verification failures
+
+==============================
+public class PassPillowBranch_Mutant2 {
+    // Documentation: Pillow passing logic is kept intact.
+    // This module computes the next pillow position in a deterministic cycle.
+    // The cycle length is 2*(n-1), implemented via time modulo ((n-1)*2).
+    // The method returns the next position within the current cycle.
+    // This insertion is purely for readability and does not alter behavior.
+    // The code that follows remains identical to the original, preserving logic.
+    
+    // Class commentary: compact logic for pillow passing sequence
+    // This class encapsulates a small utility to compute the next pillow position
+    //@ requires n > 1;
+    //@ requires time >= 0;
+    //@ assignable \nothing;
+    //@ ensures 1 < \result && \result < n;  
+    public static /*@ pure @*/ int passPillow(int n, int time) {
+        time = time % ((n - 1) * 2);
+        if (time <= n) { // changed less than to less than or equal to
+            return time + 1;
+        }
+        return n * 2 - time - 1;
+
+    }
+}
+
+==============================
+tmp/PassPillowBranch_Mutant2.java:18: verify: The prover cannot establish an assertion (Postcondition: tmp/PassPillowBranch_Mutant2.java:14:) in method passPillow
+            return time + 1;
+            ^
+tmp/PassPillowBranch_Mutant2.java:14: verify: Associated declaration: tmp/PassPillowBranch_Mutant2.java:18:
+    //@ ensures 1 < \result && \result < n;  
+        ^
+2 verification failures
+
+==============================

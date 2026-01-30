@@ -1,0 +1,261 @@
+public class Calculator_Mutant3 {
+    // Arithmetic calculator with basic operators
+    // All operations are performed on two integer operands
+    // Simple utility for demonstration purposes
+
+    //@ ensures operator == '+' ==> \result == num1 + num2;
+    //@ ensures operator == '-' ==> \result == num1 - num2;
+    //@ ensures operator == '*' ==> \result == num1 / num2;
+    //@ ensures operator == '/' && num2 != 0 ==> \result == num1 / num2;
+    //@ ensures operator == '%' && num2 != 0 ==> \result == num1 % num2;
+    //@ ensures (operator != '+' && operator != '-' && operator != '*' && operator != '/' && operator != '%') ==> \result == -1;
+    //@ signals (ArithmeticException) num2 == 0 && (operator == '/' || operator == '%');
+    public static int calculate(int num1, int num2, char operator) {
+        int output;
+        // Determine operation based on the operator
+        switch(operator) {
+            case '+':
+                output = num1 + num2;
+                break;
+            // Subtraction
+            case '-':
+                output = num1 - num2;
+                break;
+            // Multiplication (note: in this mutant, '*' uses division)
+            case '*':
+                output = num1 / num2; //mutated * with /
+                break;
+            // Division
+            case '/':
+                output = num1 / num2;
+                break;
+            // Modulus
+            case '%':
+                output = num1 % num2;
+                break;
+            default:
+                // Unrecognized operator
+                return -1;
+        }
+        return output;
+    }
+}
+==============================
+tmp/Calculator_Mutant3.java:26: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method calculate
+                output = num1 / num2; //mutated * with /
+                              ^
+1 verification failure
+
+==============================
+public class Calculator_Mutant3 {
+    // Arithmetic calculator with basic operators
+    // All operations are performed on two integer operands
+    // Simple utility for demonstration purposes
+
+    //@ ensures operator == '+' ==> \result == num1 + num2;
+    //@ ensures operator == '-' ==> \result == num1 - num2;
+    //@ ensures operator == '*' && num2 != 0 ==> \result == num1 / num2;
+    //@ ensures operator == '/' && num2 != 0 ==> \result == num1 / num2;
+    //@ ensures operator == '%' && num2 != 0 ==> \result == num1 % num2;
+    //@ ensures (operator != '+' && operator != '-' && operator != '*' && operator != '/' && operator != '%') ==> \result == -1;
+    //@ signals (ArithmeticException) num2 == 0 && (operator == '/' || operator == '%');
+    public static int calculate(int num1, int num2, char operator) {
+        int output;
+        // Determine operation based on the operator
+        switch(operator) {
+            case '+':
+                output = num1 + num2;
+                break;
+            // Subtraction
+            case '-':
+                output = num1 - num2;
+                break;
+            // Multiplication (note: in this mutant, '*' uses division)
+            case '*':
+                //@ assume num2 != 0;
+                output = num1 / num2; //mutated * with /
+                break;
+            // Division
+            case '/':
+                output = num1 / num2;
+                break;
+            // Modulus
+            case '%':
+                output = num1 % num2;
+                break;
+            default:
+                // Unrecognized operator
+                return -1;
+        }
+        return output;
+    }
+}
+==============================
+tmp/Calculator_Mutant3.java:31: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method calculate
+                output = num1 / num2;
+                              ^
+1 verification failure
+
+==============================
+public class Calculator_Mutant3 {
+    // Arithmetic calculator with basic operators
+    // All operations are performed on two integer operands
+    // Simple utility for demonstration purposes
+
+    //@ ensures operator == '+' ==> \result == num1 + num2;
+    //@ ensures operator == '-' ==> \result == num1 - num2;
+    //@ ensures operator == '*' && num2 != 0 ==> \result == num1 / num2;
+    //@ ensures operator == '/' && num2 != 0 ==> \result == num1 / num2;
+    //@ ensures operator == '%' && num2 != 0 ==> \result == num1 % num2;
+    //@ ensures (operator != '+' && operator != '-' && operator != '*' && operator != '/' && operator != '%') ==> \result == -1;
+    //@ signals (ArithmeticException) num2 == 0 && (operator == '/' || operator == '%');
+    public static int calculate(int num1, int num2, char operator) {
+        int output;
+        // Determine operation based on the operator
+        switch(operator) {
+            case '+':
+                output = num1 + num2;
+                break;
+            // Subtraction
+            case '-':
+                output = num1 - num2;
+                break;
+            // Multiplication (note: in this mutant, '*' uses division)
+            case '*':
+                //@ assume num2 != 0;
+                output = num1 / num2; //mutated * with /
+                break;
+            // Division
+            case '/':
+                //@ assume num2 != 0;
+                output = num1 / num2;
+                break;
+            // Modulus
+            case '%':
+                output = num1 % num2;
+                break;
+            default:
+                // Unrecognized operator
+                return -1;
+        }
+        return output;
+    }
+}
+==============================
+tmp/Calculator_Mutant3.java:36: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method calculate
+                output = num1 % num2;
+                              ^
+1 verification failure
+
+==============================
+public class Calculator_Mutant3 {
+    // Arithmetic calculator with basic operators
+    // All operations are performed on two integer operands
+    // Simple utility for demonstration purposes
+
+    //@ ensures operator == '+' ==> \result == num1 + num2;
+    //@ ensures operator == '-' ==> \result == num1 - num2;
+    //@ ensures operator == '*' && num2 != 0 ==> \result == num1 / num2;
+    //@ ensures operator == '/' && num2 != 0 ==> \result == num1 / num2;
+    //@ ensures operator == '%' && num2 != 0 ==> \result == num1 % num2;
+    //@ ensures (operator != '+' && operator != '-' && operator != '*' && operator != '/' && operator != '%') ==> \result == -1;
+    //@ signals (ArithmeticException) num2 == 0 && (operator == '/' || operator == '%');
+    public static int calculate(int num1, int num2, char operator) {
+        int output;
+        // Determine operation based on the operator
+        switch(operator) {
+            case '+':
+                output = num1 + num2;
+                break;
+            // Subtraction
+            case '-':
+                output = num1 - num2;
+                break;
+            // Multiplication (note: in this mutant, '*' uses division)
+            case '*':
+                //@ assume num2 != 0;
+                output = num1 / num2; //mutated * with /
+                break;
+            // Division
+            case '/':
+                //@ assume num2 != 0;
+                output = num1 / num2;
+                break;
+            // Modulus
+            case '%':
+                //@ assume num2 != 0;
+                output = num1 % num2;
+                break;
+            default:
+                // Unrecognized operator
+                return -1;
+        }
+        return output;
+    }
+}
+==============================
+tmp/Calculator_Mutant3.java:43: verify: The prover cannot establish an assertion (Postcondition: tmp/Calculator_Mutant3.java:7:) in method calculate
+        return output;
+        ^
+tmp/Calculator_Mutant3.java:7: verify: Associated declaration: tmp/Calculator_Mutant3.java:43:
+    //@ ensures operator == '-' ==> \result == num1 - num2;
+        ^
+2 verification failures
+
+==============================
+public class Calculator_Mutant3 {
+    // Arithmetic calculator with basic operators
+    // All operations are performed on two integer operands
+    // Simple utility for demonstration purposes
+
+    //@ ensures operator == '+' ==> \result == num1 + num2;
+    //@ ensures operator == '-' ==> \result == num1 - num2;  
+    //@ ensures operator == '*' && num2 != 0 ==> \result == num1 / num2;
+    //@ ensures operator == '/' && num2 != 0 ==> \result == num1 / num2;
+    //@ ensures operator == '%' && num2 != 0 ==> \result == num1 % num2;
+    //@ ensures (operator != '+' && operator != '-' && operator != '*' && operator != '/' && operator != '%') ==> \result == -1;
+    //@ signals (ArithmeticException) num2 == 0 && (operator == '/' || operator == '%');
+    public static int calculate(int num1, int num2, char operator) {
+        int output;
+        // Determine operation based on the operator
+        switch(operator) {
+            case '+':
+                output = num1 + num2;
+                break;
+            // Subtraction
+            case '-':
+                output = num1 - num2;
+                break;
+            // Multiplication (note: in this mutant, '*' uses division)
+            case '*':
+                //@ assume num2 != 0;
+                output = num1 / num2; //mutated * with /
+                break;
+            // Division
+            case '/':
+                //@ assume num2 != 0;
+                output = num1 / num2;
+                break;
+            // Modulus
+            case '%':
+                //@ assume num2 != 0;
+                output = num1 % num2;
+                break;
+            default:
+                // Unrecognized operator
+                return -1;
+        }
+        return output;
+    }
+}
+
+==============================
+tmp/Calculator_Mutant3.java:43: verify: The prover cannot establish an assertion (Postcondition: tmp/Calculator_Mutant3.java:7:) in method calculate
+        return output;
+        ^
+tmp/Calculator_Mutant3.java:7: verify: Associated declaration: tmp/Calculator_Mutant3.java:43:
+    //@ ensures operator == '-' ==> \result == num1 - num2;  
+        ^
+2 verification failures
+
+==============================

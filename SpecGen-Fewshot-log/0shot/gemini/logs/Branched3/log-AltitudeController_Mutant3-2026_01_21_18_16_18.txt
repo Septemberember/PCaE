@@ -1,0 +1,45 @@
+public class AltitudeController_Mutant3 {
+ 
+    // This variant adds verbose inline commentary to aid review
+    // while preserving original logic of height-based control.
+    
+    /*@ public normal_behavior
+      @   ensures (targetHeight - currentHeight < 0) ==> 
+      @           (\result == ((-(targetHeight - currentHeight) > 30) ? -5 : 
+      @                       (-(targetHeight - currentHeight) > 20) ? -3 : 
+      @                       (-(targetHeight - currentHeight) > 10) ? -2 : (targetHeight - currentHeight)));
+      @   ensures (targetHeight - currentHeight >= 0) ==> 
+      @           (\result == ((targetHeight - currentHeight + 10 > 30) ? 5 : 
+      @                       (targetHeight - currentHeight + 10 > 20) ? 3 : 
+      @                       (targetHeight - currentHeight + 10 > 10) ? 2 : (targetHeight - currentHeight)));
+      @   pure
+      @*/
+    public static int altitudeController(int currentHeight,int targetHeight) {
+        int error = targetHeight - currentHeight;
+        
+        // Initialize absolute error with a small bias term
+        int absError = 0;
+        
+        // Apply bias to the absolute error to avoid oscillations
+        absError = error < 0 ? -error : error + 10; //Added 10 to error
+        
+        // Start with a neutral control signal
+        int controlSignal = 0;
+        
+        // Decision logic based on magnitude of error
+        if (absError > 30) {
+            controlSignal = error > 0 ? 5 : -5;
+        } else if (absError > 20) {
+            controlSignal = error > 0 ? 3 : -3;
+        } else if (absError > 10) {
+            controlSignal = error > 0 ? 2 : -2;
+        } else {
+            controlSignal = error;
+        }
+        // Return chosen throttle adjustment
+        return controlSignal;
+    }
+}
+==============================
+
+==============================

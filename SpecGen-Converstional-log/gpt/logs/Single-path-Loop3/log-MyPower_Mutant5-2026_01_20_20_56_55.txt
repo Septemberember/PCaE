@@ -1,0 +1,120 @@
+public class MyPower_Mutant5 {
+    // Utility: compute x raised to the power n using repeated multiplication
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   // avoid arithmetic overflow w.r.t. the mathematical result (and final "- 1")
+      @   requires (\bigint)(\product int k; 0 <= k && k < n; (\bigint)x) - 1 >= Integer.MIN_VALUE
+      @        && (\bigint)(\product int k; 0 <= k && k < n; (\bigint)x) - 1 <= Integer.MAX_VALUE;
+      @   ensures \result
+      @        == (int)((\bigint)(\product int k; 0 <= k && k < n; (\bigint)x) - 1);
+      @*/
+    public static /*@ pure @*/ int power(int x, int n) {
+        // Initialize result
+        int res = 1;
+        // Multiply x by itself n times
+        /*@ maintaining 0 <= i && i <= n;
+          @ maintaining res == (int)(\bigint)(\product int k; 0 <= k && k < i; (\bigint)x);
+          @ decreases n - i;
+          @*/
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        // Subtract 1 from the final result to demonstrate post-processing
+        return res - 1;  // Subtract 1 from the result
+    }
+    // End of power method
+}
+==============================
+tmp/MyPower_Mutant5.java:16: verify: The prover cannot establish an assertion (ArithmeticCastRange) in method power
+          @ maintaining res == (int)(\bigint)(\product int k; 0 <= k && k < i; (\bigint)x);
+                               ^
+1 verification failure
+
+==============================
+public class MyPower_Mutant5 {
+    // Utility: compute x raised to the power n using repeated multiplication
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   // Prevent overflow of the intermediate powers that are stored in int variable res.
+      @   requires (\forall int i; 0 <= i && i <= n;
+      @                Integer.MIN_VALUE
+      @                  <= (\bigint)(\product int k; 0 <= k && k < i; (\bigint)x)
+      @             && (\bigint)(\product int k; 0 <= k && k < i; (\bigint)x)
+      @                  <= Integer.MAX_VALUE);
+      @   // Prevent overflow of the final post-processing "- 1".
+      @   requires Integer.MIN_VALUE
+      @              <= (\bigint)(\product int k; 0 <= k && k < n; (\bigint)x) - 1
+      @        && (\bigint)(\product int k; 0 <= k && k < n; (\bigint)x) - 1
+      @              <= Integer.MAX_VALUE;
+      @   assignable \nothing;
+      @   ensures (\bigint)\result
+      @            == (\bigint)(\product int k; 0 <= k && k < n; (\bigint)x) - 1;
+      @*/
+    public static /*@ pure @*/ int power(int x, int n) {
+        // Initialize result
+        int res = 1;
+        // Multiply x by itself n times
+        /*@ maintaining 0 <= i && i <= n;
+          @ maintaining (\bigint)res
+          @              == (\bigint)(\product int k; 0 <= k && k < i; (\bigint)x);
+          @ decreases n - i;
+          @*/
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        // Subtract 1 from the final result to demonstrate post-processing
+        return res - 1;  // Subtract 1 from the result
+    }
+    // End of power method
+}
+==============================
+tmp/MyPower_Mutant5.java:25: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method power
+          @ maintaining (\bigint)res
+            ^
+1 verification failure
+
+==============================
+public class MyPower_Mutant5 {
+    // Utility: compute x raised to the power n using repeated multiplication
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   // Prevent overflow of the intermediate powers that are stored in int variable res.
+      @   requires (\forall int i; 0 <= i && i <= n;
+      @                Integer.MIN_VALUE
+      @                  <= (\bigint)(\product int k; 0 <= k && k < i; (\bigint)x)
+      @             && (\bigint)(\product int k; 0 <= k && k < i; (\bigint)x)
+      @                  <= Integer.MAX_VALUE);
+      @   // Prevent overflow of the final post-processing "- 1".
+      @   requires Integer.MIN_VALUE
+      @              <= (\bigint)(\product int k; 0 <= k && k < n; (\bigint)x) - 1
+      @        && (\bigint)(\product int k; 0 <= k && k < n; (\bigint)x) - 1
+      @              <= Integer.MAX_VALUE;
+      @   assignable \nothing;
+      @   ensures (\bigint)\result
+      @            == (\bigint)(\product int k; 0 <= k && k < n; (\bigint)x) - 1;
+      @*/
+    public static /*@ pure @*/ int power(int x, int n) {
+        // Initialize result
+        int res = 1;
+        // Multiply x by itself n times
+        /*@ maintaining 0 <= i && i <= n;
+          @ maintaining (\bigint)res  
+          @              == (\bigint)(\product int k; 0 <= k && k < i; (\bigint)x);
+          @ decreases n - i;
+          @*/
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        // Subtract 1 from the final result to demonstrate post-processing
+        return res - 1;  // Subtract 1 from the result
+    }
+    // End of power method
+}
+
+==============================
+tmp/MyPower_Mutant5.java:25: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method power
+          @ maintaining (\bigint)res  
+            ^
+1 verification failure
+
+==============================

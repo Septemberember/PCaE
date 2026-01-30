@@ -1,0 +1,77 @@
+public class MulLoop_Mutant5 {
+    // Simple multiplication implemented via repeated addition/subtraction
+    // Handles non-negative and negative multiplier
+
+    //@ ensures \result == a * b;
+    public static int mulLoop(int a, int b) {
+        // Result accumulator initialized to zero
+        int res = 0;
+        if (b >= 0) {
+            // Non-negative multiplier path: accumulate a, b times
+            //@ maintaining 0 <= i && i <= b;
+            //@ maintaining res == a * (b - i);
+            //@ decreases i;
+            for(int i = b; i > 0; i--) { // changed the loop to decrement from b to 0
+                // Each iteration adds a to the result
+                res = res + a;
+            }
+            // end of non-negative branch
+        } else {
+            //@ maintaining 0 <= i && i <= -b;
+            //@ maintaining res == -a * i;
+            //@ decreases (-b) - i;
+            for(int i = 0; i < -b; i++) {
+                // Subtract a for each iteration when b is negative
+                res = res - a;
+            }
+            // end of negative branch
+        }
+        return res;
+    }
+}
+==============================
+tmp/MulLoop_Mutant5.java:21: verify: The prover cannot establish an assertion (LoopInvariant) in method mulLoop
+            //@ maintaining res == -a * i;
+                ^
+1 verification failure
+
+==============================
+public class MulLoop_Mutant5 {
+    // Simple multiplication implemented via repeated addition/subtraction
+    // Handles non-negative and negative multiplier
+
+    //@ ensures \result == a * b;
+    public static int mulLoop(int a, int b) {
+        // Result accumulator initialized to zero
+        int res = 0;
+        if (b >= 0) {
+            // Non-negative multiplier path: accumulate a, b times
+            //@ maintaining 0 <= i && i <= b;
+            //@ maintaining res == a * (b - i);
+            //@ decreases i;
+            for(int i = b; i > 0; i--) { // changed the loop to decrement from b to 0
+                // Each iteration adds a to the result
+                res = res + a;
+            }
+            // end of non-negative branch
+        } else {
+            //@ maintaining 0 <= i && i <= -b;
+            //@ maintaining res == -a * i;  
+            //@ decreases (-b) - i;
+            for(int i = 0; i < -b; i++) {
+                // Subtract a for each iteration when b is negative
+                res = res - a;
+            }
+            // end of negative branch
+        }
+        return res;
+    }
+}
+
+==============================
+tmp/MulLoop_Mutant5.java:21: verify: The prover cannot establish an assertion (LoopInvariant) in method mulLoop
+            //@ maintaining res == -a * i;  
+                ^
+1 verification failure
+
+==============================

@@ -1,0 +1,53 @@
+public class ReLU_Mutant5 {
+    // Mutant variant: extra descriptive comments added to increase line count.
+    // The actual logic is unchanged in this version.
+    // The computeReLU method is currently a pass-through.
+    
+    //@ requires Double.isFinite(x);
+    //@ ensures \result == x;
+    //@ ensures \result >= 0;
+    public static double computeReLU(double x) {
+        // Preserve original behavior: return the input value as-is
+        return x;
+        // End of computation placeholder
+    }
+    // End of class with additional comments to aid tracing
+    // Note: This block intentionally contains only comments and blank lines.
+}
+==============================
+tmp/ReLU_Mutant5.java:11: verify: The prover cannot establish an assertion (Postcondition: tmp/ReLU_Mutant5.java:8:) in method computeReLU
+        return x;
+        ^
+tmp/ReLU_Mutant5.java:8: verify: Associated declaration: tmp/ReLU_Mutant5.java:11:
+    //@ ensures \result >= 0;
+        ^
+2 verification failures
+
+==============================
+public class ReLU_Mutant5 {
+    // Mutant variant: extra descriptive comments added to increase line count.
+    // The actual logic is unchanged in this version.
+    // The computeReLU method is currently a pass-through.
+    
+    //@ requires Double.isFinite(x);
+    //@ ensures \result == x;
+    //@ ensures \result > 0;  
+    public static double computeReLU(double x) {
+        // Preserve original behavior: return the input value as-is
+        return x;
+        // End of computation placeholder
+    }
+    // End of class with additional comments to aid tracing
+    // Note: This block intentionally contains only comments and blank lines.
+}
+
+==============================
+tmp/ReLU_Mutant5.java:11: verify: The prover cannot establish an assertion (Postcondition: tmp/ReLU_Mutant5.java:8:) in method computeReLU
+        return x;
+        ^
+tmp/ReLU_Mutant5.java:8: verify: Associated declaration: tmp/ReLU_Mutant5.java:11:
+    //@ ensures \result > 0;  
+        ^
+2 verification failures
+
+==============================

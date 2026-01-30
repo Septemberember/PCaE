@@ -1,0 +1,25 @@
+public class Return100_Mutant1 {
+    // This class returns 200 by summing 2 in each of 100 iterations.
+    // It uses a simple loop to accumulate the result.
+
+    //@ ensures \result == 200;
+    public static int return100 () {
+        // Loop executes 100 times.
+        // Each iteration adds 2 to the result.
+
+        int res = 0;
+        int i = 0;
+        //@ maintaining 0 <= i && i <= 100;
+        //@ maintaining res == i * 2;
+        //@ decreases 100 - i;
+        for(i = 0; i < 100; i++) {
+            res = res + 2; // CHANGED: incremented by 2 instead of 1
+        }
+        // End of loop processing
+        return res;
+    }
+    // End of return100 method
+}
+==============================
+
+==============================

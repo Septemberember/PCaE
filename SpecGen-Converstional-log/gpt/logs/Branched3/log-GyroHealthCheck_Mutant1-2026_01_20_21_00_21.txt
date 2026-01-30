@@ -1,0 +1,36 @@
+// Gyro health check utility class
+public class GyroHealthCheck_Mutant1 {
+    // Entry point: compute alarm based on pairwise axis differences
+    //@ assignable \nothing;
+    //@ ensures \result == 0 || \result == 1;
+    /*@ ensures \result == 1 <==>
+      @   (\let int dXY = (x - y);
+      @    \let int diffXY = (dXY > 0 ? -dXY : dXY);
+      @    \let int dYZ = (y - z);
+      @    \let int diffYZ = (dYZ > 0 ? -dYZ : dYZ);
+      @    \let int dXZ = (x - z);
+      @    \let int diffXZ = (dXZ < 0 ? -dXZ : dXZ);
+      @      (diffXY > 10 || diffYZ > 10 || diffXZ > 10));
+      @*/
+    //@ ensures \result == 0 <==> \result != 1;
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // If diffXY is positive, invert to its negative counterpart
+        if (diffXY > 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // If diffYZ is positive, invert to its negative counterpart
+        if (diffYZ > 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // If diffXZ is negative, take its absolute value
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        int alarm = 0;
+        // Alarm if any pairwise difference exceeds the threshold
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        return alarm;
+    }
+}
+==============================
+
+==============================

@@ -1,0 +1,66 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class Power2Bit {
+    public static int power2Bit(int n) {
+        int x = 2;
+        int MAX_LENGTH = 8;
+        int MKS = 88;
+        int base = 0;
+        int res = 1;
+        String s = null;
+        if(n < 0){
+            n = -n;
+        }
+        if(n >= 0){
+            if(n < 6){
+                for(int i = 0; i <= n; i++){
+                    res = res * x;
+                    String resStr = new String(String.valueOf(res));
+                    s = resStr;
+                    if(i == 3 && res > MKS){
+                        base = 2;
+                    }
+                }
+            }else{
+                res = MAX_LENGTH;
+                String resStr = new String(String.valueOf(res));
+                s = resStr;
+                base = 1;
+            }
+        }
+        res = s.length();
+        return res + base;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: n < 0 && -n < 6 && (2 ** (-n)) <= 88
+D1: return_value == String.valueOf(2 ** (-n)).length()
+
+T2: n < 0 && -n < 6 && (2 ** (-n)) > 88
+D2: return_value == String.valueOf(2 ** (-n)).length() + 2
+
+T3: n < 0 && -n >= 6
+D3: return_value == String.valueOf(8).length() + 1
+
+T4: n >= 0 && n < 6 && (2 ** n) <= 88
+D4: return_value == String.valueOf(2 ** n).length()
+
+T5: n >= 0 && n < 6 && (2 ** n) > 88
+D5: return_value == String.valueOf(2 ** n).length() + 2
+
+T6: n >= 0 && n >= 6
+D6: return_value == String.valueOf(8).length() + 1
+```
+*end* role assistant
+start role user
+There exists n < 0 && -n < 6 && (2 ** (-n)) > 88 in the FSF, and it is a unsatisfiable，please regenerate the FSF，avoiding contains this kind of unsatisfiable T!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

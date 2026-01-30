@@ -1,0 +1,34 @@
+public class Return100Nested_Mutant3 {
+    // This class exposes a computation that yields a fixed integer.
+    // The computation consists of a 10x10 nested loop.
+    // Each inner iteration adds 2 to the accumulator.
+    // The resulting value is returned by return100().
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   assignable \nothing;
+      @   ensures \result == 200;
+      @*/
+    public static int return100 () {
+        int res = 0;
+        /*@ loop_invariant 0 <= i && i <= 10;
+          @ loop_invariant res == 20 * i;
+          @ loop_invariant 0 <= res && res <= 200;
+          @ decreases 10 - i;
+          @*/
+        for(int i = 0; i < 10; i++) {
+            /*@ loop_invariant 0 <= j && j <= 10;
+              @ loop_invariant res == 20 * i + 2 * j;
+              @ loop_invariant 0 <= res && res <= 200;
+              @ decreases 10 - j;
+              @*/
+            for(int j = 0; j < 10; j++) {
+                res = res + 2;
+            }
+        }
+        return res;
+    }
+}
+==============================
+
+==============================

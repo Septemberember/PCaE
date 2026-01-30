@@ -1,0 +1,400 @@
+public class FlowCalculator_S {
+
+    //@ requires Integer.MIN_VALUE <= 2L * pressure + 14 && 2L * pressure + 14 <= Integer.MAX_VALUE;
+    //@ requires Integer.MIN_VALUE <= 2L * pressure + 29 + (long)rate && 2L * pressure + 29 + (long)rate <= Integer.MAX_VALUE;
+    //@ ensures \result == \result; /* not NaN */
+    /*@ ensures
+      @   (\let int a = 2*pressure + 15;
+      @     (a > 40
+      @       ? (rate >= 5
+      @           ? (\let int adj = 2*pressure + 29 + rate;
+      @               \let double f0 = ((double)adj) * 0.95;
+      @               \let double f  = (f0 > 80.0 ? f0 * 0.9 : f0 + 10.0);
+      @               f * 0.85 + ((double)adj) * 0.05)
+      @           : (\let int adj = 2*pressure + 17;
+      @               \let double f  = ((double)adj) * 1.1;
+      @               f * 0.85 + ((double)adj) * 0.05))
+      @       : (rate < 3
+      @           ? (\let int adj = 2*pressure + 14;
+      @               \let double f0 = ((double)adj) * 0.7;
+      @               \let double f  = (f0 < 20.0 ? f0 + 5.0 : f0 * 0.95);
+      @               f * 1.1 + ((double)adj) * 0.05)
+      @           : (\let int adj = 2*pressure + 9;
+      @               \let double f0 = ((double)adj) * 0.8;
+      @               \let double f  = (f0 < 20.0 ? f0 + 5.0 : f0 * 0.95);
+      @               f * 0.85 + ((double)adj) * 0.05))));
+      @*/
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure < 10) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+tmp/FlowCalculator_S.java:5: error: Embedded block comment must terminate within the JML line comment
+    //@ ensures \result == \result; /* not NaN */
+                                    ^
+1 error
+
+==============================
+public class FlowCalculator_S {
+
+    //@ requires Integer.MIN_VALUE <= 2L * pressure + 14 && 2L * pressure + 14 <= Integer.MAX_VALUE;
+    //@ requires Integer.MIN_VALUE <= 2L * pressure + 15 && 2L * pressure + 15 <= Integer.MAX_VALUE;
+    //@ requires Integer.MIN_VALUE <= 2L * pressure + 29 + (long)rate && 2L * pressure + 29 + (long)rate <= Integer.MAX_VALUE;
+    //@ ensures \result == \result;
+    /*@ ensures
+      @   (\let int a = 2*pressure + 15;
+      @     (a > 40
+      @       ? (rate >= 5
+      @           ? (\let int adj = 2*pressure + 29 + rate;
+      @               \let double f0 = ((double)adj) * 0.95;
+      @               \let double f  = (f0 > 80.0 ? f0 * 0.9 : f0 + 10.0);
+      @               f * 0.85 + ((double)adj) * 0.05)
+      @           : (\let int adj = 2*pressure + 17;
+      @               \let double f  = ((double)adj) * 1.1;
+      @               f * 0.85 + ((double)adj) * 0.05))
+      @       : (rate < 3
+      @           ? (\let int adj = 2*pressure + 14;
+      @               \let double f0 = ((double)adj) * 0.7;
+      @               \let double f  = (f0 < 20.0 ? f0 + 5.0 : f0 * 0.95);
+      @               f * 1.1 + ((double)adj) * 0.05)
+      @           : (\let int adj = 2*pressure + 9;
+      @               \let double f0 = ((double)adj) * 0.8;
+      @               \let double f  = (f0 < 20.0 ? f0 + 5.0 : f0 * 0.95);
+      @               f * 0.85 + ((double)adj) * 0.05))));
+      @*/
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure < 10) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+tmp/FlowCalculator_S.java:8: error: incompatible types: double cannot be converted to boolean
+      @   (\let int a = 2*pressure + 15;
+           ^
+1 error
+
+==============================
+public class FlowCalculator_S {
+
+    //@ requires Integer.MIN_VALUE <= 2L * pressure + 15 && 2L * pressure + 15 <= Integer.MAX_VALUE;
+    //@ requires Integer.MIN_VALUE <= 2L * pressure + 21 + (long)rate && 2L * pressure + 21 + (long)rate <= Integer.MAX_VALUE;
+    //@ requires Integer.MIN_VALUE <= 2L * pressure + 29 + (long)rate && 2L * pressure + 29 + (long)rate <= Integer.MAX_VALUE;
+    //@ requires !((2L*pressure + 15 > 40) && rate == 5 && pressure < 10);
+    /*@ ensures \result ==
+      @   (\let int base = 2*pressure + 15;
+      @     (base > 40
+      @       ? (\let int adj1 = base + 6;
+      @           (rate >= 5
+      @             ? (\let int adj2 = adj1 + rate;
+      @                 (pressure < 10
+      @                   ? (\let double flow0 = ((double)adj2) / (rate - 5);
+      @                       \let double flow1 = (flow0 > 80.0 ? flow0 * 0.9 : flow0 + 10.0);
+      @                       flow1 * 1.1 + ((double)adj2) * 0.05)
+      @                   : (\let int adj3 = adj2 + 8;
+      @                       \let double flow0 = ((double)adj3) * 0.95;
+      @                       \let double flow1 = (flow0 > 80.0 ? flow0 * 0.9 : flow0 + 10.0);
+      @                       flow1 * 0.85 + ((double)adj3) * 0.05)))
+      @             : (\let int adjF = adj1 - 4;
+      @                 \let double flow1 = ((double)adjF) * 1.1;
+      @                 flow1 * 0.85 + ((double)adjF) * 0.05)))
+      @       : (\let int adj1 = base - 6;
+      @           (rate < 3
+      @             ? (\let int adjF = adj1 + 5;
+      @                 \let double flow0 = ((double)adjF) * 0.7;
+      @                 \let double flow1 = (flow0 < 20.0 ? flow0 + 5.0 : flow0 * 0.95);
+      @                 flow1 * 1.1 + ((double)adjF) * 0.05)
+      @             : (\let int adjF = adj1;
+      @                 \let double flow0 = ((double)adjF) * 0.8;
+      @                 \let double flow1 = (flow0 < 20.0 ? flow0 + 5.0 : flow0 * 0.95);
+      @                 flow1 * 0.85 + ((double)adjF) * 0.05)))));
+      @*/
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure < 10) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+tmp/FlowCalculator_S.java:14: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                   ? (\let double flow0 = ((double)adj2) / (rate - 5);
+                                                  ^
+  Reason: Unknown type tag DOUBLE
+tmp/FlowCalculator_S.java:16: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                       flow1 * 1.1 + ((double)adj2) * 0.05)
+                                             ^
+  Reason: Unknown type tag DOUBLE
+tmp/FlowCalculator_S.java:18: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                       \let double flow0 = ((double)adj3) * 0.95;
+                                                   ^
+  Reason: Unknown type tag DOUBLE
+tmp/FlowCalculator_S.java:20: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                       flow1 * 0.85 + ((double)adj3) * 0.05)))
+                                              ^
+  Reason: Unknown type tag DOUBLE
+tmp/FlowCalculator_S.java:22: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                 \let double flow1 = ((double)adjF) * 1.1;
+                                             ^
+  Reason: Unknown type tag DOUBLE
+tmp/FlowCalculator_S.java:23: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                 flow1 * 0.85 + ((double)adjF) * 0.05)))
+                                        ^
+  Reason: Unknown type tag DOUBLE
+tmp/FlowCalculator_S.java:27: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                 \let double flow0 = ((double)adjF) * 0.7;
+                                             ^
+  Reason: Unknown type tag DOUBLE
+tmp/FlowCalculator_S.java:29: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                 flow1 * 1.1 + ((double)adjF) * 0.05)
+                                       ^
+  Reason: Unknown type tag DOUBLE
+tmp/FlowCalculator_S.java:31: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                 \let double flow0 = ((double)adjF) * 0.8;
+                                             ^
+  Reason: Unknown type tag DOUBLE
+tmp/FlowCalculator_S.java:33: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                 flow1 * 0.85 + ((double)adjF) * 0.05)))));
+                                        ^
+  Reason: Unknown type tag DOUBLE
+10 errors
+
+==============================
+public class FlowCalculator_S {
+
+    //@ requires !( (2*pressure + 15 > 40) && (pressure < 10) && (rate == 5) );
+    //@ ensures \result == \result;
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure < 10) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+
+==============================

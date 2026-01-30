@@ -1,0 +1,72 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class EnergyMonitor {
+    public static int calculateConsumption(int usage) {
+        int consumptionCoe[] = new int[4];
+        consumptionCoe[0] = 1;
+        consumptionCoe[1] = 2;
+        consumptionCoe[2] = 5;
+        consumptionCoe[3] = 6;
+
+        int payment = 0;
+        int penalty = 2;
+        int level = 0;
+        if(usage > 400){
+            return usage * consumptionCoe[3];
+        }
+        level = usage / 100;
+        if(level < 0){
+            return 0;
+        }
+        if(level == 0){
+            payment = usage * consumptionCoe[0];
+            payment = payment - penalty * usage / 10;
+        }
+        if(level == 1){
+            payment = (usage - 100) * consumptionCoe[1] + 50 * consumptionCoe[0];
+            payment = payment - penalty * usage / 30;
+        }
+        if(level == 2){
+            payment = (usage - 200) * consumptionCoe[2] + 50 * consumptionCoe[1] + 50 * consumptionCoe[0];
+            payment = payment - penalty * usage / 50;
+        }else{
+            payment = payment +  usage * consumptionCoe[level] + penalty * (usage - 300);
+        }
+        return payment;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: usage > 400
+D1: return_value == usage * 6
+
+T2: usage <= -100
+D2: return_value == 0
+
+T3: usage >= -99 && usage <= 99
+D3: return_value == 4 * usage - 600 - (2 * usage) / 10
+
+T4: usage >= 100 && usage <= 199
+D4: return_value == 6 * usage - 750 - (2 * usage) / 30
+
+T5: usage >= 200 && usage <= 299
+D5: return_value == 5 * usage - 850 - (2 * usage) / 50
+
+T6: usage >= 300 && usage <= 399
+D6: return_value == 8 * usage - 600
+
+T7: usage == 400
+D7: Exception
+```
+*end* role assistant
+start role user
+Some errors occurred while verifyingT: usage > 400	D: return_value == usage * 6, , please regenerate the FSF!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

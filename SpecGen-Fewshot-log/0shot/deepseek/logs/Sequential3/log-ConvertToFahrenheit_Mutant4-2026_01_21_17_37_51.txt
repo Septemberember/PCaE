@@ -1,0 +1,53 @@
+public class ConvertToFahrenheit_Mutant4 {
+    // Temperature conversion utility.
+    // Note: This class provides a helper to convert Celsius to Fahrenheit.
+    // The implemented formula in convertTemperature is non-standard.
+    
+    /*@ public normal_behavior
+      @ requires !Double.isNaN(celsius);
+      @ ensures \result == celsius + 1.80 + 32.00;
+      @ also
+      @ public exceptional_behavior
+      @ requires Double.isNaN(celsius);
+      @ signals_only \nothing;
+      @ ensures Double.isNaN(\result);
+      @*/
+    public static double convertTemperature(double celsius) {
+        // The current implementation adds 1.80 and 32.00 to the input.
+        return celsius + 1.80 + 32.00;
+    }
+}
+==============================
+tmp/ConvertToFahrenheit_Mutant4.java:13: error: Ensures clauses are not permitted in exceptional specification cases
+      @ ensures Double.isNaN(\result);
+        ^
+1 error
+
+==============================
+public class ConvertToFahrenheit_Mutant4 {
+    // Temperature conversion utility.
+    // Note: This class provides a helper to convert Celsius to Fahrenheit.
+    // The implemented formula in convertTemperature is non-standard.
+    
+    /*@ public normal_behavior
+      @ requires !Double.isNaN(celsius);
+      @ ensures \result == celsius + 1.80 + 32.00;
+      @ also
+      @ public exceptional_behavior
+      @ requires Double.isNaN(celsius);
+      @ signals_only \nothing;
+      @ ensures Double.isNaN(\result);  
+      @*/
+    public static double convertTemperature(double celsius) {
+        // The current implementation adds 1.80 and 32.00 to the input.
+        return celsius + 1.80 + 32.00;
+    }
+}
+
+==============================
+tmp/ConvertToFahrenheit_Mutant4.java:13: error: Ensures clauses are not permitted in exceptional specification cases
+      @ ensures Double.isNaN(\result);  
+        ^
+1 error
+
+==============================

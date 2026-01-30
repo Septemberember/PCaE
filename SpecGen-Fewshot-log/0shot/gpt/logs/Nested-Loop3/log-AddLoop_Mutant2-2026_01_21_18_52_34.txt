@@ -1,0 +1,47 @@
+// AddLoop_Mutant2: descriptive header
+// This variant preserves the original logic using two branches
+// Comments are inserted to aid code comprehension without modifying behavior
+public class AddLoop_Mutant2 {
+    // Branch overview
+    // - if y > 0, increment sum by 1, for y iterations
+    // - else, decrement sum by 2, for -y iterations
+    /*@ public normal_behavior
+      @   // Avoid Java's overflow on negation when y == Integer.MIN_VALUE
+      @   requires y != Integer.MIN_VALUE;
+      @   // Prevent arithmetic overflow so the functional postcondition matches Java int behavior
+      @   requires (y > 0)  ==> (Integer.MIN_VALUE <= x + y   && x + y   <= Integer.MAX_VALUE);
+      @   requires (y <= 0) ==> (Integer.MIN_VALUE <= x + 2*y && x + 2*y <= Integer.MAX_VALUE);
+      @   assignable \nothing;
+      @   ensures (y > 0)  ==> (\result == x + y);
+      @   ensures (y <= 0) ==> (\result == x + 2*y);
+      @*/
+    public static int AddLoop(int x, int y) {
+        // Initialize accumulator with x
+        int sum = x;
+        if (y > 0) {
+            int n = y;
+            /*@ maintaining 0 <= n && n <= y;
+              @ maintaining sum == x + (y - n);
+              @ decreasing n;
+              @*/
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+            }
+        } else {
+            int n = -y;
+            /*@ maintaining 0 <= n && n <= (-y);
+              @ maintaining sum == x + 2*y + 2*n;
+              @ decreasing n;
+              @*/
+            while (n > 0) {
+                sum = sum - 2;
+                n = n - 1;
+            }
+        }
+        return sum;
+    }
+}
+==============================
+
+==============================

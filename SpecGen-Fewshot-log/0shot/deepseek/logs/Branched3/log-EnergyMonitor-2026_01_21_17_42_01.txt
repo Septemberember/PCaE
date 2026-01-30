@@ -1,0 +1,107 @@
+public class EnergyMonitor {
+    //@ spec_public
+    public static int calculateConsumption(int usage) {
+        //@ spec_public
+        int consumptionCoe[] = new int[4];
+        consumptionCoe[0] = 1;
+        consumptionCoe[1] = 2;
+        consumptionCoe[2] = 5;
+        consumptionCoe[3] = 6;
+
+        //@ spec_public
+        int payment = 0;
+        //@ spec_public
+        int penalty = 2;
+        //@ spec_public
+        int level = 0;
+        //@ requires usage >= 0;
+        //@ ensures usage > 400 ==> \result == usage * consumptionCoe[3];
+        //@ ensures usage <= 400 && usage >= 0 ==> \result >= 0;
+        //@ ensures usage <= 400 && usage >= 0 ==> \result == payment;
+        if(usage > 400){
+            return usage * consumptionCoe[3];
+        }
+        level = usage / 100;
+        //@ maintaining level == usage / 100;
+        //@ maintaining level >= 0 && level <= 3;
+        if(level < 0){
+            return 0;
+        }
+        if(level == 0){
+            payment = usage * consumptionCoe[0];
+            payment = payment - penalty * usage / 10;
+        }
+        if(level == 1){
+            payment = (usage - 100) * consumptionCoe[1] + 50 * consumptionCoe[0];
+            payment = payment - penalty * usage / 30;
+        }
+        if(level == 2){
+            payment = (usage - 200) * consumptionCoe[2] + 50 * consumptionCoe[1] + 50 * consumptionCoe[0];
+            payment = payment - penalty * usage / 50;
+        }else{
+            payment = payment +  usage * consumptionCoe[level] + penalty * (usage - 300);
+        }
+        return payment;
+    }
+}
+==============================
+tmp/EnergyMonitor.java:25: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining level == usage / 100;
+            ^
+1 error
+
+==============================
+public class EnergyMonitor {
+    //@ spec_public
+    public static int calculateConsumption(int usage) {
+        //@ spec_public
+        int consumptionCoe[] = new int[4];
+        consumptionCoe[0] = 1;
+        consumptionCoe[1] = 2;
+        consumptionCoe[2] = 5;
+        consumptionCoe[3] = 6;
+
+        //@ spec_public
+        int payment = 0;
+        //@ spec_public
+        int penalty = 2;
+        //@ spec_public
+        int level = 0;
+        //@ requires usage >= 0;
+        //@ ensures usage > 400 ==> \result == usage * consumptionCoe[3];
+        //@ ensures usage <= 400 && usage >= 0 ==> \result >= 0;
+        //@ ensures usage <= 400 && usage >= 0 ==> \result == payment;
+        if(usage > 400){
+            return usage * consumptionCoe[3];
+        }
+        level = usage / 100;
+        //@ maintaining level == usage / 100;  
+        //@ maintaining level >= 0 && level <= 3;
+        if(level < 0){
+            return 0;
+        }
+        if(level == 0){
+            payment = usage * consumptionCoe[0];
+            payment = payment - penalty * usage / 10;
+        }
+        if(level == 1){
+            payment = (usage - 100) * consumptionCoe[1] + 50 * consumptionCoe[0];
+            payment = payment - penalty * usage / 30;
+        }
+        if(level == 2){
+            payment = (usage - 200) * consumptionCoe[2] + 50 * consumptionCoe[1] + 50 * consumptionCoe[0];
+            payment = payment - penalty * usage / 50;
+        }else{
+            payment = payment +  usage * consumptionCoe[level] + penalty * (usage - 300);
+        }
+        return payment;
+    }
+}
+
+==============================
+tmp/EnergyMonitor.java:25: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining level == usage / 100;  
+            ^
+1 error
+
+==============================

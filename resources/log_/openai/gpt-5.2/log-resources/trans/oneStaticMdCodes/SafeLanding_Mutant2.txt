@@ -1,0 +1,39 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class SafeLanding_Mutant2 {
+    // Entry point for evaluating landing safety
+    public static int safeLanding(int height, int speed, int tilt) {
+        int safe = 1;
+        // Check height threshold; taller than expected threshold reduces safety
+        if (height > 5) {
+            safe = 0;
+        }
+        // Enforce speed constraint for a safe landing
+        if (speed >= 3) {
+            safe = 0;
+        }
+        // Tilt constraint to ensure stable descent
+        if (tilt > 10) {
+            safe = 0;
+        }
+        // Final safety outcome based on the evaluated conditions
+        return safe;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: height <= 5 && speed < 3 && tilt <= 10
+D1: return_value == 1
+
+T2: height > 5 || speed >= 3 || tilt > 10
+D2: return_value == 0
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

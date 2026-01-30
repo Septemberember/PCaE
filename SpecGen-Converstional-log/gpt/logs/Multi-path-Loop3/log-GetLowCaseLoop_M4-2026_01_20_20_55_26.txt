@@ -1,0 +1,79 @@
+// Character mapping helper: derives a candidate by scanning a small range
+// This snippet demonstrates a simple loop with an early return for non-letter inputs
+
+public class GetLowCaseLoop_M4 {
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   ensures (c < 'F' || c > 'Z') ==> \result == (char)0;
+      @   ensures ('F' <= c && c <= 'Z') ==> \result == (char)(c - 'A' + 'a');
+      @*/
+    public static char getLowCase(char c) {
+        char t = 'f';
+        // Initialize t to 'f' and iterate toward 'z' to locate a transformed input
+        //@ maintaining (char)'f' <= t && t <= (char)('z' + 1);
+        //@ maintaining (\forall int u; (int)'f' <= u && u < (int)t; (char)u != (char)(c - 'A' + 'a'));
+        //@ decreases (int)'z' - (int)t + 1;
+        while(t <= 'z' && t != c - 'A' + 'a') {
+            // Loop begins: compare and adjust t within the range
+            if(c < 'F' || c > 'Z') {
+                // If c is outside the A-Z range, there is no valid mapping
+                return 0;
+            }
+            t++;
+            // Move to the next candidate letter
+        }
+        // End of this iteration
+        // Return the resulting character after the loop completes
+        return t;
+    }
+}
+==============================
+tmp/GetLowCaseLoop_M4.java:27: verify: The prover cannot establish an assertion (Postcondition: tmp/GetLowCaseLoop_M4.java:7:) in method getLowCase
+        return t;
+        ^
+tmp/GetLowCaseLoop_M4.java:7: verify: Associated declaration: tmp/GetLowCaseLoop_M4.java:27:
+      @   ensures (c < 'F' || c > 'Z') ==> \result == (char)0;
+          ^
+2 verification failures
+
+==============================
+// Character mapping helper: derives a candidate by scanning a small range
+// This snippet demonstrates a simple loop with an early return for non-letter inputs
+
+public class GetLowCaseLoop_M4 {
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   ensures (c < 'F' || c > 'Z') ==> \result == (char)0;  
+      @   ensures ('F' <= c && c <= 'Z') ==> \result == (char)(c - 'A' + 'a');
+      @*/
+    public static char getLowCase(char c) {
+        char t = 'f';
+        // Initialize t to 'f' and iterate toward 'z' to locate a transformed input
+        //@ maintaining (char)'f' <= t && t <= (char)('z' + 1);
+        //@ maintaining (\forall int u; (int)'f' <= u && u < (int)t; (char)u != (char)(c - 'A' + 'a'));
+        //@ decreases (int)'z' - (int)t + 1;
+        while(t <= 'z' && t != c - 'A' + 'a') {
+            // Loop begins: compare and adjust t within the range
+            if(c < 'F' || c > 'Z') {
+                // If c is outside the A-Z range, there is no valid mapping
+                return 0;
+            }
+            t++;
+            // Move to the next candidate letter
+        }
+        // End of this iteration
+        // Return the resulting character after the loop completes
+        return t;
+    }
+}
+
+==============================
+tmp/GetLowCaseLoop_M4.java:27: verify: The prover cannot establish an assertion (Postcondition: tmp/GetLowCaseLoop_M4.java:7:) in method getLowCase
+        return t;
+        ^
+tmp/GetLowCaseLoop_M4.java:7: verify: Associated declaration: tmp/GetLowCaseLoop_M4.java:27:
+      @   ensures (c < 'F' || c > 'Z') ==> \result == (char)0;  
+          ^
+2 verification failures
+
+==============================

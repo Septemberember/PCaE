@@ -1,0 +1,8 @@
+experimentName: GPT522shot
+model: openai/gpt-5.2
+category: Sequential3
+total number: 63
+success number: 58
+success rate: 92.06%
+failed number: 5
+exception number: 0

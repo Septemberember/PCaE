@@ -1,0 +1,71 @@
+start role user
+Please generate an FSF for the program below:
+```
+import java.util.ArrayList;
+
+public class TrafficController {
+    public static int calculateFlow(int vehicles) {
+        ArrayList<Integer> flowRates = new ArrayList<Integer>(12);
+        for (int i = 0; i < 12; i++) {
+            flowRates.add(0);
+        }
+        int MAX_VEHICLES = 200;
+        int MIN_VEHICLES = 10;
+        int congestion = 0;
+
+        int rateIndex = 0;
+
+        if (vehicles < MIN_VEHICLES) {
+            vehicles = MIN_VEHICLES;
+            congestion = congestion - 3;
+        } else {
+            congestion = congestion + 1;
+        }
+
+        if (vehicles > MAX_VEHICLES) {
+            vehicles = MAX_VEHICLES;
+            congestion = congestion * 2;
+        }
+
+        int flowRate = vehicles / 5 + 20;
+
+        if (flowRate >= 25 && flowRate <= 45) {
+            rateIndex = flowRate / 5;
+        } else {
+            rateIndex = flowRate % 12;
+        }
+
+        flowRates.get(rateIndex);
+        return flowRate + congestion;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: vehicles >= 10 && vehicles <= 200
+D1: flowRate == (vehicles / 5) + 20 && congestion == 1 && flowRate >= 25 && flowRate <= 45 && rateIndex == flowRate / 5 && return_value == flowRate + 1
+T2: vehicles >= 10 && vehicles <= 200
+D2: flowRate == (vehicles / 5) + 20 && congestion == 1 && (flowRate < 25 || flowRate > 45) && rateIndex == flowRate % 12 && return_value == flowRate + 1
+T3: vehicles < 10
+D3: vehicles' == 10 && flowRate == (vehicles' / 5) + 20 && congestion == -3 && flowRate >= 25 && flowRate <= 45 && rateIndex == flowRate / 5 && return_value == flowRate - 3
+T4: vehicles < 10
+D4: vehicles' == 10 && flowRate == (vehicles' / 5) + 20 && congestion == -3 && (flowRate < 25 || flowRate > 45) && rateIndex == flowRate % 12 && return_value == flowRate - 3
+T5: vehicles > 200
+D5: vehicles' == 200 && flowRate == (vehicles' / 5) + 20 && congestion == 2 && flowRate >= 25 && flowRate <= 45 && rateIndex == flowRate / 5 && return_value == flowRate + 2
+T6: vehicles > 200
+D6: vehicles' == 200 && flowRate == (vehicles' / 5) + 20 && congestion == 2 && (flowRate < 25 || flowRate > 45) && rateIndex == flowRate % 12 && return_value == flowRate + 2
+T7: vehicles < 10 && vehicles > 200
+D7: vehicles' == 10 && vehicles'' == 200 && flowRate == (vehicles'' / 5) + 20 && congestion == -3 * 2 && flowRate >= 25 && flowRate <= 45 && rateIndex == flowRate / 5 && return_value == flowRate - 6
+T8: vehicles < 10 && vehicles > 200
+D8: vehicles' == 10 && vehicles'' == 200 && flowRate == (vehicles'' / 5) + 20 && congestion == -3 * 2 && (flowRate < 25 || flowRate > 45) && rateIndex == flowRate % 12 && return_value == flowRate - 6
+```
+*end* role assistant
+start role user
+There exists vehicles < 10 && vehicles > 200 in the FSF, and it is a unsatisfiable，please regenerate the FSF，avoiding contains this kind of unsatisfiable T!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

@@ -1,0 +1,81 @@
+public class GyroHealthCheck_Mutant2 {
+    // GyroHealthCheck_Mutant2: health evaluation utility
+    // Computes a simple alarm based on axis differences
+    // using a threshold of 10 units between any pair of axes.
+    
+    /*@ requires Integer.MIN_VALUE <= (\bigint)x - (\bigint)y && (\bigint)x - (\bigint)y <= Integer.MAX_VALUE;
+      @ requires Integer.MIN_VALUE <= (\bigint)y - (\bigint)z && (\bigint)y - (\bigint)z <= Integer.MAX_VALUE;
+      @ requires Integer.MIN_VALUE <= (\bigint)x - (\bigint)z && (\bigint)x - (\bigint)z <= Integer.MAX_VALUE;
+      @ requires (\bigint)x - (\bigint)z != Integer.MIN_VALUE; // ensures negation in "diffXZ = -diffXZ" does not overflow
+      @ ensures \result == 0 || \result == 1;
+      @ ensures (\result == 1) <==> ( (x - y) > 10 || (y - z) > 10 || \abs((\bigint)x - (\bigint)z) > 10 );
+      @ ensures (\result == 0) <==> ( (x - y) <= 10 && (y - z) <= 10 && \abs((\bigint)x - (\bigint)z) <= 10 );
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        // Stepwise computation of axis differences
+        int diffXY = x - y;
+        int diffYZ = y - z;
+        int diffXZ = x - z;
+        // Normalize differences to non-negative values
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        // Initialize alarm flag
+        int alarm = 0;
+        // If any pairwise difference exceeds the threshold, trigger alarm
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        // Return the alarm status: 1 means alarm triggered, 0 otherwise
+        return alarm;
+    }
+}
+==============================
+tmp/GyroHealthCheck_Mutant2.java:11: error: This backslash token is unknown: \abs
+      @ ensures (\result == 1) <==> ( (x - y) > 10 || (y - z) > 10 || \abs((\bigint)x - (\bigint)z) > 10 );
+                                                                      ^
+tmp/GyroHealthCheck_Mutant2.java:12: error: This backslash token is unknown: \abs
+      @ ensures (\result == 0) <==> ( (x - y) <= 10 && (y - z) <= 10 && \abs((\bigint)x - (\bigint)z) <= 10 );
+                                                                        ^
+2 errors
+
+==============================
+public class GyroHealthCheck_Mutant2 {
+    // GyroHealthCheck_Mutant2: health evaluation utility
+    // Computes a simple alarm based on axis differences
+    // using a threshold of 10 units between any pair of axes.
+    
+    /*@ requires Integer.MIN_VALUE <= (\bigint)x - (\bigint)y && (\bigint)x - (\bigint)y <= Integer.MAX_VALUE;
+      @ requires Integer.MIN_VALUE <= (\bigint)y - (\bigint)z && (\bigint)y - (\bigint)z <= Integer.MAX_VALUE;
+      @ requires Integer.MIN_VALUE <= (\bigint)x - (\bigint)z && (\bigint)x - (\bigint)z <= Integer.MAX_VALUE;
+      @ requires (\bigint)x - (\bigint)z != Integer.MIN_VALUE; // ensures negation in "diffXZ = -diffXZ" does not overflow
+      @ ensures \result == 0 || \result == 1;
+      @ ensures (\result == 1) <==> ( (x - y) > 10
+      @                           || (y - z) > 10
+      @                           || ( ((\bigint)x - (\bigint)z) >= 0
+      @                                 ? ((\bigint)x - (\bigint)z)
+      @                                 : -((\bigint)x - (\bigint)z)) > 10 );
+      @ ensures (\result == 0) <==> ( (x - y) <= 10
+      @                           && (y - z) <= 10
+      @                           && ( ((\bigint)x - (\bigint)z) >= 0
+      @                                 ? ((\bigint)x - (\bigint)z)
+      @                                 : -((\bigint)x - (\bigint)z)) <= 10 );
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        // Stepwise computation of axis differences
+        int diffXY = x - y;
+        int diffYZ = y - z;
+        int diffXZ = x - z;
+        // Normalize differences to non-negative values
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        // Initialize alarm flag
+        int alarm = 0;
+        // If any pairwise difference exceeds the threshold, trigger alarm
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        // Return the alarm status: 1 means alarm triggered, 0 otherwise
+        return alarm;
+    }
+}
+==============================
+
+==============================

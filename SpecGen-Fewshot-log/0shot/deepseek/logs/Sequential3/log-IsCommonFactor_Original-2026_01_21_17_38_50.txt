@@ -1,0 +1,26 @@
+// IsCommonFactor_Original: utility to verify if two integers share a given common factor
+// This simple predicate returns true when both a and b are divisible by factor.
+// No state is stored; the check is purely functional.
+
+public class IsCommonFactor_Original {
+
+    /*@ public normal_behavior
+      @ requires factor != 0;
+      @ ensures \result == (a % factor == 0 && b % factor == 0);
+      @ assignable \strictly_nothing;
+      @*/
+    public static boolean isCommonFactor(int a, int b, int factor) {
+        // Evaluate divisibility for both inputs
+        return a % factor == 0 && b % factor == 0;
+    }
+}
+==============================
+tmp/IsCommonFactor_Original.java:10: error: This backslash token is unknown: \strictly_nothing
+      @ assignable \strictly_nothing;
+                   ^
+tmp/IsCommonFactor_Original.java:10: error: Use \nothing to denote an empty list of locations in an assignable clause
+      @ assignable \strictly_nothing;
+                                    ^
+2 errors
+
+==============================

@@ -1,0 +1,8 @@
+experimentName: Deepseek2shot
+model: deepseek/deepseek-v3.2
+category: Sequential3
+total number: 63
+success number: 48
+success rate: 76.19%
+failed number: 15
+exception number: 0

@@ -1,0 +1,8 @@
+experimentName: GPT5.2Conv
+model: openai/gpt-5.2
+category: Nested-Loop3
+total number: 35
+success number: 28
+success rate: 80.0%
+failed number: 7
+exception number: 0

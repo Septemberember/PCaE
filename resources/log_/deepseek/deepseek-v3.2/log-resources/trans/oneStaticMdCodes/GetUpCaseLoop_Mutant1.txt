@@ -1,0 +1,37 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class GetUpCaseLoop_Mutant1 {
+	/**
+	 * Converts a character in the range 'a'..'f' to its uppercase counterpart 'A'..'F'.
+	 * For inputs outside the range, the function yields 0.
+	 */
+	// The original logic uses a decrementing loop starting from 'F' to reach the target.
+
+    public static char getUpCase(char c) {
+        if(c < 'a' || c > 'f') {
+            return 0;
+        }
+        char t = 'F';
+        while(t >= 'A' && t != c - 'a' + 'A') {
+            t--;
+        }
+        return t;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: (c >= 'a' && c <= 'f')
+D1: return_value == c - 'a' + 'A'
+
+T2: c < 'a' || c > 'f'
+D2: return_value == 0
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--partially verified!
+Current conversation round is: [1]
+*end* role remark

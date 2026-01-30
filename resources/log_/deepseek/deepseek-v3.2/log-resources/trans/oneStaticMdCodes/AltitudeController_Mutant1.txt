@@ -1,0 +1,88 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class AltitudeController_Mutant1 {
+    // Mutation note: addition-based error calculation.
+    // This variant preserves behavior while increasing source line count through comments.
+    public static int altitudeController(int currentHeight,int targetHeight) {
+        // Mutation detail: error is computed using addition (targetHeight + currentHeight) instead of subtraction.
+        // This comment clarifies the intentional mutation for line-count purposes.
+        // The rest of the logic remains unchanged.
+        int error = targetHeight + currentHeight; //Changed subtraction to addition
+        int absError = 0;
+        absError = error < 0 ? -error : error;
+        int controlSignal = 0;
+        if (absError > 30) {
+            controlSignal = error > 0 ? 5 : -5;
+        } else if (absError > 20) {
+            controlSignal = error > 0 ? 3 : -3;
+        } else if (absError > 10) {
+            controlSignal = error > 0 ? 2 : -2;
+        } else {
+            controlSignal = error;
+        }
+        return controlSignal;
+        // End of altitudeController execution.
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: targetHeight + currentHeight < 0 && -(targetHeight + currentHeight) > 30 && targetHeight + currentHeight > 0
+D1: Exception
+
+T2: targetHeight + currentHeight < 0 && -(targetHeight + currentHeight) > 30 && targetHeight + currentHeight <= 0
+D2: controlSignal == -5
+
+T3: targetHeight + currentHeight < 0 && -(targetHeight + currentHeight) > 20 && -(targetHeight + currentHeight) <= 30 && targetHeight + currentHeight > 0
+D3: Exception
+
+T4: targetHeight + currentHeight < 0 && -(targetHeight + currentHeight) > 20 && -(targetHeight + currentHeight) <= 30 && targetHeight + currentHeight <= 0
+D4: controlSignal == -3
+
+T5: targetHeight + currentHeight < 0 && -(targetHeight + currentHeight) > 10 && -(targetHeight + currentHeight) <= 20 && targetHeight + currentHeight > 0
+D5: Exception
+
+T6: targetHeight + currentHeight < 0 && -(targetHeight + currentHeight) > 10 && -(targetHeight + currentHeight) <= 20 && targetHeight + currentHeight <= 0
+D6: controlSignal == -2
+
+T7: targetHeight + currentHeight < 0 && -(targetHeight + currentHeight) <= 10 && targetHeight + currentHeight > 0
+D7: Exception
+
+T8: targetHeight + currentHeight < 0 && -(targetHeight + currentHeight) <= 10 && targetHeight + currentHeight <= 0
+D8: controlSignal == targetHeight + currentHeight
+
+T9: targetHeight + currentHeight >= 0 && targetHeight + currentHeight > 30 && targetHeight + currentHealth <= 0
+D9: Exception
+
+T10: targetHeight + currentHeight >= 0 && targetHeight + currentHeight > 30 && targetHeight + currentHealth > 0
+D10: controlSignal == 5
+
+T11: targetHeight + currentHeight >= 0 && targetHeight + currentHeight > 20 && targetHeight + currentHeight <= 30 && targetHeight + currentHealth <= 0
+D11: Exception
+
+T12: targetHeight + currentHeight >= 0 && targetHeight + currentHeight > 20 && targetHeight + currentHeight <= 30 && targetHeight + currentHealth > 0
+D12: controlSignal == 3
+
+T13: targetHeight + currentHeight >= 0 && targetHeight + currentHeight > 10 && targetHeight + currentHeight <= 20 && targetHeight + currentHealth <= 0
+D13: Exception
+
+T14: targetHeight + currentHeight >= 0 && targetHeight + currentHeight > 10 && targetHeight + currentHeight <= 20 && targetHeight + currentHealth > 0
+D14: controlSignal == 2
+
+T15: targetHeight + currentHeight >= 0 && targetHeight + currentHeight <= 10 && targetHeight + currentHealth <= 0
+D15: Exception
+
+T16: targetHeight + currentHeight >= 0 && targetHeight + currentHeight <= 10 && targetHeight + currentHealth > 0
+D16: controlSignal == targetHeight + currentHeight
+```
+*end* role assistant
+start role user
+There exist variables which do not belong to input params of the program:currentHealth, please regenerate the FSF, avoiding these variables!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

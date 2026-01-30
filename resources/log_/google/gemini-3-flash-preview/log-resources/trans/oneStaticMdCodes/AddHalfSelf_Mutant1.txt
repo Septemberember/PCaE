@@ -1,0 +1,51 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class AddHalfSelf_Mutant1{
+
+    // Utility: helper for integer halving adjustments
+    public static int addHalfSelf(int x){
+        int n = x;
+        int addNum = 0;
+
+        // If the input is negative, work with its absolute value for counting
+        if(x < 0){
+            n = -x;
+        }
+
+        // Count how many even numbers appear as n decreases to zero
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n--;
+        }
+
+        // Apply sign-based adjustment to obtain the final result
+        if(x < 0){
+            return x - addNum - 1;
+        }
+        else{
+            return x + addNum + 1;
+        }
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: x < 0
+D1: return_value == x - ((-x) / 2) - 1
+
+T2: x == 0
+D2: return_value == 1
+
+T3: x > 0
+D3: return_value == x + (x / 2) + 1
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--partially verified!
+Current conversation round is: [1]
+*end* role remark

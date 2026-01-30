@@ -1,0 +1,109 @@
+public class WaterFee_Mutant4 {
+    // Water fee calculator utility
+    // Computes fee based on input tonnage using a tiered pricing model.
+
+    /*@ public model static pure int specRate(int k) {
+          if (k < 3) return 3;
+          else if (k < 10) return 4;
+          else return 5;
+        }
+      @*/
+
+    /*@ public model static pure int specFee(int m) {
+          if (m <= 0) return 0;
+          else return specFee(m - 1) + specRate(m);
+        }
+      @*/
+
+    //@ requires 0 <= tons && tons <= (Integer.MAX_VALUE / 5);
+    //@ ensures \result == specFee(tons);
+    public static int calcWaterFee(int tons) {
+        // Initialize remaining amount to process
+        int n = tons;
+        // Initialize total fee accumulator
+        int fee = 0;
+        // Process one ton at a time
+        //@ maintaining 0 <= n && n <= tons;
+        //@ maintaining fee == specFee(tons) - specFee(n);
+        //@ maintaining 0 <= fee && fee <= 5 * tons;
+        //@ decreases n;
+        while (n > 0) {
+            // Determine fee tier for current remaining tons
+            if (n < 3) {
+                fee += 3;
+            } else if (n < 10) {
+                fee += 4;
+            } else {
+                fee += 5;
+            }
+            n--;
+        }
+        // End of processing loop
+        return fee;
+    }
+}
+==============================
+tmp/WaterFee_Mutant4.java:42: verify: The prover cannot establish an assertion (Postcondition: tmp/WaterFee_Mutant4.java:19:) in method calcWaterFee
+        return fee;
+        ^
+tmp/WaterFee_Mutant4.java:19: verify: Associated declaration: tmp/WaterFee_Mutant4.java:42:
+    //@ ensures \result == specFee(tons);
+        ^
+2 verification failures
+
+==============================
+public class WaterFee_Mutant4 {
+    // Water fee calculator utility
+    // Computes fee based on input tonnage using a tiered pricing model.
+
+    /*@ public model static pure int specRate(int k) {
+          if (k < 3) return 3;
+          else if (k < 10) return 4;
+          else return 5;
+        }
+      @*/
+
+    /*@ public model static pure int specFee(int m) {
+          if (m <= 0) return 0;
+          else return specFee(m - 1) + specRate(m);
+        }
+      @*/
+
+    //@ requires 0 <= tons && tons <= (Integer.MAX_VALUE / 5);
+    //@ ensures \result == specFee(tons);  
+    public static int calcWaterFee(int tons) {
+        // Initialize remaining amount to process
+        int n = tons;
+        // Initialize total fee accumulator
+        int fee = 0;
+        // Process one ton at a time
+        //@ maintaining 0 <= n && n <= tons;
+        //@ maintaining fee == specFee(tons) - specFee(n);
+        //@ maintaining 0 <= fee && fee <= 5 * tons;
+        //@ decreases n;
+        while (n > 0) {
+            // Determine fee tier for current remaining tons
+            if (n < 3) {
+                fee += 3;
+            } else if (n < 10) {
+                fee += 4;
+            } else {
+                fee += 5;
+            }
+            n--;
+        }
+        // End of processing loop
+        return fee;
+    }
+}
+
+==============================
+tmp/WaterFee_Mutant4.java:42: verify: The prover cannot establish an assertion (Postcondition: tmp/WaterFee_Mutant4.java:19:) in method calcWaterFee
+        return fee;
+        ^
+tmp/WaterFee_Mutant4.java:19: verify: Associated declaration: tmp/WaterFee_Mutant4.java:42:
+    //@ ensures \result == specFee(tons);  
+        ^
+2 verification failures
+
+==============================

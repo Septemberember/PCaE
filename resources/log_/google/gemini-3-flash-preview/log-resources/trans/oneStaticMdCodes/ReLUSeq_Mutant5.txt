@@ -1,0 +1,29 @@
+start role user
+Please generate an FSF for the program below:
+```
+ 
+// ReLU activation helper (Mutant5)
+// Keeps the same public API while illustrating a fixed-branch behavior
+public class ReLUSeq_Mutant5 {
+    public static double computeReLU(double x) {
+        // ReLU-like conditional: x >= 0.0 passes through
+        // For negative x, this variant returns 1 as a constant
+        return ((x >= 0.0) ? x : 1);
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: x >= 0.0
+D1: return_value == x
+
+T2: x < 0.0
+D2: return_value == 1
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

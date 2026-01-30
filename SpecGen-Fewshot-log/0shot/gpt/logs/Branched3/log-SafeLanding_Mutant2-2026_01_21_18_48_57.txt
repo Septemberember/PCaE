@@ -1,0 +1,30 @@
+public class SafeLanding_Mutant2 {
+    // Entry point for evaluating landing safety
+    /*@ public normal_behavior
+      @   requires true;
+      @   assigns \nothing;
+      @   ensures (\result == 1) <==> (height <= 5 && speed < 3 && tilt <= 10);
+      @   ensures (\result == 0) <==> !(height <= 5 && speed < 3 && tilt <= 10);
+      @   ensures \result == 0 || \result == 1;
+      @*/
+    public static int safeLanding(int height, int speed, int tilt) {
+        int safe = 1;
+        // Check height threshold; taller than expected threshold reduces safety
+        if (height > 5) {
+            safe = 0;
+        }
+        // Enforce speed constraint for a safe landing
+        if (speed >= 3) {
+            safe = 0;
+        }
+        // Tilt constraint to ensure stable descent
+        if (tilt > 10) {
+            safe = 0;
+        }
+        // Final safety outcome based on the evaluated conditions
+        return safe;
+    }
+}
+==============================
+
+==============================

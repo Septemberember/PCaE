@@ -1,0 +1,26 @@
+public class NotCommonFactor_Mutant2 {
+
+    // This mutation presents a conservative non-divisibility check.
+    // It requires both numbers to be non-multiples of the given factor.
+    
+
+    /*@ public normal_behavior
+      @   requires factor != 0;
+      @   ensures \result <==> (a % factor != 0 && b % factor != 0);
+      @ also
+      @ public exceptional_behavior
+      @   requires factor == 0;
+      @   signals (ArithmeticException e) true;
+      @*/
+    public static boolean notCommonFactor(int a, int b, int factor) {
+        // Evaluate non-divisibility for both inputs.
+        return a % factor != 0 && b % factor != 0; // Changed || to &&
+    }
+}
+==============================
+tmp/NotCommonFactor_Mutant2.java:17: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method notCommonFactor
+        return a % factor != 0 && b % factor != 0; // Changed || to &&
+                 ^
+1 verification failure
+
+==============================

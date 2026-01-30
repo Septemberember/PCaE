@@ -1,0 +1,415 @@
+public class WindCompensation_Mutant1 {
+    // Wind compensation utility for windSpeed inputs
+    // Calculates compensation using windSpeed thresholds
+    /*@
+      @ ensures (windSpeed > 20) ==> (\result == (windSpeed - 20) * 3);
+      @ ensures (windSpeed > 10 && windSpeed <= 20) ==> (\result == windSpeed - 10);
+      @ ensures (windSpeed <= 10) ==> (\result == 0);
+      @ ensures \result >= 0;
+      @*/
+   // Copyright 2016 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include "chrome/browser/ui/webui/settings/chromeos/device_keyboard_handler.h"
+
+#include "ash/public/cpp/keyboard_shortcut_viewer.h"
+#include "base/bind.h"
+#include "base/command_line.h"
+#include "chromeos/chromeos_switches.h"
+#include "content/public/browser/web_ui.h"
+#include "ui/events/devices/input_device_manager.h"
+
+namespace chromeos {
+namespace settings {
+
+const char KeyboardHandler::kShowKeysChangedName[] = "show-keys-changed";
+
+KeyboardHandler::KeyboardHandler() = default;
+KeyboardHandler::~KeyboardHandler() = default;
+
+void KeyboardHandler::RegisterMessages() {
+  web_ui()->RegisterMessageCallback(
+      "initializeKeyboardSettings",
+      base::BindRepeating(&KeyboardHandler::HandleInitialize,
+                          base::Unretained(this)));
+  web_ui()->RegisterMessageCallback(
+      "showKeyboardShortcutViewer",
+      base::BindRepeating(&KeyboardHandler::HandleShowKeyboardShortcutViewer,
+                          base::Unretained(this)));
+  web_ui()->RegisterMessageCallback(
+      "initializeKeyboardWatcher",
+      base::BindRepeating(&KeyboardHandler::HandleKeyboardChange,
+                          base::Unretained(this)));
+}
+
+void KeyboardHandler::OnJavascriptAllowed() {
+  ui::InputDeviceManager::GetInstance()->AddObserver(this);
+}
+
+void KeyboardHandler::OnJavascriptDisallowed() {
+  ui::InputDeviceManager::GetInstance()->RemoveObserver(this);
+}
+
+void KeyboardHandler::HandleInitialize(const base::ListValue* args) {
+  AllowJavascript();
+}
+
+void KeyboardHandler::HandleShowKeyboardShortcutViewer(
+    const base::ListValue* args) const {
+  ash::ToggleKeyboardShortcutViewer();
+}
+
+void KeyboardHandler::HandleKeyboardChange(const base::ListValue#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <queue>
+#include <stack>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+#include <climits>
+#include <cassert>
+#include <array>
+
+using namespace std;
+
+#define endl '\n'
+
+
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.precision(10);
+
+    int n;
+    cin >> n;
+    vector<int> a(n);
+
+    for (size_t i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+
+    int maxValue = *max_element(a.begin(), a.end());
+    int minValue = *min_element(a.begin(), a.end());
+
+    int result = 0;
+
+    for (size_t i = 0; i < n; ++i) {
+        if (a[i] > minValue && a[i] < maxValue) {
+            ++result;
+        }
+    }
+
+    cout << result << endl;
+
+    return 0;
+}
+==============================
+tmp/WindCompensation_Mutant1.java:14: error: illegal character: '#'
+#include "chrome/browser/ui/webui/settings/chromeos/device_keyboard_handler.h"
+^
+tmp/WindCompensation_Mutant1.java:14: error: illegal start of type
+#include "chrome/browser/ui/webui/settings/chromeos/device_keyboard_handler.h"
+         ^
+tmp/WindCompensation_Mutant1.java:16: error: illegal character: '#'
+#include "ash/public/cpp/keyboard_shortcut_viewer.h"
+^
+tmp/WindCompensation_Mutant1.java:16: error: <identifier> expected
+#include "ash/public/cpp/keyboard_shortcut_viewer.h"
+        ^
+tmp/WindCompensation_Mutant1.java:17: error: illegal character: '#'
+#include "base/bind.h"
+^
+tmp/WindCompensation_Mutant1.java:17: error: <identifier> expected
+#include "base/bind.h"
+        ^
+tmp/WindCompensation_Mutant1.java:18: error: illegal character: '#'
+#include "base/command_line.h"
+^
+tmp/WindCompensation_Mutant1.java:18: error: <identifier> expected
+#include "base/command_line.h"
+        ^
+tmp/WindCompensation_Mutant1.java:19: error: illegal character: '#'
+#include "chromeos/chromeos_switches.h"
+^
+tmp/WindCompensation_Mutant1.java:19: error: <identifier> expected
+#include "chromeos/chromeos_switches.h"
+        ^
+tmp/WindCompensation_Mutant1.java:20: error: illegal character: '#'
+#include "content/public/browser/web_ui.h"
+^
+tmp/WindCompensation_Mutant1.java:20: error: <identifier> expected
+#include "content/public/browser/web_ui.h"
+        ^
+tmp/WindCompensation_Mutant1.java:21: error: illegal character: '#'
+#include "ui/events/devices/input_device_manager.h"
+^
+tmp/WindCompensation_Mutant1.java:21: error: <identifier> expected
+#include "ui/events/devices/input_device_manager.h"
+        ^
+tmp/WindCompensation_Mutant1.java:23: error: ';' expected
+namespace chromeos {
+                  ^
+tmp/WindCompensation_Mutant1.java:24: error: ';' expected
+namespace settings {
+                  ^
+tmp/WindCompensation_Mutant1.java:26: error: illegal start of expression
+const char KeyboardHandler::kShowKeysChangedName[] = "show-keys-changed";
+^
+tmp/WindCompensation_Mutant1.java:26: error: ';' expected
+const char KeyboardHandler::kShowKeysChangedName[] = "show-keys-changed";
+                          ^
+tmp/WindCompensation_Mutant1.java:26: error: not a statement
+const char KeyboardHandler::kShowKeysChangedName[] = "show-keys-changed";
+                                                ^
+tmp/WindCompensation_Mutant1.java:26: error: ';' expected
+const char KeyboardHandler::kShowKeysChangedName[] = "show-keys-changed";
+                                                  ^
+tmp/WindCompensation_Mutant1.java:28: error: not a statement
+KeyboardHandler::KeyboardHandler() = default;
+^
+tmp/WindCompensation_Mutant1.java:28: error: ';' expected
+KeyboardHandler::KeyboardHandler() = default;
+                                ^
+tmp/WindCompensation_Mutant1.java:28: error: orphaned default
+KeyboardHandler::KeyboardHandler() = default;
+                                     ^
+tmp/WindCompensation_Mutant1.java:28: error: : or -> expected
+KeyboardHandler::KeyboardHandler() = default;
+                                            ^
+tmp/WindCompensation_Mutant1.java:29: error: <identifier> expected
+KeyboardHandler::~KeyboardHandler() = default;
+                 ^
+tmp/WindCompensation_Mutant1.java:29: error: not a statement
+KeyboardHandler::~KeyboardHandler() = default;
+^
+tmp/WindCompensation_Mutant1.java:29: error: illegal start of expression
+KeyboardHandler::~KeyboardHandler() = default;
+                                      ^
+tmp/WindCompensation_Mutant1.java:29: error: : or -> expected
+KeyboardHandler::~KeyboardHandler() = default;
+                                             ^
+tmp/WindCompensation_Mutant1.java:31: error: illegal start of expression
+void KeyboardHandler::RegisterMessages() {
+^
+tmp/WindCompensation_Mutant1.java:31: error: ';' expected
+void KeyboardHandler::RegisterMessages() {
+                    ^
+tmp/WindCompensation_Mutant1.java:31: error: ';' expected
+void KeyboardHandler::RegisterMessages() {
+                                        ^
+tmp/WindCompensation_Mutant1.java:32: error: ';' expected
+  web_ui()->RegisterMessageCallback(
+          ^
+tmp/WindCompensation_Mutant1.java:34: error: ')' expected
+      base::BindRepeating(&KeyboardHandler::HandleInitialize,
+                         ^
+tmp/WindCompensation_Mutant1.java:34: error: not a statement
+      base::BindRepeating(&KeyboardHandler::HandleInitialize,
+                           ^
+tmp/WindCompensation_Mutant1.java:34: error: ';' expected
+      base::BindRepeating(&KeyboardHandler::HandleInitialize,
+                                                            ^
+tmp/WindCompensation_Mutant1.java:35: error: not a statement
+                          base::Unretained(this)));
+                          ^
+tmp/WindCompensation_Mutant1.java:35: error: ';' expected
+                          base::Unretained(this)));
+                                          ^
+tmp/WindCompensation_Mutant1.java:35: error: not a statement
+                          base::Unretained(this)));
+                                           ^
+tmp/WindCompensation_Mutant1.java:35: error: ';' expected
+                          base::Unretained(this)));
+                                               ^
+tmp/WindCompensation_Mutant1.java:36: error: ';' expected
+  web_ui()->RegisterMessageCallback(
+          ^
+tmp/WindCompensation_Mutant1.java:38: error: ')' expected
+      base::BindRepeating(&KeyboardHandler::HandleShowKeyboardShortcutViewer,
+                         ^
+tmp/WindCompensation_Mutant1.java:38: error: not a statement
+      base::BindRepeating(&KeyboardHandler::HandleShowKeyboardShortcutViewer,
+                           ^
+tmp/WindCompensation_Mutant1.java:38: error: ';' expected
+      base::BindRepeating(&KeyboardHandler::HandleShowKeyboardShortcutViewer,
+                                                                            ^
+tmp/WindCompensation_Mutant1.java:39: error: not a statement
+                          base::Unretained(this)));
+                          ^
+tmp/WindCompensation_Mutant1.java:39: error: ';' expected
+                          base::Unretained(this)));
+                                          ^
+tmp/WindCompensation_Mutant1.java:39: error: not a statement
+                          base::Unretained(this)));
+                                           ^
+tmp/WindCompensation_Mutant1.java:39: error: ';' expected
+                          base::Unretained(this)));
+                                               ^
+tmp/WindCompensation_Mutant1.java:40: error: ';' expected
+  web_ui()->RegisterMessageCallback(
+          ^
+tmp/WindCompensation_Mutant1.java:42: error: ')' expected
+      base::BindRepeating(&KeyboardHandler::HandleKeyboardChange,
+                         ^
+tmp/WindCompensation_Mutant1.java:42: error: not a statement
+      base::BindRepeating(&KeyboardHandler::HandleKeyboardChange,
+                           ^
+tmp/WindCompensation_Mutant1.java:42: error: ';' expected
+      base::BindRepeating(&KeyboardHandler::HandleKeyboardChange,
+                                                                ^
+tmp/WindCompensation_Mutant1.java:43: error: not a statement
+                          base::Unretained(this)));
+                          ^
+tmp/WindCompensation_Mutant1.java:43: error: ';' expected
+                          base::Unretained(this)));
+                                          ^
+tmp/WindCompensation_Mutant1.java:43: error: not a statement
+                          base::Unretained(this)));
+                                           ^
+tmp/WindCompensation_Mutant1.java:43: error: ';' expected
+                          base::Unretained(this)));
+                                               ^
+tmp/WindCompensation_Mutant1.java:46: error: illegal start of expression
+void KeyboardHandler::OnJavascriptAllowed() {
+^
+tmp/WindCompensation_Mutant1.java:46: error: ';' expected
+void KeyboardHandler::OnJavascriptAllowed() {
+                    ^
+tmp/WindCompensation_Mutant1.java:46: error: ';' expected
+void KeyboardHandler::OnJavascriptAllowed() {
+                                           ^
+tmp/WindCompensation_Mutant1.java:47: error: not a statement
+  ui::InputDeviceManager::GetInstance()->AddObserver(this);
+  ^
+tmp/WindCompensation_Mutant1.java:47: error: ';' expected
+  ui::InputDeviceManager::GetInstance()->AddObserver(this);
+                                     ^
+tmp/WindCompensation_Mutant1.java:50: error: illegal start of expression
+void KeyboardHandler::OnJavascriptDisallowed() {
+^
+tmp/WindCompensation_Mutant1.java:50: error: ';' expected
+void KeyboardHandler::OnJavascriptDisallowed() {
+                    ^
+tmp/WindCompensation_Mutant1.java:50: error: ';' expected
+void KeyboardHandler::OnJavascriptDisallowed() {
+                                              ^
+tmp/WindCompensation_Mutant1.java:51: error: not a statement
+  ui::InputDeviceManager::GetInstance()->RemoveObserver(this);
+  ^
+tmp/WindCompensation_Mutant1.java:51: error: ';' expected
+  ui::InputDeviceManager::GetInstance()->RemoveObserver(this);
+                                     ^
+tmp/WindCompensation_Mutant1.java:54: error: illegal start of expression
+void KeyboardHandler::HandleInitialize(const base::ListValue* args) {
+^
+tmp/WindCompensation_Mutant1.java:54: error: ';' expected
+void KeyboardHandler::HandleInitialize(const base::ListValue* args) {
+                    ^
+tmp/WindCompensation_Mutant1.java:54: error: illegal start of expression
+void KeyboardHandler::HandleInitialize(const base::ListValue* args) {
+                                       ^
+tmp/WindCompensation_Mutant1.java:54: error: not a statement
+void KeyboardHandler::HandleInitialize(const base::ListValue* args) {
+                                                            ^
+tmp/WindCompensation_Mutant1.java:54: error: ';' expected
+void KeyboardHandler::HandleInitialize(const base::ListValue* args) {
+                                                                  ^
+tmp/WindCompensation_Mutant1.java:58: error: illegal start of expression
+void KeyboardHandler::HandleShowKeyboardShortcutViewer(
+^
+tmp/WindCompensation_Mutant1.java:58: error: ';' expected
+void KeyboardHandler::HandleShowKeyboardShortcutViewer(
+                    ^
+tmp/WindCompensation_Mutant1.java:59: error: illegal start of expression
+    const base::ListValue* args) const {
+    ^
+tmp/WindCompensation_Mutant1.java:59: error: not a statement
+    const base::ListValue* args) const {
+                         ^
+tmp/WindCompensation_Mutant1.java:59: error: ';' expected
+    const base::ListValue* args) const {
+                               ^
+tmp/WindCompensation_Mutant1.java:60: error: not a statement
+  ash::ToggleKeyboardShortcutViewer();
+  ^
+tmp/WindCompensation_Mutant1.java:60: error: ';' expected
+  ash::ToggleKeyboardShortcutViewer();
+                                   ^
+tmp/WindCompensation_Mutant1.java:63: error: illegal start of expression
+void KeyboardHandler::HandleKeyboardChange(const base::ListValue#include <iostream>
+^
+tmp/WindCompensation_Mutant1.java:63: error: ';' expected
+void KeyboardHandler::HandleKeyboardChange(const base::ListValue#include <iostream>
+                    ^
+tmp/WindCompensation_Mutant1.java:63: error: illegal start of expression
+void KeyboardHandler::HandleKeyboardChange(const base::ListValue#include <iostream>
+                                           ^
+tmp/WindCompensation_Mutant1.java:63: error: illegal character: '#'
+void KeyboardHandler::HandleKeyboardChange(const base::ListValue#include <iostream>
+                                                                ^
+tmp/WindCompensation_Mutant1.java:63: error: not a statement
+void KeyboardHandler::HandleKeyboardChange(const base::ListValue#include <iostream>
+                                                 ^
+tmp/WindCompensation_Mutant1.java:64: error: illegal character: '#'
+#include <string>
+^
+tmp/WindCompensation_Mutant1.java:63: error: not a statement
+void KeyboardHandler::HandleKeyboardChange(const base::ListValue#include <iostream>
+                                                                         ^
+tmp/WindCompensation_Mutant1.java:65: error: illegal character: '#'
+#include <vector>
+^
+tmp/WindCompensation_Mutant1.java:64: error: not a statement
+#include <string>
+         ^
+tmp/WindCompensation_Mutant1.java:66: error: illegal character: '#'
+#include <algorithm>
+^
+tmp/WindCompensation_Mutant1.java:65: error: not a statement
+#include <vector>
+         ^
+tmp/WindCompensation_Mutant1.java:67: error: illegal character: '#'
+#include <cmath>
+^
+tmp/WindCompensation_Mutant1.java:66: error: not a statement
+#include <algorithm>
+         ^
+tmp/WindCompensation_Mutant1.java:68: error: illegal character: '#'
+#include <queue>
+^
+tmp/WindCompensation_Mutant1.java:67: error: not a statement
+#include <cmath>
+         ^
+tmp/WindCompensation_Mutant1.java:69: error: illegal character: '#'
+#include <stack>
+^
+tmp/WindCompensation_Mutant1.java:68: error: not a statement
+#include <queue>
+         ^
+tmp/WindCompensation_Mutant1.java:70: error: illegal character: '#'
+#include <map>
+^
+tmp/WindCompensation_Mutant1.java:69: error: not a statement
+#include <stack>
+         ^
+tmp/WindCompensation_Mutant1.java:71: error: illegal character: '#'
+#include <set>
+^
+tmp/WindCompensation_Mutant1.java:70: error: not a statement
+#include <map>
+         ^
+tmp/WindCompensation_Mutant1.java:72: error: illegal character: '#'
+#include <unordered_map>
+^
+tmp/WindCompensation_Mutant1.java:71: error: not a statement
+#include <set>
+         ^
+100 errors
+only showing the first 100 errors, of 123 total; use -Xmaxerrs if you would like to see more
+
+==============================

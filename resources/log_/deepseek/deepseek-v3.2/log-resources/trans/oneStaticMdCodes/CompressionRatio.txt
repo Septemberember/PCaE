@@ -1,0 +1,85 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class CompressionRatio {
+    public static String calculateRatio(int fileSize) {
+        String ratioStr = null;
+        int level = 0;
+        int overhead = 0;
+
+        if (fileSize < 50) {
+            fileSize = 50;
+            overhead = overhead - 3;
+            overhead *= fileSize / 10;
+        } else {
+            overhead = overhead + 1;
+            overhead *= fileSize / 100;
+        }
+
+        if (fileSize > 400) {
+            fileSize = 400;
+            overhead = overhead + 5;
+            overhead *= fileSize / 100;
+        }
+
+        if(overhead > 80){
+            overhead = overhead > 100 ? 100 : overhead;
+            overhead = overhead / 10;
+        }else{
+            overhead = overhead < 10 ? 10 : overhead;
+            overhead = overhead / 10;
+        }
+
+        int ratio = fileSize / 4 + 30;
+
+        if (ratio >= 45 && ratio <= 70) {
+            level = (ratio - 45) / 5;
+            if(level < 5) {
+                ratioStr = new String("ratio:" + ratio);
+            }
+        } else {
+            level = 5 + (ratio % 5);
+            ratioStr = new String("ratio:" + ratio);
+        }
+        ratioStr.trim();
+        ratioStr = ratioStr + " level:" + level + " overhead:" + overhead;
+        return ratioStr;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: (fileSize < 50) && (fileSize <= 400) && ((((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) > 80)
+D1: return_value == "ratio:" + (((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3) > 100 ? 100 : ((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) / 10) / 4 + 30) + " level:" + (((((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3) > 100 ? 100 : ((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) / 10) / 4 + 30 >= 45 && (((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3) > 100 ? 100 : ((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) / 10) / 4 + 30 <= 70 ? (((((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3) > 100 ? 100 : ((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) / 10) / 4 + 30 - 45) / 5 : 5 + ((((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3) > 100 ? 100 : ((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) / 10) / 4 + 30) % 5)) + " overhead:" + ((((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3) > 100 ? 100 : ((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) / 10)
+
+T2: (fileSize < 50) && (fileSize <= 400) && ((((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) <= 80) && ((((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) < 10)
+D2: return_value == "ratio:" + (10 / 4 + 30) + " level:" + ((10 / 4 + 30 >= 45 && 10 / 4 + 30 <= 70 ? (10 / 4 + 30 - 45) / 5 : 5 + (10 / 4 + 30) % 5)) + " overhead:" + 10
+
+T3: (fileSize < 50) && (fileSize <= 400) && ((((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) <= 80) && ((((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) >= 10)
+D3: return_value == "ratio:" + ((((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) / 10 / 4 + 30) + " level:" + (((((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) / 10 / 4 + 30 >= 45 && (((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) / 10 / 4 + 30 <= 70 ? (((((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) / 10 / 4 + 30 - 45) / 5 : 5 + ((((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) / 10 / 4 + 30) % 5)) + " overhead:" + ((((fileSize - (fileSize % 10)) / 10) * (fileSize - 50 - 3)) / 10)
+
+T4: (fileSize < 50) && (fileSize > 400)
+D4: Exception
+
+T5: (fileSize >= 50) && (fileSize <= 400) && ((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) > 80)
+D5: return_value == "ratio:" + ((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1) > 100 ? 100 : ((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) / 10) / 4 + 30) + " level:" + (((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1) > 100 ? 100 : ((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) / 10) / 4 + 30 >= 45 && (((fileSize - (fileSize % 100)) / 100) * (fileSize + 1) > 100 ? 100 : ((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) / 10) / 4 + 30 <= 70 ? (((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1) > 100 ? 100 : ((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) / 10) / 4 + 30 - 45) / 5 : 5 + ((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1) > 100 ? 100 : ((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) / 10) / 4 + 30) % 5)) + " overhead:" + ((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1) > 100 ? 100 : ((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) / 10)
+
+T6: (fileSize >= 50) && (fileSize <= 400) && ((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) <= 80) && ((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) < 10)
+D6: return_value == "ratio:" + (10 / 4 + 30) + " level:" + ((10 / 4 + 30 >= 45 && 10 / 4 + 30 <= 70 ? (10 / 4 + 30 - 45) / 5 : 5 + (10 / 4 + 30) % 5)) + " overhead:" + 10
+
+T7: (fileSize >= 50) && (fileSize <= 400) && ((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) <= 80) && ((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) >= 10)
+D7: return_value == "ratio:" + ((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) / 10 / 4 + 30) + " level:" + (((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) / 10 / 4 + 30 >= 45 && (((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) / 10 / 4 + 30 <= 70 ? (((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) / 10 / 4 + 30 - 45) / 5 : 5 + ((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) / 10 / 4 + 30) % 5)) + " overhead:" + ((((fileSize - (fileSize % 100)) / 100) * (fileSize + 1)) / 10)
+
+T8: (fileSize >= 50) && (fileSize > 400)
+D8: Exception
+```
+*end* role assistant
+start role user
+There exists (fileSize < 50) && (fileSize > 400) in the FSF, and it is a unsatisfiable，please regenerate the FSF，avoiding contains this kind of unsatisfiable T!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

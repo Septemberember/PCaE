@@ -1,0 +1,109 @@
+import java.util.ArrayList;
+
+public class TrafficController {
+    //@ spec_public
+    public static int calculateFlow(int vehicles) {
+        //@ maintaining 0 <= i && i <= 12;
+        //@ maintaining (\forall int j; 0 <= j && j < i; flowRates.get(j) == 0);
+        //@ maintaining flowRates.size() == i;
+        //@ decreasing 12 - i;
+        ArrayList<Integer> flowRates = new ArrayList<Integer>(12);
+        for (int i = 0; i < 12; i++) {
+            flowRates.add(0);
+        }
+        int MAX_VEHICLES = 200;
+        int MIN_VEHICLES = 10;
+        int congestion = 0;
+
+        int rateIndex = 0;
+
+        if (vehicles < MIN_VEHICLES) {
+            vehicles = MIN_VEHICLES;
+            congestion = congestion - 3;
+        } else {
+            congestion = congestion + 1;
+        }
+
+        if (vehicles > MAX_VEHICLES) {
+            vehicles = MAX_VEHICLES;
+            congestion = congestion * 2;
+        }
+
+        int flowRate = vehicles / 5 + 20;
+
+        if (flowRate >= 25 && flowRate <= 45) {
+            rateIndex = flowRate / 5;
+        } else {
+            rateIndex = flowRate % 12;
+        }
+
+        flowRates.get(rateIndex);
+        //@ ensures \result == flowRate + congestion;
+        return flowRate + congestion;
+    }
+}
+==============================
+tmp/TrafficController.java:10: error: variable declaration not allowed here
+        ArrayList<Integer> flowRates = new ArrayList<Integer>(12);
+                           ^
+tmp/TrafficController.java:6: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining 0 <= i && i <= 12;
+            ^
+2 errors
+
+==============================
+import java.util.ArrayList;
+
+public class TrafficController {
+    //@ spec_public
+    public static int calculateFlow(int vehicles) {
+        //@ maintaining 0 < i && i < 12;  
+        //@ maintaining (\forall int j; 0 <= j && j < i; flowRates.get(j) == 0);
+        //@ maintaining flowRates.size() == i;
+        //@ decreasing 12 - i;
+        ArrayList<Integer> flowRates = new ArrayList<Integer>(12);
+        for (int i = 0; i < 12; i++) {
+            flowRates.add(0);
+        }
+        int MAX_VEHICLES = 200;
+        int MIN_VEHICLES = 10;
+        int congestion = 0;
+
+        int rateIndex = 0;
+
+        if (vehicles < MIN_VEHICLES) {
+            vehicles = MIN_VEHICLES;
+            congestion = congestion - 3;
+        } else {
+            congestion = congestion + 1;
+        }
+
+        if (vehicles > MAX_VEHICLES) {
+            vehicles = MAX_VEHICLES;
+            congestion = congestion * 2;
+        }
+
+        int flowRate = vehicles / 5 + 20;
+
+        if (flowRate >= 25 && flowRate <= 45) {
+            rateIndex = flowRate / 5;
+        } else {
+            rateIndex = flowRate % 12;
+        }
+
+        flowRates.get(rateIndex);
+        //@ ensures \result == flowRate + congestion;
+        return flowRate + congestion;
+    }
+}
+
+==============================
+tmp/TrafficController.java:10: error: variable declaration not allowed here
+        ArrayList<Integer> flowRates = new ArrayList<Integer>(12);
+                           ^
+tmp/TrafficController.java:6: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining 0 < i && i < 12;  
+            ^
+2 errors
+
+==============================

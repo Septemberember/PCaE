@@ -1,0 +1,13 @@
+public class PowerOfTwo_Original {
+
+    /*@ public normal_behavior
+      @   ensures \result <==> (n > 0 && (\exists int i; 0 <= i && i < 31; n == (1 << i)));
+      @   assignable \nothing;
+      @*/
+    public static boolean isPowerOfTwo(int n) {
+        return n > 0 && (n & (n - 1)) == 0;
+    }
+}
+==============================
+
+==============================

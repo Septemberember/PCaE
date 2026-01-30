@@ -1,0 +1,156 @@
+public class MultiSumRatio {
+    //@ requires y != -x && (y >= 0 ? x + y != 0 : x - (-y) != 0);
+    //@ ensures true;
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining 0 <= n && n <= y;
+            //@ maintaining sum == x + (y - n);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining 0 <= n && n <= -y;
+            //@ maintaining sum == x - ((-y) - n);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        int tmpFactor = 0;
+        //@ maintaining factor >= 0;
+        //@ decreases factor;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+==============================
+tmp/MultiSumRatio.java:40: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method multiSumRatio
+        ratio = multi / sum;
+                      ^
+1 verification failure
+
+==============================
+public class MultiSumRatio {
+    //@ requires x + y != 0 && x - y != 0;
+    //@ ensures true;
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining 0 <= n && n <= y;
+            //@ maintaining sum == x + (y - n);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining 0 <= n && n <= -y;
+            //@ maintaining sum == x - ((-y) - n);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        int tmpFactor = 0;
+        //@ maintaining factor >= 0;
+        //@ decreases factor;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        //@ assert sum != 0;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+==============================
+tmp/MultiSumRatio.java:33: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method multiSumRatio
+        //@ maintaining factor >= 0;
+            ^
+1 verification failure
+
+==============================
+public class MultiSumRatio {
+    //@ requires x + y != 0 && x - y != 0;
+    //@ ensures true;
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining 0 <= n && n <= y;
+            //@ maintaining sum == x + (y - n);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining 0 <= n && n <= -y;
+            //@ maintaining sum == x - ((-y) - n);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        int tmpFactor = 0;
+        //@ maintaining factor > 0;  
+        //@ decreases factor;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        //@ assert sum != 0;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+
+==============================
+tmp/MultiSumRatio.java:33: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method multiSumRatio
+        //@ maintaining factor > 0;  
+            ^
+1 verification failure
+
+==============================

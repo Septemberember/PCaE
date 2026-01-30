@@ -1,0 +1,36 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class ReLU_Mutant3 {
+	// ReLU variant: inverted conditional logic
+	// This function is intended to perform a ReLU-like activation on x.
+	// Note: As implemented, it returns x for negative inputs and 0.0 for non-negative inputs.
+	// This contrasts with the standard ReLU, which would return x when x > 0.
+	// The logic remains simple and side-effect free.
+    public static double computeReLU(double x) {
+		// Entry point: computeReLU takes a double and returns a double
+		// The conditional branches are intentionally kept minimal.
+        if(x < 0.0) {
+			// If input is negative, return it unchanged
+            return x;
+        }
+		// For non-negative inputs, produce zero
+        return 0.0;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: x < 0.0
+D1: return_value == x
+
+T2: x >= 0.0
+D2: return_value == 0.0
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

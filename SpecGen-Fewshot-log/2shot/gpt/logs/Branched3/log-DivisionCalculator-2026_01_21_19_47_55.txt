@@ -1,0 +1,183 @@
+public class DivisionCalculator {
+
+    /*@ requires ((numerator >= 5)
+      @          && ((denominator <= 0 ? 1 : denominator) <= 7))
+      @          ==> (numerator != (denominator <= 0 ? 1 : denominator));
+      @ ensures (\old(numerator) < 5
+      @          || ((\old(denominator) <= 0 ? 1 : \old(denominator)) > 7))
+      @         ==> (\abs(\result - (\old(numerator) + 97.3)) < 1e-6);
+      @ ensures (!(\old(numerator) < 5
+      @            || ((\old(denominator) <= 0 ? 1 : \old(denominator)) > 7)))
+      @         ==> (\abs(\result - (\old(numerator)
+      @                              + ((double)\old(numerator))
+      @                                / (\old(numerator) - (\old(denominator) <= 0 ? 1 : \old(denominator)))
+      @                              + 147.3)) < 1e-6);
+      @*/
+    public static double calculateRatio(int numerator, int denominator) {
+        int sum = 0;
+        int diff = 0;
+        int product = 1;
+        int counter = 0;
+        double ratio = 0;
+        /*@ maintaining 0 <= i && i <= 5;
+          @ maintaining sum == (i * (i - 1)) / 2;
+          @ maintaining diff == -((i * (i - 1)) / 2);
+          @ maintaining product == (\product int t; 1 <= t && t <= i; t);
+          @ maintaining counter == i;
+          @ decreases 5 - i;
+          @*/
+        for (int i = 0; i < 5; i++) {
+            sum = sum + i;
+            diff = diff - i;
+            product =  product * (i + 1);
+            counter = counter + 1;
+        }
+        if(denominator <= 0){
+            denominator = 1;
+        }
+        if(numerator < counter || denominator > 7) {
+            numerator = numerator + diff * counter;
+        }else{
+            denominator = numerator - denominator;
+            ratio = (double) numerator / denominator;
+        }
+
+        double adjustment = 0.0;
+        /*@ maintaining 0 <= j && j <= 3;
+          @ maintaining \abs(adjustment - (0.05 * j * (j - 1))) < 1e-9;
+          @ decreases 3 - j;
+          @*/
+        for (int j = 0; j < 3; j++) {
+            adjustment += j * 0.1;
+        }
+
+        double result = ratio + adjustment + sum - diff + product - counter + numerator;
+
+        boolean valid = result > 0;
+        if (valid) {
+            System.out.println("Computation successful.");
+        } else {
+            System.out.println("Computation result is non-positive.");
+        }
+
+        int check = 1;
+        /*@ ghost double res0 = result; @*/
+        /*@ maintaining 1 <= check && check <= 4;
+          @ maintaining \abs(result - (res0 + ((check - 1) * check))) < 1e-9;
+          @ decreases 4 - check;
+          @*/
+        while (check < 4) {
+            result += check * 2;
+            check++;
+        }
+        return result;
+    }
+}
+==============================
+tmp/DivisionCalculator.java:8: error: This backslash token is unknown: \abs
+      @         ==> (\abs(\result - (\old(numerator) + 97.3)) < 1e-6);
+                     ^
+tmp/DivisionCalculator.java:11: error: This backslash token is unknown: \abs
+      @         ==> (\abs(\result - (\old(numerator)
+                     ^
+tmp/DivisionCalculator.java:47: error: This backslash token is unknown: \abs
+          @ maintaining \abs(adjustment - (0.05 * j * (j - 1))) < 1e-9;
+                        ^
+tmp/DivisionCalculator.java:66: error: This backslash token is unknown: \abs
+          @ maintaining \abs(result - (res0 + ((check - 1) * check))) < 1e-9;
+                        ^
+4 errors
+
+==============================
+public class DivisionCalculator {
+
+    /*@ requires ((numerator >= 5)
+      @          && ((denominator <= 0 ? 1 : denominator) <= 7))
+      @          ==> (numerator != (denominator <= 0 ? 1 : denominator));
+      @ ensures (\old(numerator) < 5
+      @          || ((\old(denominator) <= 0 ? 1 : \old(denominator)) > 7))
+      @         ==> (\abs(\result - (\old(numerator) + 97.3)) < 1e-6);
+      @ ensures (!(\old(numerator) < 5
+      @            || ((\old(denominator) <= 0 ? 1 : \old(denominator)) > 7)))
+      @         ==> (\abs(\result - (\old(numerator)
+      @                              + ((double)\old(numerator))
+      @                                / (\old(numerator) - (\old(denominator) <= 0 ? 1 : \old(denominator)))
+      @                              + 147.3)) < 1e-6);
+      @*/
+    public static double calculateRatio(int numerator, int denominator) {
+        int sum = 0;
+        int diff = 0;
+        int product = 1;
+        int counter = 0;
+        double ratio = 0;
+        /*@ maintaining 0 <= i && i <= 5;
+          @ maintaining sum == (i * (i - 1)) / 2;
+          @ maintaining diff == -((i * (i - 1)) / 2);
+          @ maintaining product == (\product int t; 1 <= t && t <= i; t);
+          @ maintaining counter == i;
+          @ decreases 5 - i;
+          @*/
+        for (int i = 0; i < 5; i++) {
+            sum = sum + i;
+            diff = diff - i;
+            product =  product * (i + 1);
+            counter = counter + 1;
+        }
+        if(denominator <= 0){
+            denominator = 1;
+        }
+        if(numerator < counter || denominator > 7) {
+            numerator = numerator + diff * counter;
+        }else{
+            denominator = numerator - denominator;
+            ratio = (double) numerator / denominator;
+        }
+
+        double adjustment = 0.0;
+        /*@ maintaining 0 <= j && j <= 3;
+          @ maintaining \abs(adjustment - (0.05 * j * (j - 1))) < 1e-9;  
+          @ decreases 3 - j;
+          @*/
+        for (int j = 0; j < 3; j++) {
+            adjustment += j * 0.1;
+        }
+
+        double result = ratio + adjustment + sum - diff + product - counter + numerator;
+
+        boolean valid = result > 0;
+        if (valid) {
+            System.out.println("Computation successful.");
+        } else {
+            System.out.println("Computation result is non-positive.");
+        }
+
+        int check = 1;
+        /*@ ghost double res0 = result; @*/
+        /*@ maintaining 1 <= check && check <= 4;
+          @ maintaining \abs(result - (res0 + ((check - 1) * check))) < 1e-9;  
+          @ decreases 4 - check;
+          @*/
+        while (check < 4) {
+            result += check * 2;
+            check++;
+        }
+        return result;
+    }
+}
+
+==============================
+tmp/DivisionCalculator.java:8: error: This backslash token is unknown: \abs
+      @         ==> (\abs(\result - (\old(numerator) + 97.3)) < 1e-6);
+                     ^
+tmp/DivisionCalculator.java:11: error: This backslash token is unknown: \abs
+      @         ==> (\abs(\result - (\old(numerator)
+                     ^
+tmp/DivisionCalculator.java:47: error: This backslash token is unknown: \abs
+          @ maintaining \abs(adjustment - (0.05 * j * (j - 1))) < 1e-9;  
+                        ^
+tmp/DivisionCalculator.java:66: error: This backslash token is unknown: \abs
+          @ maintaining \abs(result - (res0 + ((check - 1) * check))) < 1e-9;  
+                        ^
+4 errors
+
+==============================

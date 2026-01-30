@@ -1,0 +1,51 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class WaterFee_Mutant3 {
+    // This class provides a simple fee calculation based on water consumption.
+    public static int calcWaterFee(int tons) {
+        // Use a local copy to avoid modifying the input parameter directly
+        int n = tons;
+
+        // Track the accumulated fee
+        int fee = 0;
+
+        // Iterate per ton to compute fee with tiered pricing
+        while (n > 0) {
+            if (n > 10) {
+                fee += 5;
+            } else if (n > 3) {
+                fee += 4;
+            } else {
+                fee += 1;
+            }
+            // Move to the next ton
+            n--;
+        }
+
+        // Return the computed total fee
+        return fee;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: tons <= 0
+D1: return_value == 0
+
+T2: tons >= 1 && tons <= 3
+D2: return_value == tons
+
+T3: tons >= 4 && tons <= 10
+D3: return_value == 4 * tons - 9
+
+T4: tons >= 11
+D4: return_value == 5 * tons - 19
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--partially verified!
+Current conversation round is: [1]
+*end* role remark

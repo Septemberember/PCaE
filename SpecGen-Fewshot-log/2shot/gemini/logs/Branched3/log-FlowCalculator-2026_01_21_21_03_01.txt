@@ -1,0 +1,123 @@
+public class FlowCalculator {
+
+    /*@ requires rate >= 5 && pressure <= 14 ==> rate != 5;
+      @ ensures \result == (
+      @   let int adj1 = (pressure + 7) * 2 - 3 + 4;
+      @   let int adj2 = (adj1 > 40) ? (
+      @       (rate >= 5) ? ( (pressure <= 14) ? (adj1 + 6 + rate) : (adj1 + 6 + rate + 8) ) : (adj1 + 6 - 4)
+      @   ) : (
+      @       (rate < 3) ? (adj1 - 6 + 5) : (adj1 - 6)
+      @   );
+      @   let double f1 = (adj1 > 40) ? (
+      @       (rate >= 5) ? (
+      @           (pressure <= 14) ? ((double)(adj1 + 6 + rate) / (rate - 5)) : ((adj1 + 6 + rate + 8) * 0.95)
+      @       ) : ((adj1 + 6 - 4) * 1.1)
+      @   ) : (
+      @       (rate < 3) ? ((adj1 - 6 + 5) * 0.7) : ((adj1 - 6) * 0.8)
+      @   );
+      @   let double f2 = (adj1 > 40 && rate >= 5) ? ( (f1 > 80) ? (f1 * 0.9) : (f1 + 10) ) : ( (f1 < 20) ? (f1 + 5) : (f1 * 0.95) );
+      @   let boolean s = (adj1 > 40) ? ( (rate >= 5) ? (pressure <= 14) : false ) : (rate < 3);
+      @   let double corr = s ? 1.1 : 0.85;
+      @   (f2 * corr + adj2 * 0.05)
+      @ );
+      @*/
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure ;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+        int sheld = 14;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure <= sheld) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+tmp/FlowCalculator.java:5: error: ',', ')', or '[' expected
+      @   let int adj1 = (pressure + 7) * 2 - 3 + 4;
+             ^
+tmp/FlowCalculator.java:5: error: '.class' expected
+      @   let int adj1 = (pressure + 7) * 2 - 3 + 4;
+                  ^
+tmp/FlowCalculator.java:6: error: <identifier> expected
+      @   let int adj2 = (adj1 > 40) ? (
+             ^
+tmp/FlowCalculator.java:6: error: Method specs may not precede a variable declaration
+      @   let int adj2 = (adj1 > 40) ? (
+              ^
+tmp/FlowCalculator.java:11: error: <identifier> expected
+      @   let double f1 = (adj1 > 40) ? (
+             ^
+tmp/FlowCalculator.java:18: error: <identifier> expected
+      @   let double f2 = (adj1 > 40 && rate >= 5) ? ( (f1 > 80) ? (f1 * 0.9) : (f1 + 10) ) : ( (f1 < 20) ? (f1 + 5) : (f1 * 0.95) );
+             ^
+tmp/FlowCalculator.java:19: error: <identifier> expected
+      @   let boolean s = (adj1 > 40) ? ( (rate >= 5) ? (pressure <= 14) : false ) : (rate < 3);
+             ^
+tmp/FlowCalculator.java:20: error: <identifier> expected
+      @   let double corr = s ? 1.1 : 0.85;
+             ^
+tmp/FlowCalculator.java:21: error: illegal start of type
+      @   (f2 * corr + adj2 * 0.05)
+          ^
+tmp/FlowCalculator.java:21: error: <identifier> expected
+      @   (f2 * corr + adj2 * 0.05)
+             ^
+tmp/FlowCalculator.java:21: error: ';' expected
+      @   (f2 * corr + adj2 * 0.05)
+                                   ^
+11 errors
+
+==============================

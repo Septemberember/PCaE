@@ -1,0 +1,455 @@
+public class TemperatureAnalyzer {
+
+    /*@ public normal_behavior
+      @   requires modifier != 2; // divisor would be 0 if modifier == 2
+      @   assignable \nothing;
+      @   ensures \result == ((temp > 50) ? 
+      @                       (((temp - 10) / (modifier - 2 + 1)) + (temp - 10) * 0.1 + 
+      @                        (1.0 + 0.05 + 0.1 + 0.15) + (temp - 10) - 3 + 2.0) :
+      @                       (temp * 0.2 + (1.0 + 0.05 + 0.1 + 0.15) + temp - 3 - 1.0))
+      @           where {
+      @               int temp = (96 + modifier - 5) * 2;
+      @           };
+      @*/
+    public static double analyzeTemperature(int modifier) {
+        int temp = 96;
+        int offset = 5;
+        double average = 0.0;
+        boolean alert = false;
+
+        temp = temp + modifier;
+        temp = temp - offset;
+        temp = temp * 2;
+
+        int factor = 3;
+        int divisor = modifier - 2;
+        double result = 0.0;
+
+        if (temp > 50) {
+            divisor = divisor + 1;
+            temp = temp - 10;
+            result = (double) temp / divisor;
+            average = result + temp * 0.1;
+            alert = average > 30;
+        } else {
+            temp = temp + 15;
+            divisor = divisor - 1;
+            average = temp * 0.2;
+            alert = average < 10;
+        }
+
+        double correction = 1.0;
+        //@ maintaining 0 <= i && i <= 4;
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+        //@ decreases 4 - i;
+        for (int i = 0; i < 4; i++) {
+            correction += i * 0.05;
+        }
+
+        double finalValue = average + correction + temp - factor;
+
+        if (alert) {
+            finalValue += 2.0;
+        } else {
+            finalValue -= 1.0;
+        }
+        return finalValue;
+    }
+}
+==============================
+tmp/TemperatureAnalyzer.java:10: error: Incorrectly formed or terminated ensures statement near here
+      @           where {
+                  ^
+tmp/TemperatureAnalyzer.java:3: error: Method specifications without a following method declaration
+    /*@ public normal_behavior
+               ^
+tmp/TemperatureAnalyzer.java:14: error: class, interface, enum, or record expected
+    public static double analyzeTemperature(int modifier) {
+                  ^
+tmp/TemperatureAnalyzer.java:16: error: class, interface, enum, or record expected
+        int offset = 5;
+        ^
+tmp/TemperatureAnalyzer.java:17: error: class, interface, enum, or record expected
+        double average = 0.0;
+        ^
+tmp/TemperatureAnalyzer.java:18: error: class, interface, enum, or record expected
+        boolean alert = false;
+        ^
+tmp/TemperatureAnalyzer.java:20: error: class, interface, enum, or record expected
+        temp = temp + modifier;
+        ^
+tmp/TemperatureAnalyzer.java:21: error: class, interface, enum, or record expected
+        temp = temp - offset;
+        ^
+tmp/TemperatureAnalyzer.java:22: error: class, interface, enum, or record expected
+        temp = temp * 2;
+        ^
+tmp/TemperatureAnalyzer.java:24: error: class, interface, enum, or record expected
+        int factor = 3;
+        ^
+tmp/TemperatureAnalyzer.java:25: error: class, interface, enum, or record expected
+        int divisor = modifier - 2;
+        ^
+tmp/TemperatureAnalyzer.java:26: error: class, interface, enum, or record expected
+        double result = 0.0;
+        ^
+tmp/TemperatureAnalyzer.java:28: error: class, interface, enum, or record expected
+        if (temp > 50) {
+        ^
+tmp/TemperatureAnalyzer.java:30: error: class, interface, enum, or record expected
+            temp = temp - 10;
+            ^
+tmp/TemperatureAnalyzer.java:31: error: class, interface, enum, or record expected
+            result = (double) temp / divisor;
+            ^
+tmp/TemperatureAnalyzer.java:32: error: class, interface, enum, or record expected
+            average = result + temp * 0.1;
+            ^
+tmp/TemperatureAnalyzer.java:33: error: class, interface, enum, or record expected
+            alert = average > 30;
+            ^
+tmp/TemperatureAnalyzer.java:34: error: class, interface, enum, or record expected
+        } else {
+        ^
+tmp/TemperatureAnalyzer.java:36: error: class, interface, enum, or record expected
+            divisor = divisor - 1;
+            ^
+tmp/TemperatureAnalyzer.java:37: error: class, interface, enum, or record expected
+            average = temp * 0.2;
+            ^
+tmp/TemperatureAnalyzer.java:38: error: class, interface, enum, or record expected
+            alert = average < 10;
+            ^
+tmp/TemperatureAnalyzer.java:39: error: class, interface, enum, or record expected
+        }
+        ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: maintaining
+        //@ maintaining 0 <= i && i <= 4;
+            ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: 0
+        //@ maintaining 0 <= i && i <= 4;
+                        ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: <=
+        //@ maintaining 0 <= i && i <= 4;
+                          ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: i
+        //@ maintaining 0 <= i && i <= 4;
+                             ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: &&
+        //@ maintaining 0 <= i && i <= 4;
+                               ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: i
+        //@ maintaining 0 <= i && i <= 4;
+                                  ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: <=
+        //@ maintaining 0 <= i && i <= 4;
+                                    ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: 4
+        //@ maintaining 0 <= i && i <= 4;
+                                       ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: 
+        //@ maintaining 0 <= i && i <= 4;
+                                        ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: maintaining
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+            ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: correction
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                        ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: ==
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                   ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: 1.0
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                      ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: +
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                          ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: 
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                            ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: \sum
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                             ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: int
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                  ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: j
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                      ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: 
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                       ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: 0
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                         ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: <=
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                           ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: j
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                              ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: &&
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                                ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: j
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                                   ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: <
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                                     ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: i
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                                       ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: 
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                                        ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: j
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                                          ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: *
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                                            ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: 0.05
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                                              ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: 
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                                                  ^
+tmp/TemperatureAnalyzer.java:43: error: Unexpected or misspelled JML token: 
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+                                                                                   ^
+tmp/TemperatureAnalyzer.java:44: error: Unexpected or misspelled JML token: decreases
+        //@ decreases 4 - i;
+            ^
+tmp/TemperatureAnalyzer.java:44: error: Unexpected or misspelled JML token: 4
+        //@ decreases 4 - i;
+                      ^
+tmp/TemperatureAnalyzer.java:44: error: Unexpected or misspelled JML token: -
+        //@ decreases 4 - i;
+                        ^
+tmp/TemperatureAnalyzer.java:44: error: Unexpected or misspelled JML token: i
+        //@ decreases 4 - i;
+                          ^
+tmp/TemperatureAnalyzer.java:44: error: Unexpected or misspelled JML token: 
+        //@ decreases 4 - i;
+                           ^
+tmp/TemperatureAnalyzer.java:45: error: class, interface, enum, or record expected
+        for (int i = 0; i < 4; i++) {
+        ^
+tmp/TemperatureAnalyzer.java:45: error: class, interface, enum, or record expected
+        for (int i = 0; i < 4; i++) {
+                        ^
+tmp/TemperatureAnalyzer.java:45: error: class, interface, enum, or record expected
+        for (int i = 0; i < 4; i++) {
+                               ^
+tmp/TemperatureAnalyzer.java:47: error: class, interface, enum, or record expected
+        }
+        ^
+tmp/TemperatureAnalyzer.java:51: error: class, interface, enum, or record expected
+        if (alert) {
+        ^
+tmp/TemperatureAnalyzer.java:53: error: class, interface, enum, or record expected
+        } else {
+        ^
+tmp/TemperatureAnalyzer.java:55: error: class, interface, enum, or record expected
+        }
+        ^
+tmp/TemperatureAnalyzer.java:57: error: class, interface, enum, or record expected
+    }
+    ^
+67 errors
+
+==============================
+public class TemperatureAnalyzer {
+
+    /*@ public normal_behavior
+      @   requires modifier != 2; // divisor would be 0 if modifier == 2
+      @   assignable \nothing;
+      @   ensures \result == ((temp > 50) ? 
+      @                       (((temp - 10) / (modifier - 2 + 1)) + (temp - 10) * 0.1 + 
+      @                        (1.0 + 0.05 + 0.1 + 0.15) + (temp - 10) - 3 + 2.0) :
+      @                       (temp * 0.2 + (1.0 + 0.05 + 0.1 + 0.15) + temp - 3 - 1.0))
+      @           where {
+      @               int temp = (96 + modifier - 5) * 2;
+      @           };
+      @*/
+    public static double analyzeTemperature(int modifier) {
+        int temp = 96;
+        int offset = 5;
+        double average = 0.0;
+        boolean alert = false;
+
+        temp = temp + modifier;
+        temp = temp - offset;
+        temp = temp * 2;
+
+        int factor = 3;
+        int divisor = modifier - 2;
+        double result = 0.0;
+
+        if (temp > 50) {
+            divisor = divisor + 1;
+            temp = temp - 10;
+            result = (double) temp / divisor;
+            average = result + temp * 0.1;
+            alert = average > 30;
+        } else {
+            temp = temp + 15;
+            divisor = divisor - 1;
+            average = temp * 0.2;
+            alert = average < 10;
+        }
+
+        double correction = 1.0;
+        //@ maintaining 0 - 1 <= i && i - 1 <= 4;  
+ 
+ 
+        for (int i = 0; i < 4; i++) {
+            correction += i * 0.05;
+        }
+
+        double finalValue = average + correction + temp - factor;
+
+        if (alert) {
+            finalValue += 2.0;
+        } else {
+            finalValue -= 1.0;
+        }
+        return finalValue;
+    }
+}
+
+==============================
+tmp/TemperatureAnalyzer.java:10: error: Incorrectly formed or terminated ensures statement near here
+      @           where {
+                  ^
+tmp/TemperatureAnalyzer.java:3: error: Method specifications without a following method declaration
+    /*@ public normal_behavior
+               ^
+tmp/TemperatureAnalyzer.java:14: error: class, interface, enum, or record expected
+    public static double analyzeTemperature(int modifier) {
+                  ^
+tmp/TemperatureAnalyzer.java:16: error: class, interface, enum, or record expected
+        int offset = 5;
+        ^
+tmp/TemperatureAnalyzer.java:17: error: class, interface, enum, or record expected
+        double average = 0.0;
+        ^
+tmp/TemperatureAnalyzer.java:18: error: class, interface, enum, or record expected
+        boolean alert = false;
+        ^
+tmp/TemperatureAnalyzer.java:20: error: class, interface, enum, or record expected
+        temp = temp + modifier;
+        ^
+tmp/TemperatureAnalyzer.java:21: error: class, interface, enum, or record expected
+        temp = temp - offset;
+        ^
+tmp/TemperatureAnalyzer.java:22: error: class, interface, enum, or record expected
+        temp = temp * 2;
+        ^
+tmp/TemperatureAnalyzer.java:24: error: class, interface, enum, or record expected
+        int factor = 3;
+        ^
+tmp/TemperatureAnalyzer.java:25: error: class, interface, enum, or record expected
+        int divisor = modifier - 2;
+        ^
+tmp/TemperatureAnalyzer.java:26: error: class, interface, enum, or record expected
+        double result = 0.0;
+        ^
+tmp/TemperatureAnalyzer.java:28: error: class, interface, enum, or record expected
+        if (temp > 50) {
+        ^
+tmp/TemperatureAnalyzer.java:30: error: class, interface, enum, or record expected
+            temp = temp - 10;
+            ^
+tmp/TemperatureAnalyzer.java:31: error: class, interface, enum, or record expected
+            result = (double) temp / divisor;
+            ^
+tmp/TemperatureAnalyzer.java:32: error: class, interface, enum, or record expected
+            average = result + temp * 0.1;
+            ^
+tmp/TemperatureAnalyzer.java:33: error: class, interface, enum, or record expected
+            alert = average > 30;
+            ^
+tmp/TemperatureAnalyzer.java:34: error: class, interface, enum, or record expected
+        } else {
+        ^
+tmp/TemperatureAnalyzer.java:36: error: class, interface, enum, or record expected
+            divisor = divisor - 1;
+            ^
+tmp/TemperatureAnalyzer.java:37: error: class, interface, enum, or record expected
+            average = temp * 0.2;
+            ^
+tmp/TemperatureAnalyzer.java:38: error: class, interface, enum, or record expected
+            alert = average < 10;
+            ^
+tmp/TemperatureAnalyzer.java:39: error: class, interface, enum, or record expected
+        }
+        ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: maintaining
+        //@ maintaining 0 - 1 <= i && i - 1 <= 4;  
+            ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: 0
+        //@ maintaining 0 - 1 <= i && i - 1 <= 4;  
+                        ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: -
+        //@ maintaining 0 - 1 <= i && i - 1 <= 4;  
+                          ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: 1
+        //@ maintaining 0 - 1 <= i && i - 1 <= 4;  
+                            ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: <=
+        //@ maintaining 0 - 1 <= i && i - 1 <= 4;  
+                              ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: i
+        //@ maintaining 0 - 1 <= i && i - 1 <= 4;  
+                                 ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: &&
+        //@ maintaining 0 - 1 <= i && i - 1 <= 4;  
+                                   ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: i
+        //@ maintaining 0 - 1 <= i && i - 1 <= 4;  
+                                      ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: -
+        //@ maintaining 0 - 1 <= i && i - 1 <= 4;  
+                                        ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: 1
+        //@ maintaining 0 - 1 <= i && i - 1 <= 4;  
+                                          ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: <=
+        //@ maintaining 0 - 1 <= i && i - 1 <= 4;  
+                                            ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: 4
+        //@ maintaining 0 - 1 <= i && i - 1 <= 4;  
+                                               ^
+tmp/TemperatureAnalyzer.java:42: error: Unexpected or misspelled JML token: 
+        //@ maintaining 0 - 1 <= i && i - 1 <= 4;  
+                                                ^
+tmp/TemperatureAnalyzer.java:45: error: class, interface, enum, or record expected
+        for (int i = 0; i < 4; i++) {
+        ^
+tmp/TemperatureAnalyzer.java:45: error: class, interface, enum, or record expected
+        for (int i = 0; i < 4; i++) {
+                        ^
+tmp/TemperatureAnalyzer.java:45: error: class, interface, enum, or record expected
+        for (int i = 0; i < 4; i++) {
+                               ^
+tmp/TemperatureAnalyzer.java:47: error: class, interface, enum, or record expected
+        }
+        ^
+tmp/TemperatureAnalyzer.java:51: error: class, interface, enum, or record expected
+        if (alert) {
+        ^
+tmp/TemperatureAnalyzer.java:53: error: class, interface, enum, or record expected
+        } else {
+        ^
+tmp/TemperatureAnalyzer.java:55: error: class, interface, enum, or record expected
+        }
+        ^
+tmp/TemperatureAnalyzer.java:57: error: class, interface, enum, or record expected
+    }
+    ^
+43 errors
+
+==============================

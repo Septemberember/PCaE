@@ -1,0 +1,41 @@
+/**** Simple parity utility for DivisorGame_Mutant4. */
+public class DivisorGame_Mutant4 {
+    // Entry point: computes parity of n
+    //@ ensures \result == n % 2;
+    //@ ensures \result == 0 || \result == 1;
+    public static int divisorGame(int n) {
+        // Parity: 0 if even, 1 if odd
+        return n % 2;
+    }
+}
+==============================
+tmp/DivisorGame_Mutant4.java:8: verify: The prover cannot establish an assertion (Postcondition: tmp/DivisorGame_Mutant4.java:5:) in method divisorGame
+        return n % 2;
+        ^
+tmp/DivisorGame_Mutant4.java:5: verify: Associated declaration: tmp/DivisorGame_Mutant4.java:8:
+    //@ ensures \result == 0 || \result == 1;
+        ^
+2 verification failures
+
+==============================
+/**** Simple parity utility for DivisorGame_Mutant4. */
+public class DivisorGame_Mutant4 {
+    // Entry point: computes parity of n
+    //@ ensures \result == n % 2;
+    //@ ensures \result == 0 || \result == 1;  
+    public static int divisorGame(int n) {
+        // Parity: 0 if even, 1 if odd
+        return n % 2;
+    }
+}
+
+==============================
+tmp/DivisorGame_Mutant4.java:8: verify: The prover cannot establish an assertion (Postcondition: tmp/DivisorGame_Mutant4.java:5:) in method divisorGame
+        return n % 2;
+        ^
+tmp/DivisorGame_Mutant4.java:5: verify: Associated declaration: tmp/DivisorGame_Mutant4.java:8:
+    //@ ensures \result == 0 || \result == 1;  
+        ^
+2 verification failures
+
+==============================

@@ -1,0 +1,87 @@
+// GetLowCaseLoop_M3: Map an uppercase ASCII character to lowercase using a small loop
+// Returns the lowercase letter for 'A'..'Z'; returns 0 for non-uppercase input
+// The method initializes a candidate t with the first lowercase letter and searches for a match
+
+public class GetLowCaseLoop_M3 {
+    /*@ public normal_behavior
+      @   requires true;
+      @   assignable \nothing;
+      @   ensures (c < 'A' || c > 'Z') ==> (\result == (char)0);
+      @   ensures ('A' <= c && c <= 'Z') ==> (\result == (char)((int)c - (int)'A' + (int)'a'));
+      @   ensures ('A' <= c && c <= 'Z') ==> ('a' <= \result && \result <= 'z');
+      @*/
+    public static char getLowCase(char c) {
+        // Initialize the candidate to the first lowercase letter
+        char t = 'a';
+        // Loop until we reach the matching lowercase representation
+        /*@ maintaining (int)'a' <= (int)t && (int)t <= (int)'z' + 1;
+          @ maintaining ('A' <= c && c <= 'Z') ==> ((int)'a' <= ((int)c - (int)'A' + (int)'a') && ((int)c - (int)'A' + (int)'a') <= (int)'z');
+          @ maintaining ('A' <= c && c <= 'Z') ==> ((int)t <= ((int)c - (int)'A' + (int)'a'));
+          @ decreases (int)'z' - (int)t + 1;
+          @*/
+        while(t <= 'z' && t != c - 'A' + 'a') {
+            // If input is not an uppercase ASCII letter, no lowercase mapping exists
+            if(c < 'A' || c > 'Z') {
+                return 0;
+            }
+            // Move to the next possible lowercase candidate
+            t++;
+        }
+        // Return the found lowercase character or the initial candidate
+        return t;
+    }
+}
+==============================
+tmp/GetLowCaseLoop_M3.java:31: verify: The prover cannot establish an assertion (Postcondition: tmp/GetLowCaseLoop_M3.java:9:) in method getLowCase
+        return t;
+        ^
+tmp/GetLowCaseLoop_M3.java:9: verify: Associated declaration: tmp/GetLowCaseLoop_M3.java:31:
+      @   ensures (c < 'A' || c > 'Z') ==> (\result == (char)0);
+          ^
+2 verification failures
+
+==============================
+// GetLowCaseLoop_M3: Map an uppercase ASCII character to lowercase using a small loop
+// Returns the lowercase letter for 'A'..'Z'; returns 0 for non-uppercase input
+// The method initializes a candidate t with the first lowercase letter and searches for a match
+
+public class GetLowCaseLoop_M3 {
+    /*@ public normal_behavior
+      @   requires true;
+      @   assignable \nothing;
+      @   ensures (c < 'A' || c > 'Z') ==> (\result == (char)0);  
+      @   ensures ('A' <= c && c <= 'Z') ==> (\result == (char)((int)c - (int)'A' + (int)'a'));
+      @   ensures ('A' <= c && c <= 'Z') ==> ('a' <= \result && \result <= 'z');
+      @*/
+    public static char getLowCase(char c) {
+        // Initialize the candidate to the first lowercase letter
+        char t = 'a';
+        // Loop until we reach the matching lowercase representation
+        /*@ maintaining (int)'a' <= (int)t && (int)t <= (int)'z' + 1;
+          @ maintaining ('A' <= c && c <= 'Z') ==> ((int)'a' <= ((int)c - (int)'A' + (int)'a') && ((int)c - (int)'A' + (int)'a') <= (int)'z');
+          @ maintaining ('A' <= c && c <= 'Z') ==> ((int)t <= ((int)c - (int)'A' + (int)'a'));
+          @ decreases (int)'z' - (int)t + 1;
+          @*/
+        while(t <= 'z' && t != c - 'A' + 'a') {
+            // If input is not an uppercase ASCII letter, no lowercase mapping exists
+            if(c < 'A' || c > 'Z') {
+                return 0;
+            }
+            // Move to the next possible lowercase candidate
+            t++;
+        }
+        // Return the found lowercase character or the initial candidate
+        return t;
+    }
+}
+
+==============================
+tmp/GetLowCaseLoop_M3.java:31: verify: The prover cannot establish an assertion (Postcondition: tmp/GetLowCaseLoop_M3.java:9:) in method getLowCase
+        return t;
+        ^
+tmp/GetLowCaseLoop_M3.java:9: verify: Associated declaration: tmp/GetLowCaseLoop_M3.java:31:
+      @   ensures (c < 'A' || c > 'Z') ==> (\result == (char)0);  
+          ^
+2 verification failures
+
+==============================

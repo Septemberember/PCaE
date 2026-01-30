@@ -1,0 +1,130 @@
+public class PassPillowBranch_Mutant5 {
+    // PassPillowBranch_Mutant5 contains a deterministic mapping for pillow timing
+    /*@ requires 2 <= n && n <= Integer.MAX_VALUE / 3;
+      @ requires 0 <= time;
+      @ ensures (\let int period = (n - 1) * 2;
+      @          \let int t = time % period;
+      @          (t < n ==> \result == t + 1)
+      @       && (t >= n ==> \result == n * 3 - t - 1));
+      @*/
+    public static int passPillow(int n, int time) {
+        // Public method computes the pillow position for given n and time
+        time = time % ((n - 1) * 2);
+        // Normalize time to the two-cycle period
+        if (time < n) {
+            // If within the first phase, answer increases sequentially
+            return time + 1;
+        }
+        // Phase B: final position uses a different mapping
+        return n * 3 - time - 1; // changed multiplication factor from 2 to 3
+        // Note: The variant uses a factor of 3 for the second phase
+    }
+    // End of calculation
+}
+==============================
+tmp/PassPillowBranch_Mutant5.java:10: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static int passPillow(int n, int time) {
+                      ^
+1 verification failure
+
+==============================
+public class PassPillowBranch_Mutant5 {
+    // PassPillowBranch_Mutant5 contains a deterministic mapping for pillow timing
+
+    /*@ requires 2 <= n;
+      @ requires 0 <= time;
+      @ requires (n - 1) <= Integer.MAX_VALUE / 2;        // prevents overflow in (n-1)*2
+      @ requires n <= Integer.MAX_VALUE / 3;              // prevents overflow in n*3
+      @ ensures (\old(time) % ((n - 1) * 2)) < n
+      @          ==> \result == (\old(time) % ((n - 1) * 2)) + 1;
+      @ ensures (\old(time) % ((n - 1) * 2)) >= n
+      @          ==> \result == (n * 3) - (\old(time) % ((n - 1) * 2)) - 1;
+      @ ensures (\old(time) % ((n - 1) * 2)) < n ==> (1 <= \result && \result <= n);
+      @ ensures (\old(time) % ((n - 1) * 2)) >= n ==> (n + 2 <= \result && \result <= (2 * n) - 1);
+      @*/
+    public static int passPillow(int n, int time) {
+        // Public method computes the pillow position for given n and time
+        time = time % ((n - 1) * 2);
+        // Normalize time to the two-cycle period
+        if (time < n) {
+            // If within the first phase, answer increases sequentially
+            return time + 1;
+        }
+        // Phase B: final position uses a different mapping
+        return n * 3 - time - 1; // changed multiplication factor from 2 to 3
+        // Note: The variant uses a factor of 3 for the second phase
+    }
+    // End of calculation
+}
+==============================
+tmp/PassPillowBranch_Mutant5.java:15: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static int passPillow(int n, int time) {
+                      ^
+1 verification failure
+
+==============================
+public class PassPillowBranch_Mutant5 {
+    // PassPillowBranch_Mutant5 contains a deterministic mapping for pillow timing
+
+    /*@ requires n > 1;
+      @ requires time >= 0;
+      @ ensures (time < n) ==> (\result == time + 1);
+      @ ensures (time >= n) ==> (\result == (n * 3) - time - 1);
+      @*/
+    public static int passPillow(int n, int time) {
+        // Public method computes the pillow position for given n and time
+        time = time % ((n - 1) * 2);
+        // Normalize time to the two-cycle period
+        if (time < n) {
+            // If within the first phase, answer increases sequentially
+            return time + 1;
+        }
+        // Phase B: final position uses a different mapping
+        return n * 3 - time - 1; // changed multiplication factor from 2 to 3
+        // Note: The variant uses a factor of 3 for the second phase
+    }
+    // End of calculation
+}
+==============================
+tmp/PassPillowBranch_Mutant5.java:15: verify: The prover cannot establish an assertion (Postcondition: tmp/PassPillowBranch_Mutant5.java:7:) in method passPillow
+            return time + 1;
+            ^
+tmp/PassPillowBranch_Mutant5.java:7: verify: Associated declaration: tmp/PassPillowBranch_Mutant5.java:15:
+      @ ensures (time >= n) ==> (\result == (n * 3) - time - 1);
+        ^
+2 verification failures
+
+==============================
+public class PassPillowBranch_Mutant5 {
+    // PassPillowBranch_Mutant5 contains a deterministic mapping for pillow timing
+
+    /*@ requires n > 1;
+      @ requires time >= 0;
+      @ ensures (time < n) ==> (\result == time + 1);
+      @ ensures (time > n) ==> (\result == (n * 3) - time - 1);  
+      @*/
+    public static int passPillow(int n, int time) {
+        // Public method computes the pillow position for given n and time
+        time = time % ((n - 1) * 2);
+        // Normalize time to the two-cycle period
+        if (time < n) {
+            // If within the first phase, answer increases sequentially
+            return time + 1;
+        }
+        // Phase B: final position uses a different mapping
+        return n * 3 - time - 1; // changed multiplication factor from 2 to 3
+        // Note: The variant uses a factor of 3 for the second phase
+    }
+    // End of calculation
+}
+
+==============================
+tmp/PassPillowBranch_Mutant5.java:15: verify: The prover cannot establish an assertion (Postcondition: tmp/PassPillowBranch_Mutant5.java:7:) in method passPillow
+            return time + 1;
+            ^
+tmp/PassPillowBranch_Mutant5.java:7: verify: Associated declaration: tmp/PassPillowBranch_Mutant5.java:15:
+      @ ensures (time > n) ==> (\result == (n * 3) - time - 1);  
+        ^
+2 verification failures
+
+==============================

@@ -1,0 +1,191 @@
+public class VoltageCalculator {
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   assignable \everything;
+      @
+      @   ensures !Double.isNaN(\result);
+      @
+      @   ensures (\let int r = resistance;
+      @            \let int adj0 = 46 + 2*r; // after: adjusted += resistance; adjusted *= 2; adjusted -= 3; adjusted += 5;
+      @            (\result ==
+      @              (adj0 > 60)
+      @                ? (\let int adj1 = adj0 + 9; // adjusted += 9;
+      @                   \let double baseV = ((double) adj1) / (r - 8); // resistance != 0 always holds in this branch (r >= 8)
+      @                   \let double v1 = (baseV > 80.0) ? (baseV * 0.88) : (baseV + 12.0);
+      @                   \let double correction = 1.12; // stable remains true in this branch
+      @                   (v1 * correction + adj1 * 0.04))
+      @                : (\let int adj2 = adj0 - 7; // adjusted -= 7;
+      @                   (r < 5)
+      @                     ? (\let int adj3 = adj2 + 4; // adjusted += 4;
+      @                        \let double baseV = adj3 * 0.7;
+      @                        \let double v2 = (baseV < 30.0) ? (baseV + 8.0) : (baseV * 0.92);
+      @                        \let double correction = 1.12; // stable remains true in this sub-branch
+      @                        (v2 * correction + adj3 * 0.04))
+      @                     : (\let int adj3 = adj2; // no further change to adjusted in this sub-branch
+      @                        \let double baseV = adj3 * 0.5;
+      @                        \let double v2 = (baseV < 30.0) ? (baseV + 8.0) : (baseV * 0.92);
+      @                        \let double correction = 0.83; // stable set to false in this sub-branch
+      @                        (v2 * correction + adj3 * 0.04)))
+      @            ));
+      @*/
+    public static double computeVoltage(int resistance) {
+        int current = 22;
+        int adjusted = current;
+        double voltage = 0.0;
+        boolean stable = true;
+        int bias = 3;
+
+        adjusted += resistance;
+        adjusted *= 2;
+        adjusted -= bias;
+        adjusted = adjusted + 5;
+
+        if (adjusted > 60) {
+            adjusted += 9;
+
+            if (resistance != 0) {
+                int divisor = resistance - 8;
+                voltage = (double) adjusted / divisor;
+            } else {
+                adjusted = adjusted + 6;
+                voltage = adjusted * 1.25;
+                stable = false;
+            }
+
+            if (voltage > 80) {
+                voltage = voltage * 0.88;
+            } else {
+                voltage = voltage + 12;
+            }
+
+        } else {
+            adjusted -= 7;
+
+            if (resistance < 5) {
+                adjusted += 4;
+                voltage = adjusted * 0.7;
+            } else {
+                voltage = adjusted * 0.5;
+                stable = false;
+            }
+
+            if (voltage < 30) {
+                voltage = voltage + 8;
+            } else {
+                voltage = voltage * 0.92;
+            }
+        }
+
+        double correction = stable ? 1.12 : 0.83;
+        double finalVoltage = voltage * correction + adjusted * 0.04;
+        System.out.println("Voltage result: " + finalVoltage);
+        return finalVoltage;
+    }
+}
+==============================
+tmp/VoltageCalculator.java:11: error: incomparable types: double and boolean
+      @            (\result ==
+                            ^
+tmp/VoltageCalculator.java:9: error: incompatible types: double cannot be converted to boolean
+      @   ensures (\let int r = resistance;
+                   ^
+2 errors
+
+==============================
+public class VoltageCalculator {
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   assignable \everything;
+      @
+      @   ensures !Double.isNaN(\result);
+      @
+      @   ensures (\let int r = resistance;  
+      @            \let int adj0 = 46 + 2*r; // after: adjusted += resistance; adjusted *= 2; adjusted -= 3; adjusted += 5;
+      @            (\result ==
+      @              (adj0 > 60)
+      @                ? (\let int adj1 = adj0 + 9; // adjusted += 9;
+      @                   \let double baseV = ((double) adj1) / (r - 8); // resistance != 0 always holds in this branch (r >= 8)
+      @                   \let double v1 = (baseV > 80.0) ? (baseV * 0.88) : (baseV + 12.0);
+      @                   \let double correction = 1.12; // stable remains true in this branch
+      @                   (v1 * correction + adj1 * 0.04))
+      @                : (\let int adj2 = adj0 - 7; // adjusted -= 7;
+      @                   (r < 5)
+      @                     ? (\let int adj3 = adj2 + 4; // adjusted += 4;
+      @                        \let double baseV = adj3 * 0.7;
+      @                        \let double v2 = (baseV < 30.0) ? (baseV + 8.0) : (baseV * 0.92);
+      @                        \let double correction = 1.12; // stable remains true in this sub-branch
+      @                        (v2 * correction + adj3 * 0.04))
+      @                     : (\let int adj3 = adj2; // no further change to adjusted in this sub-branch
+      @                        \let double baseV = adj3 * 0.5;
+      @                        \let double v2 = (baseV < 30.0) ? (baseV + 8.0) : (baseV * 0.92);
+      @                        \let double correction = 0.83; // stable set to false in this sub-branch
+      @                        (v2 * correction + adj3 * 0.04)))
+      @            ));
+      @*/
+    public static double computeVoltage(int resistance) {
+        int current = 22;
+        int adjusted = current;
+        double voltage = 0.0;
+        boolean stable = true;
+        int bias = 3;
+
+        adjusted += resistance;
+        adjusted *= 2;
+        adjusted -= bias;
+        adjusted = adjusted + 5;
+
+        if (adjusted > 60) {
+            adjusted += 9;
+
+            if (resistance != 0) {
+                int divisor = resistance - 8;
+                voltage = (double) adjusted / divisor;
+            } else {
+                adjusted = adjusted + 6;
+                voltage = adjusted * 1.25;
+                stable = false;
+            }
+
+            if (voltage > 80) {
+                voltage = voltage * 0.88;
+            } else {
+                voltage = voltage + 12;
+            }
+
+        } else {
+            adjusted -= 7;
+
+            if (resistance < 5) {
+                adjusted += 4;
+                voltage = adjusted * 0.7;
+            } else {
+                voltage = adjusted * 0.5;
+                stable = false;
+            }
+
+            if (voltage < 30) {
+                voltage = voltage + 8;
+            } else {
+                voltage = voltage * 0.92;
+            }
+        }
+
+        double correction = stable ? 1.12 : 0.83;
+        double finalVoltage = voltage * correction + adjusted * 0.04;
+        System.out.println("Voltage result: " + finalVoltage);
+        return finalVoltage;
+    }
+}
+
+==============================
+tmp/VoltageCalculator.java:11: error: incomparable types: double and boolean
+      @            (\result ==
+                            ^
+tmp/VoltageCalculator.java:9: error: incompatible types: double cannot be converted to boolean
+      @   ensures (\let int r = resistance;  
+                   ^
+2 errors
+
+==============================

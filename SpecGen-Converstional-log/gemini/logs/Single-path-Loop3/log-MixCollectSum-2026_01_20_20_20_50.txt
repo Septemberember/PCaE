@@ -1,0 +1,135 @@
+import java.util.*;
+public class MixCollectSum {
+    //@ ensures (x < 195) ==> \result == 0;
+    //@ ensures (x >= 195) ==> \result >= 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 220){
+            x = 220;
+        }
+        //@ maintaining (x < 195) || (x >= 49 && x <= 220);
+        //@ maintaining list.size() >= 0;
+        //@ decreases x;
+        while(x >= 195){
+           if(x == 200){
+               x = x - 150;
+               sum = tmp / x;
+           }
+           x = x - 1;
+           list.add(x);
+        }
+        //@ maintaining sum >= 0;
+        //@ maintaining list.size() >= 0;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+TimeoutException
+==============================
+import java.util.*;
+public class MixCollectSum {
+    //@ ensures (x < 195) ==> \result == 0;
+    //@ ensures (x >= 195) ==> \result != 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 220){
+            x = 220;
+        }
+        //@ maintaining (x >= 195 ==> x <= 220);
+        //@ maintaining (x < 195 ==> (x >= 49 || x == 194));
+        //@ decreases x;
+        while(x >= 195){
+           if(x == 200){
+               x = x - 150;
+               sum = tmp / x;
+           }
+           x = x - 1;
+           list.add(x);
+        }
+        //@ maintaining sum >= 0;
+        //@ maintaining (\forall int j; 0 <= j && j < list.size(); list.get(j) >= 49);
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+TimeoutException
+==============================
+import java.util.*;
+public class MixCollectSum {
+    //@ ensures (x < 195) ==> \result == 0;
+    //@ ensures (x >= 195) ==> \result > 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 220){
+            x = 220;
+        }
+        //@ maintaining x >= 49 || x == 194 || (x < 195 && \old(x) < 195);
+        //@ maintaining list.size() >= 0;
+        //@ decreases x;
+        while(x >= 195){
+           if(x == 200){
+               x = x - 150;
+               sum = tmp / x;
+           }
+           x = x - 1;
+           list.add(x);
+        }
+        //@ maintaining sum >= 0;
+        //@ maintaining list.size() >= 0;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+TimeoutException
+==============================
+import java.util.*;
+public class MixCollectSum {
+    //@ ensures (\old(x) < 195) ==> \result == 0;
+    //@ ensures (\old(x) >= 195) ==> \result > 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 220){
+            x = 220;
+        }
+        //@ maintaining x <= 220;
+        //@ maintaining x < 195 ==> (x >= 49 || x == 194 || (\old(x) < 195 && x == \old(x)));
+        //@ decreases x;
+        while(x >= 195){
+           if(x == 200){
+               x = x - 150;
+               sum = tmp / x;
+           }
+           x = x - 1;
+           list.add(x);
+        }
+        //@ maintaining sum >= 0;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+
+==============================

@@ -1,0 +1,83 @@
+/*
+ * MulLoop_Mutant3
+ * This variant demonstrates a loop-based multiplication by repeated addition or subtraction.
+ * It intentionally uses subtraction for non-negative b and addition for negative b.
+ */
+ 
+public class MulLoop_Mutant3 {
+
+    // Compute product via repeated addition/subtraction.
+    // Positive b uses addition, negative b uses subtraction.
+    // Simple loop-based implementation to accumulate the result.
+    //@ requires ((-\bigint)a * (\bigint)b) >= Integer.MIN_VALUE && ((-\bigint)a * (\bigint)b) <= Integer.MAX_VALUE;
+    //@ ensures \result == (int)((-\bigint)a * (\bigint)b);
+    public static int mulLoop(int a, int b) {
+        int res = 0;
+        if (b >= 0) {
+            //@ maintaining 0 <= i && i <= b;
+            //@ maintaining res == (int)((-\bigint)a * (\bigint)i);
+            //@ decreases b - i;
+            for(int i = 0; i < b; i++) {
+                res = res - a;  // changed the operator from + to -
+            }
+        } else {
+            //@ maintaining 0 <= i && i <= -b;
+            //@ maintaining res == (int)((\bigint)a * (\bigint)i);
+            //@ decreases (-b) - i;
+            for(int i = 0; i < -b; i++) {
+                res = res + a;  // changed the operator from - to +
+            }
+        }
+        return res;
+    }
+}
+==============================
+tmp/MulLoop_Mutant3.java:12: error: ')' expected
+    //@ requires ((-\bigint)a * (\bigint)b) >= Integer.MIN_VALUE && ((-\bigint)a * (\bigint)b) <= Integer.MAX_VALUE;
+                            ^
+tmp/MulLoop_Mutant3.java:13: error: ')' expected
+    //@ ensures \result == (int)((-\bigint)a * (\bigint)b);
+                                           ^
+tmp/MulLoop_Mutant3.java:18: error: ')' expected
+            //@ maintaining res == (int)((-\bigint)a * (\bigint)i);
+                                                   ^
+3 errors
+
+==============================
+/*
+ * MulLoop_Mutant3
+ * This variant demonstrates a loop-based multiplication by repeated addition or subtraction.
+ * It intentionally uses subtraction for non-negative b and addition for negative b.
+ */
+ 
+public class MulLoop_Mutant3 {
+
+    // Compute product via repeated addition/subtraction.
+    // Positive b uses addition, negative b uses subtraction.
+    // Simple loop-based implementation to accumulate the result.
+    //@ requires b != Integer.MIN_VALUE; // to avoid overflow in the expression -b used by the code
+    //@ requires ( (-(\bigint)a) * (\bigint)b ) >= Integer.MIN_VALUE && ( (-(\bigint)a) * (\bigint)b ) <= Integer.MAX_VALUE;
+    //@ ensures (\bigint)\result == (-(\bigint)a) * (\bigint)b;
+    public static int mulLoop(int a, int b) {
+        int res = 0;
+        if (b >= 0) {
+            //@ maintaining 0 <= i && i <= b;
+            //@ maintaining (\bigint)res == (-(\bigint)a) * (\bigint)i;
+            //@ decreases b - i;
+            for(int i = 0; i < b; i++) {
+                res = res - a;  // changed the operator from + to -
+            }
+        } else {
+            //@ maintaining 0 <= i && i <= -b;
+            //@ maintaining (\bigint)res == (\bigint)a * (\bigint)i;
+            //@ decreases (-b) - i;
+            for(int i = 0; i < -b; i++) {
+                res = res + a;  // changed the operator from - to +
+            }
+        }
+        return res;
+    }
+}
+==============================
+
+==============================

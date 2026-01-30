@@ -1,0 +1,83 @@
+// Character mapping helper: derives a candidate by scanning a small range
+// This snippet demonstrates a simple loop with an early return for non-letter inputs
+
+public class GetLowCaseLoop_M4 {
+    /*@ public normal_behavior
+      @ requires 'A' <= c && c <= 'Z';
+      @ ensures \result == Character.toLowerCase(c);
+      @ also
+      @ public normal_behavior
+      @ requires c < 'A' || c > 'Z';
+      @ ensures \result == 0;
+      @*/
+    public static char getLowCase(char c) {
+        char t = 'f';
+        // Initialize t to 'f' and iterate toward 'z' to locate a transformed input
+        /*@ loop_invariant 'f' <= t && t <= 'z' + 1;
+          @ maintaining ('A' <= c && c <= 'Z') ==> 
+          @   (t <= c - 'A' + 'a' || \result == 0);
+          @ decreasing 'z' - t;
+          @*/
+        while(t <= 'z' && t != c - 'A' + 'a') {
+            // Loop begins: compare and adjust t within the range
+            if(c < 'F' || c > 'Z') {
+                // If c is outside the A-Z range, there is no valid mapping
+                return 0;
+            }
+            t++;
+            // Move to the next candidate letter
+        }
+        // End of this iteration
+        // Return the resulting character after the loop completes
+        return t;
+    }
+}
+==============================
+tmp/GetLowCaseLoop_M4.java:18: error: A \result expression may not be in a loop_invariant clause
+          @   (t <= c - 'A' + 'a' || \result == 0);
+                                      ^
+1 error
+
+==============================
+// Character mapping helper: derives a candidate by scanning a small range
+// This snippet demonstrates a simple loop with an early return for non-letter inputs
+
+public class GetLowCaseLoop_M4 {
+    /*@ public normal_behavior
+      @ requires 'A' <= c && c <= 'Z';
+      @ ensures \result == Character.toLowerCase(c);
+      @ also
+      @ public normal_behavior
+      @ requires c < 'A' || c > 'Z';
+      @ ensures \result == 0;
+      @*/
+    public static char getLowCase(char c) {
+        char t = 'f';
+        // Initialize t to 'f' and iterate toward 'z' to locate a transformed input
+        /*@ loop_invariant 'f' <= t && t <= 'z' + 1;
+          @ maintaining ('A' <= c && c <= 'Z') ==> 
+          @   (t <= c - 'A' + 'a' || \result == 0);
+          @ decreasing 'z' - t;
+          @*/
+        while(t <= 'z' && t != c - 'A' + 'a') {
+            // Loop begins: compare and adjust t within the range
+            if(c < 'F' || c > 'Z') {
+                // If c is outside the A-Z range, there is no valid mapping
+                return 0;
+            }
+            t++;
+            // Move to the next candidate letter
+        }
+        // End of this iteration
+        // Return the resulting character after the loop completes
+        return t;
+    }
+}
+
+==============================
+tmp/GetLowCaseLoop_M4.java:18: error: A \result expression may not be in a loop_invariant clause
+          @   (t <= c - 'A' + 'a' || \result == 0);
+                                      ^
+1 error
+
+==============================

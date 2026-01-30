@@ -1,0 +1,8 @@
+experimentName: Gemini3Conv
+model: google/gemini-3-flash-preview
+category: Branched3
+total number: 270
+success number: 133
+success rate: 49.25%
+failed number: 136
+exception number: 1

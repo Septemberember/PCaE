@@ -1,0 +1,73 @@
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   ensures \result == (int)\(\pow(x, n + 1));
+      @   assignable \nothing;
+      @*/
+    public static int power(int x, int n) {
+        int res = 1;
+        /*@ maintaining 0 <= i && i <= n + 1;
+          @ maintaining res == (int)\(\pow(x, i));
+          @ decreasing n + 1 - i;
+          @*/
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Mutant4.java:8: error: A backslash in a JML comment expects to be followed by a valid identifier
+      @   ensures \result == (int)\(\pow(x, n + 1));
+                                  ^
+tmp/MyPower_Mutant4.java:8: error: This backslash token is unknown: \pow
+      @   ensures \result == (int)\(\pow(x, n + 1));
+                                    ^
+tmp/MyPower_Mutant4.java:14: error: A backslash in a JML comment expects to be followed by a valid identifier
+          @ maintaining res == (int)\(\pow(x, i));
+                                    ^
+tmp/MyPower_Mutant4.java:14: error: This backslash token is unknown: \pow
+          @ maintaining res == (int)\(\pow(x, i));
+                                      ^
+4 errors
+
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   ensures \result == (int)\(\pow(x, n - 1));  
+      @   assignable \nothing;
+      @*/
+    public static int power(int x, int n) {
+        int res = 1;
+        /*@ maintaining 0 <= i && i <= n + 1;
+ 
+          @ decreasing n + 1 - i;
+          @*/
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+}
+
+==============================
+tmp/MyPower_Mutant4.java:8: error: A backslash in a JML comment expects to be followed by a valid identifier
+      @   ensures \result == (int)\(\pow(x, n - 1));  
+                                  ^
+tmp/MyPower_Mutant4.java:8: error: This backslash token is unknown: \pow
+      @   ensures \result == (int)\(\pow(x, n - 1));  
+                                    ^
+2 errors
+
+==============================

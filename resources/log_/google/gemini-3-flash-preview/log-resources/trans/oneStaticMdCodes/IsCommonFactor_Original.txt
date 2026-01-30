@@ -1,0 +1,33 @@
+start role user
+Please generate an FSF for the program below:
+```
+// IsCommonFactor_Original: utility to verify if two integers share a given common factor
+// This simple predicate returns true when both a and b are divisible by factor.
+// No state is stored; the check is purely functional.
+
+public class IsCommonFactor_Original {
+
+    public static boolean isCommonFactor(int a, int b, int factor) {
+        // Evaluate divisibility for both inputs
+        return a % factor == 0 && b % factor == 0;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: factor == 0
+D1: Exception
+
+T2: factor != 0 && (a % factor == 0 && b % factor == 0)
+D2: return_value == true
+
+T3: factor != 0 && (a % factor != 0 || b % factor != 0)
+D3: return_value == false
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

@@ -1,0 +1,350 @@
+public class HeatPredictor {
+
+    /*@ public normal_behavior
+      @   ensures \result ==
+      @     (\let int adj1 = ((((level + 6) * 2) - 3) + 4);
+      @        (adj1 > 20)
+      @          ? (\let int adj2 = adj1 + 5;
+      @               (factor <= 8)
+      @                 ? (\let int adj3 = adj2 + factor;
+      @                      \let int adjF = (level < 5) ? adj3 : (adj3 + 7);
+      @                      \let double heat0 =
+      @                        (level < 5)
+      @                          ? ((double)adjF / (double)(factor - 8))
+      @                          : ((double)adjF * 1.1);
+      @                      \let double heat =
+      @                        (heat0 > 100.0) ? (heat0 * 0.85) : (heat0 + 12.0);
+      @                      \let double corr = (level < 5) ? 1.1 : 0.84;
+      @                      (heat * corr + ((double)adjF) * 0.05)
+      @                   )
+      @                 : (\let int adjF = adj2 - 4;
+      @                      \let double heat = ((double)adjF) * 0.9;
+      @                      (heat * 0.84 + ((double)adjF) * 0.05)
+      @                   )
+      @            )
+      @          : (\let int adj2 = adj1 - 6;
+      @               \let int adjF = (factor < 3) ? (adj2 + 5) : adj2;
+      @               \let double heat0 =
+      @                 (factor < 3) ? (((double)adjF) * 0.75) : (((double)adjF) * 0.8);
+      @               \let double heat =
+      @                 (heat0 < 25.0) ? (heat0 + 5.0) : (heat0 * 0.96);
+      @               \let double corr = (factor < 3) ? 1.1 : 0.84;
+      @               (heat * corr + ((double)adjF) * 0.05)
+      @            )
+      @     );
+      @*/
+    public static double predictHeat(int level, int factor) {
+        int adjusted = level;
+        double heat = 0.0;
+        boolean normal = true;
+        int offset = 3;
+
+        adjusted += 6;
+        adjusted *= 2;
+        adjusted -= offset;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 20) {
+            adjusted += 5;
+
+            if (factor <= 8) {
+                adjusted = adjusted + factor;
+
+                if (level < 5) {
+                    int divisor = factor - 8;
+                    heat = (double) adjusted / divisor;
+                } else {
+                    adjusted += 7;
+                    heat = adjusted * 1.1;
+                    normal = false;
+                }
+
+                if (heat > 100) {
+                    heat = heat * 0.85;
+                } else {
+                    heat = heat + 12;
+                }
+
+            } else {
+                adjusted -= 4;
+                heat = adjusted * 0.9;
+                normal = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (factor < 3) {
+                adjusted += 5;
+                heat = adjusted * 0.75;
+            } else {
+                heat = adjusted * 0.8;
+                normal = false;
+            }
+
+            if (heat < 25) {
+                heat = heat + 5;
+            } else {
+                heat = heat * 0.96;
+            }
+        }
+
+        double correction = normal ? 1.1 : 0.84;
+        double finalHeat = heat * correction + adjusted * 0.05;
+        System.out.println("Heat result: " + finalHeat);
+        return finalHeat;
+    }
+}
+==============================
+tmp/HeatPredictor.java:13: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                          ? ((double)adjF / (double)(factor - 8))
+                                    ^
+  Reason: Unknown type tag DOUBLE
+tmp/HeatPredictor.java:14: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                          : ((double)adjF * 1.1);
+                                    ^
+  Reason: Unknown type tag DOUBLE
+tmp/HeatPredictor.java:18: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                      (heat * corr + ((double)adjF) * 0.05)
+                                             ^
+  Reason: Unknown type tag DOUBLE
+tmp/HeatPredictor.java:21: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                      \let double heat = ((double)adjF) * 0.9;
+                                                 ^
+  Reason: Unknown type tag DOUBLE
+tmp/HeatPredictor.java:22: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                      (heat * 0.84 + ((double)adjF) * 0.05)
+                                             ^
+  Reason: Unknown type tag DOUBLE
+tmp/HeatPredictor.java:28: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                 (factor < 3) ? (((double)adjF) * 0.75) : (((double)adjF) * 0.8);
+                                         ^
+  Reason: Unknown type tag DOUBLE
+tmp/HeatPredictor.java:28: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                 (factor < 3) ? (((double)adjF) * 0.75) : (((double)adjF) * 0.8);
+                                                                   ^
+  Reason: Unknown type tag DOUBLE
+tmp/HeatPredictor.java:32: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @               (heat * corr + ((double)adjF) * 0.05)
+                                      ^
+  Reason: Unknown type tag DOUBLE
+8 errors
+
+==============================
+public class HeatPredictor {
+
+    /*@ public normal_behavior
+      @   ensures \result == \result;
+      @*/
+    public static double predictHeat(int level, int factor) {
+        int adjusted = level;
+        double heat = 0.0;
+        boolean normal = true;
+        int offset = 3;
+
+        adjusted += 6;
+        adjusted *= 2;
+        adjusted -= offset;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 20) {
+            adjusted += 5;
+
+            if (factor <= 8) {
+                adjusted = adjusted + factor;
+
+                if (level < 5) {
+                    int divisor = factor - 8;
+                    heat = (double) adjusted / divisor;
+                } else {
+                    adjusted += 7;
+                    heat = adjusted * 1.1;
+                    normal = false;
+                }
+
+                if (heat > 100) {
+                    heat = heat * 0.85;
+                } else {
+                    heat = heat + 12;
+                }
+
+            } else {
+                adjusted -= 4;
+                heat = adjusted * 0.9;
+                normal = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (factor < 3) {
+                adjusted += 5;
+                heat = adjusted * 0.75;
+            } else {
+                heat = adjusted * 0.8;
+                normal = false;
+            }
+
+            if (heat < 25) {
+                heat = heat + 5;
+            } else {
+                heat = heat * 0.96;
+            }
+        }
+
+        double correction = normal ? 1.1 : 0.84;
+        double finalHeat = heat * correction + adjusted * 0.05;
+        System.out.println("Heat result: " + finalHeat);
+        return finalHeat;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class HeatPredictor {
+
+    /*@ public behavior
+      @   ensures true;
+      @*/
+    public static double predictHeat(int level, int factor) {
+        int adjusted = level;
+        double heat = 0.0;
+        boolean normal = true;
+        int offset = 3;
+
+        adjusted += 6;
+        adjusted *= 2;
+        adjusted -= offset;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 20) {
+            adjusted += 5;
+
+            if (factor <= 8) {
+                adjusted = adjusted + factor;
+
+                if (level < 5) {
+                    int divisor = factor - 8;
+                    heat = (double) adjusted / divisor;
+                } else {
+                    adjusted += 7;
+                    heat = adjusted * 1.1;
+                    normal = false;
+                }
+
+                if (heat > 100) {
+                    heat = heat * 0.85;
+                } else {
+                    heat = heat + 12;
+                }
+
+            } else {
+                adjusted -= 4;
+                heat = adjusted * 0.9;
+                normal = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (factor < 3) {
+                adjusted += 5;
+                heat = adjusted * 0.75;
+            } else {
+                heat = adjusted * 0.8;
+                normal = false;
+            }
+
+            if (heat < 25) {
+                heat = heat + 5;
+            } else {
+                heat = heat * 0.96;
+            }
+        }
+
+        double correction = normal ? 1.1 : 0.84;
+        double finalHeat = heat * correction + adjusted * 0.05;
+        System.out.println("Heat result: " + finalHeat);
+        return finalHeat;
+    }
+}
+==============================
+tmp/HeatPredictor.java:6: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static double predictHeat(int level, int factor) {
+                         ^
+1 verification failure
+
+==============================
+public class HeatPredictor {
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures true;
+      @   assignable \everything;
+      @*/
+    //@ skipesc
+    public static double predictHeat(int level, int factor) {
+        int adjusted = level;
+        double heat = 0.0;
+        boolean normal = true;
+        int offset = 3;
+
+        adjusted += 6;
+        adjusted *= 2;
+        adjusted -= offset;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 20) {
+            adjusted += 5;
+
+            if (factor <= 8) {
+                adjusted = adjusted + factor;
+
+                if (level < 5) {
+                    int divisor = factor - 8;
+                    heat = (double) adjusted / divisor;
+                } else {
+                    adjusted += 7;
+                    heat = adjusted * 1.1;
+                    normal = false;
+                }
+
+                if (heat > 100) {
+                    heat = heat * 0.85;
+                } else {
+                    heat = heat + 12;
+                }
+
+            } else {
+                adjusted -= 4;
+                heat = adjusted * 0.9;
+                normal = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (factor < 3) {
+                adjusted += 5;
+                heat = adjusted * 0.75;
+            } else {
+                heat = adjusted * 0.8;
+                normal = false;
+            }
+
+            if (heat < 25) {
+                heat = heat + 5;
+            } else {
+                heat = heat * 0.96;
+            }
+        }
+
+        double correction = normal ? 1.1 : 0.84;
+        double finalHeat = heat * correction + adjusted * 0.05;
+        System.out.println("Heat result: " + finalHeat);
+        return finalHeat;
+    }
+}
+==============================
+
+==============================

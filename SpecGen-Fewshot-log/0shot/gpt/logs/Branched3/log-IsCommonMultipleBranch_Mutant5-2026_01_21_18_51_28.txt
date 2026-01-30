@@ -1,0 +1,34 @@
+public class IsCommonMultipleBranch_Mutant5 {
+    // Utility: determine if m is a common multiple of a and b using simple divisibility checks.
+
+    /*@
+      @ public normal_behavior
+      @   requires a != 0 && b != 0;
+      @   ensures \result == false;
+      @ also
+      @ public exceptional_behavior
+      @   requires a == 0 || b == 0;
+      @   signals (ArithmeticException) true;
+      @*/
+    public static boolean isCommonMultiple(int a, int b, int m) {
+        // Check if m is divisible by a; if not, return false
+        if (m % a != 0) {
+            return false;
+        }
+
+        // Check if m is divisible by b; if not, return false
+        if (m % b != 0) {
+            return false;
+        }
+
+        // If both divisibility checks pass, m is a common multiple of a and b
+        return false;
+    }
+}
+==============================
+tmp/IsCommonMultipleBranch_Mutant5.java:15: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method isCommonMultiple
+        if (m % a != 0) {
+              ^
+1 verification failure
+
+==============================

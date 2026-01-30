@@ -1,0 +1,52 @@
+public class Power2Bit {
+    /*@ public normal_behavior
+      @   ensures ((\old(n) < 0 ? -\old(n) : \old(n)) < 6) ==> 
+      @           (\result == String.valueOf((int)Math.pow(2, (\old(n) < 0 ? -\old(n) : \old(n)) + 1)).length() + 
+      @           (((\old(n) < 0 ? -\old(n) : \old(n)) >= 3 && (int)Math.pow(2, 4) > 88) ? 2 : 0));
+      @   ensures ((\old(n) < 0 ? -\old(n) : \old(n)) >= 6) ==> (\result == String.valueOf(8).length() + 1);
+      @   assignable \nothing;
+      @*/
+    public static int power2Bit(int n) {
+        int x = 2;
+        int MAX_LENGTH = 8;
+        int MKS = 88;
+        int base = 0;
+        int res = 1;
+        String s = null;
+        if(n < 0){
+            n = -n;
+        }
+        if(n >= 0){
+            if(n < 6){
+                /*@ maintaining 0 <= i && i <= n + 1;
+                  @ maintaining res == (int)Math.pow(2, i);
+                  @ maintaining i > 0 ==> s != null && s.equals(String.valueOf(res));
+                  @ maintaining (i > 3 && (int)Math.pow(2, 4) > MKS) ? base == 2 : base == 0;
+                  @ decreases n - i;
+                  @*/
+                for(int i = 0; i <= n; i++){
+                    res = res * x;
+                    String resStr = new String(String.valueOf(res));
+                    s = resStr;
+                    if(i == 3 && res > MKS){
+                        base = 2;
+                    }
+                }
+            }else{
+                res = MAX_LENGTH;
+                String resStr = new String(String.valueOf(res));
+                s = resStr;
+                base = 1;
+            }
+        }
+        res = s.length();
+        return res + base;
+    }
+}
+==============================
+tmp/Power2Bit_S.java:1: error: class Power2Bit is public, should be declared in a file named Power2Bit.java
+public class Power2Bit {
+       ^
+1 error
+
+==============================

@@ -1,0 +1,171 @@
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   // If the loop does not execute (n < 0), the method returns the initial accumulator.
+      @   ensures n < 0 ==> \result == 1;
+      @   // If n >= 0, the loop multiplies by x exactly (n+1) times: product over k=0..n.
+      @   ensures n >= 0 ==> \result == (int)(\product int k; 0 <= k && k <= n; (\bigint)x);
+      @*/
+    public static int power(int x, int n) {
+        int res = 1;
+        /*@ maintaining n < 0 ==> (i == 0 && res == 1);
+          @ maintaining n >= 0 ==> (0 <= i && i <= n + 1);
+          @ maintaining n >= 0 ==> res == (int)(\product int k; 0 <= k && k < i; (\bigint)x);
+          @ decreases (n >= 0 ? (n - i + 1) : 0);
+          @*/
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Mutant4.java:17: verify: The prover cannot establish an assertion (ArithmeticCastRange) in method power
+          @ maintaining n >= 0 ==> res == (int)(\product int k; 0 <= k && k < i; (\bigint)x);
+                                          ^
+1 verification failure
+
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   // If the loop does not execute (n < 0), the method returns the initial accumulator.
+      @   ensures n < 0 ==> \result == 1;
+      @
+      @   // To avoid reasoning about Java int overflow, we require that all intermediate
+      @   // and final mathematical results fit into the int range.
+      @   requires n < 0 || (\forall int e; 0 <= e && e <= n+1;
+      @                        Integer.MIN_VALUE <= pow_bigint(x,e) && pow_bigint(x,e) <= Integer.MAX_VALUE);
+      @
+      @   // If n >= 0, the loop multiplies by x exactly (n+1) times.
+      @   ensures n >= 0 ==> \bigint(\result) == pow_bigint(x, n+1);
+      @*/
+    public static int power(int x, int n) {
+        int res = 1;
+        /*@ maintaining n < 0 ==> (i == 0 && res == 1);
+          @ maintaining n >= 0 ==> (0 <= i && i <= n + 1);
+          @ maintaining n >= 0 ==> \bigint(res) == pow_bigint(x, i);
+          @ decreases (n >= 0 ? (n - i + 1) : 0);
+          @*/
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+
+    /*@ public model static pure \bigint pow_bigint(int x, int e) {
+      @     if (e <= 0) return (\bigint)1;
+      @     else return (\bigint)x * pow_bigint(x, e-1);
+      @ }
+      @*/
+}
+==============================
+tmp/MyPower_Mutant4.java:18: error: Incorrectly formed or terminated ensures statement near here
+      @   ensures n >= 0 ==> \bigint(\result) == pow_bigint(x, n+1);
+                                    ^
+tmp/MyPower_Mutant4.java:24: error: Incorrectly formed or terminated loop_invariant statement near here
+          @ maintaining n >= 0 ==> \bigint(res) == pow_bigint(x, i);
+                                          ^
+2 errors
+
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @
+      @   // If the loop does not execute (n < 0), the method returns the initial accumulator.
+      @   ensures n < 0 ==> \result == 1;
+      @
+      @   // To match Java int arithmetic without overflow, require that every intermediate
+      @   // mathematical product fits into the int range.
+      @   requires n < 0
+      @        || (\forall int e; 0 <= e && e <= n+1;
+      @              Integer.MIN_VALUE <= (\product int k; 0 <= k && k < e; (\bigint)x)
+      @           && (\product int k; 0 <= k && k < e; (\bigint)x) <= Integer.MAX_VALUE);
+      @
+      @   // For n >= 0, the loop multiplies by x exactly (n+1) times.
+      @   ensures n >= 0 ==> (\bigint)\result
+      @                    == (\product int k; 0 <= k && k <= n; (\bigint)x);
+      @*/
+    public static int power(int x, int n) {
+        int res = 1;
+        /*@ maintaining n < 0 ==> (i == 0 && res == 1);
+          @ maintaining n >= 0 ==> (0 <= i && i <= n + 1);
+          @ maintaining n >= 0 ==> (\bigint)res
+          @                       == (\product int k; 0 <= k && k < i; (\bigint)x);
+          @ decreases (n >= 0 ? (n - i + 1) : 0);
+          @*/
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Mutant4.java:27: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method power
+          @ maintaining n >= 0 ==> (\bigint)res
+            ^
+1 verification failure
+
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @
+      @   // If the loop does not execute (n < 0), the method returns the initial accumulator.
+      @   ensures n < 0 ==> \result == 1;
+      @
+      @   // To match Java int arithmetic without overflow, require that every intermediate
+      @   // mathematical product fits into the int range.
+      @   requires n < 0
+      @        || (\forall int e; 0 <= e && e <= n+1;
+      @              Integer.MIN_VALUE <= (\product int k; 0 <= k && k < e; (\bigint)x)
+      @           && (\product int k; 0 <= k && k < e; (\bigint)x) <= Integer.MAX_VALUE);
+      @
+      @   // For n >= 0, the loop multiplies by x exactly (n+1) times.
+      @   ensures n >= 0 ==> (\bigint)\result
+      @                    == (\product int k; 0 <= k && k <= n; (\bigint)x);
+      @*/
+    public static int power(int x, int n) {
+        int res = 1;
+        /*@ maintaining n < 0 ==> (i == 0 && res == 1);
+          @ maintaining n >= 0 ==> (0 <= i && i <= n + 1);
+          @ maintaining n > 0 ==> (\bigint)res  
+          @                       == (\product int k; 0 <= k && k < i; (\bigint)x);
+          @ decreases (n >= 0 ? (n - i + 1) : 0);
+          @*/
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+}
+
+==============================
+tmp/MyPower_Mutant4.java:27: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method power
+          @ maintaining n > 0 ==> (\bigint)res  
+            ^
+1 verification failure
+
+==============================

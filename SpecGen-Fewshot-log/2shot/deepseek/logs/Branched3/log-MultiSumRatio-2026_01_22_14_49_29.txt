@@ -1,0 +1,111 @@
+public class MultiSumRatio {
+    //@ ensures \result == (x * y) / (x + y) * tmpFactor;
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining sum == x + (y - n);
+            //@ maintaining factor == 1 + (\sum int i; 0 <= i && i < (y - n); (y - i));
+            //@ maintaining n >= 0;
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining sum == x - ((-y) - n);
+            //@ maintaining factor == 1 + (\sum int i; 0 <= i && i < ((-y) - n); ((-y) - i));
+            //@ maintaining n >= 0;
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        int tmpFactor = 0;
+        //@ maintaining tmpFactor == (\sum int i; 0 <= i && i < \count; 1);
+        //@ maintaining factor >= 0;
+        //@ decreases factor;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+==============================
+tmp/MultiSumRatio.java:2: error: cannot find symbol
+    //@ ensures \result == (x * y) / (x + y) * tmpFactor;
+                                               ^
+  symbol:   variable tmpFactor
+  location: class MultiSumRatio
+1 error
+
+==============================
+public class MultiSumRatio {
+    //@ ensures \result == (x * y) / (x + y) * tmpFactor;  
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining sum == x + (y - n);
+            //@ maintaining factor == 1 + (\sum int i; 0 <= i && i < (y - n); (y - i));
+            //@ maintaining n >= 0;
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining sum == x - ((-y) - n);
+            //@ maintaining factor == 1 + (\sum int i; 0 <= i && i < ((-y) - n); ((-y) - i));
+            //@ maintaining n >= 0;
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        int tmpFactor = 0;
+        //@ maintaining tmpFactor == (\sum int i; 0 <= i && i < \count; 1);
+        //@ maintaining factor >= 0;
+        //@ decreases factor;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+
+==============================
+tmp/MultiSumRatio.java:2: error: cannot find symbol
+    //@ ensures \result == (x * y) / (x + y) * tmpFactor;  
+                                               ^
+  symbol:   variable tmpFactor
+  location: class MultiSumRatio
+1 error
+
+==============================

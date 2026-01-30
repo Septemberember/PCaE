@@ -1,0 +1,65 @@
+public class GetUpCaseLoop_Mutant3 {
+    // Compute the corresponding uppercase letter for a lowercase input, if applicable.
+    /*@ public normal_behavior
+      @   ensures (c < 'f' || c > 'z') ==> \result == (char)0;
+      @   ensures ('f' <= c && c <= 'z') ==> \result == (char)(c - 'a' + 'A');
+      @   ensures ('f' <= c && c <= 'z') ==> ('F' <= \result && \result <= 'Z');
+      @*/
+    public static char getUpCase(char c) {
+        // Validate the input character: only lowercase 'a'..'z' are considered.
+        if(c < 'f' || c > 'z') {
+            return 0;
+        }
+        // Start with the uppercase offset from 'A'
+        char t = 'F';
+        // Iterate until we reach the target uppercase character corresponding to c
+        /*@ maintaining 'F' <= t && t <= (char)('Z' + 1);
+          @ maintaining t == 'F' + (\num_of int k; 'F' <= k && k < t; 1);
+          @ maintaining (t <= 'Z' && t != (char)(c - 'a' + 'A')) ==> (t < (char)(c - 'a' + 'A'));
+          @ decreases (int)((char)('Z' + 1) - t);
+          @*/
+        while(t <= 'Z' && t != c - 'a' + 'A') {
+            t++;
+        }
+        // Return the computed uppercase character
+        return t;
+    }
+}
+==============================
+tmp/GetUpCaseLoop_Mutant3.java:17: error: incompatible types: int cannot be converted to boolean
+          @ maintaining t == 'F' + (\num_of int k; 'F' <= k && k < t; 1);
+                                                                      ^
+1 error
+
+==============================
+public class GetUpCaseLoop_Mutant3 {
+    // Compute the corresponding uppercase letter for a lowercase input, if applicable.
+    /*@ public normal_behavior
+      @   ensures (c < 'f' || c > 'z') ==> \result == (char)0;
+      @   ensures ('f' <= c && c <= 'z') ==> \result == (char)(c - 'a' + 'A');
+      @   ensures ('f' <= c && c <= 'z') ==> ('F' <= \result && \result <= 'Z');
+      @*/
+    public static char getUpCase(char c) {
+        // Validate the input character: only lowercase 'a'..'z' are considered.
+        if(c < 'f' || c > 'z') {
+            return 0;
+        }
+        // Start with the uppercase offset from 'A'
+        char t = 'F';
+        //@ ghost char target = (char)(c - 'a' + 'A');
+        // Iterate until we reach the target uppercase character corresponding to c
+        /*@ maintaining target == (char)(c - 'a' + 'A');
+          @ maintaining 'F' <= target && target <= 'Z';
+          @ maintaining 'F' <= t && t <= target;
+          @ decreases (int)(target - t);
+          @*/
+        while(t <= 'Z' && t != c - 'a' + 'A') {
+            t++;
+        }
+        // Return the computed uppercase character
+        return t;
+    }
+}
+==============================
+
+==============================

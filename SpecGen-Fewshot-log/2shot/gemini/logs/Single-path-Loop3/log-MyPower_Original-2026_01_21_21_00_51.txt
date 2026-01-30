@@ -1,0 +1,57 @@
+public class MyPower_Original {
+    // Simple utility to compute integer powers iteratively
+    // Keeps multiplication-based result straightforward and efficient
+    //@ requires n >= 0;
+    //@ ensures \result == (int) \Math.pow(x, n);
+    public static int power(int x, int n) {
+        int res = 1;
+        // Begin iterative exponentiation: multiply x by itself n times
+        /*@ maintaining 0 <= i && i <= n;
+          @ maintaining res == (int) \Math.pow(x, i);
+          @ decreases n - i;
+          @*/
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Original.java:5: error: This backslash token is unknown: \Math
+    //@ ensures \result == (int) \Math.pow(x, n);
+                                 ^
+tmp/MyPower_Original.java:10: error: This backslash token is unknown: \Math
+          @ maintaining res == (int) \Math.pow(x, i);
+                                     ^
+2 errors
+
+==============================
+public class MyPower_Original {
+    // Simple utility to compute integer powers iteratively
+    // Keeps multiplication-based result straightforward and efficient
+    //@ requires n >= 0;
+    //@ ensures \result == (int) \Math.pow(x, n);  
+    public static int power(int x, int n) {
+        int res = 1;
+        // Begin iterative exponentiation: multiply x by itself n times
+        /*@ maintaining 0 <= i && i <= n;
+          @ maintaining res == (int) \Math.pow(x, i);  
+          @ decreases n - i;
+          @*/
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        return res;
+    }
+}
+
+==============================
+tmp/MyPower_Original.java:5: error: This backslash token is unknown: \Math
+    //@ ensures \result == (int) \Math.pow(x, n);  
+                                 ^
+tmp/MyPower_Original.java:10: error: This backslash token is unknown: \Math
+          @ maintaining res == (int) \Math.pow(x, i);  
+                                     ^
+2 errors
+
+==============================

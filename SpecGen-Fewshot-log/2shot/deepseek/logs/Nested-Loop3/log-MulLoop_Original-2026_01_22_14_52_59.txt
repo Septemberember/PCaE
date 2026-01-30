@@ -1,0 +1,79 @@
+/**
+ * Utility: compute multiplication using repeated addition.
+ * This class demonstrates a straightforward, loop-based approach.
+ */
+public class MulLoop_Original {
+
+	// Public API: multiply two integers by repeated addition.
+	//@ requires Integer.MIN_VALUE <= a * b && a * b <= Integer.MAX_VALUE;
+	//@ ensures \result == a * b;
+	public static int mulLoop(int a, int b) {
+        // Result accumulator
+        int res = 0;
+        if (b >= 0) {
+            // When multiplier is non-negative, add 'a' exactly 'b' times
+            //@ maintaining res == a * i && 0 <= i && i <= b;
+            //@ decreases b - i;
+            for(int i = 0; i < b; i++) {
+                res = res + a;
+            }
+        } else {
+            // When multiplier is negative, subtract 'a' for each of the  |b| iterations
+            //@ maintaining res == a * b + a * i && 0 <= i && i <= -b;
+            //@ decreases -b - i;
+            for(int i = 0; i < -b; i++) {
+                res = res - a;
+            }
+        }
+        // Return the computed product
+        return res;
+    }
+
+}
+==============================
+tmp/MulLoop_Original.java:22: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method mulLoop
+            //@ maintaining res == a * b + a * i && 0 <= i && i <= -b;
+                ^
+1 verification failure
+
+==============================
+/**
+ * Utility: compute multiplication using repeated addition.
+ * This class demonstrates a straightforward, loop-based approach.
+ */
+public class MulLoop_Original {
+
+	// Public API: multiply two integers by repeated addition.
+	//@ requires Integer.MIN_VALUE <= a * b && a * b <= Integer.MAX_VALUE;
+	//@ ensures \result == a * b;
+	public static int mulLoop(int a, int b) {
+        // Result accumulator
+        int res = 0;
+        if (b >= 0) {
+            // When multiplier is non-negative, add 'a' exactly 'b' times
+            //@ maintaining res == a * i && 0 <= i && i <= b;
+            //@ decreases b - i;
+            for(int i = 0; i < b; i++) {
+                res = res + a;
+            }
+        } else {
+            // When multiplier is negative, subtract 'a' for each of the  |b| iterations
+            //@ maintaining res == a * b + a * i && 0 < i && i < -b;  
+            //@ decreases -b - i;
+            for(int i = 0; i < -b; i++) {
+                res = res - a;
+            }
+        }
+        // Return the computed product
+        return res;
+    }
+
+}
+
+==============================
+tmp/MulLoop_Original.java:22: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method mulLoop
+            //@ maintaining res == a * b + a * i && 0 < i && i < -b;  
+                ^
+1 verification failure
+
+==============================

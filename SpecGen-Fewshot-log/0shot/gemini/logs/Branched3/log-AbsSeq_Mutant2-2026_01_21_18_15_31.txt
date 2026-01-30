@@ -1,0 +1,23 @@
+public class AbsSeq_Mutant2 {
+    // AbsSeq_Mutant2: helper for absolute value computation
+
+    /*@ public normal_behavior
+      @   requires num > Integer.MIN_VALUE;
+      @   ensures (num >= 0 ==> \result == num) && (num < 0 ==> \result == -num);
+      @   ensures \result >= 0;
+      @   assignable \nothing;
+      @*/
+    public static int Abs(int num) {
+        // Compute absolute value: negate when negative
+        if (num < 0) {
+            // Flip sign for negative values
+            return num * -1;
+        } else {
+            // Positive or zero remains unchanged
+            return num;
+        }
+    }
+}
+==============================
+
+==============================

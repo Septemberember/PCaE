@@ -1,0 +1,253 @@
+public class MultiSumRatio {
+    /*@ public normal_behavior
+      @   requires y != Integer.MIN_VALUE; // to avoid overflow in y = -y when y < 0
+      @   requires (\let int Y = ((\old(y) < 0) ? -\old(y) : \old(y));
+      @               0 <= Y && Y <= 65536
+      @            && Integer.MIN_VALUE <= (\bigint)x + (\bigint)Y
+      @            && (\bigint)x + (\bigint)Y <= Integer.MAX_VALUE
+      @            && ((\bigint)x + (\bigint)Y) != 0
+      @            && Integer.MIN_VALUE <= (\bigint)x * (\bigint)Y
+      @            && (\bigint)x * (\bigint)Y <= Integer.MAX_VALUE
+      @            && (\exists int t; 0 <= t
+      @                 && (1 + ((\bigint)Y * ((\bigint)Y - 1)) / 2)
+      @                      / (\product int i; 0 <= i && i < t; 10) <= 10
+      @                 && (t == 0
+      @                     || (1 + ((\bigint)Y * ((\bigint)Y - 1)) / 2)
+      @                          / (\product int i; 0 <= i && i < (t-1); 10) > 10)
+      @                 && Integer.MIN_VALUE <=
+      @                      (((\bigint)x * (\bigint)Y) / ((\bigint)x + (\bigint)Y)) * (\bigint)t
+      @                 && (((\bigint)x * (\bigint)Y) / ((\bigint)x + (\bigint)Y)) * (\bigint)t
+      @                      <= Integer.MAX_VALUE
+      @               )
+      @           );
+      @   ensures (\let int Y = ((\old(y) < 0) ? -\old(y) : \old(y));
+      @            (\let \bigint S  = (\bigint)x + (\bigint)Y;
+      @             (\let \bigint F0 = 1 + ((\bigint)Y * ((\bigint)Y - 1)) / 2;
+      @              (\exists int t; 0 <= t
+      @                && F0 / (\product int i; 0 <= i && i < t; 10) <= 10
+      @                && (t == 0 || F0 / (\product int i; 0 <= i && i < (t-1); 10) > 10)
+      @                && \result == (int)((( (\bigint)x * (\bigint)Y) / S) * (\bigint)t)
+      @              ))));
+      @*/
+    /*@ pure @*/ public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining 0 <= n && n <= y;
+            //@ maintaining sum == x + (y - n);
+            //@ maintaining (\bigint)factor == 1 + (((\bigint)(y - n)) * ((\bigint)(y + n - 1))) / 2;
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining 0 <= n && n <= -y;
+            //@ maintaining sum == x - ((-y) - n);
+            //@ maintaining (\bigint)factor == 1 + (((\bigint)((-y) - n)) * ((\bigint)((-y) + n - 1))) / 2;
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        int tmpFactor = 0;
+        //@ ghost int origFactor = factor;
+        //@ maintaining origFactor > 0;
+        //@ maintaining tmpFactor >= 0;
+        //@ maintaining (\bigint)factor == (\bigint)origFactor / (\product int i; 0 <= i && i < tmpFactor; 10);
+        //@ decreases factor;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+==============================
+tmp/MultiSumRatio.java:4: error: A \old token with no label may not be present in a requires clause
+      @   requires (\let int Y = ((\old(y) < 0) ? -\old(y) : \old(y));
+                                        ^
+tmp/MultiSumRatio.java:4: error: A \old token with no label may not be present in a requires clause
+      @   requires (\let int Y = ((\old(y) < 0) ? -\old(y) : \old(y));
+                                                        ^
+tmp/MultiSumRatio.java:4: error: A \old token with no label may not be present in a requires clause
+      @   requires (\let int Y = ((\old(y) < 0) ? -\old(y) : \old(y));
+                                                                  ^
+tmp/MultiSumRatio.java:4: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @   requires (\let int Y = ((\old(y) < 0) ? -\old(y) : \old(y));
+                             ^
+  Reason: Exception attributing VariableDecl //@ int Y = ((\old(y) < 0) ? -\old(y) : \old(y))
+java.lang.NullPointerException: Cannot invoke "com.sun.tools.javac.tree.JCTree.hasTag(com.sun.tools.javac.tree.JCTree$Tag)" because "tree" is null
+	at jdk.compiler/com.sun.tools.javac.tree.TreeInfo.skipParens(TreeInfo.java:841)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeInfo.symbol(TreeInfo.java:953)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.isBooleanOrNumeric(Attr.java:1962)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.isBooleanOrNumeric(JmlAttr.java:7906)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.isBooleanOrNumeric(Attr.java:1956)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.isBooleanOrNumeric(JmlAttr.java:7906)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitConditional(Attr.java:1893)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitConditional(JmlAttr.java:4786)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCConditional.accept(JCTree.java:1472)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitParens(Attr.java:3826)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCParens.accept(JCTree.java:1969)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribExpr(Attr.java:726)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribExpr(JmlAttr.java:7570)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitVarDef(Attr.java:1327)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlVariableDecl(JmlAttr.java:7410)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlVariableDecl.accept(JmlTree.java:1517)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribStat(Attr.java:754)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribStat(JmlAttr.java:581)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribStats(Attr.java:773)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitLetExpr(JmlAttr.java:4486)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlLetExpr.accept(JmlTree.java:4131)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitParens(Attr.java:3826)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCParens.accept(JCTree.java:1969)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribExpr(Attr.java:726)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribExpr(JmlAttr.java:7570)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlMethodClauseExpr(JmlAttr.java:3848)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodClauseExpr.accept(JmlTree.java:2501)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlSpecificationCase(JmlAttr.java:4195)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlSpecificationCase.accept(JmlTree.java:3046)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlMethodSpecs(JmlAttr.java:4270)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodSpecs.accept(JmlTree.java:2709)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attrSpecs(JmlAttr.java:8110)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribMethodSpecsAndBody(JmlAttr.java:1468)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitMethodDef(Attr.java:1243)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitMethodDef(JmlAttr.java:1349)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlMethodDecl(JmlAttr.java:7323)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodDecl.accept(JmlTree.java:1383)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribStat(Attr.java:754)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribStat(JmlAttr.java:581)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribClassBody(Attr.java:5378)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribClassBody(JmlAttr.java:557)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribClass(Attr.java:5269)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribClass(JmlAttr.java:423)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribClass(Attr.java:5107)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attrib(Attr.java:5052)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.attribute(JavaCompiler.java:1320)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.attribute(JmlCompiler.java:304)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.compile(JavaCompiler.java:936)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.compile(JmlCompiler.java:197)
+	at jdk.compiler/com.sun.tools.javac.main.Main.compile(Main.java:321)
+	at jdk.compiler/org.jmlspecs.openjml.Main.compile(Main.java:534)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:374)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:332)
+	at jdk.compiler/org.jmlspecs.openjml.Main.main(Main.java:295)
+	at jdk.compiler/com.sun.tools.javac.Main.main(Main.java:53)
+com.sun.tools.javac.util.PropagatedException: java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke "com.sun.tools.javac.tree.JCTree.hasTag(com.sun.tools.javac.tree.JCTree$Tag)" because "tree" is null
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlVariableDecl(JmlAttr.java:7517)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlVariableDecl.accept(JmlTree.java:1517)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribStat(Attr.java:754)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribStat(JmlAttr.java:581)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribStats(Attr.java:773)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitLetExpr(JmlAttr.java:4486)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlLetExpr.accept(JmlTree.java:4131)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitParens(Attr.java:3826)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCParens.accept(JCTree.java:1969)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribExpr(Attr.java:726)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribExpr(JmlAttr.java:7570)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlMethodClauseExpr(JmlAttr.java:3848)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodClauseExpr.accept(JmlTree.java:2501)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlSpecificationCase(JmlAttr.java:4195)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlSpecificationCase.accept(JmlTree.java:3046)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlMethodSpecs(JmlAttr.java:4270)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodSpecs.accept(JmlTree.java:2709)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attrSpecs(JmlAttr.java:8110)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribMethodSpecsAndBody(JmlAttr.java:1468)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitMethodDef(Attr.java:1243)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitMethodDef(JmlAttr.java:1349)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlMethodDecl(JmlAttr.java:7323)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodDecl.accept(JmlTree.java:1383)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribStat(Attr.java:754)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribStat(JmlAttr.java:581)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribClassBody(Attr.java:5378)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribClassBody(JmlAttr.java:557)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribClass(Attr.java:5269)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribClass(JmlAttr.java:423)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribClass(Attr.java:5107)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attrib(Attr.java:5052)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.attribute(JavaCompiler.java:1320)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.attribute(JmlCompiler.java:304)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.compile(JavaCompiler.java:936)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.compile(JmlCompiler.java:197)
+	at jdk.compiler/com.sun.tools.javac.main.Main.compile(Main.java:321)
+	at jdk.compiler/org.jmlspecs.openjml.Main.compile(Main.java:534)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:374)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:332)
+	at jdk.compiler/org.jmlspecs.openjml.Main.main(Main.java:295)
+	at jdk.compiler/com.sun.tools.javac.Main.main(Main.java:53)
+Caused by: java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke "com.sun.tools.javac.tree.JCTree.hasTag(com.sun.tools.javac.tree.JCTree$Tag)" because "tree" is null
+	... 49 more
+Caused by: java.lang.NullPointerException: Cannot invoke "com.sun.tools.javac.tree.JCTree.hasTag(com.sun.tools.javac.tree.JCTree$Tag)" because "tree" is null
+	at jdk.compiler/com.sun.tools.javac.tree.TreeInfo.skipParens(TreeInfo.java:841)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeInfo.symbol(TreeInfo.java:953)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.isBooleanOrNumeric(Attr.java:1962)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.isBooleanOrNumeric(JmlAttr.java:7906)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.isBooleanOrNumeric(Attr.java:1956)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.isBooleanOrNumeric(JmlAttr.java:7906)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitConditional(Attr.java:1893)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitConditional(JmlAttr.java:4786)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCConditional.accept(JCTree.java:1472)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitParens(Attr.java:3826)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCParens.accept(JCTree.java:1969)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribExpr(Attr.java:726)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribExpr(JmlAttr.java:7570)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitVarDef(Attr.java:1327)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlVariableDecl(JmlAttr.java:7410)
+	... 48 more
+EXZCEPTION ON STAT MultiSumRatio //@ int Y = ((\old(y) < 0) ? -\old(y) : \old(y)) RNV: Env[AttrContext[Scope[Y |  | y, x | super, this]],outer=Env[AttrContext[Scope[MultiSumRatio]]]]
+MISMATCHED JMLENV
+java.lang.RuntimeException
+	at jdk.compiler/org.jmlspecs.openjml.Utils.dumpStack(Utils.java:1988)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr$JmlEnv.pop(JmlAttr.java:8447)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribClass(JmlAttr.java:462)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribClass(Attr.java:5107)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attrib(Attr.java:5052)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.attribute(JavaCompiler.java:1320)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.attribute(JmlCompiler.java:304)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.compile(JavaCompiler.java:936)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.compile(JmlCompiler.java:197)
+	at jdk.compiler/com.sun.tools.javac.main.Main.compile(Main.java:321)
+	at jdk.compiler/org.jmlspecs.openjml.Main.compile(Main.java:534)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:374)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:332)
+	at jdk.compiler/org.jmlspecs.openjml.Main.main(Main.java:295)
+	at jdk.compiler/com.sun.tools.javac.Main.main(Main.java:53)
+4 errors
+
+==============================

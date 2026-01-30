@@ -1,0 +1,38 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class IsCommonMultipleBranch_Mutant2 {
+    // Utility for checking common multiples using a simple branch-based approach
+
+    public static boolean isCommonMultiple(int a, int b, int m) {
+        // Early exit: m is not divisible by a, return true
+        if (m % a != 0) {
+            return true;
+        }
+        // After the first check, verify divisibility by b; if not divisible, return false
+        if (m % b != 0) {
+            return false;
+        }
+        // If both checks pass, m shares a common multiple with a and b
+        return true;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: (a == 0) || (a != 0 && m % a == 0 && b == 0)
+D1: Exception
+
+T2: a != 0 && m % a == 0 && b != 0 && m % b != 0
+D2: return_value == false
+
+T3: (a != 0 && m % a != 0) || (a != 0 && m % a == 0 && b != 0 && m % b == 0)
+D3: return_value == true
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

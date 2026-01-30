@@ -1,0 +1,8 @@
+experimentName: 20260127-RQ3-Evo-Test
+model: openai/gpt-5.2
+category: EXCHANGE_D
+total number: 35
+success number: 34
+success rate: 97.14%
+failed number: 0
+exception number: 1

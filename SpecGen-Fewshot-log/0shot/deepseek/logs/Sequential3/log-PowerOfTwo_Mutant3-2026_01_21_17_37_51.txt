@@ -1,0 +1,47 @@
+public class PowerOfTwo_Mutant3 {
+ // Utility: power-of-two check utility class
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures \result == (n > 1 && (n & (n - 1)) == 0);
+      @   ensures \result == (n > 0 && (n & (n - 1)) == 0);
+      @*/
+    public static boolean isPowerOfTwo(int n) {
+        // Fast check using bitwise trick
+        return n > 1 && (n & (n - 1)) == 0;
+    }
+}
+==============================
+tmp/PowerOfTwo_Mutant3.java:11: verify: The prover cannot establish an assertion (Postcondition: tmp/PowerOfTwo_Mutant3.java:7:) in method isPowerOfTwo
+        return n > 1 && (n & (n - 1)) == 0;
+        ^
+tmp/PowerOfTwo_Mutant3.java:7: verify: Associated declaration: tmp/PowerOfTwo_Mutant3.java:11:
+      @   ensures \result == (n > 0 && (n & (n - 1)) == 0);
+          ^
+2 verification failures
+
+==============================
+public class PowerOfTwo_Mutant3 {
+ // Utility: power-of-two check utility class
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures \result == (n > 1 && (n & (n - 1)) == 0);
+      @   ensures \result == (n > 0 && (n & (n - 1)) == 0);  
+      @*/
+    public static boolean isPowerOfTwo(int n) {
+        // Fast check using bitwise trick
+        return n > 1 && (n & (n - 1)) == 0;
+    }
+}
+
+==============================
+tmp/PowerOfTwo_Mutant3.java:11: verify: The prover cannot establish an assertion (Postcondition: tmp/PowerOfTwo_Mutant3.java:7:) in method isPowerOfTwo
+        return n > 1 && (n & (n - 1)) == 0;
+        ^
+tmp/PowerOfTwo_Mutant3.java:7: verify: Associated declaration: tmp/PowerOfTwo_Mutant3.java:11:
+      @   ensures \result == (n > 0 && (n & (n - 1)) == 0);  
+          ^
+2 verification failures
+
+==============================

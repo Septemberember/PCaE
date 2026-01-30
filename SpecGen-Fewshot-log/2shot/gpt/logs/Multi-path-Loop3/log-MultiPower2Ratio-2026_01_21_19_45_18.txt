@@ -1,0 +1,223 @@
+public class MultiPower2Ratio {
+    /*@ public normal_behavior
+      @   requires y != Integer.MIN_VALUE;
+      @   requires spec_multiSumRatio((\bigint)x, (\bigint)y) >= Integer.MIN_VALUE
+      @         && spec_multiSumRatio((\bigint)x, (\bigint)y) <= Integer.MAX_VALUE;
+      @   ensures \result == (int) spec_multiSumRatio((\bigint)x, (\bigint)y);
+      @*/
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        //@ ghost int yNorm = y;
+        if (y > 0) {
+            int n = y;
+            //@ ghost int iter = 0;
+            /*@ maintaining 0 <= n && n <= yNorm;
+              @ maintaining 0 <= iter;
+              @ maintaining sum == x + iter;
+              @ maintaining (\bigint)factor == 1 + spec_inc((\bigint)yNorm) - spec_inc((\bigint)n);
+              @ maintaining (\bigint)iter == spec_iterCount((\bigint)yNorm) - spec_iterCount((\bigint)n);
+              @ decreases n;
+              @*/
+            while (n > 0) {
+                sum = sum + 1;
+                n = n / 2;
+                factor += n;
+                //@ set iter = iter + 1;
+            }
+        } else {
+            int n = -y;
+            /*@ maintaining n >= 0;
+              @ maintaining yNorm == 0;
+              @ decreases n;
+              @*/
+            while (n > 0) {
+                sum = sum - 1;
+                n = n / 2;
+                factor += n;
+            }
+        }
+        int tmpFactor = 1;
+        //@ ghost int factor0 = factor;
+        //@ ghost int k = 0;
+        /*@ maintaining factor >= 1;
+          @ maintaining 0 <= k;
+          @ maintaining tmpFactor == 1 + k;
+          @ maintaining (\bigint)factor == (\bigint)factor0 / spec_pow10((\bigint)k);
+          @ decreases factor;
+          @*/
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+            //@ set k = k + 1;
+        }
+        int multi = x * y;
+        if(sum < 0){
+            sum = sum * -1;
+        }
+        sum = sum + tmpFactor;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+
+    /*@ public model static pure \bigint spec_yNorm(\bigint y) {
+      @   return (y < 0 ? -y : y);
+      @ } @*/
+
+    /*@ public model static pure \bigint spec_iterCount(\bigint n) {
+      @   return (n > 0 ? 1 + spec_iterCount(n / 2) : 0);
+      @ } @*/
+
+    /*@ public model static pure \bigint spec_inc(\bigint n) {
+      @   return (n > 0 ? (n / 2) + spec_inc(n / 2) : 0);
+      @ } @*/
+
+    /*@ public model static pure \bigint spec_factor(\bigint yNorm) {
+      @   return 1 + spec_inc(yNorm);
+      @ } @*/
+
+    /*@ public model static pure \bigint spec_tmpFactor(\bigint f) {
+      @   return (f > 10 ? 1 + spec_tmpFactor(f / 10) : 1);
+      @ } @*/
+
+    /*@ public model static pure \bigint spec_pow10(\bigint k) {
+      @   return (k <= 0 ? 1 : 10 * spec_pow10(k - 1));
+      @ } @*/
+
+    /*@ public model static pure \bigint spec_multiSumRatio(\bigint x, \bigint y) {
+      @   \bigint yN = spec_yNorm(y);
+      @   \bigint sum0 = (yN > 0 ? x + spec_iterCount(yN) : x);
+      @   \bigint factor = spec_factor(yN);
+      @   \bigint tmp = spec_tmpFactor(factor);
+      @   \bigint sum = (sum0 < 0 ? -sum0 : sum0) + tmp;
+      @   \bigint multi = x * yN;
+      @   return (multi / sum) * tmp;
+      @ } @*/
+}
+==============================
+tmp/MultiPower2Ratio.java:47: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method multiSumRatio
+        /*@ maintaining factor >= 1;
+            ^
+tmp/MultiPower2Ratio.java:99: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method spec_multiSumRatio
+      @   return (multi / sum) * tmp;
+                        ^
+2 verification failures
+
+==============================
+public class MultiPower2Ratio {
+    /*@ public normal_behavior
+      @   requires y != Integer.MIN_VALUE;
+      @   requires spec_multiSumRatio((\bigint)x, (\bigint)y) >= Integer.MIN_VALUE
+      @         && spec_multiSumRatio((\bigint)x, (\bigint)y) <= Integer.MAX_VALUE;
+      @   ensures \result == (int) spec_multiSumRatio((\bigint)x, (\bigint)y);
+      @*/
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        //@ ghost int yNorm = y;
+        if (y > 0) {
+            int n = y;
+            //@ ghost int iter = 0;
+            /*@ maintaining 0 <= n && n <= yNorm;
+              @ maintaining 0 <= iter;
+              @ maintaining sum == x + iter;
+              @ maintaining (\bigint)factor == 1 + spec_inc((\bigint)yNorm) - spec_inc((\bigint)n);
+              @ maintaining (\bigint)iter == spec_iterCount((\bigint)yNorm) - spec_iterCount((\bigint)n);
+              @ decreases n;
+              @*/
+            while (n > 0) {
+                sum = sum + 1;
+                n = n / 2;
+                factor += n;
+                //@ set iter = iter + 1;
+            }
+        } else {
+            int n = -y;
+            /*@ maintaining n >= 0;
+              @ maintaining yNorm == 0;
+              @ decreases n;
+              @*/
+            while (n > 0) {
+                sum = sum - 1;
+                n = n / 2;
+                factor += n;
+            }
+        }
+        int tmpFactor = 1;
+        //@ ghost int factor0 = factor;
+        //@ ghost int k = 0;
+        /*@ maintaining factor > 1;  
+          @ maintaining 0 <= k;
+          @ maintaining tmpFactor == 1 + k;
+          @ maintaining (\bigint)factor == (\bigint)factor0 / spec_pow10((\bigint)k);
+          @ decreases factor;
+          @*/
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+            //@ set k = k + 1;
+        }
+        int multi = x * y;
+        if(sum < 0){
+            sum = sum * -1;
+        }
+        sum = sum + tmpFactor;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+
+    /*@ public model static pure \bigint spec_yNorm(\bigint y) {
+      @   return (y < 0 ? -y : y);
+      @ } @*/
+
+    /*@ public model static pure \bigint spec_iterCount(\bigint n) {
+      @   return (n > 0 ? 1 + spec_iterCount(n / 2) : 0);
+      @ } @*/
+
+    /*@ public model static pure \bigint spec_inc(\bigint n) {
+      @   return (n > 0 ? (n / 2) + spec_inc(n / 2) : 0);
+      @ } @*/
+
+    /*@ public model static pure \bigint spec_factor(\bigint yNorm) {
+      @   return 1 + spec_inc(yNorm);
+      @ } @*/
+
+    /*@ public model static pure \bigint spec_tmpFactor(\bigint f) {
+      @   return (f > 10 ? 1 + spec_tmpFactor(f / 10) : 1);
+      @ } @*/
+
+    /*@ public model static pure \bigint spec_pow10(\bigint k) {
+      @   return (k <= 0 ? 1 : 10 * spec_pow10(k - 1));
+      @ } @*/
+
+    /*@ public model static pure \bigint spec_multiSumRatio(\bigint x, \bigint y) {
+      @   \bigint yN = spec_yNorm(y);
+      @   \bigint sum0 = (yN > 0 ? x + spec_iterCount(yN) : x);
+      @   \bigint factor = spec_factor(yN);
+      @   \bigint tmp = spec_tmpFactor(factor);
+      @   \bigint sum = (sum0 < 0 ? -sum0 : sum0) + tmp;
+      @   \bigint multi = x * yN;
+      @   return (multi / sum) * tmp;
+      @ } @*/
+}
+
+==============================
+tmp/MultiPower2Ratio.java:47: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method multiSumRatio
+        /*@ maintaining factor > 1;  
+            ^
+tmp/MultiPower2Ratio.java:99: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method spec_multiSumRatio
+      @   return (multi / sum) * tmp;
+                        ^
+2 verification failures
+
+==============================

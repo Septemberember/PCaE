@@ -1,0 +1,30 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class NegAbs_Mutant3 {
+
+    // Computes the negation of the provided integer.
+    public static int negAbs(int num) {
+        // If the input is negative, negating it yields its absolute value
+        // however, this implementation negates all inputs.
+        if (num < 0)
+            // Returning the negation of num
+            return -num;
+        else
+            // Negate regardless of sign in this implementation
+            return -num;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: true
+D1: return_value == -num
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

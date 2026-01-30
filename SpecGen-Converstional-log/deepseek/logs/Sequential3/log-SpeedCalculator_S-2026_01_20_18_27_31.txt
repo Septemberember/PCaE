@@ -1,0 +1,89 @@
+public class SpeedCalculator_S {
+    //@ requires Integer.MIN_VALUE <= time && time <= Integer.MAX_VALUE;
+    //@ ensures \result == 100 - ((time < 5) ? 5 : ((time > 50) ? 50 : time)) * 2;
+    public static int calculateSpeed(int time) {
+        int buffer[] = new int[6];
+        int MAX_TIME = 50;
+        int MIN_TIME = 5;
+        
+        int offset = 0;
+        int adjustment = 0;
+
+        //@ maintaining adjustment == 0;
+        if (time < MIN_TIME) {
+            time = MIN_TIME;
+            adjustment = adjustment - 10;
+        } else {
+            adjustment = adjustment + 5;
+        }
+
+        //@ maintaining adjustment == (time < MIN_TIME ? -10 : 5);
+        if (time > MAX_TIME) {
+            time = MAX_TIME;
+            adjustment = adjustment * 2;
+        }
+
+        int speed = 100 - time * 2;
+
+        //@ maintaining speed == 100 - time * 2;
+        if (speed >= 10 && speed < 24) {
+            offset = speed / 4;
+        } else {
+            offset = speed % 6;
+        }
+        
+        buffer[offset] = speed + adjustment;
+        return speed;
+    }
+}
+==============================
+tmp/SpeedCalculator_S.java:12: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining adjustment == 0;
+            ^
+tmp/SpeedCalculator_S.java:20: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining adjustment == (time < MIN_TIME ? -10 : 5);
+            ^
+tmp/SpeedCalculator_S.java:28: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining speed == 100 - time * 2;
+            ^
+3 errors
+
+==============================
+public class SpeedCalculator_S {
+    //@ requires Integer.MIN_VALUE <= time && time <= Integer.MAX_VALUE;
+    //@ ensures \result == 100 - ((time < 5) ? 5 : ((time > 50) ? 50 : time)) * 2;
+    public static int calculateSpeed(int time) {
+        int buffer[] = new int[6];
+        int MAX_TIME = 50;
+        int MIN_TIME = 5;
+        
+        int offset = 0;
+        int adjustment = 0;
+
+        if (time < MIN_TIME) {
+            time = MIN_TIME;
+            adjustment = adjustment - 10;
+        } else {
+            adjustment = adjustment + 5;
+        }
+
+        if (time > MAX_TIME) {
+            time = MAX_TIME;
+            adjustment = adjustment * 2;
+        }
+
+        int speed = 100 - time * 2;
+
+        if (speed >= 10 && speed < 24) {
+            offset = speed / 4;
+        } else {
+            offset = speed % 6;
+        }
+        
+        buffer[offset] = speed + adjustment;
+        return speed;
+    }
+}
+==============================
+
+==============================

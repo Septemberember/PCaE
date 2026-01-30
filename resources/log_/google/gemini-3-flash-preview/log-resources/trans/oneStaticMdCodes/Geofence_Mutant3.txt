@@ -1,0 +1,45 @@
+start role user
+Please generate an FSF for the program below:
+```
+/**
+ * Geofence boundary check utility.
+ * Returns 1 when coordinates are outside the allowed limits, otherwise 0.
+ * This class is intentionally compact and deterministic.
+ */
+
+public class Geofence_Mutant3 {
+    // Geofence evaluation helper
+    // Verifies whether (x, y) falls outside [0, limitX) x [0, limitY)
+    // Returns 1 if out of bounds, otherwise 0.
+
+    public static int geofence(int x, int y, int limitX, int limitY) {
+        int alarm = 0;
+        // Start with no alarm; any out-of-bounds condition will flip this
+        if (x < 0 || x >= limitX) {
+            alarm = 1;
+        }
+
+        // Check Y coordinate against Y limits
+        if (y < 0 || y >= limitY) {
+            alarm = 1;
+        }
+
+        return alarm;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: (x < 0 || x >= limitX) || (y < 0 || y >= limitY)
+D1: return_value == 1
+
+T2: (x >= 0 && x < limitX) && (y >= 0 && y < limitY)
+D2: return_value == 0
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--partially verified!
+Current conversation round is: [1]
+*end* role remark

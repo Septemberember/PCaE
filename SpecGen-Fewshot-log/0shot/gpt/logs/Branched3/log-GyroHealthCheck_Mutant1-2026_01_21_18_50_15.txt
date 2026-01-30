@@ -1,0 +1,85 @@
+// Gyro health check utility class
+public class GyroHealthCheck_Mutant1 {
+    // Entry point: compute alarm based on pairwise axis differences
+    /*@ public normal_behavior
+      @   // Preconditions to avoid Java int overflow in the implementation.
+      @   requires ((long)x - (long)y) <= Integer.MAX_VALUE && ((long)x - (long)y) >= Integer.MIN_VALUE;
+      @   requires ((long)y - (long)z) <= Integer.MAX_VALUE && ((long)y - (long)z) >= Integer.MIN_VALUE;
+      @   requires ((long)x - (long)z) <= Integer.MAX_VALUE && ((long)x - (long)z) >= Integer.MIN_VALUE;
+      @   // The code may negate (x - z) when it is negative; this would overflow for Integer.MIN_VALUE.
+      @   requires ((\bigint)x - (\bigint)z) != (\bigint)Integer.MIN_VALUE;
+      @
+      @   assignable \nothing;
+      @
+      @   ensures \result == 0 || \result == 1;
+      @   // Due to the implemented sign-handling, only |x - z| can trigger the alarm.
+      @   ensures (\result == 1) <==> (\abs((\bigint)x - (\bigint)z) > 10);
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // If diffXY is positive, invert to its negative counterpart
+        if (diffXY > 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // If diffYZ is positive, invert to its negative counterpart
+        if (diffYZ > 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // If diffXZ is negative, take its absolute value
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        int alarm = 0;
+        // Alarm if any pairwise difference exceeds the threshold
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        return alarm;
+    }
+}
+==============================
+tmp/GyroHealthCheck_Mutant1.java:16: error: This backslash token is unknown: \abs
+      @   ensures (\result == 1) <==> (\abs((\bigint)x - (\bigint)z) > 10);
+                                       ^
+1 error
+
+==============================
+// Gyro health check utility class
+public class GyroHealthCheck_Mutant1 {
+    // Entry point: compute alarm based on pairwise axis differences
+    /*@ public normal_behavior
+      @   // Preconditions to avoid Java int overflow in the implementation.
+      @   requires ((long)x - (long)y) <= Integer.MAX_VALUE && ((long)x - (long)y) >= Integer.MIN_VALUE;
+      @   requires ((long)y - (long)z) <= Integer.MAX_VALUE && ((long)y - (long)z) >= Integer.MIN_VALUE;
+      @   requires ((long)x - (long)z) <= Integer.MAX_VALUE && ((long)x - (long)z) >= Integer.MIN_VALUE;
+      @   // The code may negate (x - z) when it is negative; this would overflow for Integer.MIN_VALUE.
+      @   requires ((\bigint)x - (\bigint)z) != (\bigint)Integer.MIN_VALUE;
+      @
+      @   assignable \nothing;
+      @
+      @   ensures \result == 0 || \result == 1;
+      @   // Due to the implemented sign-handling, only |x - z| can trigger the alarm.
+      @   ensures (\result == 1) <==> (\abs((\bigint)x - (\bigint)z) > 10);  
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // If diffXY is positive, invert to its negative counterpart
+        if (diffXY > 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // If diffYZ is positive, invert to its negative counterpart
+        if (diffYZ > 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // If diffXZ is negative, take its absolute value
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        int alarm = 0;
+        // Alarm if any pairwise difference exceeds the threshold
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        return alarm;
+    }
+}
+
+==============================
+tmp/GyroHealthCheck_Mutant1.java:16: error: This backslash token is unknown: \abs
+      @   ensures (\result == 1) <==> (\abs((\bigint)x - (\bigint)z) > 10);  
+                                       ^
+1 error
+
+==============================

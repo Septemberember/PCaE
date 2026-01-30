@@ -1,0 +1,43 @@
+public class AddHalfSelf_Mutant4{
+    // Adjustment utility for the addHalfSelf method
+    // Computes the final value by adding an even-step based amount.
+    /*@ public normal_behavior
+      @   requires x != Integer.MIN_VALUE; // to make (-x) well-defined in int arithmetic
+      @   requires -1073741824 <= x && x <= 1073741823; // to prevent overflow in the returned int result
+      @   ensures (\let int m = (x < 0 ? -x : x);
+      @            \result == (x < 0 ? x - 2*(m/2) : x + 2*(m/2)));
+      @*/
+    public static int addHalfSelf(int x){
+        int n = x;
+        // accumulator for total addition
+        int addNum = 0;
+        if(x < 0){
+            n = -x;
+        }
+        // Iterate while processing absolute value
+        /*@ maintaining (\let int m = (x < 0 ? -x : x);
+          @               0 <= n && n <= m
+          @            && 0 <= addNum
+          @            && addNum == 2*((m/2) - (n/2)));
+          @ decreases n;
+          @*/
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum += 2;
+            }
+            // advance to the next number
+            n--;
+        }
+        // Apply the accumulated adjustment based on sign
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+    // End of addHalfSelf logic
+}
+==============================
+
+==============================

@@ -1,0 +1,30 @@
+public class GyroHealthCheck_Mutant4 {
+    // Performs a health check by comparing pairwise gyro differences.
+    //@ requires x != Integer.MIN_VALUE && y != Integer.MIN_VALUE && z != Integer.MIN_VALUE;
+    //@ requires Math.abs((long)x - y) <= Integer.MAX_VALUE;
+    //@ requires Math.abs((long)y - z) <= Integer.MAX_VALUE;
+    //@ requires Math.abs((long)x - z) <= Integer.MAX_VALUE;
+    //@ ensures (Math.abs((long)x - y) > 10 || Math.abs((long)y - z) > 10 || Math.abs((long)x - z) > 10) ==> \result == 2;
+    //@ ensures (Math.abs((long)x - y) <= 10 && Math.abs((long)y - z) <= 10 && Math.abs((long)x - z) <= 10) ==> \result == 0;
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // Normalize to absolute difference for XY
+        if (diffXY < 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // Normalize to absolute difference for YZ
+        if (diffYZ < 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // Normalize to absolute difference for XZ
+        if (diffXZ < 0) diffXZ = -diffXZ;
+
+        int alarm = 0;
+        // Trigger alarm if any pair differs by more than 10
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 2;
+        }
+        return alarm;
+    }
+}
+==============================
+
+==============================

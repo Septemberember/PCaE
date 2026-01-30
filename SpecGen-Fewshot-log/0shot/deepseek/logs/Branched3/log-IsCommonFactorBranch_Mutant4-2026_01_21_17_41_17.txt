@@ -1,0 +1,49 @@
+//@ public model import org.jmlspecs.models.JMLMath;
+
+public class IsCommonFactorBranch_Mutant4 {
+    /*@ public normal_behavior
+      @ requires factor != 0;
+      @ ensures \result == (a % factor == 0);
+      @ also
+      @ requires factor == 0;
+      @ ensures \result == false;
+      @*/
+    public static boolean isCommonFactor (int a, int b, int factor) {
+        // Determine divisibility of 'a' by 'factor'
+        if (a % factor != 0) {
+            // If 'a' is not divisible by 'factor', return false
+            return false;
+        }
+        // 'a' is divisible by 'factor'
+        return true;
+    }
+}
+==============================
+tmp/IsCommonFactorBranch_Mutant4.java:3: error: class, interface, enum, or record expected
+public class IsCommonFactorBranch_Mutant4 {
+^
+error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+  Reason: Unexpected exception: Exception during parsing near h;
+  
+  public class IsCommonFactorBranch_Mutant4 {
+      /*@ publ java.lang.NullPointerException: Cannot read field "pos" because "errs.head" is null
+java.lang.NullPointerException: Cannot read field "pos" because "errs.head" is null
+	at jdk.compiler/com.sun.tools.javac.parser.JmlParser.classOrRecordOrInterfaceOrEnumDeclaration(JmlParser.java:446)
+	at jdk.compiler/com.sun.tools.javac.parser.JavacParser.typeDeclaration(JavacParser.java:3791)
+	at jdk.compiler/com.sun.tools.javac.parser.JavacParser.parseCompilationUnit(JavacParser.java:3635)
+	at jdk.compiler/com.sun.tools.javac.parser.JmlParser.parseCompilationUnit(JmlParser.java:265)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.parse(JavaCompiler.java:620)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.parse(JmlCompiler.java:211)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.parseFiles(JavaCompiler.java:1009)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.parseFiles(JavaCompiler.java:996)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.compile(JavaCompiler.java:922)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.compile(JmlCompiler.java:197)
+	at jdk.compiler/com.sun.tools.javac.main.Main.compile(Main.java:321)
+	at jdk.compiler/org.jmlspecs.openjml.Main.compile(Main.java:534)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:374)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:332)
+	at jdk.compiler/org.jmlspecs.openjml.Main.main(Main.java:295)
+	at jdk.compiler/com.sun.tools.javac.Main.main(Main.java:53)
+2 errors
+
+==============================

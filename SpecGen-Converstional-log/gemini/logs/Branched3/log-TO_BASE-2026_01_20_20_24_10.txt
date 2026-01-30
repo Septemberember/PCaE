@@ -1,0 +1,58 @@
+public class TO_BASE {
+    //@ requires b >= 1 && b <= 36;
+    //@ ensures b == 1 ==> \result.equals("0");
+    //@ ensures b > 1 ==> \result != null;
+    public static String to_base(int b) {
+        int num = (b + 200) / 3;
+        String result = "";
+        /*@ spec_public @*/ String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int i;
+        if(b == 1){
+            return "0";
+        }
+        //@ maintaining num >= 0;
+        //@ maintaining result != null;
+        //@ decreases num;
+        while (num > 0) {
+            i = num % b;
+            num = num / b;
+            result = result + String.valueOf(alphabet.charAt(i));
+        }
+
+        return result;
+    }
+}
+==============================
+tmp/TO_BASE.java:8: error: This JML modifier is not allowed for a local variable declaration
+        /*@ spec_public @*/ String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            ^
+1 error
+
+==============================
+public class TO_BASE {
+    //@ requires b >= 1 && b <= 36;
+    //@ ensures b == 1 ==> \result.equals("0");
+    //@ ensures b > 1 ==> \result != null;
+    public static String to_base(int b) {
+        int num = (b + 200) / 3;
+        String result = "";
+        String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int i;
+        if(b == 1){
+            return "0";
+        }
+        //@ maintaining num >= 0;
+        //@ maintaining result != null;
+        //@ decreases num;
+        while (num > 0) {
+            i = num % b;
+            num = num / b;
+            result = result + String.valueOf(alphabet.charAt(i));
+        }
+
+        return result;
+    }
+}
+==============================
+
+==============================

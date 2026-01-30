@@ -1,0 +1,85 @@
+/* 
+ * DivisionOverflow_Mutant3
+ * This mutant demonstrates a straightforward division operation
+ * after incrementing the numerator, with commentary added.
+ * No changes to the executable code are made.
+ */
+ 
+public class DivisionOverflow_Mutant3 {
+    // Prepare the inputs for division to simulate a simple edge case.
+
+    /*@ public normal_behavior
+      @   requires denom != 0;
+      @   ensures \result == ((nom + 1) / denom);
+      @ also
+      @ public exceptional_behavior
+      @   requires denom == 0;
+      @   signals_only ArithmeticException;
+      @*/
+    public static int division_test_fail_overflow(int nom, int denom) {
+        // Increment the numerator before division; behavior is unchanged otherwise.
+        int tmp = (nom+1) / denom; // modifying nom by adding 1
+        // Return the computed quotient for potential downstream validation.
+        return tmp;
+    }
+}
+==============================
+TimeoutException
+==============================
+/* 
+ * DivisionOverflow_Mutant3
+ * This mutant demonstrates a straightforward division operation
+ * after incrementing the numerator, with commentary added.
+ * No changes to the executable code are made.
+ */
+ 
+public class DivisionOverflow_Mutant3 {
+    // Prepare the inputs for division to simulate a simple edge case.
+    //@ requires denom != 0;
+    //@ ensures \result == ((nom + 1) / denom);
+    public static int division_test_fail_overflow(int nom, int denom) {
+        // Increment the numerator before division; behavior is unchanged otherwise.
+        int tmp = (nom+1) / denom; // modifying nom by adding 1
+        // Return the computed quotient for potential downstream validation.
+        return tmp;
+    }
+}
+==============================
+tmp/DivisionOverflow_Mutant3.java:16: verify: The prover cannot establish an assertion (Postcondition: tmp/DivisionOverflow_Mutant3.java:11:) in method division_test_fail_overflow
+        return tmp;
+        ^
+tmp/DivisionOverflow_Mutant3.java:11: verify: Associated declaration: tmp/DivisionOverflow_Mutant3.java:16:
+    //@ ensures \result == ((nom + 1) / denom);
+        ^
+2 verification failures
+
+==============================
+/* 
+ * DivisionOverflow_Mutant3
+ * This mutant demonstrates a straightforward division operation
+ * after incrementing the numerator, with commentary added.
+ * No changes to the executable code are made.
+ */
+ 
+public class DivisionOverflow_Mutant3 {
+    // Prepare the inputs for division to simulate a simple edge case.
+    //@ requires denom != 0;
+    //@ ensures \result == ((nom + 1) / denom);  
+    public static int division_test_fail_overflow(int nom, int denom) {
+        // Increment the numerator before division; behavior is unchanged otherwise.
+        int tmp = (nom+1) / denom; // modifying nom by adding 1
+        // Return the computed quotient for potential downstream validation.
+        return tmp;
+    }
+}
+
+==============================
+tmp/DivisionOverflow_Mutant3.java:16: verify: The prover cannot establish an assertion (Postcondition: tmp/DivisionOverflow_Mutant3.java:11:) in method division_test_fail_overflow
+        return tmp;
+        ^
+tmp/DivisionOverflow_Mutant3.java:11: verify: Associated declaration: tmp/DivisionOverflow_Mutant3.java:16:
+    //@ ensures \result == ((nom + 1) / denom);  
+        ^
+2 verification failures
+
+==============================

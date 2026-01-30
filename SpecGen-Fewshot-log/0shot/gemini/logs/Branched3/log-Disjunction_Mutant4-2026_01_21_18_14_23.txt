@@ -1,0 +1,23 @@
+public class Disjunction_Mutant4 {
+    // This class provides a simple two-operand disjunction utility.
+    
+    /*@ public normal_behavior
+      @   ensures (b1 == true) ==> (\result == false);
+      @   ensures (b1 == false && b2 == true) ==> (\result == true);
+      @   ensures (b1 == false && b2 == false) ==> (\result == false);
+      @   ensures \result == (!b1 && b2);
+      @*/
+    public static boolean disjunctOf(boolean b1, boolean b2) {
+        // Evaluates two boolean operands using explicit checks
+        if(b1 == true)
+            return false;
+        // If the first operand isn't true, evaluate the second
+        if(b2 == true)
+            return true;
+        // Neither operand is true; default to false
+        return false;
+    }
+}
+==============================
+
+==============================

@@ -1,0 +1,103 @@
+public class AltitudeController_Mutant4 {
+    /*@ public normal_behavior
+      @   ensures ((\absolute_values(\old(targetHeight) - \old(currentHeight)) >= 30) ==> 
+      @             (\result == ((\old(targetHeight) - \old(currentHeight)) > 0 ? 5 : -5))) &&
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) < 30 && \absolute_values(\old(targetHeight) - \old(currentHeight)) > 20) ==> 
+      @             (\result == ((\old(targetHeight) - \old(currentHeight)) > 0 ? 3 : -3))) &&
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) <= 20 && \absolute_values(\old(targetHeight) - \old(currentHeight)) > 10) ==> 
+      @             (\result == ((\old(targetHeight) - \old(currentHeight)) > 0 ? 2 : -2))) &&
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) <= 10) ==> 
+      @             (\result == (\old(targetHeight) - \old(currentHeight))));
+      @   assignable \nothing;
+      @*/
+    public static int altitudeController(int currentHeight,int targetHeight) {
+        int error = targetHeight - currentHeight;
+        int absError = 0;
+        absError = error < 0 ? -error : error;
+        int controlSignal = 0;
+        if (absError >= 30) { //Changed > to >=
+            controlSignal = error > 0 ? 5 : -5;
+        } else if (absError > 20) {
+            controlSignal = error > 0 ? 3 : -3;
+        } else if (absError > 10) {
+            controlSignal = error > 0 ? 2 : -2;
+        } else {
+            controlSignal = error;
+        }
+        return controlSignal;
+    }
+}
+==============================
+tmp/AltitudeController_Mutant4.java:3: error: This backslash token is unknown: \absolute_values
+      @   ensures ((\absolute_values(\old(targetHeight) - \old(currentHeight)) >= 30) ==> 
+                    ^
+tmp/AltitudeController_Mutant4.java:5: error: This backslash token is unknown: \absolute_values
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) < 30 && \absolute_values(\old(targetHeight) - \old(currentHeight)) > 20) ==> 
+                    ^
+tmp/AltitudeController_Mutant4.java:5: error: This backslash token is unknown: \absolute_values
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) < 30 && \absolute_values(\old(targetHeight) - \old(currentHeight)) > 20) ==> 
+                                                                                       ^
+tmp/AltitudeController_Mutant4.java:7: error: This backslash token is unknown: \absolute_values
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) <= 20 && \absolute_values(\old(targetHeight) - \old(currentHeight)) > 10) ==> 
+                    ^
+tmp/AltitudeController_Mutant4.java:7: error: This backslash token is unknown: \absolute_values
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) <= 20 && \absolute_values(\old(targetHeight) - \old(currentHeight)) > 10) ==> 
+                                                                                        ^
+tmp/AltitudeController_Mutant4.java:9: error: This backslash token is unknown: \absolute_values
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) <= 10) ==> 
+                    ^
+6 errors
+
+==============================
+public class AltitudeController_Mutant4 {
+    /*@ public normal_behavior
+      @   ensures ((\absolute_values(\old(targetHeight) - \old(currentHeight)) > 30) ==>   
+      @             (\result == ((\old(targetHeight) - \old(currentHeight)) > 0 ? 5 : -5))) &&
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) < 30 && \absolute_values(\old(targetHeight) - \old(currentHeight)) > 20) ==> 
+      @             (\result == ((\old(targetHeight) - \old(currentHeight)) > 0 ? 3 : -3))) &&
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) <= 20 && \absolute_values(\old(targetHeight) - \old(currentHeight)) > 10) ==> 
+      @             (\result == ((\old(targetHeight) - \old(currentHeight)) > 0 ? 2 : -2))) &&
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) <= 10) ==> 
+      @             (\result == (\old(targetHeight) - \old(currentHeight))));
+      @   assignable \nothing;
+      @*/
+    public static int altitudeController(int currentHeight,int targetHeight) {
+        int error = targetHeight - currentHeight;
+        int absError = 0;
+        absError = error < 0 ? -error : error;
+        int controlSignal = 0;
+        if (absError >= 30) { //Changed > to >=
+            controlSignal = error > 0 ? 5 : -5;
+        } else if (absError > 20) {
+            controlSignal = error > 0 ? 3 : -3;
+        } else if (absError > 10) {
+            controlSignal = error > 0 ? 2 : -2;
+        } else {
+            controlSignal = error;
+        }
+        return controlSignal;
+    }
+}
+
+==============================
+tmp/AltitudeController_Mutant4.java:3: error: This backslash token is unknown: \absolute_values
+      @   ensures ((\absolute_values(\old(targetHeight) - \old(currentHeight)) > 30) ==>   
+                    ^
+tmp/AltitudeController_Mutant4.java:5: error: This backslash token is unknown: \absolute_values
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) < 30 && \absolute_values(\old(targetHeight) - \old(currentHeight)) > 20) ==> 
+                    ^
+tmp/AltitudeController_Mutant4.java:5: error: This backslash token is unknown: \absolute_values
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) < 30 && \absolute_values(\old(targetHeight) - \old(currentHeight)) > 20) ==> 
+                                                                                       ^
+tmp/AltitudeController_Mutant4.java:7: error: This backslash token is unknown: \absolute_values
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) <= 20 && \absolute_values(\old(targetHeight) - \old(currentHeight)) > 10) ==> 
+                    ^
+tmp/AltitudeController_Mutant4.java:7: error: This backslash token is unknown: \absolute_values
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) <= 20 && \absolute_values(\old(targetHeight) - \old(currentHeight)) > 10) ==> 
+                                                                                        ^
+tmp/AltitudeController_Mutant4.java:9: error: This backslash token is unknown: \absolute_values
+      @           ((\absolute_values(\old(targetHeight) - \old(currentHeight)) <= 10) ==> 
+                    ^
+6 errors
+
+==============================

@@ -1,0 +1,107 @@
+public class MulLoop_Mutant2 {
+    // Simple example of a loop-based multiplication using addition.
+    /*@ public normal_behavior
+      @   requires ((\bigint)a * (\bigint)b) >= Integer.MIN_VALUE
+      @         && ((\bigint)a * (\bigint)b) <= Integer.MAX_VALUE;
+      @   ensures (\bigint)\result == (\bigint)a * (\bigint)b;
+      @*/
+    public static int mulLoop(int a, int b) {
+        // mulLoop computes a * b by repeated addition or subtraction.
+        int res = 0;
+        // res holds the cumulative result.
+        if (b > 0) { // changed >= to >
+            // If b is positive, accumulate by adding a, b times.
+            for(int i = 0; i < b; i++)
+                /*@ maintaining 0 <= i && i <= b;
+                  @ maintaining (\bigint)res == (\bigint)a * (\bigint)i;
+                  @ decreases b - i;
+                  @ assignable res;
+                  @*/
+            {
+                res = res + a;
+            }
+        } else {
+            // If b is negative, accumulate by subtracting a, |b| times.
+            for(int i = 0; i < -b; i++)
+                /*@ maintaining 0 <= i && i <= -b;
+                  @ maintaining (\bigint)res == -((\bigint)a * (\bigint)i);
+                  @ decreases (-b) - i;
+                  @ assignable res;
+                  @*/
+            {
+                res = res - a;
+            }
+        }
+        return res;
+    }
+}
+==============================
+tmp/MulLoop_Mutant2.java:18: error: Expected loop specifications while in JML: assignable is not a loop specification keyword
+                  @ assignable res;
+                    ^
+tmp/MulLoop_Mutant2.java:15: error: Loop specifications must immediately precede a loop statement
+                /*@ maintaining 0 <= i && i <= b;
+                    ^
+tmp/MulLoop_Mutant2.java:29: error: Expected loop specifications while in JML: assignable is not a loop specification keyword
+                  @ assignable res;
+                    ^
+tmp/MulLoop_Mutant2.java:26: error: Loop specifications must immediately precede a loop statement
+                /*@ maintaining 0 <= i && i <= -b;
+                    ^
+4 errors
+
+==============================
+public class MulLoop_Mutant2 {
+    // Simple example of a loop-based multiplication using addition.
+    /*@ public normal_behavior
+      @   requires ((\bigint)a * (\bigint)b) >= Integer.MIN_VALUE
+      @         && ((\bigint)a * (\bigint)b) <= Integer.MAX_VALUE;
+      @   ensures (\bigint)\result == (\bigint)a * (\bigint)b;
+      @*/
+    public static int mulLoop(int a, int b) {
+        // mulLoop computes a * b by repeated addition or subtraction.
+        int res = 0;
+        // res holds the cumulative result.
+        if (b > 0) { // changed >= to >
+            // If b is positive, accumulate by adding a, b times.
+            for(int i = 0; i < b; i++)
+                /*@ maintaining 0 < i && i < b;  
+                  @ maintaining (\bigint)res == (\bigint)a * (\bigint)i;
+                  @ decreases b - i;
+                  @ assignable res;
+                  @*/
+            {
+                res = res + a;
+            }
+        } else {
+            // If b is negative, accumulate by subtracting a, |b| times.
+            for(int i = 0; i < -b; i++)
+                /*@ maintaining 0 < i && i < -b;  
+                  @ maintaining (\bigint)res == -((\bigint)a * (\bigint)i);
+                  @ decreases (-b) - i;
+                  @ assignable res;
+                  @*/
+            {
+                res = res - a;
+            }
+        }
+        return res;
+    }
+}
+
+==============================
+tmp/MulLoop_Mutant2.java:18: error: Expected loop specifications while in JML: assignable is not a loop specification keyword
+                  @ assignable res;
+                    ^
+tmp/MulLoop_Mutant2.java:15: error: Loop specifications must immediately precede a loop statement
+                /*@ maintaining 0 < i && i < b;  
+                    ^
+tmp/MulLoop_Mutant2.java:29: error: Expected loop specifications while in JML: assignable is not a loop specification keyword
+                  @ assignable res;
+                    ^
+tmp/MulLoop_Mutant2.java:26: error: Loop specifications must immediately precede a loop statement
+                /*@ maintaining 0 < i && i < -b;  
+                    ^
+4 errors
+
+==============================

@@ -1,0 +1,103 @@
+public class WaterFee_Mutant1 {
+ // WaterFee_Mutant1: computes a tiered water service fee based on usage in tons
+ // Base concept: start with a fixed base fee and add charges per usage interval
+ // The calculation uses a simple loop over the input amount
+    /*@ public normal_behavior
+      @   requires tons >= 0;
+      @   requires 15L + 5L * tons <= Integer.MAX_VALUE;
+      @   assignable \nothing;
+      @   ensures \result
+      @           == 15
+      @              + (\sum int k; 1 <= k && k <= tons;
+      @                    (k > 30 ? 5 : (k > 10 ? 4 : 3)));
+      @*/
+    public static int calcWaterFee(int tons) {
+        // Local copy of the input tons for iteration
+        int n = tons;
+        // Initial base fee
+        int fee = 15;
+        // Iterate while there is remaining usage to account for
+        /*@ maintaining 0 <= n && n <= tons;
+          @ maintaining fee
+          @            == 15
+          @               + (\sum int k; n < k && k <= tons;
+          @                     (k > 30 ? 5 : (k > 10 ? 4 : 3)));
+          @ decreases n;
+          @*/
+        while (n > 0) {
+            // Tier 1: very high usage
+            if (n > 30) {
+                fee += 5;
+            } else if (n > 10) {
+                // Tier 2: moderate usage
+                fee += 4;
+            } else {
+                // Tier 3: low usage
+                fee += 3;
+            }
+            // Consume one ton per loop iteration
+            n--;
+        }
+        // Return the computed total fee
+        return fee;
+    }
+}
+==============================
+tmp/WaterFee_Mutant1.java:21: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method calcWaterFee
+          @ maintaining fee
+            ^
+1 verification failure
+
+==============================
+public class WaterFee_Mutant1 {
+ // WaterFee_Mutant1: computes a tiered water service fee based on usage in tons
+ // Base concept: start with a fixed base fee and add charges per usage interval
+ // The calculation uses a simple loop over the input amount
+    /*@ public normal_behavior
+      @   requires tons >= 0;
+      @   requires 15L + 5L * tons <= Integer.MAX_VALUE;
+      @   assignable \nothing;
+      @   ensures \result
+      @           == 15
+      @              + (\sum int k; 1 <= k && k <= tons;
+      @                    (k > 30 ? 5 : (k > 10 ? 4 : 3)));
+      @*/
+    public static int calcWaterFee(int tons) {
+        // Local copy of the input tons for iteration
+        int n = tons;
+        // Initial base fee
+        int fee = 15;
+        // Iterate while there is remaining usage to account for
+        /*@ maintaining 0 <= n && n <= tons;
+          @ maintaining fee  
+          @            == 15
+          @               + (\sum int k; n < k && k <= tons;
+          @                     (k > 30 ? 5 : (k > 10 ? 4 : 3)));
+          @ decreases n;
+          @*/
+        while (n > 0) {
+            // Tier 1: very high usage
+            if (n > 30) {
+                fee += 5;
+            } else if (n > 10) {
+                // Tier 2: moderate usage
+                fee += 4;
+            } else {
+                // Tier 3: low usage
+                fee += 3;
+            }
+            // Consume one ton per loop iteration
+            n--;
+        }
+        // Return the computed total fee
+        return fee;
+    }
+}
+
+==============================
+tmp/WaterFee_Mutant1.java:21: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method calcWaterFee
+          @ maintaining fee  
+            ^
+1 verification failure
+
+==============================

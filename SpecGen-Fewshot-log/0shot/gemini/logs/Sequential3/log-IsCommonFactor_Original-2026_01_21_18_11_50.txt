@@ -1,0 +1,26 @@
+// IsCommonFactor_Original: utility to verify if two integers share a given common factor
+// This simple predicate returns true when both a and b are divisible by factor.
+// No state is stored; the check is purely functional.
+
+public class IsCommonFactor_Original {
+
+    /*@ public normal_behavior
+      @   requires factor != 0;
+      @   ensures \result <==> (a % factor == 0 && b % factor == 0);
+      @ also
+      @ public exceptional_behavior
+      @   requires factor == 0;
+      @   signals (ArithmeticException) true;
+      @*/
+    public static boolean isCommonFactor(int a, int b, int factor) {
+        // Evaluate divisibility for both inputs
+        return a % factor == 0 && b % factor == 0;
+    }
+}
+==============================
+tmp/IsCommonFactor_Original.java:17: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method isCommonFactor
+        return a % factor == 0 && b % factor == 0;
+                 ^
+1 verification failure
+
+==============================

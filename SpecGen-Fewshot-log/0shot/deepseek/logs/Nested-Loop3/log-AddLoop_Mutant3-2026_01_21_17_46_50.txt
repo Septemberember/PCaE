@@ -1,0 +1,97 @@
+public class AddLoop_Mutant3 {
+    // Utility: compute sum using loop-based accumulation
+    // The method demonstrates two branches dependent on y
+    
+    /*@ public normal_behavior
+      @ requires true;
+      @ ensures \result == x + 2 * y;
+      @*/
+    public static int AddLoop(int x, int y) {
+        int sum = x;
+        // Start with the provided x as the base and update in the loop
+        // For y > 0, each iteration increases sum by 2
+        if (y > 0) {
+            int n = y;
+            // Iterate n times, incrementing sum by 2 per iteration
+            /*@ loop_invariant n >= 0;
+              @ loop_invariant sum == x + 2 * (y - n);
+              @ decreasing n;
+              @*/
+            while (n > 0) {
+                sum = sum + 2;
+                n = n - 1;
+            }
+        } else {
+            int n = -y;
+            // Iterate n times, decrementing sum by 1 per iteration
+            /*@ loop_invariant n >= 0;
+              @ loop_invariant sum == x - 1 * ((-y) - n);
+              @ decreasing n;
+              @*/
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+            }
+        }
+        return sum;
+    }
+}
+==============================
+tmp/AddLoop_Mutant3.java:36: verify: The prover cannot establish an assertion (Postcondition: tmp/AddLoop_Mutant3.java:7:) in method AddLoop
+        return sum;
+        ^
+tmp/AddLoop_Mutant3.java:7: verify: Associated declaration: tmp/AddLoop_Mutant3.java:36:
+      @ ensures \result == x + 2 * y;
+        ^
+2 verification failures
+
+==============================
+public class AddLoop_Mutant3 {
+    // Utility: compute sum using loop-based accumulation
+    // The method demonstrates two branches dependent on y
+    
+    /*@ public normal_behavior
+      @ requires true;
+      @ ensures \result == x + 2 * y;  
+      @*/
+    public static int AddLoop(int x, int y) {
+        int sum = x;
+        // Start with the provided x as the base and update in the loop
+        // For y > 0, each iteration increases sum by 2
+        if (y > 0) {
+            int n = y;
+            // Iterate n times, incrementing sum by 2 per iteration
+            /*@ loop_invariant n >= 0;
+              @ loop_invariant sum == x + 2 * (y - n);
+              @ decreasing n;
+              @*/
+            while (n > 0) {
+                sum = sum + 2;
+                n = n - 1;
+            }
+        } else {
+            int n = -y;
+            // Iterate n times, decrementing sum by 1 per iteration
+            /*@ loop_invariant n >= 0;
+              @ loop_invariant sum == x - 1 * ((-y) - n);
+              @ decreasing n;
+              @*/
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+            }
+        }
+        return sum;
+    }
+}
+
+==============================
+tmp/AddLoop_Mutant3.java:36: verify: The prover cannot establish an assertion (Postcondition: tmp/AddLoop_Mutant3.java:7:) in method AddLoop
+        return sum;
+        ^
+tmp/AddLoop_Mutant3.java:7: verify: Associated declaration: tmp/AddLoop_Mutant3.java:36:
+      @ ensures \result == x + 2 * y;  
+        ^
+2 verification failures
+
+==============================

@@ -1,0 +1,167 @@
+public class MultiSumRatio {
+
+    /*@ public normal_behavior
+      @   requires (\old(x) + ((\old(y) < 0) ? -\old(y) : \old(y))) != 0;
+      @   assignable \nothing;
+      @   ensures
+      @     (\let int yAbs = ((\old(y) < 0) ? -\old(y) : \old(y));
+      @      \let int sumFinal = (\old(x) + yAbs);
+      @      \let int factor0 = (1 + (yAbs * (yAbs - 1)) / 2);
+      @      (\exists int t; t >= 0
+      @         && (factor0 / (int)\pow(10, t)) <= 10
+      @         && (t == 0 || (factor0 / (int)\pow(10, t - 1)) > 10)
+      @         && \result == (((\old(x) * yAbs) / sumFinal) * t)
+      @      )
+      @     );
+      @ also
+      @ public exceptional_behavior
+      @   requires (\old(x) + ((\old(y) < 0) ? -\old(y) : \old(y))) == 0;
+      @   assignable \nothing;
+      @   signals_only ArithmeticException;
+      @*/
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            /*@ maintaining 0 <= n && n <= y;
+              @ maintaining sum == x + (y - n);
+              @ maintaining factor == 1 + (\sum int k; n <= k && k < y; k);
+              @ decreasing n;
+              @*/
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            /*@ maintaining 0 <= n;
+              @ maintaining sum == x - ((-y) - n);
+              @ maintaining factor == 1 + (\sum int k; n <= k && k < (-y); k);
+              @ decreasing n;
+              @*/
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        int tmpFactor = 0;
+        //@ label FactorLoopStart;
+        /*@ maintaining tmpFactor >= 0;
+          @ maintaining factor >= 0;
+          @ maintaining factor == \at(factor, FactorLoopStart) / (int)\pow(10, tmpFactor);
+          @ decreasing factor;
+          @*/
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+==============================
+tmp/MultiSumRatio.java:11: error: This backslash token is unknown: \pow
+      @         && (factor0 / (int)\pow(10, t)) <= 10
+                                   ^
+tmp/MultiSumRatio.java:12: error: This backslash token is unknown: \pow
+      @         && (t == 0 || (factor0 / (int)\pow(10, t - 1)) > 10)
+                                              ^
+tmp/MultiSumRatio.java:58: error: This backslash token is unknown: \at
+          @ maintaining factor == \at(factor, FactorLoopStart) / (int)\pow(10, tmpFactor);
+                                  ^
+tmp/MultiSumRatio.java:58: error: This backslash token is unknown: \pow
+          @ maintaining factor == \at(factor, FactorLoopStart) / (int)\pow(10, tmpFactor);
+                                                                      ^
+4 errors
+
+==============================
+public class MultiSumRatio {
+
+    /*@ public normal_behavior
+      @   requires (\old(x) + ((\old(y) < 0) ? -\old(y) : \old(y))) != 0;
+      @   assignable \nothing;
+      @   ensures
+      @     (\let int yAbs = ((\old(y) < 0) ? -\old(y) : \old(y));
+      @      \let int sumFinal = (\old(x) + yAbs);
+      @      \let int factor0 = (1 + (yAbs * (yAbs - 1)) / 2);
+      @      (\exists int t; t >= 0
+      @         && (factor0 / (int)\pow(10, t)) <= 10
+      @         && (t == 0 || (factor0 / (int)\pow(10, t - 1)) > 10)
+      @         && \result == (((\old(x) * yAbs) / sumFinal) * t)
+      @      )
+      @     );
+      @ also
+      @ public exceptional_behavior
+      @   requires (\old(x) + ((\old(y) < 0) ? -\old(y) : \old(y))) == 0;
+      @   assignable \nothing;
+      @   signals_only ArithmeticException;
+      @*/
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            /*@ maintaining 0 <= n && n <= y;
+              @ maintaining sum == x + (y - n);
+              @ maintaining factor == 1 + (\sum int k; n <= k && k < y; k);
+              @ decreasing n;
+              @*/
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            /*@ maintaining 0 <= n;
+              @ maintaining sum == x - ((-y) - n);
+              @ maintaining factor == 1 + (\sum int k; n <= k && k < (-y); k);
+              @ decreasing n;
+              @*/
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        int tmpFactor = 0;
+        //@ label FactorLoopStart;
+        /*@ maintaining tmpFactor >= 0;
+          @ maintaining factor >= 0;
+ 
+          @ decreasing factor;
+          @*/
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+
+==============================
+tmp/MultiSumRatio.java:11: error: This backslash token is unknown: \pow
+      @         && (factor0 / (int)\pow(10, t)) <= 10
+                                   ^
+tmp/MultiSumRatio.java:12: error: This backslash token is unknown: \pow
+      @         && (t == 0 || (factor0 / (int)\pow(10, t - 1)) > 10)
+                                              ^
+2 errors
+
+==============================

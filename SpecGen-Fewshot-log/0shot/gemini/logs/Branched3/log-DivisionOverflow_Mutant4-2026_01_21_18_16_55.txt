@@ -1,0 +1,30 @@
+public class DivisionOverflow_Mutant4 {
+    // Test scaffolding: ensure safe handling of division by non-zero denominators.
+    // The following path performs an integer division when denominator is non-zero.
+    
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures (denom != 0) ==> (\result == nom / denom);
+      @   ensures (denom == 0) ==> (\result == 0);
+      @   signals (ArithmeticException) (denom == 0 && nom == Integer.MIN_VALUE && denom == -1); 
+      @   // Note: In Java, Integer.MIN_VALUE / -1 causes an overflow but not an ArithmeticException.
+      @   // ArithmeticException is only thrown for division by zero.
+      @*/
+    public static int division_test_fail_overflow(int nom, int denom) {
+        //~should_fail
+        // Guard: denom should be non-zero to avoid ArithmeticException.
+        if (denom != 0) { //add a check for denominator to be non-zero
+            int tmp = nom / denom;
+            return tmp;
+        }
+        // If denom is zero, return a neutral result.
+        return 0;
+    }
+}
+==============================
+tmp/DivisionOverflow_Mutant4.java:9: error: Signals clauses are not permitted in normal specification cases
+      @   signals (ArithmeticException) (denom == 0 && nom == Integer.MIN_VALUE && denom == -1); 
+          ^
+1 error
+
+==============================

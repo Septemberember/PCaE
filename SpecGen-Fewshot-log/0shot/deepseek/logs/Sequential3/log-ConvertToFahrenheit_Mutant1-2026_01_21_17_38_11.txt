@@ -1,0 +1,43 @@
+public class ConvertToFahrenheit_Mutant1 {
+
+    // Temperature conversion utility
+    /*@ requires Double.isFinite(celsius);
+      @ ensures \result == celsius * 1.80 - 32.00;
+      @ ensures \result == (celsius * 9.0/5.0) - 32.00;
+      @*/
+    public static double convertTemperature(double celsius) {
+        return celsius * 1.80 - 32.00;
+    }
+}
+==============================
+tmp/ConvertToFahrenheit_Mutant1.java:9: verify: The prover cannot establish an assertion (Postcondition: tmp/ConvertToFahrenheit_Mutant1.java:6:) in method convertTemperature
+        return celsius * 1.80 - 32.00;
+        ^
+tmp/ConvertToFahrenheit_Mutant1.java:6: verify: Associated declaration: tmp/ConvertToFahrenheit_Mutant1.java:9:
+      @ ensures \result == (celsius * 9.0/5.0) - 32.00;
+        ^
+2 verification failures
+
+==============================
+public class ConvertToFahrenheit_Mutant1 {
+
+    // Temperature conversion utility
+    /*@ requires Double.isFinite(celsius);
+      @ ensures \result == celsius * 1.80 - 32.00;
+      @ ensures \result == (celsius * 9.0/5.0) - 32.00;  
+      @*/
+    public static double convertTemperature(double celsius) {
+        return celsius * 1.80 - 32.00;
+    }
+}
+
+==============================
+tmp/ConvertToFahrenheit_Mutant1.java:9: verify: The prover cannot establish an assertion (Postcondition: tmp/ConvertToFahrenheit_Mutant1.java:6:) in method convertTemperature
+        return celsius * 1.80 - 32.00;
+        ^
+tmp/ConvertToFahrenheit_Mutant1.java:6: verify: Associated declaration: tmp/ConvertToFahrenheit_Mutant1.java:9:
+      @ ensures \result == (celsius * 9.0/5.0) - 32.00;  
+        ^
+2 verification failures
+
+==============================

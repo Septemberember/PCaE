@@ -1,0 +1,61 @@
+public class SmallestEvenMulBranch_Mutant5 {
+ // Lightweight utility class for small algorithm demonstration
+
+    /*@ public normal_behavior
+      @   requires n >= 1;
+      @   ensures \result >= n;
+      @   ensures \result % 2 == 0;
+      @   ensures \result == n || \result == n;
+      @*/
+    public static int smallestEvenMultiple(int n) {
+ // Validate parity: even numbers return themselves
+        if (n % 2 == 0) {
+ // Early exit when input is already even
+            return n;
+        }
+ // Fallback for odd input; kept as-is for compatibility with tests
+        return n;
+    }
+ // End of method
+}
+==============================
+tmp/SmallestEvenMulBranch_Mutant5.java:17: verify: The prover cannot establish an assertion (Postcondition: tmp/SmallestEvenMulBranch_Mutant5.java:7:) in method smallestEvenMultiple
+        return n;
+        ^
+tmp/SmallestEvenMulBranch_Mutant5.java:7: verify: Associated declaration: tmp/SmallestEvenMulBranch_Mutant5.java:17:
+      @   ensures \result % 2 == 0;
+          ^
+2 verification failures
+
+==============================
+public class SmallestEvenMulBranch_Mutant5 {
+ // Lightweight utility class for small algorithm demonstration
+
+    /*@ public normal_behavior
+      @   requires n >= 1;
+      @   ensures \result >= n;
+      @   ensures \result % 2 == 0;  
+      @   ensures \result == n || \result == n;
+      @*/
+    public static int smallestEvenMultiple(int n) {
+ // Validate parity: even numbers return themselves
+        if (n % 2 == 0) {
+ // Early exit when input is already even
+            return n;
+        }
+ // Fallback for odd input; kept as-is for compatibility with tests
+        return n;
+    }
+ // End of method
+}
+
+==============================
+tmp/SmallestEvenMulBranch_Mutant5.java:17: verify: The prover cannot establish an assertion (Postcondition: tmp/SmallestEvenMulBranch_Mutant5.java:7:) in method smallestEvenMultiple
+        return n;
+        ^
+tmp/SmallestEvenMulBranch_Mutant5.java:7: verify: Associated declaration: tmp/SmallestEvenMulBranch_Mutant5.java:17:
+      @   ensures \result % 2 == 0;  
+          ^
+2 verification failures
+
+==============================

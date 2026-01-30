@@ -1,0 +1,104 @@
+public class ChangeCase_Mutant4 {
+
+ // Utility: ASCII-based character case conversion helper.
+ // The routine targets the standard A-Z and a-z ranges.
+ // Non-letter characters are returned unchanged.
+ 
+ // Notes:
+ // - Efficient arithmetic-based mapping between cases.
+ // - No allocations or exceptions.
+ // - Behavior is defined for ASCII subset.
+ 
+ // Additional clarification:
+ // - Only relevant for typical English alphabets in ASCII.
+ // - No allocations; uses simple arithmetic.
+
+ // ASCII case conversion helper.
+ // This routine only affects standard A-Z and a-z ranges.
+ // Non-letter characters are returned unchanged.
+
+    /*@
+      @ public normal_behavior
+      @ ensures \result == c || 
+      @         (c >= 'A' && c <= 'Z' && \result == (char)(c - 'A' + 'a')) ||
+      @         (c >= 'a' && c <= 'z' && \result == (char)(c - 'a' + 'A'));
+      @ ensures (c >= 'A' && c <= 'Z') ==> (\result >= 'a' && \result <= 'z');
+      @ ensures (c >= 'a' && c <= 'z') ==> (\result >= 'A' && \result <= 'Z');
+      @ ensures (c < 'A' || (c > 'Z' && c < 'a') || c > 'z') ==> \result == c;
+      @*/
+    public static char changeCase(char c) {
+        char result = ' ';
+        if (c > 'z') {
+            result = c;
+        } else if (c > 'a') {
+            result = (char) (c - 'a' + 'A');
+        } else if (c > 'Z') {
+            result = c;
+        } else if (c >= 'A') {
+            result = (char) (c - 'A' + 'a');
+        } else {
+            result = c;
+        }
+        return result;
+    }
+    
+}
+==============================
+tmp/ChangeCase_Mutant4.java:42: verify: The prover cannot establish an assertion (Postcondition: tmp/ChangeCase_Mutant4.java:26:) in method changeCase
+        return result;
+        ^
+tmp/ChangeCase_Mutant4.java:26: verify: Associated declaration: tmp/ChangeCase_Mutant4.java:42:
+      @ ensures (c >= 'a' && c <= 'z') ==> (\result >= 'A' && \result <= 'Z');
+        ^
+2 verification failures
+
+==============================
+public class ChangeCase_Mutant4 {
+
+ // Utility: ASCII-based character case conversion helper.
+ // The routine targets the standard A-Z and a-z ranges.
+ // Non-letter characters are returned unchanged.
+ 
+ // Notes:
+ // - Efficient arithmetic-based mapping between cases.
+ // - No allocations or exceptions.
+ // - Behavior is defined for ASCII subset.
+ 
+ // Additional clarification:
+ // - Only relevant for typical English alphabets in ASCII.
+ // - No allocations; uses simple arithmetic.
+
+ // ASCII case conversion helper.
+ // This routine only affects standard A-Z and a-z ranges.
+ // Non-letter characters are returned unchanged.
+
+    /*@
+      @ public normal_behavior
+      @ ensures \result == c || 
+      @         (c >= 'A' && c <= 'Z' && \result == (char)(c - 'A' + 'a')) ||
+      @         (c >= 'a' && c <= 'z' && \result == (char)(c - 'a' + 'A'));
+      @ ensures (c >= 'A' && c <= 'Z') ==> (\result >= 'a' && \result <= 'z');
+      @ ensures (c > 'a' && c < 'z') ==> (\result > 'A' && \result < 'Z');  
+      @ ensures (c < 'A' || (c > 'Z' && c < 'a') || c > 'z') ==> \result == c;
+      @*/
+    public static char changeCase(char c) {
+        char result = ' ';
+        if (c > 'z') {
+            result = c;
+        } else if (c > 'a') {
+            result = (char) (c - 'a' + 'A');
+        } else if (c > 'Z') {
+            result = c;
+        } else if (c >= 'A') {
+            result = (char) (c - 'A' + 'a');
+        } else {
+            result = c;
+        }
+        return result;
+    }
+    
+}
+
+==============================
+
+==============================

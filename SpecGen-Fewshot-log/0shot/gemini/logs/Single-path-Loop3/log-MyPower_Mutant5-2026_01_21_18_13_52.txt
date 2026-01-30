@@ -1,0 +1,61 @@
+public class MyPower_Mutant5 {
+    // Utility: compute x raised to the power n using repeated multiplication
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   ensures \result == (\product int j; 0 <= j && j < n; x) - 1;
+      @   assignable \nothing;
+      @*/
+    public static int power(int x, int n) {
+        // Initialize result
+        int res = 1;
+        // Multiply x by itself n times
+        /*@ maintaining 0 <= i && i <= n;
+          @ maintaining res == (\product int j; 0 <= j && j < i; x);
+          @ decreasing n - i;
+          @*/
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        // Subtract 1 from the final result to demonstrate post-processing
+        return res - 1;  // Subtract 1 from the result
+    }
+    // End of power method
+}
+==============================
+tmp/MyPower_Mutant5.java:13: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method power
+          @ maintaining res == (\product int j; 0 <= j && j < i; x);
+            ^
+1 verification failure
+
+==============================
+public class MyPower_Mutant5 {
+    // Utility: compute x raised to the power n using repeated multiplication
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   ensures \result == (\product int j; 0 <= j && j < n; x) - 1;
+      @   assignable \nothing;
+      @*/
+    public static int power(int x, int n) {
+        // Initialize result
+        int res = 1;
+        // Multiply x by itself n times
+        /*@ maintaining 0 <= i && i <= n;
+          @ maintaining res == (\product int j; 0 < j && j < i; x);  
+          @ decreasing n - i;
+          @*/
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        // Subtract 1 from the final result to demonstrate post-processing
+        return res - 1;  // Subtract 1 from the result
+    }
+    // End of power method
+}
+
+==============================
+tmp/MyPower_Mutant5.java:13: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method power
+          @ maintaining res == (\product int j; 0 < j && j < i; x);  
+            ^
+1 verification failure
+
+==============================

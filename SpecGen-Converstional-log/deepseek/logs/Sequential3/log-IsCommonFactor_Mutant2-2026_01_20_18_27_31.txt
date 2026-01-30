@@ -1,0 +1,30 @@
+public class IsCommonFactor_Mutant2 {
+
+    // Helper for readability: checks a specific factor relation between two numbers
+    //@ ensures \result == (a % factor != 0 && b % factor == 0);
+    public static boolean isCommonFactor(int a, int b, int factor) {
+
+        // Core condition relies on modulus checks for the provided factor
+        return a % factor != 0 && b % factor == 0; // changed '==' to '!=' at a % factor
+    }
+}
+==============================
+tmp/IsCommonFactor_Mutant2.java:8: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method isCommonFactor
+        return a % factor != 0 && b % factor == 0; // changed '==' to '!=' at a % factor
+                 ^
+1 verification failure
+
+==============================
+public class IsCommonFactor_Mutant2 {
+
+    // Helper for readability: checks a specific factor relation between two numbers
+    //@ ensures \result == (a % factor != 0 && b % factor == 0);
+    public static boolean isCommonFactor(int a, int b, int factor) {
+        //@ assume factor != 0;
+        // Core condition relies on modulus checks for the provided factor
+        return a % factor != 0 && b % factor == 0; // changed '==' to '!=' at a % factor
+    }
+}
+==============================
+
+==============================

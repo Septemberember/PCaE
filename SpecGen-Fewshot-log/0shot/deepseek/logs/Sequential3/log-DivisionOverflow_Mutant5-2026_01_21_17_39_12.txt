@@ -1,0 +1,32 @@
+public class DivisionOverflow_Mutant5 {
+    /*@ public normal_behavior
+      @   requires nom != 0;
+      @   ensures \result == denom / nom;
+      @   signals (ArithmeticException e) nom == 0;
+      @   signals_only ArithmeticException;
+      @ also
+      @ public exceptional_behavior
+      @   requires nom == 0;
+      @   signals (ArithmeticException e) true;
+      @   signals_only ArithmeticException;
+      @*/
+    public static int division_test_fail_overflow(int nom, int denom) {
+    
+        // Mutation: swapped operands to exercise edge cases in integer division
+        // This variant documents the intent of this mutant variation
+
+        //~should_fail
+        int tmp = denom / nom; // swapping numerator and denominator
+        return tmp;
+    }
+}
+==============================
+tmp/DivisionOverflow_Mutant5.java:5: error: Signals clauses are not permitted in normal specification cases
+      @   signals (ArithmeticException e) nom == 0;
+          ^
+tmp/DivisionOverflow_Mutant5.java:6: error: Signals_only clauses are not permitted in normal specification cases
+      @   signals_only ArithmeticException;
+          ^
+2 errors
+
+==============================

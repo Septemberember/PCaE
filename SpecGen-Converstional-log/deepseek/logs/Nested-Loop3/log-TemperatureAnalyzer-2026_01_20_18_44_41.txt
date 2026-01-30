@@ -1,0 +1,192 @@
+public class TemperatureAnalyzer {
+
+    //@ requires modifier != 2;
+    //@ ensures \result == (\old(temp) + modifier - offset) * 2 > 50 ? 
+    //@                     ((((\old(temp) + modifier - offset) * 2 - 10) / (modifier - 2 + 1)) + ((\old(temp) + modifier - offset) * 2 - 10) * 0.1 + 1.0 + 0.05 + 0.1 + 0.15 + ((\old(temp) + modifier - offset) * 2 - 10) - 3 + 2.0) :
+    //@                     (((\old(temp) + modifier - offset) * 2 + 15) * 0.2 + 1.0 + 0.05 + 0.1 + 0.15 + ((\old(temp) + modifier - offset) * 2 + 15) - 3 - 1.0);
+    public static double analyzeTemperature(int modifier) {
+        int temp = 96;
+        int offset = 5;
+        double average = 0.0;
+        boolean alert = false;
+
+        temp = temp + modifier;
+        temp = temp - offset;
+        temp = temp * 2;
+
+        int factor = 3;
+        int divisor = modifier - 2;
+        double result = 0.0;
+
+        if (temp > 50) {
+            divisor = divisor + 1;
+            temp = temp - 10;
+            result = (double) temp / divisor;
+            average = result + temp * 0.1;
+            alert = average > 30;
+        } else {
+            temp = temp + 15;
+            divisor = divisor - 1;
+            average = temp * 0.2;
+            alert = average < 10;
+        }
+
+        double correction = 1.0;
+        //@ maintaining 0 <= i && i <= 4;
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+        //@ decreases 4 - i;
+        for (int i = 0; i < 4; i++) {
+            correction += i * 0.05;
+        }
+
+        double finalValue = average + correction + temp - factor;
+
+        if (alert) {
+            finalValue += 2.0;
+        } else {
+            finalValue -= 1.0;
+        }
+        return finalValue;
+    }
+}
+==============================
+tmp/TemperatureAnalyzer.java:4: error: cannot find symbol
+    //@ ensures \result == (\old(temp) + modifier - offset) * 2 > 50 ? 
+                                 ^
+  symbol:   variable temp
+  location: class TemperatureAnalyzer
+tmp/TemperatureAnalyzer.java:4: error: cannot find symbol
+    //@ ensures \result == (\old(temp) + modifier - offset) * 2 > 50 ? 
+                                                    ^
+  symbol:   variable offset
+  location: class TemperatureAnalyzer
+tmp/TemperatureAnalyzer.java:5: error: cannot find symbol
+    //@                     ((((\old(temp) + modifier - offset) * 2 - 10) / (modifier - 2 + 1)) + ((\old(temp) + modifier - offset) * 2 - 10) * 0.1 + 1.0 + 0.05 + 0.1 + 0.15 + ((\old(temp) + modifier - offset) * 2 - 10) - 3 + 2.0) :
+                                     ^
+  symbol:   variable temp
+  location: class TemperatureAnalyzer
+tmp/TemperatureAnalyzer.java:5: error: cannot find symbol
+    //@                     ((((\old(temp) + modifier - offset) * 2 - 10) / (modifier - 2 + 1)) + ((\old(temp) + modifier - offset) * 2 - 10) * 0.1 + 1.0 + 0.05 + 0.1 + 0.15 + ((\old(temp) + modifier - offset) * 2 - 10) - 3 + 2.0) :
+                                                                                                         ^
+  symbol:   variable temp
+  location: class TemperatureAnalyzer
+tmp/TemperatureAnalyzer.java:5: error: cannot find symbol
+    //@                     ((((\old(temp) + modifier - offset) * 2 - 10) / (modifier - 2 + 1)) + ((\old(temp) + modifier - offset) * 2 - 10) * 0.1 + 1.0 + 0.05 + 0.1 + 0.15 + ((\old(temp) + modifier - offset) * 2 - 10) - 3 + 2.0) :
+                                                                                                                                                                                       ^
+  symbol:   variable temp
+  location: class TemperatureAnalyzer
+tmp/TemperatureAnalyzer.java:6: error: cannot find symbol
+    //@                     (((\old(temp) + modifier - offset) * 2 + 15) * 0.2 + 1.0 + 0.05 + 0.1 + 0.15 + ((\old(temp) + modifier - offset) * 2 + 15) - 3 - 1.0);
+                                    ^
+  symbol:   variable temp
+  location: class TemperatureAnalyzer
+tmp/TemperatureAnalyzer.java:6: error: cannot find symbol
+    //@                     (((\old(temp) + modifier - offset) * 2 + 15) * 0.2 + 1.0 + 0.05 + 0.1 + 0.15 + ((\old(temp) + modifier - offset) * 2 + 15) - 3 - 1.0);
+                                                                                                                  ^
+  symbol:   variable temp
+  location: class TemperatureAnalyzer
+tmp/TemperatureAnalyzer.java:5: error: cannot find symbol
+    //@                     ((((\old(temp) + modifier - offset) * 2 - 10) / (modifier - 2 + 1)) + ((\old(temp) + modifier - offset) * 2 - 10) * 0.1 + 1.0 + 0.05 + 0.1 + 0.15 + ((\old(temp) + modifier - offset) * 2 - 10) - 3 + 2.0) :
+                                                        ^
+  symbol:   variable offset
+  location: class TemperatureAnalyzer
+tmp/TemperatureAnalyzer.java:5: error: cannot find symbol
+    //@                     ((((\old(temp) + modifier - offset) * 2 - 10) / (modifier - 2 + 1)) + ((\old(temp) + modifier - offset) * 2 - 10) * 0.1 + 1.0 + 0.05 + 0.1 + 0.15 + ((\old(temp) + modifier - offset) * 2 - 10) - 3 + 2.0) :
+                                                                                                                            ^
+  symbol:   variable offset
+  location: class TemperatureAnalyzer
+tmp/TemperatureAnalyzer.java:5: error: cannot find symbol
+    //@                     ((((\old(temp) + modifier - offset) * 2 - 10) / (modifier - 2 + 1)) + ((\old(temp) + modifier - offset) * 2 - 10) * 0.1 + 1.0 + 0.05 + 0.1 + 0.15 + ((\old(temp) + modifier - offset) * 2 - 10) - 3 + 2.0) :
+                                                                                                                                                                                                          ^
+  symbol:   variable offset
+  location: class TemperatureAnalyzer
+tmp/TemperatureAnalyzer.java:6: error: cannot find symbol
+    //@                     (((\old(temp) + modifier - offset) * 2 + 15) * 0.2 + 1.0 + 0.05 + 0.1 + 0.15 + ((\old(temp) + modifier - offset) * 2 + 15) - 3 - 1.0);
+                                                       ^
+  symbol:   variable offset
+  location: class TemperatureAnalyzer
+tmp/TemperatureAnalyzer.java:6: error: cannot find symbol
+    //@                     (((\old(temp) + modifier - offset) * 2 + 15) * 0.2 + 1.0 + 0.05 + 0.1 + 0.15 + ((\old(temp) + modifier - offset) * 2 + 15) - 3 - 1.0);
+                                                                                                                                     ^
+  symbol:   variable offset
+  location: class TemperatureAnalyzer
+12 errors
+
+==============================
+public class TemperatureAnalyzer {
+
+    //@ requires modifier != 2;
+    //@ ensures \result == ((modifier > -46) ? 
+    //@                     (((((91 + modifier) * 2 - 10) / (modifier - 1)) + ((91 + modifier) * 2 - 10) * 0.1 + 1.3 + ((91 + modifier) * 2 - 10) - 3 + 
+    //@                     (((((91 + modifier) * 2 - 10) / (modifier - 1)) + ((91 + modifier) * 2 - 10) * 0.1) > 30 ? 2.0 : -1.0)) : 
+    //@                     (((91 + modifier) * 2 + 15) * 0.2 + 1.3 + ((91 + modifier) * 2 + 15) - 3 + 
+    //@                     ((((91 + modifier) * 2 + 15) * 0.2) < 10 ? 2.0 : -1.0)));
+    public static double analyzeTemperature(int modifier) {
+        int temp = 96;
+        int offset = 5;
+        double average = 0.0;
+        boolean alert = false;
+
+        temp = temp + modifier;
+        temp = temp - offset;
+        temp = temp * 2;
+
+        int factor = 3;
+        int divisor = modifier - 2;
+        double result = 0.0;
+
+        if (temp > 50) {
+            divisor = divisor + 1;
+            temp = temp - 10;
+            result = (double) temp / divisor;
+            average = result + temp * 0.1;
+            alert = average > 30;
+        } else {
+            temp = temp + 15;
+            divisor = divisor - 1;
+            average = temp * 0.2;
+            alert = average < 10;
+        }
+
+        double correction = 1.0;
+        //@ maintaining 0 <= i && i <= 4;
+        //@ maintaining correction == 1.0 + (\sum int j; 0 <= j && j < i; j * 0.05);
+        //@ decreases 4 - i;
+        for (int i = 0; i < 4; i++) {
+            correction += i * 0.05;
+        }
+
+        double finalValue = average + correction + temp - factor;
+
+        if (alert) {
+            finalValue += 2.0;
+        } else {
+            finalValue -= 1.0;
+        }
+        return finalValue;
+    }
+}
+==============================
+tmp/TemperatureAnalyzer.java:6: error: ')' expected
+    //@                     (((((91 + modifier) * 2 - 10) / (modifier - 1)) + ((91 + modifier) * 2 - 10) * 0.1) > 30 ? 2.0 : -1.0)) : 
+                                                                                                                                   ^
+1 error
+
+==============================
+public class TemperatureAnalyzer {
+    
+    //@ requires modifier != 1;
+    //@ ensures \result == (((((91 + modifier) * 2 - 10) / (modifier - 1)) + ((91 + modifier) * 2 - 10) * 0.1) > 30 ? 2.0 : -1.0);
+    public double analyzeTemperature(int modifier) {
+        // Calculate the complex expression
+        double numerator = (91 + modifier) * 2 - 10;
+        double denominator = modifier - 1;
+        double value = (numerator / denominator) + (numerator * 0.1);
+        
+        // Return result based on condition
+        return value > 30 ? 2.0 : -1.0;
+    }
+}
+==============================
+
+==============================

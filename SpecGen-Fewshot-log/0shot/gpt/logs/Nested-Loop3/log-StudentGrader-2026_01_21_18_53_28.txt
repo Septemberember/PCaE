@@ -1,0 +1,133 @@
+public class StudentGrader {
+    /*@ public normal_behavior
+      @   requires score != 90;
+      @   ensures \result != null;
+      @   ensures (\old(score) > 90 ==> \result.equals("A - 90"));
+      @   ensures (\old(score) <= 90 ==> \result.equals(\result.toLowerCase()));
+      @   ensures (\old(score) <= 90 ==> (\result.length() >= 4
+      @           && \result.charAt(0) >= 'a' && \result.charAt(0) <= 'f'
+      @           && \result.indexOf(": ") >= 0));
+      @   ensures (\old(score) <= 90 ==> (\exists int s; 32 <= s && s <= 41;
+      @              \result.endsWith(": " + s)));
+      @ also
+      @ public exceptional_behavior
+      @   requires score == 90;
+      @   signals_only NullPointerException;
+      @*/
+    public static String calculateGrade(int score) {
+        String gradeStr = null;
+        int MAX_SCORE = 90;
+        int MIN_SCORE = 40;
+        int curve = 0;
+        if (score < MIN_SCORE) {
+            curve = curve - (MIN_SCORE - score);
+            score = MIN_SCORE;
+            char l = 'G';
+            gradeStr = String.valueOf(l);
+        } else {
+            curve = curve + 2;
+        }
+
+        if (score > MAX_SCORE) {
+            score = MAX_SCORE;
+            gradeStr = new String("A - " + score);
+            return gradeStr;
+        }
+
+        if(score < MAX_SCORE) {
+            curve = curve + 8;
+            char level = 'F';
+            /*@ ghost int score0 = score; @*/
+            while(score > MIN_SCORE) {
+                /*@ maintaining score == score0 - 10 * (((int)'F') - ((int)level))
+                  @         && 0 <= (((int)'F') - ((int)level))
+                  @         && score <= score0;
+                  @ decreases score - MIN_SCORE;
+                  @*/
+                score = score - 10;
+                level--;
+            }
+            gradeStr = new String(String.valueOf(level));
+            if(curve % 2 == 0) {
+                score = score + 1;
+            }
+        }
+        gradeStr = gradeStr.toLowerCase();
+        gradeStr = gradeStr + ": " + score;
+        return gradeStr;
+    }
+}
+==============================
+tmp/StudentGrader.java:42: error: Loop specifications must immediately precede a loop statement
+                /*@ maintaining score == score0 - 10 * (((int)'F') - ((int)level))
+                    ^
+1 error
+
+==============================
+public class StudentGrader {
+    /*@ public normal_behavior
+      @   requires score != 90;
+      @   ensures \result != null;
+      @   ensures (\old(score) > 90 ==> \result.equals("A - 90"));
+      @   ensures (\old(score) <= 90 ==> \result.equals(\result.toLowerCase()));
+      @   ensures (\old(score) <= 90 ==> (\result.length() >= 4
+      @           && \result.charAt(0) >= 'a' && \result.charAt(0) <= 'f'
+      @           && \result.indexOf(": ") >= 0));
+      @   ensures (\old(score) <= 90 ==> (\exists int s; 32 <= s && s <= 41;
+      @              \result.endsWith(": " + s)));
+      @ also
+      @ public exceptional_behavior
+      @   requires score == 90;
+      @   signals_only NullPointerException;
+      @*/
+    public static String calculateGrade(int score) {
+        String gradeStr = null;
+        int MAX_SCORE = 90;
+        int MIN_SCORE = 40;
+        int curve = 0;
+        if (score < MIN_SCORE) {
+            curve = curve - (MIN_SCORE - score);
+            score = MIN_SCORE;
+            char l = 'G';
+            gradeStr = String.valueOf(l);
+        } else {
+            curve = curve + 2;
+        }
+
+        if (score > MAX_SCORE) {
+            score = MAX_SCORE;
+            gradeStr = new String("A - " + score);
+            return gradeStr;
+        }
+
+        if(score < MAX_SCORE) {
+            curve = curve + 8;
+            char level = 'F';
+            /*@ ghost int score0 = score; @*/
+            while(score > MIN_SCORE) {
+                /*@ maintaining score == score0 - 10 * (((int)'F') - ((int)level))  
+                  @         && 0 <= (((int)'F') - ((int)level))
+                  @         && score <= score0;
+                  @ decreases score - MIN_SCORE;
+                  @*/
+                score = score - 10;
+                level--;
+            }
+            gradeStr = new String(String.valueOf(level));
+            if(curve % 2 == 0) {
+                score = score + 1;
+            }
+        }
+        gradeStr = gradeStr.toLowerCase();
+        gradeStr = gradeStr + ": " + score;
+        return gradeStr;
+    }
+}
+
+==============================
+tmp/StudentGrader.java:42: error: Loop specifications must immediately precede a loop statement
+                /*@ maintaining score == score0 - 10 * (((int)'F') - ((int)level))  
+                    ^
+1 error
+
+==============================

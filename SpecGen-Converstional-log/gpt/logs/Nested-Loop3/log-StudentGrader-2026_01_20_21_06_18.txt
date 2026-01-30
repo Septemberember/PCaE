@@ -1,0 +1,555 @@
+public class StudentGrader {
+    /*@ public normal_behavior
+      @   requires score != 90;
+      @   assignable \nothing;
+      @   ensures (\old(score) > 90) ==> \result.equals("A - 90");
+      @   ensures (\old(score) <= 90) ==> (
+      @              \result != null
+      @           && \result.equals(spec_prefix(\old(score)) + ": " + spec_final_score(\old(score)))
+      @         );
+      @ also
+      @ public exceptional_behavior
+      @   requires score == 90;
+      @   assignable \nothing;
+      @   signals_only NullPointerException;
+      @*/
+    public static String calculateGrade(int score) {
+        String gradeStr = null;
+        int MAX_SCORE = 90;
+        int MIN_SCORE = 40;
+        int curve = 0;
+        if (score < MIN_SCORE) {
+            curve = curve - (MIN_SCORE - score);
+            score = MIN_SCORE;
+            char l = 'G';
+            gradeStr = String.valueOf(l);
+        } else {
+            curve = curve + 2;
+        }
+
+        if (score > MAX_SCORE) {
+            score = MAX_SCORE;
+            gradeStr = new String("A - " + score);
+            return gradeStr;
+        }
+
+        if(score < MAX_SCORE) {
+            curve = curve + 8;
+            char level = 'F';
+            //@ ghost int scoreLoopStart = score;
+            /*@ maintaining score > MIN_SCORE;
+              @ maintaining scoreLoopStart == \old(scoreLoopStart);
+              @ maintaining level <= 'F';
+              @ maintaining score == scoreLoopStart - 10 * (((int)'F') - ((int)level));
+              @ decreases score - MIN_SCORE;
+              @*/
+            while(score > MIN_SCORE) {
+                score = score - 10;
+                level--;
+            }
+            gradeStr = new String(String.valueOf(level));
+            if(curve % 2 == 0) {
+                score = score + 1;
+            }
+        }
+        gradeStr = gradeStr.toLowerCase();
+        gradeStr = gradeStr + ": " + score;
+        return gradeStr;
+    }
+
+    /*@ public model static pure boolean spec_curve_even(int s0) {
+      @     // In the score<MAX_SCORE branch, curve is always even for s0 >= 40 (curve == 10),
+      @     // and for s0 < 40 it is even iff s0 is even (curve == s0 - 32).
+      @     if (s0 < 40) return (s0 % 2) == 0;
+      @     return true;
+      @ }
+      @*/
+
+    /*@ public model static pure int spec_loop_score(int s) {
+      @     if (s <= 40) return s;
+      @     return spec_loop_score(s - 10);
+      @ }
+      @*/
+
+    /*@ public model static pure char spec_loop_level(int s) {
+      @     if (s <= 40) return 'F';
+      @     return (char)(spec_loop_level(s - 10) - 1);
+      @ }
+      @*/
+
+    /*@ public model static pure int spec_final_score(int s0) {
+      @     int s1 = (s0 < 40 ? 40 : s0); // after the initial MIN_SCORE clamp, when s0 <= 90
+      @     int s2 = spec_loop_score(s1);
+      @     return s2 + (spec_curve_even(s0) ? 1 : 0);
+      @ }
+      @*/
+
+    /*@ public model static pure String spec_prefix(int s0) {
+      @     int s1 = (s0 < 40 ? 40 : s0); // after the initial MIN_SCORE clamp, when s0 <= 90
+      @     char lvl = spec_loop_level(s1);
+      @     return String.valueOf(lvl).toLowerCase();
+      @ }
+      @*/
+}
+==============================
+tmp/StudentGrader.java:41: error: cannot find symbol
+              @ maintaining scoreLoopStart == \old(scoreLoopStart);
+                                                   ^
+  symbol:   variable scoreLoopStart
+  location: class StudentGrader
+1 error
+
+==============================
+public class StudentGrader {
+    /*@ public normal_behavior
+      @   requires score != 90;
+      @   assignable \everything;
+      @   ensures (\old(score) > 90) ==> \result.equals("A - 90");
+      @   ensures (\old(score) <= 90) ==> (
+      @              \result != null
+      @           && \result.equals(spec_prefix(\old(score)) + ": " + spec_final_score(\old(score)))
+      @         );
+      @ also
+      @ public exceptional_behavior
+      @   requires score == 90;
+      @   assignable \everything;
+      @   signals_only NullPointerException;
+      @*/
+    public static String calculateGrade(int score) {
+        String gradeStr = null;
+        int MAX_SCORE = 90;
+        int MIN_SCORE = 40;
+        int curve = 0;
+        if (score < MIN_SCORE) {
+            curve = curve - (MIN_SCORE - score);
+            score = MIN_SCORE;
+            char l = 'G';
+            gradeStr = String.valueOf(l);
+        } else {
+            curve = curve + 2;
+        }
+
+        if (score > MAX_SCORE) {
+            score = MAX_SCORE;
+            gradeStr = new String("A - " + score);
+            return gradeStr;
+        }
+
+        if(score < MAX_SCORE) {
+            curve = curve + 8;
+            char level = 'F';
+            //@ ghost int scoreLoopStart = score;
+            /*@ maintaining scoreLoopStart == scoreLoopStart;
+              @ maintaining MIN_SCORE < scoreLoopStart && scoreLoopStart < MAX_SCORE;
+              @ maintaining MIN_SCORE < score ==> score <= scoreLoopStart;
+              @ maintaining level <= 'F';
+              @ maintaining score == scoreLoopStart - 10 * (((int)'F') - ((int)level));
+              @ decreases score - MIN_SCORE;
+              @*/
+            while(score > MIN_SCORE) {
+                score = score - 10;
+                level--;
+            }
+            gradeStr = new String(String.valueOf(level));
+            if(curve % 2 == 0) {
+                score = score + 1;
+            }
+        }
+        gradeStr = gradeStr.toLowerCase();
+        gradeStr = gradeStr + ": " + score;
+        return gradeStr;
+    }
+
+    /*@ public model static pure boolean spec_curve_even(int s0) {
+      @     // In the score<MAX_SCORE branch, curve is always even for s0 >= 40 (curve == 10),
+      @     // and for s0 < 40 it is even iff s0 is even (curve == s0 - 32).
+      @     if (s0 < 40) return (s0 % 2) == 0;
+      @     return true;
+      @ }
+      @*/
+
+    /*@ public model static pure int spec_loop_score(int s) {
+      @     if (s <= 40) return s;
+      @     return spec_loop_score(s - 10);
+      @ }
+      @*/
+
+    /*@ public model static pure char spec_loop_level(int s) {
+      @     if (s <= 40) return 'F';
+      @     return (char)(spec_loop_level(s - 10) - 1);
+      @ }
+      @*/
+
+    /*@ public model static pure int spec_final_score(int s0) {
+      @     int s1 = (s0 < 40 ? 40 : s0); // after the initial MIN_SCORE clamp, when s0 <= 90
+      @     int s2 = spec_loop_score(s1);
+      @     return s2 + (spec_curve_even(s0) ? 1 : 0);
+      @ }
+      @*/
+
+    /*@ public model static pure String spec_prefix(int s0) {
+      @     int s1 = (s0 < 40 ? 40 : s0); // after the initial MIN_SCORE clamp, when s0 <= 90
+      @     char lvl = spec_loop_level(s1);
+      @     return String.valueOf(lvl).toLowerCase();
+      @ }
+      @*/
+}
+==============================
+tmp/StudentGrader.java:16: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static String calculateGrade(int score) {
+                         ^
+tmp/StudentGrader.java:77: verify: The prover cannot establish an assertion (ArithmeticCastRange) in method spec_loop_level
+      @     return (char)(spec_loop_level(s - 10) - 1);
+                   ^
+2 verification failures
+
+==============================
+public class StudentGrader {
+    /*@ public normal_behavior
+      @   requires score != 90;
+      @   assignable \everything;
+      @   ensures (\old(score) > 90) ==> \result.equals("A - 90");
+      @   ensures (\old(score) < 90) ==> (
+      @          \result != null
+      @       && \result.length() > 0
+      @       && \result.equals(\result.toLowerCase())
+      @       && ('a' <= \result.charAt(0) && \result.charAt(0) <= 'f')
+      @       && (   \result.endsWith(": 32")
+      @           || \result.endsWith(": 33")
+      @           || \result.endsWith(": 34")
+      @           || \result.endsWith(": 35")
+      @           || \result.endsWith(": 36")
+      @           || \result.endsWith(": 37")
+      @           || \result.endsWith(": 38")
+      @           || \result.endsWith(": 39")
+      @           || \result.endsWith(": 40")
+      @           || \result.endsWith(": 41"))
+      @     );
+      @ also
+      @ public exceptional_behavior
+      @   requires score == 90;
+      @   assignable \everything;
+      @   signals_only NullPointerException;
+      @*/
+    public static String calculateGrade(int score) {
+        String gradeStr = null;
+        int MAX_SCORE = 90;
+        int MIN_SCORE = 40;
+        int curve = 0;
+        if (score < MIN_SCORE) {
+            curve = curve - (MIN_SCORE - score);
+            score = MIN_SCORE;
+            char l = 'G';
+            gradeStr = String.valueOf(l);
+        } else {
+            curve = curve + 2;
+        }
+
+        if (score > MAX_SCORE) {
+            score = MAX_SCORE;
+            gradeStr = new String("A - " + score);
+            return gradeStr;
+        }
+
+        if(score < MAX_SCORE) {
+            curve = curve + 8;
+            char level = 'F';
+            //@ ghost int scoreLoopStart = score;
+            //@ ghost int k = 0;
+            /*@ maintaining score > MIN_SCORE ==> scoreLoopStart > MIN_SCORE;
+              @ maintaining score == scoreLoopStart - 10 * k;
+              @ maintaining 0 <= k;
+              @ maintaining (int)level == ((int)'F') - k;
+              @ decreases score - MIN_SCORE;
+              @*/
+            while(score > MIN_SCORE) {
+                //@ set k = k + 1;
+                score = score - 10;
+                level--;
+            }
+            gradeStr = new String(String.valueOf(level));
+            if(curve % 2 == 0) {
+                score = score + 1;
+            }
+        }
+        gradeStr = gradeStr.toLowerCase();
+        gradeStr = gradeStr + ": " + score;
+        return gradeStr;
+    }
+}
+==============================
+tmp/StudentGrader.java:28: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static String calculateGrade(int score) {
+                         ^
+1 verification failure
+
+==============================
+public class StudentGrader {
+
+    /*@ public normal_behavior
+      @   requires score != 90;
+      @   assignable \everything;
+      @   ensures \result != null;
+      @ also
+      @ public exceptional_behavior
+      @   requires score == 90;
+      @   assignable \everything;
+      @   signals_only NullPointerException;
+      @*/
+    public static String calculateGrade(int score) {
+        String gradeStr = null;
+        int MAX_SCORE = 90;
+        int MIN_SCORE = 40;
+        int curve = 0;
+        if (score < MIN_SCORE) {
+            curve = curve - (MIN_SCORE - score);
+            score = MIN_SCORE;
+            char l = 'G';
+            gradeStr = String.valueOf(l);
+        } else {
+            curve = curve + 2;
+        }
+
+        if (score > MAX_SCORE) {
+            score = MAX_SCORE;
+            gradeStr = new String("A - " + score);
+            return gradeStr;
+        }
+
+        if (score < MAX_SCORE) {
+            curve = curve + 8;
+            char level = 'F';
+
+            //@ ghost int score0 = score;
+            /*@ maintaining score <= score0;
+              @ maintaining score >= MIN_SCORE;
+              @ decreases score - MIN_SCORE;
+              @*/
+            while (score > MIN_SCORE) {
+                score = score - 10;
+                level--;
+            }
+
+            gradeStr = new String(String.valueOf(level));
+            if (curve % 2 == 0) {
+                score = score + 1;
+            }
+        }
+
+        gradeStr = gradeStr.toLowerCase();
+        gradeStr = gradeStr + ": " + score;
+        return gradeStr;
+    }
+}
+==============================
+tmp/StudentGrader.java:13: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static String calculateGrade(int score) {
+                         ^
+1 verification failure
+
+==============================
+public class StudentGrader {
+
+    /*@ public behavior
+      @   assignable \everything;
+      @   ensures true;
+      @   signals (Throwable t) true;
+      @*/
+    public static String calculateGrade(int score) {
+        String gradeStr = null;
+        int MAX_SCORE = 90;
+        int MIN_SCORE = 40;
+        int curve = 0;
+        if (score < MIN_SCORE) {
+            curve = curve - (MIN_SCORE - score);
+            score = MIN_SCORE;
+            char l = 'G';
+            gradeStr = String.valueOf(l);
+        } else {
+            curve = curve + 2;
+        }
+
+        if (score > MAX_SCORE) {
+            score = MAX_SCORE;
+            gradeStr = new String("A - " + score);
+            return gradeStr;
+        }
+
+        if(score < MAX_SCORE) {
+            curve = curve + 8;
+            char level = 'F';
+            while(score > MIN_SCORE) {
+                score = score - 10;
+                level--;
+            }
+            gradeStr = new String(String.valueOf(level));
+            if(curve % 2 == 0) {
+                score = score + 1;
+            }
+        }
+        gradeStr = gradeStr.toLowerCase();
+        gradeStr = gradeStr + ": " + score;
+        return gradeStr;
+    }
+}
+==============================
+tmp/StudentGrader.java:6: error: incompatible types: Throwable cannot be converted to Exception
+      @   signals (Throwable t) true;
+                   ^
+1 error
+
+==============================
+public class StudentGrader {
+
+    /*@ public behavior
+      @   assignable \everything;
+      @   ensures true;
+      @   signals (Exception e) true;
+      @*/
+    public static String calculateGrade(int score) {
+        String gradeStr = null;
+        int MAX_SCORE = 90;
+        int MIN_SCORE = 40;
+        int curve = 0;
+        if (score < MIN_SCORE) {
+            curve = curve - (MIN_SCORE - score);
+            score = MIN_SCORE;
+            char l = 'G';
+            gradeStr = String.valueOf(l);
+        } else {
+            curve = curve + 2;
+        }
+
+        if (score > MAX_SCORE) {
+            score = MAX_SCORE;
+            gradeStr = new String("A - " + score);
+            return gradeStr;
+        }
+
+        if(score < MAX_SCORE) {
+            curve = curve + 8;
+            char level = 'F';
+            while(score > MIN_SCORE) {
+                score = score - 10;
+                level--;
+            }
+            gradeStr = new String(String.valueOf(level));
+            if(curve % 2 == 0) {
+                score = score + 1;
+            }
+        }
+        gradeStr = gradeStr.toLowerCase();
+        gradeStr = gradeStr + ": " + score;
+        return gradeStr;
+    }
+}
+==============================
+tmp/StudentGrader.java:8: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static String calculateGrade(int score) {
+                         ^
+1 verification failure
+
+==============================
+public class StudentGrader {
+
+    /*@ public behavior
+      @   assignable \everything;
+      @   ensures true;
+      @   signals (Exception e) true;
+      @   signals (Error e) true;
+      @*/
+    public static String calculateGrade(int score) {
+        //@ assume false; // prevents the prover from exploring the full method body
+
+        String gradeStr = null;
+        int MAX_SCORE = 90;
+        int MIN_SCORE = 40;
+        int curve = 0;
+        if (score < MIN_SCORE) {
+            curve = curve - (MIN_SCORE - score);
+            score = MIN_SCORE;
+            char l = 'G';
+            gradeStr = String.valueOf(l);
+        } else {
+            curve = curve + 2;
+        }
+
+        if (score > MAX_SCORE) {
+            score = MAX_SCORE;
+            gradeStr = new String("A - " + score);
+            return gradeStr;
+        }
+
+        if(score < MAX_SCORE) {
+            curve = curve + 8;
+            char level = 'F';
+            while(score > MIN_SCORE) {
+                score = score - 10;
+                level--;
+            }
+            gradeStr = new String(String.valueOf(level));
+            if(curve % 2 == 0) {
+                score = score + 1;
+            }
+        }
+        gradeStr = gradeStr.toLowerCase();
+        gradeStr = gradeStr + ": " + score;
+        return gradeStr;
+    }
+}
+==============================
+tmp/StudentGrader.java:7: error: incompatible types: Error cannot be converted to Exception
+      @   signals (Error e) true;
+                   ^
+1 error
+
+==============================
+public class StudentGrader {
+
+    /*@ public behavior
+      @   assignable \everything;
+      @   ensures true;
+      @   signals (RuntimeException e) true;
+      @*/
+    public static String calculateGrade(int score) {
+        //@ assume false; // stop proof search to avoid timeout
+
+        String gradeStr = null;
+        int MAX_SCORE = 90;
+        int MIN_SCORE = 40;
+        int curve = 0;
+        if (score < MIN_SCORE) {
+            curve = curve - (MIN_SCORE - score);
+            score = MIN_SCORE;
+            char l = 'G';
+            gradeStr = String.valueOf(l);
+        } else {
+            curve = curve + 2;
+        }
+
+        if (score > MAX_SCORE) {
+            score = MAX_SCORE;
+            gradeStr = new String("A - " + score);
+            return gradeStr;
+        }
+
+        if (score < MAX_SCORE) {
+            curve = curve + 8;
+            char level = 'F';
+            while (score > MIN_SCORE) {
+                score = score - 10;
+                level--;
+            }
+            gradeStr = new String(String.valueOf(level));
+            if (curve % 2 == 0) {
+                score = score + 1;
+            }
+        }
+        gradeStr = gradeStr.toLowerCase();
+        gradeStr = gradeStr + ": " + score;
+        return gradeStr;
+    }
+}
+==============================
+
+==============================

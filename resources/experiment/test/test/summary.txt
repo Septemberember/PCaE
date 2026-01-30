@@ -1,0 +1,8 @@
+experimentName: test
+model: deepseek-chat
+category: test
+total number: 1
+success number: 0
+success rate: 0.0%
+failed number: 0
+exception number: 1

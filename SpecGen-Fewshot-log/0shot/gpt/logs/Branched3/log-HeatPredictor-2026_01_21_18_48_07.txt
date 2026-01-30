@@ -1,0 +1,130 @@
+public class HeatPredictor {
+
+    /*@ public normal_behavior
+      @   // The method follows a fully deterministic, piecewise computation.
+      @   // Let a = 2*level + 13 be the value of 'adjusted' right before the first if.
+      @
+      @   ensures ( (2*level + 13 > 20) && (factor <= 8) && (level < 5) ) ==>
+      @             \result ==
+      @               (
+      @                 (
+      @                   (
+      @                     ( ((double)(2*level + 18 + factor)) / (factor - 8) ) > 100.0
+      @                     ? ( ((double)(2*level + 18 + factor)) / (factor - 8) ) * 0.85
+      @                     : ( ((double)(2*level + 18 + factor)) / (factor - 8) ) + 12.0
+      @                   )
+      @                 ) * 1.1
+      @                 + (2*level + 18 + factor) * 0.05
+      @               );
+      @
+      @   ensures ( (2*level + 13 > 20) && (factor <= 8) && (level >= 5) ) ==>
+      @             \result ==
+      @               (
+      @                 (
+      @                   (
+      @                     ( ((2*level + 25 + factor) * 1.1) > 100.0 )
+      @                     ? ((2*level + 25 + factor) * 1.1) * 0.85
+      @                     : ((2*level + 25 + factor) * 1.1) + 12.0
+      @                   )
+      @                 ) * 0.84
+      @                 + (2*level + 25 + factor) * 0.05
+      @               );
+      @
+      @   ensures ( (2*level + 13 > 20) && (factor > 8) ) ==>
+      @             \result ==
+      @               (
+      @                 ((2*level + 14) * 0.9) * 0.84
+      @                 + (2*level + 14) * 0.05
+      @               );
+      @
+      @   ensures ( (2*level + 13 <= 20) && (factor < 3) ) ==>
+      @             \result ==
+      @               (
+      @                 (
+      @                   (
+      @                     ( ((2*level + 12) * 0.75) < 25.0 )
+      @                     ? ((2*level + 12) * 0.75) + 5.0
+      @                     : ((2*level + 12) * 0.75) * 0.96
+      @                   )
+      @                 ) * 1.1
+      @                 + (2*level + 12) * 0.05
+      @               );
+      @
+      @   ensures ( (2*level + 13 <= 20) && (factor >= 3) ) ==>
+      @             \result ==
+      @               (
+      @                 (
+      @                   (
+      @                     ( ((2*level + 7) * 0.8) < 25.0 )
+      @                     ? ((2*level + 7) * 0.8) + 5.0
+      @                     : ((2*level + 7) * 0.8) * 0.96
+      @                   )
+      @                 ) * 0.84
+      @                 + (2*level + 7) * 0.05
+      @               );
+      @*/
+    public static double predictHeat(int level, int factor) {
+        int adjusted = level;
+        double heat = 0.0;
+        boolean normal = true;
+        int offset = 3;
+
+        adjusted += 6;
+        adjusted *= 2;
+        adjusted -= offset;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 20) {
+            adjusted += 5;
+
+            if (factor <= 8) {
+                adjusted = adjusted + factor;
+
+                if (level < 5) {
+                    int divisor = factor - 8;
+                    heat = (double) adjusted / divisor;
+                } else {
+                    adjusted += 7;
+                    heat = adjusted * 1.1;
+                    normal = false;
+                }
+
+                if (heat > 100) {
+                    heat = heat * 0.85;
+                } else {
+                    heat = heat + 12;
+                }
+
+            } else {
+                adjusted -= 4;
+                heat = adjusted * 0.9;
+                normal = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (factor < 3) {
+                adjusted += 5;
+                heat = adjusted * 0.75;
+            } else {
+                heat = adjusted * 0.8;
+                normal = false;
+            }
+
+            if (heat < 25) {
+                heat = heat + 5;
+            } else {
+                heat = heat * 0.96;
+            }
+        }
+
+        double correction = normal ? 1.1 : 0.84;
+        double finalHeat = heat * correction + adjusted * 0.05;
+        System.out.println("Heat result: " + finalHeat);
+        return finalHeat;
+    }
+}
+==============================
+TimeoutException
+==============================

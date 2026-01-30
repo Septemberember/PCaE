@@ -1,0 +1,8 @@
+experimentName: 20260127-RQ3-Evo-Test
+model: openai/gpt-5.2
+category: BorderConditionMove
+total number: 25
+success number: 22
+success rate: 88.0%
+failed number: 1
+exception number: 2

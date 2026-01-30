@@ -1,0 +1,104 @@
+public class AddLoop_Mutant5 {
+    // Class scope: focused on a simple additive looping example.
+
+    // Note: This class demonstrates a simple additive loop.
+    /*@ public normal_behavior
+      @   requires y >= 0 ==> x + y + 1 <= Integer.MAX_VALUE;
+      @   requires y < 0 ==> x + y - 1 >= Integer.MIN_VALUE;
+      @   ensures (y >= 0) ==> (\result == x + y + 1);
+      @   ensures (y < 0) ==> (\result == x + y - 1);
+      @   assignable \nothing;
+      @*/
+    public static int AddLoop(int x, int y) {
+        // Initialize the accumulator with the starting value x.
+        int sum = x;
+        if (y > 0) {
+            // Positive input path: prepares to iterate downward.
+            // Positive path: start from y and count down to 0.
+            int n = y;
+            /*@ maintaining -1 <= n && n <= y;
+              @ maintaining sum == x + (y - n);
+              @ decreasing n;
+              @*/
+            while (n >= 0) {
+                sum = sum + 1;
+                n = n - 1;
+            }
+        } else {
+            // Negative path: operate on absolute value of y.
+            // Negative path: handle absolute value of y.
+            int n = -y;
+            /*@ maintaining -1 <= n && n <= (y == Integer.MIN_VALUE ? (long)Integer.MAX_VALUE + 1 : -y);
+              @ maintaining (y <= 0) ==> (sum == x - ((-y) - n));
+              @ decreasing n;
+              @*/
+            while (n >= 0) {
+                sum = sum - 1;
+                n = n - 1;
+            }
+        }
+        // Return the final accumulated sum.
+        // Final value computed by the accumulation loop.
+        return sum;
+        // End of AddLoop computation.
+    }
+}
+==============================
+tmp/AddLoop_Mutant5.java:42: verify: The prover cannot establish an assertion (Postcondition: tmp/AddLoop_Mutant5.java:8:) in method AddLoop
+        return sum;
+        ^
+tmp/AddLoop_Mutant5.java:8: verify: Associated declaration: tmp/AddLoop_Mutant5.java:42:
+      @   ensures (y >= 0) ==> (\result == x + y + 1);
+          ^
+2 verification failures
+
+==============================
+public class AddLoop_Mutant5 {
+    // Class scope: focused on a simple additive looping example.
+
+    // Note: This class demonstrates a simple additive loop.
+    /*@ public normal_behavior
+      @   requires y >= 0 ==> x + y + 1 <= Integer.MAX_VALUE;
+      @   requires y < 0 ==> x + y - 1 >= Integer.MIN_VALUE;
+      @   ensures (y > 0) ==> (\result == x + y + 1);  
+      @   ensures (y < 0) ==> (\result == x + y - 1);
+      @   assignable \nothing;
+      @*/
+    public static int AddLoop(int x, int y) {
+        // Initialize the accumulator with the starting value x.
+        int sum = x;
+        if (y > 0) {
+            // Positive input path: prepares to iterate downward.
+            // Positive path: start from y and count down to 0.
+            int n = y;
+            /*@ maintaining -1 <= n && n <= y;
+              @ maintaining sum == x + (y - n);
+              @ decreasing n;
+              @*/
+            while (n >= 0) {
+                sum = sum + 1;
+                n = n - 1;
+            }
+        } else {
+            // Negative path: operate on absolute value of y.
+            // Negative path: handle absolute value of y.
+            int n = -y;
+            /*@ maintaining -1 <= n && n <= (y == Integer.MIN_VALUE ? (long)Integer.MAX_VALUE + 1 : -y);
+              @ maintaining (y <= 0) ==> (sum == x - ((-y) - n));
+              @ decreasing n;
+              @*/
+            while (n >= 0) {
+                sum = sum - 1;
+                n = n - 1;
+            }
+        }
+        // Return the final accumulated sum.
+        // Final value computed by the accumulation loop.
+        return sum;
+        // End of AddLoop computation.
+    }
+}
+
+==============================
+
+==============================

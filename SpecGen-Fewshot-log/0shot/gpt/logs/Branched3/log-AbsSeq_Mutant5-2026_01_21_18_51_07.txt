@@ -1,0 +1,22 @@
+public class AbsSeq_Mutant5 {
+
+    // Class containing a straightforward absolute value utility.
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   assignable \nothing;
+      @   ensures \result == (\old(num) < 0 ? -\old(num) : \old(num));
+      @   ensures (\old(num) != Integer.MIN_VALUE) ==> (\result >= 0);
+      @*/
+    public static int Abs(int num) {
+        // If negative, convert to positive
+        if (num < 0) {
+            num = -num;
+        } 
+
+        return num;
+    }
+}
+==============================
+
+==============================

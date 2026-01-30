@@ -1,0 +1,113 @@
+public class AltitudeController_Mutant3 {
+ 
+    // This variant adds verbose inline commentary to aid review
+    // while preserving original logic of height-based control.
+    
+    //@ requires true;
+    //@ ensures \result == (targetHeight - currentHeight < 0 ? 
+    //@                     (targetHeight - currentHeight > -30 ? 
+    //@                      (targetHeight - currentHeight > -20 ? 
+    //@                       (targetHeight - currentHeight > -10 ? 
+    //@                        targetHeight - currentHeight : -2) : -3) : -5) :
+    //@                     (targetHeight - currentHeight + 10 > 30 ? 
+    //@                      (targetHeight - currentHeight + 10 > 20 ? 
+    //@                       (targetHeight - currentHeight + 10 > 10 ? 
+    //@                        5 : 2) : 3) : targetHeight - currentHeight));
+    public static int altitudeController(int currentHeight,int targetHeight) {
+        int error = targetHeight - currentHeight;
+        
+        // Initialize absolute error with a small bias term
+        int absError = 0;
+        
+        // Apply bias to the absolute error to avoid oscillations
+        //@ maintaining absError == (error < 0 ? -error : error + 10);
+        absError = error < 0 ? -error : error + 10; //Added 10 to error
+        
+        // Start with a neutral control signal
+        int controlSignal = 0;
+        
+        // Decision logic based on magnitude of error
+        //@ maintaining controlSignal == (absError > 30 ? (error > 0 ? 5 : -5) :
+        //@                               (absError > 20 ? (error > 0 ? 3 : -3) :
+        //@                               (absError > 10 ? (error > 0 ? 2 : -2) : error)));
+        if (absError > 30) {
+            controlSignal = error > 0 ? 5 : -5;
+        } else if (absError > 20) {
+            controlSignal = error > 0 ? 3 : -3;
+        } else if (absError > 10) {
+            controlSignal = error > 0 ? 2 : -2;
+        } else {
+            controlSignal = error;
+        }
+        // Return chosen throttle adjustment
+        //@ ensures \result == controlSignal;
+        return controlSignal;
+    }
+}
+==============================
+tmp/AltitudeController_Mutant3.java:23: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining absError == (error < 0 ? -error : error + 10);
+            ^
+tmp/AltitudeController_Mutant3.java:30: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining controlSignal == (absError > 30 ? (error > 0 ? 5 : -5) :
+            ^
+2 errors
+
+==============================
+public class AltitudeController_Mutant3 {
+ 
+    // This variant adds verbose inline commentary to aid review
+    // while preserving original logic of height-based control.
+    
+    //@ requires true;
+    //@ ensures \result == (targetHeight - currentHeight < 0 ? 
+    //@                     (targetHeight - currentHeight > -30 ? 
+    //@                      (targetHeight - currentHeight > -20 ? 
+    //@                       (targetHeight - currentHeight > -10 ? 
+    //@                        targetHeight - currentHeight : -2) : -3) : -5) :
+    //@                     (targetHeight - currentHeight + 10 > 30 ? 
+    //@                      (targetHeight - currentHeight + 10 > 20 ? 
+    //@                       (targetHeight - currentHeight + 10 > 10 ? 
+    //@                        5 : 2) : 3) : targetHeight - currentHeight));
+    public static int altitudeController(int currentHeight,int targetHeight) {
+        int error = targetHeight - currentHeight;
+        
+        // Initialize absolute error with a small bias term
+        int absError = 0;
+        
+        // Apply bias to the absolute error to avoid oscillations
+        //@ maintaining absError == (error < 0 ? -error : error + 10);  
+        absError = error < 0 ? -error : error + 10; //Added 10 to error
+        
+        // Start with a neutral control signal
+        int controlSignal = 0;
+        
+        // Decision logic based on magnitude of error
+        //@ maintaining controlSignal == (absError > 30 ? (error > 0 ? 5 : -5) :  
+        //@                               (absError > 20 ? (error > 0 ? 3 : -3) :
+        //@                               (absError > 10 ? (error > 0 ? 2 : -2) : error)));
+        if (absError > 30) {
+            controlSignal = error > 0 ? 5 : -5;
+        } else if (absError > 20) {
+            controlSignal = error > 0 ? 3 : -3;
+        } else if (absError > 10) {
+            controlSignal = error > 0 ? 2 : -2;
+        } else {
+            controlSignal = error;
+        }
+        // Return chosen throttle adjustment
+        //@ ensures \result == controlSignal;
+        return controlSignal;
+    }
+}
+
+==============================
+tmp/AltitudeController_Mutant3.java:23: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining absError == (error < 0 ? -error : error + 10);  
+            ^
+tmp/AltitudeController_Mutant3.java:30: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining controlSignal == (absError > 30 ? (error > 0 ? 5 : -5) :  
+            ^
+2 errors
+
+==============================

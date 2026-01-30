@@ -1,0 +1,45 @@
+// PassPillow calculation utility
+public class PassPillowBranch_Original {
+
+    /*@ public normal_behavior
+      @   requires n > 1;
+      @   requires time >= 0;
+      @   assignable \nothing;
+      @   ensures (\let int t = (\old(time) % (2 * (n - 1)));
+      @              \result == ((t < n) ? (t + 1) : (n * 2 - t - 1)));
+      @ also
+      @ public exceptional_behavior
+      @   requires n < 1;
+      @   assignable \nothing;
+      @   signals_only IllegalArgumentException;
+      @   signals (IllegalArgumentException e) true;
+      @ also
+      @ public exceptional_behavior
+      @   requires n == 1;
+      @   assignable \nothing;
+      @   signals_only ArithmeticException;
+      @   signals (ArithmeticException e) true;
+      @*/
+    public static int passPillow(int n, int time) {
+        // Guard against invalid input: n must be at least 1
+        if(n - 1 < 0){
+            throw new IllegalArgumentException("n is less than 1");
+        }
+        // Normalize the time within the two-phase cycle to handle wrap-around
+        time = time % ((n - 1) * 2);
+        if (time < n) {
+            // Phase 1: time within first half of the cycle
+            return time + 1;
+        }
+        // Phase 2: time in second half of the cycle, symmetric mapping
+        return n * 2 - time - 1;
+    }
+    // End of passPillow method
+}
+==============================
+tmp/PassPillowBranch_Original.java:23: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static int passPillow(int n, int time) {
+                      ^
+1 verification failure
+
+==============================

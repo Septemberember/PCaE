@@ -1,0 +1,28 @@
+public class PassPillowBranch_Mutant5 {
+    // PassPillowBranch_Mutant5 contains a deterministic mapping for pillow timing
+    //@ requires n > 1;
+    //@ requires time >= 0;
+    //@ ensures 1 <= \result && \result <= n;
+    //@ ensures time % ((n - 1) * 2) < n ==> \result == (time % ((n - 1) * 2)) + 1;
+    //@ ensures time % ((n - 1) * 2) >= n ==> \result == n * 3 - (time % ((n - 1) * 2)) - 1;
+    public static int passPillow(int n, int time) {
+        // Public method computes the pillow position for given n and time
+        time = time % ((n - 1) * 2);
+        // Normalize time to the two-cycle period
+        if (time < n) {
+            // If within the first phase, answer increases sequentially
+            return time + 1;
+        }
+        // Phase B: final position uses a different mapping
+        return n * 3 - time - 1; // changed multiplication factor from 2 to 3
+        // Note: The variant uses a factor of 3 for the second phase
+    }
+    // End of calculation
+}
+==============================
+tmp/PassPillowBranch_Mutant5.java:8: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static int passPillow(int n, int time) {
+                      ^
+1 verification failure
+
+==============================

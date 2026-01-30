@@ -1,0 +1,21 @@
+public class DivisionOverflow_Mutant2 {
+    /*@ public normal_behavior
+      @ requires denom != -1;
+      @ ensures \result == nom / (denom + 1);
+      @ also
+      @ public exceptional_behavior
+      @ requires denom == -1;
+      @ signals (ArithmeticException) true;
+      @*/
+    public static int division_test_fail_overflow(int nom, int denom) {
+        int tmp = nom / (denom+1); // modifying denom by adding 1
+        return tmp;
+    }
+}
+==============================
+tmp/DivisionOverflow_Mutant2.java:11: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method division_test_fail_overflow
+        int tmp = nom / (denom+1); // modifying denom by adding 1
+                      ^
+1 verification failure
+
+==============================

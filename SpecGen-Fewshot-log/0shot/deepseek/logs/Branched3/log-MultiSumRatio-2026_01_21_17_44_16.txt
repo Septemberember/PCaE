@@ -1,0 +1,105 @@
+public class MultiSumRatio {
+    //@ spec_public
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        //@ maintaining y >= 0;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining n >= 0;
+            //@ maintaining sum == \old(sum) + (y - n);
+            //@ maintaining factor == \old(factor) + (y - n) * (y - n + 1) / 2;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining n >= 0;
+            //@ maintaining sum == \old(sum) - ((-y) - n);
+            //@ maintaining factor == \old(factor) + ((-y) - n) * ((-y) - n + 1) / 2;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        int tmpFactor = 0;
+        //@ maintaining factor >= 0;
+        //@ maintaining tmpFactor >= 0;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        //@ ensures \result == (x * y) / (x + y) * tmpFactor;
+        return ratio;
+    }
+}
+==============================
+tmp/MultiSumRatio.java:7: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining y >= 0;
+            ^
+1 error
+
+==============================
+public class MultiSumRatio {
+    //@ spec_public
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        //@ maintaining y > 0;  
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining n >= 0;
+            //@ maintaining sum == \old(sum) + (y - n);
+            //@ maintaining factor == \old(factor) + (y - n) * (y - n + 1) / 2;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining n >= 0;
+            //@ maintaining sum == \old(sum) - ((-y) - n);
+            //@ maintaining factor == \old(factor) + ((-y) - n) * ((-y) - n + 1) / 2;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        int tmpFactor = 0;
+        //@ maintaining factor >= 0;
+        //@ maintaining tmpFactor >= 0;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        //@ ensures \result == (x * y) / (x + y) * tmpFactor;
+        return ratio;
+    }
+}
+
+==============================
+tmp/MultiSumRatio.java:7: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining y > 0;  
+            ^
+1 error
+
+==============================

@@ -1,0 +1,38 @@
+public class Calculator_Mutant4 {
+    //@ requires (operator != '/' && operator != '%') || num2 != 0;
+    //@ requires operator != '+' || ((\bigint)Integer.MIN_VALUE <= (\bigint)num1 + (\bigint)num2 && (\bigint)num1 + (\bigint)num2 <= (\bigint)Integer.MAX_VALUE);
+    //@ requires operator != '-' || ((\bigint)Integer.MIN_VALUE <= (\bigint)num1 - (\bigint)num2 && (\bigint)num1 - (\bigint)num2 <= (\bigint)Integer.MAX_VALUE);
+    //@ requires operator != '*' || ((\bigint)Integer.MIN_VALUE <= (\bigint)num1 * (\bigint)num2 && (\bigint)num1 * (\bigint)num2 <= (\bigint)Integer.MAX_VALUE);
+    //@ ensures (operator == '+') ==> (\result == num1 + num2);
+    //@ ensures (operator == '-') ==> (\result == num1 - num2);
+    //@ ensures (operator == '*') ==> (\result == num1 * num2);
+    //@ ensures (operator == '/') ==> (\result == num1 % num2);
+    //@ ensures (operator == '%') ==> (\result == num1 % num2);
+    //@ ensures (operator != '+' && operator != '-' && operator != '*' && operator != '/' && operator != '%') ==> (\result == -1);
+    public static int calculate(int num1, int num2, char operator) {
+        int output;
+        switch(operator) {
+            case '+':
+                output = num1 + num2;
+                break;
+            case '-':
+                output = num1 - num2;
+                break;
+            case '*':
+                output = num1 * num2;
+                break;
+            case '/':
+                output = num1 % num2; //mutated / with %
+                break;
+            case '%':
+                output = num1 % num2;
+                break;
+            default:
+                return -1;
+        }
+        return output;
+    }
+}
+==============================
+
+==============================

@@ -1,0 +1,13 @@
+public class ReLUSeq_Original {
+    // ReLU activation: returns x when non-negative, otherwise 0
+    // This method is side-effect free and returns a double
+    //@ ensures (x >= 0.0) ==> (\result == x);
+    //@ ensures (x < 0.0) ==> (\result == 0.0);
+    //@ ensures \result >= 0.0;
+    public static /*@ pure @*/ double computeReLU(double x) {
+        return ((x >= 0.0) ? x : 0);
+    }
+}
+==============================
+
+==============================

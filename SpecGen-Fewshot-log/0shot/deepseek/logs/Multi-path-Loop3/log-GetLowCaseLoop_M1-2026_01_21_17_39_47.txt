@@ -1,0 +1,99 @@
+public class GetLowCaseLoop_M1 {
+
+    // Utility holder for methods related to low-case character calculation
+
+    // This class provides a helper to derive a low-case character via a backward loop
+    // The algorithm searches from 'z' down to 'f' to find a target associated with input c
+
+    /*@ public normal_behavior
+      @ requires Character.isUpperCase(c) && c >= 'F' && c <= 'Z';
+      @ ensures \result == (char)(c - 'A' + 'a') && \result >= 'f' && \result <= 'z';
+      @ also
+      @ public exceptional_behavior
+      @ requires !Character.isUpperCase(c) || c < 'F' || c > 'Z';
+      @ ensures \result == 0;
+      @*/
+    public static char getLowCase(char c) {
+
+        // Start from the logical upper bound 'z'
+        char t = 'z';
+
+        /*@ maintaining t >= 'f' - 1 && t <= 'z';
+          @ maintaining (\forall char ch; ch > t && ch <= 'z'; 
+          @               ch != c - 'A' + 'a');
+          @ decreasing t;
+          @*/
+        // Iterate downward to search for the matching lowercase target derived from c
+        while(t >= 'f' && t != c - 'A' + 'a') {
+
+            // If the input is outside the uppercase A-Z range, signal with 0
+            if(c < 'F' || c > 'Z') {
+                return 0;
+            }
+
+            // Move to the previous character in the sequence
+            t--;
+        }
+
+        // Return the matching lowercase candidate
+        return t;
+    }
+
+}
+==============================
+tmp/GetLowCaseLoop_M1.java:14: error: Ensures clauses are not permitted in exceptional specification cases
+      @ ensures \result == 0;
+        ^
+1 error
+
+==============================
+public class GetLowCaseLoop_M1 {
+
+    // Utility holder for methods related to low-case character calculation
+
+    // This class provides a helper to derive a low-case character via a backward loop
+    // The algorithm searches from 'z' down to 'f' to find a target associated with input c
+
+    /*@ public normal_behavior
+      @ requires Character.isUpperCase(c) && c >= 'F' && c <= 'Z';
+      @ ensures \result == (char)(c - 'A' + 'a') && \result >= 'f' && \result <= 'z';
+      @ also
+      @ public exceptional_behavior
+      @ requires !Character.isUpperCase(c) || c < 'F' || c > 'Z';
+      @ ensures \result == 0;  
+      @*/
+    public static char getLowCase(char c) {
+
+        // Start from the logical upper bound 'z'
+        char t = 'z';
+
+        /*@ maintaining t >= 'f' - 1 && t <= 'z';
+          @ maintaining (\forall char ch; ch > t && ch <= 'z'; 
+          @               ch != c - 'A' + 'a');
+          @ decreasing t;
+          @*/
+        // Iterate downward to search for the matching lowercase target derived from c
+        while(t >= 'f' && t != c - 'A' + 'a') {
+
+            // If the input is outside the uppercase A-Z range, signal with 0
+            if(c < 'F' || c > 'Z') {
+                return 0;
+            }
+
+            // Move to the previous character in the sequence
+            t--;
+        }
+
+        // Return the matching lowercase candidate
+        return t;
+    }
+
+}
+
+==============================
+tmp/GetLowCaseLoop_M1.java:14: error: Ensures clauses are not permitted in exceptional specification cases
+      @ ensures \result == 0;  
+        ^
+1 error
+
+==============================

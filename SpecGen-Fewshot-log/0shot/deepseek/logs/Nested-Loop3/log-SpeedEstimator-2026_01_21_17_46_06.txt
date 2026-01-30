@@ -1,0 +1,285 @@
+public class SpeedEstimator {
+
+    //@ ensures \result >= 0.0;
+    //@ ensures distance >= 0 && time >= 0 ==> \result >= 0.0;
+    //@ ensures time > 0 ==> \result >= 0.0;
+    //@ ensures time == 0 ==> \result >= 0.0;
+    public static double estimateSpeed(int distance,int time) {
+        int adjusted = distance;
+        double speed = 0.0;
+        boolean valid = true;
+        int bias = 2;
+
+        //@ maintaining adjusted == \old(adjusted) + 10;
+        adjusted += 10;
+        //@ maintaining adjusted == \old(adjusted) * 2;
+        adjusted *= 2;
+        //@ maintaining adjusted == \old(adjusted) - bias;
+        adjusted -= bias;
+        //@ maintaining adjusted == \old(adjusted) + 5;
+        adjusted = adjusted + 5;
+
+        if (adjusted > -50 && adjusted <= 67) {
+            //@ maintaining adjusted == \old(adjusted) + 4;
+            adjusted += 4;
+            if (time < 5) {
+                //@ maintaining adjusted == \old(adjusted) + time * 2;
+                adjusted = adjusted + time * 2;
+
+                if (distance > 20) {
+                    //@ maintaining adjusted == \old(adjusted) + distance - 4;
+                    adjusted = adjusted + distance - 4;
+                    //@ maintaining speed == adjusted * 0.75;
+                    speed = adjusted * 0.75;
+                    //@ maintaining adjusted == \old(adjusted) - 5;
+                    adjusted -= 5;
+
+                    if (time > 0) {
+                        //@ maintaining adjusted == \old(adjusted) + 2;
+                        adjusted += 2;
+
+                        if (time != 0) {
+                            int divisor = time - 1;
+                            //@ maintaining speed == (double) adjusted / divisor;
+                            speed = (double) adjusted / divisor;
+                        } else {
+                            //@ maintaining adjusted == \old(adjusted) + 4;
+                            adjusted += 4;
+                            //@ maintaining speed == adjusted * 1.05;
+                            speed = adjusted * 1.05;
+                            valid = false;
+                        }
+
+                    } else {
+                        //@ maintaining adjusted == \old(adjusted) + 3;
+                        adjusted += 3;
+                        //@ maintaining speed == adjusted * 0.6;
+                        speed = adjusted * 0.6;
+                    }
+                } else {
+                    //@ maintaining adjusted == \old(adjusted) + 3;
+                    adjusted += 3;
+                    //@ maintaining speed == adjusted * 1.1;
+                    speed = adjusted * 1.1;
+                    valid = false;
+                }
+
+            } else {
+                //@ maintaining adjusted == \old(adjusted) - 6;
+                adjusted -= 6;
+                //@ maintaining speed == adjusted * 0.8;
+                speed = adjusted * 0.8;
+                valid = false;
+            }
+
+        }
+        double factor = valid ? 1.1 : 0.85;
+        double finalSpeed = speed * factor + adjusted * 0.04;
+        System.out.println("Speed result: " + finalSpeed);
+        return finalSpeed;
+    }
+}
+==============================
+tmp/SpeedEstimator.java:13: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining adjusted == \old(adjusted) + 10;
+            ^
+tmp/SpeedEstimator.java:15: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining adjusted == \old(adjusted) * 2;
+            ^
+tmp/SpeedEstimator.java:17: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining adjusted == \old(adjusted) - bias;
+            ^
+tmp/SpeedEstimator.java:19: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining adjusted == \old(adjusted) + 5;
+            ^
+tmp/SpeedEstimator.java:23: error: Loop specifications must immediately precede a loop statement
+            //@ maintaining adjusted == \old(adjusted) + 4;
+                ^
+tmp/SpeedEstimator.java:26: error: Loop specifications must immediately precede a loop statement
+                //@ maintaining adjusted == \old(adjusted) + time * 2;
+                    ^
+tmp/SpeedEstimator.java:30: error: Loop specifications must immediately precede a loop statement
+                    //@ maintaining adjusted == \old(adjusted) + distance - 4;
+                        ^
+tmp/SpeedEstimator.java:32: error: Loop specifications must immediately precede a loop statement
+                    //@ maintaining speed == adjusted * 0.75;
+                        ^
+tmp/SpeedEstimator.java:34: error: Loop specifications must immediately precede a loop statement
+                    //@ maintaining adjusted == \old(adjusted) - 5;
+                        ^
+tmp/SpeedEstimator.java:38: error: Loop specifications must immediately precede a loop statement
+                        //@ maintaining adjusted == \old(adjusted) + 2;
+                            ^
+tmp/SpeedEstimator.java:43: error: Loop specifications must immediately precede a loop statement
+                            //@ maintaining speed == (double) adjusted / divisor;
+                                ^
+tmp/SpeedEstimator.java:46: error: Loop specifications must immediately precede a loop statement
+                            //@ maintaining adjusted == \old(adjusted) + 4;
+                                ^
+tmp/SpeedEstimator.java:48: error: Loop specifications must immediately precede a loop statement
+                            //@ maintaining speed == adjusted * 1.05;
+                                ^
+tmp/SpeedEstimator.java:54: error: Loop specifications must immediately precede a loop statement
+                        //@ maintaining adjusted == \old(adjusted) + 3;
+                            ^
+tmp/SpeedEstimator.java:56: error: Loop specifications must immediately precede a loop statement
+                        //@ maintaining speed == adjusted * 0.6;
+                            ^
+tmp/SpeedEstimator.java:60: error: Loop specifications must immediately precede a loop statement
+                    //@ maintaining adjusted == \old(adjusted) + 3;
+                        ^
+tmp/SpeedEstimator.java:62: error: Loop specifications must immediately precede a loop statement
+                    //@ maintaining speed == adjusted * 1.1;
+                        ^
+tmp/SpeedEstimator.java:68: error: Loop specifications must immediately precede a loop statement
+                //@ maintaining adjusted == \old(adjusted) - 6;
+                    ^
+tmp/SpeedEstimator.java:70: error: Loop specifications must immediately precede a loop statement
+                //@ maintaining speed == adjusted * 0.8;
+                    ^
+19 errors
+
+==============================
+public class SpeedEstimator {
+
+    //@ ensures \result >= 0.0;
+    //@ ensures distance >= 0 && time >= 0 ==> \result >= 0.0;
+    //@ ensures time > 0 ==> \result >= 0.0;
+    //@ ensures time == 0 ==> \result >= 0.0;
+    public static double estimateSpeed(int distance,int time) {
+        int adjusted = distance;
+        double speed = 0.0;
+        boolean valid = true;
+        int bias = 2;
+
+        //@ maintaining adjusted == \old(adjusted) + 10;  
+        adjusted += 10;
+        //@ maintaining adjusted == \old(adjusted) * 2;  
+        adjusted *= 2;
+        //@ maintaining adjusted == \old(adjusted) - bias;  
+        adjusted -= bias;
+        //@ maintaining adjusted == \old(adjusted) + 5;  
+        adjusted = adjusted + 5;
+
+        if (adjusted > -50 && adjusted <= 67) {
+            //@ maintaining adjusted == \old(adjusted) + 4;  
+            adjusted += 4;
+            if (time < 5) {
+                //@ maintaining adjusted == \old(adjusted) + time * 2;  
+                adjusted = adjusted + time * 2;
+
+                if (distance > 20) {
+                    //@ maintaining adjusted == \old(adjusted) + distance - 4;  
+                    adjusted = adjusted + distance - 4;
+                    //@ maintaining speed == adjusted * 0.75;  
+                    speed = adjusted * 0.75;
+                    //@ maintaining adjusted == \old(adjusted) - 5;  
+                    adjusted -= 5;
+
+                    if (time > 0) {
+                        //@ maintaining adjusted == \old(adjusted) + 2;  
+                        adjusted += 2;
+
+                        if (time != 0) {
+                            int divisor = time - 1;
+                            //@ maintaining speed == (double) adjusted / divisor;  
+                            speed = (double) adjusted / divisor;
+                        } else {
+                            //@ maintaining adjusted == \old(adjusted) + 4;  
+                            adjusted += 4;
+                            //@ maintaining speed == adjusted * 1.05;  
+                            speed = adjusted * 1.05;
+                            valid = false;
+                        }
+
+                    } else {
+                        //@ maintaining adjusted == \old(adjusted) + 3;  
+                        adjusted += 3;
+                        //@ maintaining speed == adjusted * 0.6;  
+                        speed = adjusted * 0.6;
+                    }
+                } else {
+                    //@ maintaining adjusted == \old(adjusted) + 3;  
+                    adjusted += 3;
+                    //@ maintaining speed == adjusted * 1.1;  
+                    speed = adjusted * 1.1;
+                    valid = false;
+                }
+
+            } else {
+                //@ maintaining adjusted == \old(adjusted) - 6;  
+                adjusted -= 6;
+                //@ maintaining speed == adjusted * 0.8;  
+                speed = adjusted * 0.8;
+                valid = false;
+            }
+
+        }
+        double factor = valid ? 1.1 : 0.85;
+        double finalSpeed = speed * factor + adjusted * 0.04;
+        System.out.println("Speed result: " + finalSpeed);
+        return finalSpeed;
+    }
+}
+
+==============================
+tmp/SpeedEstimator.java:13: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining adjusted == \old(adjusted) + 10;  
+            ^
+tmp/SpeedEstimator.java:15: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining adjusted == \old(adjusted) * 2;  
+            ^
+tmp/SpeedEstimator.java:17: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining adjusted == \old(adjusted) - bias;  
+            ^
+tmp/SpeedEstimator.java:19: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining adjusted == \old(adjusted) + 5;  
+            ^
+tmp/SpeedEstimator.java:23: error: Loop specifications must immediately precede a loop statement
+            //@ maintaining adjusted == \old(adjusted) + 4;  
+                ^
+tmp/SpeedEstimator.java:26: error: Loop specifications must immediately precede a loop statement
+                //@ maintaining adjusted == \old(adjusted) + time * 2;  
+                    ^
+tmp/SpeedEstimator.java:30: error: Loop specifications must immediately precede a loop statement
+                    //@ maintaining adjusted == \old(adjusted) + distance - 4;  
+                        ^
+tmp/SpeedEstimator.java:32: error: Loop specifications must immediately precede a loop statement
+                    //@ maintaining speed == adjusted * 0.75;  
+                        ^
+tmp/SpeedEstimator.java:34: error: Loop specifications must immediately precede a loop statement
+                    //@ maintaining adjusted == \old(adjusted) - 5;  
+                        ^
+tmp/SpeedEstimator.java:38: error: Loop specifications must immediately precede a loop statement
+                        //@ maintaining adjusted == \old(adjusted) + 2;  
+                            ^
+tmp/SpeedEstimator.java:43: error: Loop specifications must immediately precede a loop statement
+                            //@ maintaining speed == (double) adjusted / divisor;  
+                                ^
+tmp/SpeedEstimator.java:46: error: Loop specifications must immediately precede a loop statement
+                            //@ maintaining adjusted == \old(adjusted) + 4;  
+                                ^
+tmp/SpeedEstimator.java:48: error: Loop specifications must immediately precede a loop statement
+                            //@ maintaining speed == adjusted * 1.05;  
+                                ^
+tmp/SpeedEstimator.java:54: error: Loop specifications must immediately precede a loop statement
+                        //@ maintaining adjusted == \old(adjusted) + 3;  
+                            ^
+tmp/SpeedEstimator.java:56: error: Loop specifications must immediately precede a loop statement
+                        //@ maintaining speed == adjusted * 0.6;  
+                            ^
+tmp/SpeedEstimator.java:60: error: Loop specifications must immediately precede a loop statement
+                    //@ maintaining adjusted == \old(adjusted) + 3;  
+                        ^
+tmp/SpeedEstimator.java:62: error: Loop specifications must immediately precede a loop statement
+                    //@ maintaining speed == adjusted * 1.1;  
+                        ^
+tmp/SpeedEstimator.java:68: error: Loop specifications must immediately precede a loop statement
+                //@ maintaining adjusted == \old(adjusted) - 6;  
+                    ^
+tmp/SpeedEstimator.java:70: error: Loop specifications must immediately precede a loop statement
+                //@ maintaining speed == adjusted * 0.8;  
+                    ^
+19 errors
+
+==============================

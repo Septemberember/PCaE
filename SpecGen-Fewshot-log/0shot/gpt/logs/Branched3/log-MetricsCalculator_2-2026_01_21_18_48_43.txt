@@ -1,0 +1,70 @@
+public class MetricsCalculator_2 {
+    /*@ public normal_behavior
+      @ requires true;
+      @ assignable \nothing;
+      @
+      @ // The computation is performed entirely using Java int arithmetic and then
+      @ // returned as a double; thus the result is always an integral-valued double.
+      @ ensures \result == (double)((int)\result);
+      @ ensures (double)Integer.MIN_VALUE <= \result && \result <= (double)Integer.MAX_VALUE;
+      @*/
+    public static double computeScore( int limit) {
+        int value = limit - 100;
+        int result = 0;
+        int iteration = 17;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = value * -1;
+            polarity = polarity * -1;
+        }
+        value = (value % 10) + 1;
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        /*@ ghost int limit0 = limit; @*/
+        /*@ ghost int adjustment0 = adjustment; @*/
+        /*@ ghost int shift0 = shift; @*/
+        /*@ ghost int n = 0; @*/
+
+        /*@ maintaining n >= 0;
+          @ maintaining 1 <= value && value <= 10;
+          @ maintaining limit == limit0 - n * value;
+          @ maintaining iteration == 17 - n;
+          @ maintaining shift == shift0 + n;
+          @ maintaining adjustment == adjustment0 + n * shift0 + (n * (n - 1)) / 2;
+          @ decreases limit;
+          @*/
+        while (limit > 0) {
+            limit = limit - value;
+            iteration = iteration - 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+            /*@ set n = n + 1; @*/
+        }
+
+        iteration = (iteration % 10) + 1;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator_2.java:11: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static double computeScore( int limit) {
+                         ^
+1 verification failure
+
+==============================

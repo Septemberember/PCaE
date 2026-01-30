@@ -1,0 +1,20 @@
+public class AbsSeq_Mutant4 {
+    // Utility: absolute value helper
+    // Mutant 4: preserves standard Abs semantics
+    // Keeps the interface unchanged while documenting
+
+    //@ ensures \result >= 0;
+    //@ ensures (num >= 0 ==> \result == num);
+    //@ ensures (num < 0 ==> \result == -num);
+    //@ ensures \result == (num < 0 ? -num : num);
+    public static int Abs(int num) {
+        if (num < 0) {
+            return -num;
+        } else {
+            return num;
+        }
+    }
+}
+==============================
+
+==============================

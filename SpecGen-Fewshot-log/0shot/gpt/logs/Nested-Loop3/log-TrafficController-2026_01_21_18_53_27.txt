@@ -1,0 +1,66 @@
+import java.util.ArrayList;
+
+public class TrafficController {
+    /*@
+      @ public normal_behavior
+      @   requires true;
+      @   ensures
+      @     (\let int v0 = \old(vehicles);
+      @      \let int v1 = (v0 < 10 ? 10 : v0);
+      @      \let int c1 = (v0 < 10 ? -3 : 1);
+      @      \let int v2 = (v1 > 200 ? 200 : v1);
+      @      \let int c2 = (v1 > 200 ? c1 * 2 : c1);
+      @      \let int flow = v2 / 5 + 20;
+      @      \result == flow + c2);
+      @   ensures 19 <= \result && \result <= 62;
+      @   signals (Exception e) false;
+      @*/
+    public static int calculateFlow(int vehicles) {
+        ArrayList<Integer> flowRates = new ArrayList<Integer>(12);
+        /*@
+          @ loop_invariant flowRates != null;
+          @ loop_invariant 0 <= i && i <= 12;
+          @ loop_invariant flowRates.size() == i;
+          @ loop_invariant (\forall int j; 0 <= j && j < i; flowRates.get(j) == 0);
+          @ decreases 12 - i;
+          @*/
+        for (int i = 0; i < 12; i++) {
+            flowRates.add(0);
+        }
+        int MAX_VEHICLES = 200;
+        int MIN_VEHICLES = 10;
+        int congestion = 0;
+
+        int rateIndex = 0;
+
+        if (vehicles < MIN_VEHICLES) {
+            vehicles = MIN_VEHICLES;
+            congestion = congestion - 3;
+        } else {
+            congestion = congestion + 1;
+        }
+
+        if (vehicles > MAX_VEHICLES) {
+            vehicles = MAX_VEHICLES;
+            congestion = congestion * 2;
+        }
+
+        int flowRate = vehicles / 5 + 20;
+
+        if (flowRate >= 25 && flowRate <= 45) {
+            rateIndex = flowRate / 5;
+        } else {
+            rateIndex = flowRate % 12;
+        }
+
+        flowRates.get(rateIndex);
+        return flowRate + congestion;
+    }
+}
+==============================
+tmp/TrafficController.java:16: error: Signals clauses are not permitted in normal specification cases
+      @   signals (Exception e) false;
+          ^
+1 error
+
+==============================

@@ -1,0 +1,111 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class FlowCalculator {
+
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure ;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+        int sheld = 14;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure <= sheld) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```fsf
+T1: pressure >= 13 && rate < 5
+D1: return_value == 0.985 * (2 * pressure + 17)
+
+T2: (pressure == 13 || pressure == 14) && rate == 5
+D2: Exception
+
+T3: (pressure == 13 || pressure == 14) && rate > 5 && (2 * pressure + 21 + rate) > 80 * (rate - 5)
+D3: return_value == 0.99 * (2 * pressure + 21 + rate) / (rate - 5) + 0.05 * (2 * pressure + 21 + rate)
+
+T4: (pressure == 13 || pressure == 14) && rate > 5 && (2 * pressure + 21 + rate) <= 80 * (rate - 5)
+D4: return_value == 1.1 * (2 * pressure + 21 + rate) / (rate - 5) + 0.05 * (2 * pressure + 21 + rate) + 11
+
+T5: pressure >= 15 && rate >= 5 && 95 * (2 * pressure + 29 + rate) > 8000
+D5: return_value == 0.77675 * (2 * pressure + 29 + rate)
+
+T6: pressure >= 15 && rate >= 5 && 95 * (2 * pressure + 29 + rate) <= 8000
+D6: return_value == 0.8575 * (2 * pressure + 29 + rate) + 8.5
+
+T7: pressure <= 12 && rate < 3 && 7 * (2 * pressure + 14) < 200
+D7: return_value == 0.82 * (2 * pressure + 14) + 5.5
+
+T8: pressure <= 12 && rate < 3 && 7 * (2 * pressure + 14) >= 200
+D8: return_value == 0.7815 * (2 * pressure + 14)
+
+T9: pressure <= 12 && rate >= 3 && 8 * (2 * pressure + 9) < 200
+D9: return_value == 0.73 * (2 * pressure + 9) + 4.25
+
+T10: pressure <= 12 && rate >= 3 && 8 * (2 * pressure + 9) >= 200
+D10: return_value == 0.696 * (2 * pressure + 9)
+```
+*end* role assistant
+start role user
+Some errors occurred while verifyingT: pressure >= 13 && rate < 5	D: return_value == 0.985 * (2 * pressure + 17), , please regenerate the FSF!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

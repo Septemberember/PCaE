@@ -1,0 +1,93 @@
+public class AddHalfSelf_Mutant1{
+
+    // Utility: helper for integer halving adjustments
+    /*@ public normal_behavior
+      @   requires x != Integer.MIN_VALUE;
+      @   ensures (x < 0) ==> (\result == x - ((-x)/2) - 1);
+      @   ensures (x >= 0) ==> (\result == x + (x/2) + 1);
+      @   assignable \nothing;
+      @*/
+    public static int addHalfSelf(int x){
+        int n = x;
+        int addNum = 0;
+
+        // If the input is negative, work with its absolute value for counting
+        if(x < 0){
+            n = -x;
+        }
+
+        /*@ maintaining n >= 0;
+          @ maintaining (x < 0) ==> (addNum == ((-x) - n) / 2);
+          @ maintaining (x >= 0) ==> (addNum == (x - n) / 2);
+          @ decreasing n;
+          @*/
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n--;
+        }
+
+        // Apply sign-based adjustment to obtain the final result
+        if(x < 0){
+            return x - addNum - 1;
+        }
+        else{
+            return x + addNum + 1;
+        }
+    }
+}
+==============================
+tmp/AddHalfSelf_Mutant1.java:20: verify: The prover cannot establish an assertion (LoopInvariant) in method addHalfSelf
+          @ maintaining (x < 0) ==> (addNum == ((-x) - n) / 2);
+            ^
+1 verification failure
+
+==============================
+public class AddHalfSelf_Mutant1{
+
+    // Utility: helper for integer halving adjustments
+    /*@ public normal_behavior
+      @   requires x != Integer.MIN_VALUE;
+      @   ensures (x < 0) ==> (\result == x - ((-x)/2) - 1);
+      @   ensures (x >= 0) ==> (\result == x + (x/2) + 1);
+      @   assignable \nothing;
+      @*/
+    public static int addHalfSelf(int x){
+        int n = x;
+        int addNum = 0;
+
+        // If the input is negative, work with its absolute value for counting
+        if(x < 0){
+            n = -x;
+        }
+
+        /*@ maintaining n >= 0;
+          @ maintaining (x < 0) ==> (addNum == ((-x) - n) / 2);  
+          @ maintaining (x >= 0) ==> (addNum == (x - n) / 2);
+          @ decreasing n;
+          @*/
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n--;
+        }
+
+        // Apply sign-based adjustment to obtain the final result
+        if(x < 0){
+            return x - addNum - 1;
+        }
+        else{
+            return x + addNum + 1;
+        }
+    }
+}
+
+==============================
+tmp/AddHalfSelf_Mutant1.java:20: verify: The prover cannot establish an assertion (LoopInvariant) in method addHalfSelf
+          @ maintaining (x < 0) ==> (addNum == ((-x) - n) / 2);  
+            ^
+1 verification failure
+
+==============================

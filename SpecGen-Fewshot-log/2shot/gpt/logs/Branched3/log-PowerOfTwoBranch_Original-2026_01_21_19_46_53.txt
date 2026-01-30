@@ -1,0 +1,18 @@
+public class PowerOfTwoBranch_Original {
+
+    //@ ensures \result <==> (n > 0 && ((n & (n - 1)) == 0));
+    //@ ensures (n <= 0) ==> (\result == false);
+    //@ ensures (n > 0 && ((n & (n - 1)) != 0)) ==> (\result == false);
+    public static /*@ pure @*/ boolean isPowerOfTwo(int n) {
+        if (n <= 0) {
+            return false;
+        }
+        if ((n & (n - 1)) != 0) {
+            return false;
+        }
+        return true;
+    }
+}
+==============================
+
+==============================

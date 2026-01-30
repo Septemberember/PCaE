@@ -1,0 +1,76 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class TemperatureConverter {
+    public static int convertTemperature(int celsius, int base) {
+        int lookupTable[] = new int[8];
+        int MAX_TEMP = 40;
+        int MIN_TEMP = 0;
+        
+        int index = 0;
+
+        if (celsius < MIN_TEMP) {
+            celsius = MIN_TEMP;
+            base = base + MIN_TEMP;
+        }else{
+            base = base - MIN_TEMP;
+        }
+
+        if(base > MAX_TEMP) {
+            base = MIN_TEMP + (MAX_TEMP - MIN_TEMP) / 2;
+        }
+        int tmp = celsius;
+        while(tmp / 10 > 0){
+            tmp = tmp / 10;
+            base = base + 1;
+        }
+
+        int fahrenheit = celsius * 9 / 5 + 32;
+
+        if (fahrenheit <= 104 && fahrenheit > 14) {
+            index = (celsius + base) / 5;
+        } else {
+            index = celsius % 8;
+        }
+        if(index < 0){
+            index = -index;
+        }
+        
+        lookupTable[index] = fahrenheit + base;
+        return fahrenheit;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```fsf
+T1:
+  (celsius < 0 && (base == 40 || base <= -40))
+  || (celsius >= 0 && celsius <= 9 && base <= 40 && (base + celsius >= 40 || base + celsius <= -40))
+  || (celsius >= 19 && celsius <= 40 && base > 40)
+  || (celsius >= 10 && celsius <= 40 && base <= 40 && (base + celsius + 1 >= 40 || base + celsius + 1 <= -40))
+D1:
+  Exception
+
+T2:
+  celsius < 0 && (base > 40 || (base >= -39 && base <= 39))
+D2:
+  return_value == 32
+
+T3:
+  (celsius >= 0 && celsius <= 9 && (base > 40 || (base <= 40 && base + celsius >= -39 && base + celsius <= 39)))
+  || (celsius >= 10 && celsius <= 18 && base > 40)
+  || (celsius >= 10 && celsius <= 40 && base <= 40 && base + celsius + 1 >= -39 && base + celsius + 1 <= 39)
+  || (celsius >= 41)
+D3:
+  return_value == (celsius * 9) / 5 + 32
+```
+*end* role assistant
+start role user
+It was found that T in the FSF does not meet the requirements and causes a parsing failure. Please carefully review my original instructions and regenerate the FSF accordingly.
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

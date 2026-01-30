@@ -1,0 +1,34 @@
+import java.util.*;
+public class MixCollectSum {
+    //@ requires x >= 0;
+    //@ ensures \result >= 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 220){
+            x = 220;
+        }
+        //@ maintaining x >= 49;
+        //@ maintaining (\forall int i; 0 <= i && i < list.size(); list.get(i) >= 49);
+        //@ decreases x - 194;
+        while(x >= 195){
+           if(x == 200){
+               x = x - 150;
+               sum = tmp / x;
+           }
+           x = x - 1;
+           list.add(x);
+        }
+        //@ maintaining sum == (\sum int j; 0 <= j && j < \count; list.get(j));
+        //@ decreases list.size() - \count;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+TimeoutException
+==============================

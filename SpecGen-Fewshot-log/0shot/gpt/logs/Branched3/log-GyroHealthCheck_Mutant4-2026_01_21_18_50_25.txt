@@ -1,0 +1,67 @@
+public class GyroHealthCheck_Mutant4 {
+    // Performs a health check by comparing pairwise gyro differences.
+    /*@ public normal_behavior
+      @   // Prevent overflow in the intermediate subtractions/negations used by the implementation.
+      @   requires ((long)x - (long)y) <= (long)Integer.MAX_VALUE
+      @         && ((long)x - (long)y) >= (long)Integer.MIN_VALUE
+      @         && ((long)x - (long)y) != (long)Integer.MIN_VALUE;
+      @   requires ((long)y - (long)z) <= (long)Integer.MAX_VALUE
+      @         && ((long)y - (long)z) >= (long)Integer.MIN_VALUE
+      @         && ((long)y - (long)z) != (long)Integer.MIN_VALUE;
+      @   requires ((long)x - (long)z) <= (long)Integer.MAX_VALUE
+      @         && ((long)x - (long)z) >= (long)Integer.MIN_VALUE
+      @         && ((long)x - (long)z) != (long)Integer.MIN_VALUE;
+      @
+      @   assignable \nothing;
+      @
+      @   ensures (\result == 2) <==>
+      @              (\abs((long)x - (long)y) > 10
+      @            || \abs((long)y - (long)z) > 10
+      @            || \abs((long)x - (long)z) > 10);
+      @   ensures (\result == 0) <==>
+      @              !(\abs((long)x - (long)y) > 10
+      @             || \abs((long)y - (long)z) > 10
+      @             || \abs((long)x - (long)z) > 10);
+      @   ensures \result == 0 || \result == 2;
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // Normalize to absolute difference for XY
+        if (diffXY < 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // Normalize to absolute difference for YZ
+        if (diffYZ < 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // Normalize to absolute difference for XZ
+        if (diffXZ < 0) diffXZ = -diffXZ;
+
+        int alarm = 0;
+        // Trigger alarm if any pair differs by more than 10
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 2;
+        }
+        return alarm;
+    }
+}
+==============================
+tmp/GyroHealthCheck_Mutant4.java:18: error: This backslash token is unknown: \abs
+      @              (\abs((long)x - (long)y) > 10
+                      ^
+tmp/GyroHealthCheck_Mutant4.java:19: error: This backslash token is unknown: \abs
+      @            || \abs((long)y - (long)z) > 10
+                      ^
+tmp/GyroHealthCheck_Mutant4.java:20: error: This backslash token is unknown: \abs
+      @            || \abs((long)x - (long)z) > 10);
+                      ^
+tmp/GyroHealthCheck_Mutant4.java:22: error: This backslash token is unknown: \abs
+      @              !(\abs((long)x - (long)y) > 10
+                       ^
+tmp/GyroHealthCheck_Mutant4.java:23: error: This backslash token is unknown: \abs
+      @             || \abs((long)y - (long)z) > 10
+                       ^
+tmp/GyroHealthCheck_Mutant4.java:24: error: This backslash token is unknown: \abs
+      @             || \abs((long)x - (long)z) > 10);
+                       ^
+6 errors
+
+==============================

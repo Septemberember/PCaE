@@ -1,0 +1,105 @@
+public class WaterFee_Mutant1 {
+ // WaterFee_Mutant1: computes a tiered water service fee based on usage in tons
+ // Base concept: start with a fixed base fee and add charges per usage interval
+ // The calculation uses a simple loop over the input amount
+    /*@ public normal_behavior
+      @   requires tons >= 0;
+      @   ensures \result == 15 + (tons > 30 ? (tons - 30) * 5 + 20 * 4 + 10 * 3 : 
+      @                            (tons > 10 ? (tons - 10) * 4 + 10 * 3 : 
+      @                            tons * 3));
+      @ also
+      @ public normal_behavior
+      @   requires tons < 0;
+      @   ensures \result == 15;
+      @*/
+    public static int calcWaterFee(int tons) {
+        // Local copy of the input tons for iteration
+        int n = tons;
+        // Initial base fee
+        int fee = 15;
+        // Iterate while there is remaining usage to account for
+        /*@ maintaining n >= 0;
+          @ maintaining n <= (tons > 0 ? tons : 0);
+          @ maintaining fee == 15 + (tons > 30 ? (tons - (n > 30 ? n : 30)) * 5 + (n > 30 ? 0 : (30 - (n > 10 ? n : 10)) * 4) + (n > 10 ? 0 : (10 - n) * 3) :
+          @                          (tons > 10 ? (tons - (n > 10 ? n : 10)) * 4 + (n > 10 ? 0 : (10 - n) * 3) :
+          @                          (tons > 0 ? (tons - n) * 3 : 0)));
+          @ decreasing n;
+          @*/
+        while (n > 0) {
+            // Tier 1: very high usage
+            if (n > 30) {
+                fee += 5;
+            } else if (n > 10) {
+                // Tier 2: moderate usage
+                fee += 4;
+            } else {
+                // Tier 3: low usage
+                fee += 3;
+            }
+            // Consume one ton per loop iteration
+            n--;
+        }
+        // Return the computed total fee
+        return fee;
+    }
+}
+==============================
+tmp/WaterFee_Mutant1.java:21: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method calcWaterFee
+        /*@ maintaining n >= 0;
+            ^
+1 verification failure
+
+==============================
+public class WaterFee_Mutant1 {
+ // WaterFee_Mutant1: computes a tiered water service fee based on usage in tons
+ // Base concept: start with a fixed base fee and add charges per usage interval
+ // The calculation uses a simple loop over the input amount
+    /*@ public normal_behavior
+      @   requires tons >= 0;
+      @   ensures \result == 15 + (tons > 30 ? (tons - 30) * 5 + 20 * 4 + 10 * 3 : 
+      @                            (tons > 10 ? (tons - 10) * 4 + 10 * 3 : 
+      @                            tons * 3));
+      @ also
+      @ public normal_behavior
+      @   requires tons < 0;
+      @   ensures \result == 15;
+      @*/
+    public static int calcWaterFee(int tons) {
+        // Local copy of the input tons for iteration
+        int n = tons;
+        // Initial base fee
+        int fee = 15;
+        // Iterate while there is remaining usage to account for
+        /*@ maintaining n > 0;  
+          @ maintaining n <= (tons > 0 ? tons : 0);
+          @ maintaining fee == 15 + (tons > 30 ? (tons - (n > 30 ? n : 30)) * 5 + (n > 30 ? 0 : (30 - (n > 10 ? n : 10)) * 4) + (n > 10 ? 0 : (10 - n) * 3) :
+          @                          (tons > 10 ? (tons - (n > 10 ? n : 10)) * 4 + (n > 10 ? 0 : (10 - n) * 3) :
+          @                          (tons > 0 ? (tons - n) * 3 : 0)));
+          @ decreasing n;
+          @*/
+        while (n > 0) {
+            // Tier 1: very high usage
+            if (n > 30) {
+                fee += 5;
+            } else if (n > 10) {
+                // Tier 2: moderate usage
+                fee += 4;
+            } else {
+                // Tier 3: low usage
+                fee += 3;
+            }
+            // Consume one ton per loop iteration
+            n--;
+        }
+        // Return the computed total fee
+        return fee;
+    }
+}
+
+==============================
+tmp/WaterFee_Mutant1.java:21: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method calcWaterFee
+        /*@ maintaining n > 0;  
+            ^
+1 verification failure
+
+==============================

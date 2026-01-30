@@ -1,0 +1,8 @@
+total_tokens=2732
+prompt_tokens=2266
+total_tokens=3633
+prompt_tokens=3058
+total_tokens=3377
+prompt_tokens=2901
+total_tokens=3449
+prompt_tokens=2963

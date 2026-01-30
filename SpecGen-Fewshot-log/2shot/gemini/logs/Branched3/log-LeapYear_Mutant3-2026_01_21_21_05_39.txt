@@ -1,0 +1,85 @@
+public class LeapYear_Mutant3 {
+    // LeapYear_Mutant3: leap year evaluation utility
+    // This class exposes a single static method for year-based leap calculation.
+    // The visible logic follows the conventional Gregorian rule set.
+    // Mutant variant intentionally keeps the nested conditional structure.
+    // The added lines are non-executable and serve documentation purposes.
+
+    /*@ ensures \result <==> (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+      @ ensures (year % 400 == 0) ==> !\result;
+      @ ensures (year % 4 == 0 && year % 100 != 0) ==> \result;
+      @*/
+    public static boolean isLeapYear(int year) {
+        boolean leap = false;
+        // Start of leap-year determination
+        if (year % 4 == 0) {
+            // Year divisible by 4
+            if (year % 100 == 0) {
+                // Century year
+                if (year % 400 == 0)
+                    leap = false;
+                else
+                    leap = true;
+            } else
+                // Not a century year
+                leap = true;
+        } else
+            // Not divisible by 4
+            leap = false;
+        // Final determination stored in 'leap'
+        return leap;
+    }
+}
+==============================
+tmp/LeapYear_Mutant3.java:30: verify: The prover cannot establish an assertion (Postcondition: tmp/LeapYear_Mutant3.java:8:) in method isLeapYear
+        return leap;
+        ^
+tmp/LeapYear_Mutant3.java:8: verify: Associated declaration: tmp/LeapYear_Mutant3.java:30:
+    /*@ ensures \result <==> (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+        ^
+2 verification failures
+
+==============================
+public class LeapYear_Mutant3 {
+    // LeapYear_Mutant3: leap year evaluation utility
+    // This class exposes a single static method for year-based leap calculation.
+    // The visible logic follows the conventional Gregorian rule set.
+    // Mutant variant intentionally keeps the nested conditional structure.
+    // The added lines are non-executable and serve documentation purposes.
+
+    /*@ ensures \result <==> (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));  
+      @ ensures (year % 400 == 0) ==> !\result;
+      @ ensures (year % 4 == 0 && year % 100 != 0) ==> \result;
+      @*/
+    public static boolean isLeapYear(int year) {
+        boolean leap = false;
+        // Start of leap-year determination
+        if (year % 4 == 0) {
+            // Year divisible by 4
+            if (year % 100 == 0) {
+                // Century year
+                if (year % 400 == 0)
+                    leap = false;
+                else
+                    leap = true;
+            } else
+                // Not a century year
+                leap = true;
+        } else
+            // Not divisible by 4
+            leap = false;
+        // Final determination stored in 'leap'
+        return leap;
+    }
+}
+
+==============================
+tmp/LeapYear_Mutant3.java:30: verify: The prover cannot establish an assertion (Postcondition: tmp/LeapYear_Mutant3.java:8:) in method isLeapYear
+        return leap;
+        ^
+tmp/LeapYear_Mutant3.java:8: verify: Associated declaration: tmp/LeapYear_Mutant3.java:30:
+    /*@ ensures \result <==> (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));  
+        ^
+2 verification failures
+
+==============================

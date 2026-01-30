@@ -1,0 +1,63 @@
+/**
+ * PowerOfTwo_Mutant1
+ * Simple utility to check if an integer is a power of two using a classic bitwise trick.
+ */
+public class PowerOfTwo_Mutant1 {
+
+    // PowerOfTwo_Mutant1: A minimal utility for checking power-of-two
+    // Uses a well-known bitwise trick: n > 0 && (n & (n - 1)) == 0
+    // Valid for non-negative integers; 0 is not considered a power of two
+
+    /*@ public normal_behavior
+      @   ensures \result == (n >= 0 && (n & (n - 1)) == 0);
+      @   ensures \result ==> (n == 0 || (\exists int k; k >= 0; n == (int)\_pow(2, k)));
+      @   pure
+      @*/
+    public static boolean isPowerOfTwo(int n) {
+        return n >= 0 && (n & (n - 1)) == 0;
+    }
+
+    /*@ public model static double _pow(double a, double b) {
+      @   return Math.pow(a, b);
+      @ }
+      @*/
+}
+==============================
+tmp/PowerOfTwo_Mutant1.java:13: error: A backslash in a JML comment expects to be followed by a valid identifier
+      @   ensures \result ==> (n == 0 || (\exists int k; k >= 0; n == (int)\_pow(2, k)));
+                                                                           ^
+1 error
+
+==============================
+/**
+ * PowerOfTwo_Mutant1
+ * Simple utility to check if an integer is a power of two using a classic bitwise trick.
+ */
+public class PowerOfTwo_Mutant1 {
+
+    // PowerOfTwo_Mutant1: A minimal utility for checking power-of-two
+    // Uses a well-known bitwise trick: n > 0 && (n & (n - 1)) == 0
+    // Valid for non-negative integers; 0 is not considered a power of two
+
+    /*@ public normal_behavior
+      @   ensures \result == (n >= 0 && (n & (n - 1)) == 0);
+      @   ensures \result ==> (n == 0 || (\exists int k; k > 0; n == (int)\_pow(2, k)));  
+      @   pure
+      @*/
+    public static boolean isPowerOfTwo(int n) {
+        return n >= 0 && (n & (n - 1)) == 0;
+    }
+
+    /*@ public model static double _pow(double a, double b) {
+      @   return Math.pow(a, b);
+      @ }
+      @*/
+}
+
+==============================
+tmp/PowerOfTwo_Mutant1.java:13: error: A backslash in a JML comment expects to be followed by a valid identifier
+      @   ensures \result ==> (n == 0 || (\exists int k; k > 0; n == (int)\_pow(2, k)));  
+                                                                          ^
+1 error
+
+==============================

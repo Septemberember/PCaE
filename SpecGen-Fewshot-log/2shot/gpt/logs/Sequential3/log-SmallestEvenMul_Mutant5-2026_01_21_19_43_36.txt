@@ -1,0 +1,20 @@
+public class SmallestEvenMul_Mutant5 {
+
+    // Computes the smallest even multiple of the given integer n.
+    // If n is even, returns n; otherwise 2*n.
+    // Uses a parity check (n % 2).
+    // Assumes non-negative input for this simple implementation.
+    //@ requires n >= 0;
+    //@ requires n <= Integer.MAX_VALUE / 2;
+    //@ ensures \result % 2 == 0;
+    //@ ensures \result == (n % 2 == 0 ? n : 2 * n);
+    //@ ensures (n % 2 == 0) ==> (\result == n);
+    //@ ensures (n % 2 != 0) ==> (\result == 2 * n);
+    //@ ensures \result >= n;
+    public static /*@ pure @*/ int smallestEvenMultiple(int n) {
+        return 0 == n % 2 ? n : 2 * n;
+    }
+}
+==============================
+
+==============================

@@ -1,0 +1,57 @@
+public class ScoreCalculator {
+    /*@ public normal_behavior
+      @   ensures (\let int bScore = (baseScore < 5 ? 5 : (baseScore > 40 ? 40 : baseScore));
+      @            \let int mult = (baseScore < 5 ? -3 : 1) + (baseScore > 40 ? 5 : 0);
+      @            \let int initialBonus = bScore * 2 - 15;
+      @            \let int processedBonus = (initialBonus > 34 ? initialBonus * 3 - 21 : initialBonus);
+      @            (processedBonus >= 13 && processedBonus <= 21) ==> 
+      @                (\let int tempBonus = (processedBonus - 8) * mult + bScore;
+      @                 \result == (tempBonus > 45 ? 45 : tempBonus)) &&
+      @            !(processedBonus >= 13 && processedBonus <= 21) ==> 
+      @                (\result == (processedBonus % 5) + mult * 5));
+      @   assignable \nothing;
+      @*/
+    public static int calculateBonus(int baseScore) {
+        int bonusBrackets[] = new int[5];
+        int bracket = 0;
+        int multiplier = 0;
+
+        if (baseScore < 5) {
+            baseScore = 5;
+            multiplier = multiplier - 3;
+        } else {
+            multiplier = multiplier + 1;
+        }
+
+        if (baseScore > 40) {
+            baseScore = 40;
+            multiplier = multiplier + 5;
+        }
+
+        int bonus = baseScore * 2 - 15;
+
+        if(bonus > 34){
+            bonus = bonus * 3 - 21;
+        }
+
+        if (bonus >= 13 && bonus <= 21) {
+            bracket = bonus / 4;
+            bonus = (bonus - 8) * multiplier;
+            bonus += baseScore;
+            bonus = bonus > 45 ? 45 : bonus;
+            bonusBrackets[bracket] = bonus + multiplier;
+        } else {
+            bracket = bonus % 5;
+            bonus = bracket + multiplier * 5;
+        }
+
+        return bonus;
+    }
+}
+==============================
+tmp/ScoreCalculator.java:42: verify: The prover cannot establish an assertion (PossiblyTooLargeIndex) in method calculateBonus
+            bonusBrackets[bracket] = bonus + multiplier;
+                         ^
+1 verification failure
+
+==============================

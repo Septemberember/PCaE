@@ -1,0 +1,223 @@
+public class AddHalfSelf_Mutant1{
+
+    // Utility: helper for integer halving adjustments
+    /*@ public normal_behavior
+      @ requires true;
+      @ ensures \result == (x < 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 : 
+      @                              x + (\count int i; 0 <= i && i < x; (x - i) % 2 == 0) + 1);
+      @*/
+    public static int addHalfSelf(int x){
+        int n = x;
+        int addNum = 0;
+
+        // If the input is negative, work with its absolute value for counting
+        if(x < 0){
+            n = -x;
+        }
+
+        // Count how many even numbers appear as n decreases to zero
+        /*@ maintaining n >= 0;
+          @ maintaining addNum == (\count int i; 0 <= i && i < (\old(n) - n); (\old(n) - i) % 2 == 0);
+          @ decreasing n;
+          @*/
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n--;
+        }
+
+        // Apply sign-based adjustment to obtain the final result
+        if(x < 0){
+            return x - addNum - 1;
+        }
+        else{
+            return x + addNum + 1;
+        }
+    }
+}
+==============================
+tmp/AddHalfSelf_Mutant1.java:6: error: ')' expected
+      @ ensures \result == (x < 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 : 
+                                               ^
+tmp/AddHalfSelf_Mutant1.java:6: error: '.class' expected
+      @ ensures \result == (x < 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 : 
+                                                    ^
+tmp/AddHalfSelf_Mutant1.java:6: error: illegal start of type
+      @ ensures \result == (x < 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 : 
+                                                       ^
+tmp/AddHalfSelf_Mutant1.java:6: error: <identifier> expected
+      @ ensures \result == (x < 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 : 
+                                                             ^
+tmp/AddHalfSelf_Mutant1.java:6: error: illegal start of type
+      @ ensures \result == (x < 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 : 
+                                                                     ^
+tmp/AddHalfSelf_Mutant1.java:6: error: illegal start of type
+      @ ensures \result == (x < 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 : 
+                                                                      ^
+tmp/AddHalfSelf_Mutant1.java:6: error: illegal start of type
+      @ ensures \result == (x < 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 : 
+                                                                           ^
+tmp/AddHalfSelf_Mutant1.java:6: error: illegal start of type
+      @ ensures \result == (x < 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 : 
+                                                                            ^
+tmp/AddHalfSelf_Mutant1.java:6: error: ';' expected
+      @ ensures \result == (x < 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 : 
+                                                                                   ^
+tmp/AddHalfSelf_Mutant1.java:7: error: illegal start of type
+      @                              x + (\count int i; 0 <= i && i < x; (x - i) % 2 == 0) + 1);
+                                                        ^
+tmp/AddHalfSelf_Mutant1.java:7: error: <identifier> expected
+      @                              x + (\count int i; 0 <= i && i < x; (x - i) % 2 == 0) + 1);
+                                                              ^
+tmp/AddHalfSelf_Mutant1.java:7: error: > expected
+      @                              x + (\count int i; 0 <= i && i < x; (x - i) % 2 == 0) + 1);
+                                                                       ^
+tmp/AddHalfSelf_Mutant1.java:7: error: illegal start of type
+      @                              x + (\count int i; 0 <= i && i < x; (x - i) % 2 == 0) + 1);
+                                                                         ^
+tmp/AddHalfSelf_Mutant1.java:7: error: <identifier> expected
+      @                              x + (\count int i; 0 <= i && i < x; (x - i) % 2 == 0) + 1);
+                                                                           ^
+tmp/AddHalfSelf_Mutant1.java:7: error: ';' expected
+      @                              x + (\count int i; 0 <= i && i < x; (x - i) % 2 == 0) + 1);
+                                                                                ^
+tmp/AddHalfSelf_Mutant1.java:20: error: ')' expected
+          @ maintaining addNum == (\count int i; 0 <= i && i < (\old(n) - n); (\old(n) - i) % 2 == 0);
+                                         ^
+tmp/AddHalfSelf_Mutant1.java:20: error: Incorrectly formed or terminated loop_invariant statement near here
+          @ maintaining addNum == (\count int i; 0 <= i && i < (\old(n) - n); (\old(n) - i) % 2 == 0);
+                                          ^
+tmp/AddHalfSelf_Mutant1.java:20: error: not a statement
+          @ maintaining addNum == (\count int i; 0 <= i && i < (\old(n) - n); (\old(n) - i) % 2 == 0);
+                                                        ^
+tmp/AddHalfSelf_Mutant1.java:20: error: Expected a declaration or a JML construct inside the JML annotation here
+          @ maintaining addNum == (\count int i; 0 <= i && i < (\old(n) - n); (\old(n) - i) % 2 == 0);
+                                                 ^
+tmp/AddHalfSelf_Mutant1.java:19: error: Loop specifications must immediately precede a loop statement
+        /*@ maintaining n >= 0;
+            ^
+tmp/AddHalfSelf_Mutant1.java:20: error: not a statement
+          @ maintaining addNum == (\count int i; 0 <= i && i < (\old(n) - n); (\old(n) - i) % 2 == 0);
+                                                                                                ^
+tmp/AddHalfSelf_Mutant1.java:20: error: ';' expected
+          @ maintaining addNum == (\count int i; 0 <= i && i < (\old(n) - n); (\old(n) - i) % 2 == 0);
+                                                                                                    ^
+tmp/AddHalfSelf_Mutant1.java:20: error: Expected a declaration or a JML construct inside the JML annotation here
+          @ maintaining addNum == (\count int i; 0 <= i && i < (\old(n) - n); (\old(n) - i) % 2 == 0);
+                                                                              ^
+23 errors
+
+==============================
+public class AddHalfSelf_Mutant1{
+
+    // Utility: helper for integer halving adjustments
+    /*@ public normal_behavior
+      @ requires true;
+      @ ensures \result == (x <= 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 :   
+      @                              x + (\count int i; 0 <= i && i < x; (x - i) % 2 == 0) + 1);
+      @*/
+    public static int addHalfSelf(int x){
+        int n = x;
+        int addNum = 0;
+
+        // If the input is negative, work with its absolute value for counting
+        if(x < 0){
+            n = -x;
+        }
+
+        // Count how many even numbers appear as n decreases to zero
+        /*@ maintaining n > 0;  
+          @ maintaining addNum == (\count int i; 0 < i && i < (\old(n) + n); (\old(n) + i) % 2 == 0);  
+          @ decreasing n;
+          @*/
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n--;
+        }
+
+        // Apply sign-based adjustment to obtain the final result
+        if(x < 0){
+            return x - addNum - 1;
+        }
+        else{
+            return x + addNum + 1;
+        }
+    }
+}
+
+==============================
+tmp/AddHalfSelf_Mutant1.java:6: error: ')' expected
+      @ ensures \result == (x <= 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 :   
+                                                ^
+tmp/AddHalfSelf_Mutant1.java:6: error: '.class' expected
+      @ ensures \result == (x <= 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 :   
+                                                     ^
+tmp/AddHalfSelf_Mutant1.java:6: error: illegal start of type
+      @ ensures \result == (x <= 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 :   
+                                                        ^
+tmp/AddHalfSelf_Mutant1.java:6: error: <identifier> expected
+      @ ensures \result == (x <= 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 :   
+                                                              ^
+tmp/AddHalfSelf_Mutant1.java:6: error: illegal start of type
+      @ ensures \result == (x <= 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 :   
+                                                                      ^
+tmp/AddHalfSelf_Mutant1.java:6: error: illegal start of type
+      @ ensures \result == (x <= 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 :   
+                                                                       ^
+tmp/AddHalfSelf_Mutant1.java:6: error: illegal start of type
+      @ ensures \result == (x <= 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 :   
+                                                                            ^
+tmp/AddHalfSelf_Mutant1.java:6: error: illegal start of type
+      @ ensures \result == (x <= 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 :   
+                                                                             ^
+tmp/AddHalfSelf_Mutant1.java:6: error: ';' expected
+      @ ensures \result == (x <= 0 ? x - (\count int i; 0 <= i && i < (-x); (-x - i) % 2 == 0) - 1 :   
+                                                                                    ^
+tmp/AddHalfSelf_Mutant1.java:7: error: illegal start of type
+      @                              x + (\count int i; 0 <= i && i < x; (x - i) % 2 == 0) + 1);
+                                                        ^
+tmp/AddHalfSelf_Mutant1.java:7: error: <identifier> expected
+      @                              x + (\count int i; 0 <= i && i < x; (x - i) % 2 == 0) + 1);
+                                                              ^
+tmp/AddHalfSelf_Mutant1.java:7: error: > expected
+      @                              x + (\count int i; 0 <= i && i < x; (x - i) % 2 == 0) + 1);
+                                                                       ^
+tmp/AddHalfSelf_Mutant1.java:7: error: illegal start of type
+      @                              x + (\count int i; 0 <= i && i < x; (x - i) % 2 == 0) + 1);
+                                                                         ^
+tmp/AddHalfSelf_Mutant1.java:7: error: <identifier> expected
+      @                              x + (\count int i; 0 <= i && i < x; (x - i) % 2 == 0) + 1);
+                                                                           ^
+tmp/AddHalfSelf_Mutant1.java:7: error: ';' expected
+      @                              x + (\count int i; 0 <= i && i < x; (x - i) % 2 == 0) + 1);
+                                                                                ^
+tmp/AddHalfSelf_Mutant1.java:20: error: ')' expected
+          @ maintaining addNum == (\count int i; 0 < i && i < (\old(n) + n); (\old(n) + i) % 2 == 0);  
+                                         ^
+tmp/AddHalfSelf_Mutant1.java:20: error: Incorrectly formed or terminated loop_invariant statement near here
+          @ maintaining addNum == (\count int i; 0 < i && i < (\old(n) + n); (\old(n) + i) % 2 == 0);  
+                                          ^
+tmp/AddHalfSelf_Mutant1.java:20: error: not a statement
+          @ maintaining addNum == (\count int i; 0 < i && i < (\old(n) + n); (\old(n) + i) % 2 == 0);  
+                                                       ^
+tmp/AddHalfSelf_Mutant1.java:20: error: Expected a declaration or a JML construct inside the JML annotation here
+          @ maintaining addNum == (\count int i; 0 < i && i < (\old(n) + n); (\old(n) + i) % 2 == 0);  
+                                                 ^
+tmp/AddHalfSelf_Mutant1.java:19: error: Loop specifications must immediately precede a loop statement
+        /*@ maintaining n > 0;  
+            ^
+tmp/AddHalfSelf_Mutant1.java:20: error: not a statement
+          @ maintaining addNum == (\count int i; 0 < i && i < (\old(n) + n); (\old(n) + i) % 2 == 0);  
+                                                                                               ^
+tmp/AddHalfSelf_Mutant1.java:20: error: ';' expected
+          @ maintaining addNum == (\count int i; 0 < i && i < (\old(n) + n); (\old(n) + i) % 2 == 0);  
+                                                                                                   ^
+tmp/AddHalfSelf_Mutant1.java:20: error: Expected a declaration or a JML construct inside the JML annotation here
+          @ maintaining addNum == (\count int i; 0 < i && i < (\old(n) + n); (\old(n) + i) % 2 == 0);  
+                                                                             ^
+23 errors
+
+==============================

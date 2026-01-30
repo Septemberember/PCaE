@@ -1,0 +1,60 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class WaterFee_Mutant2 {
+
+    // This class uses a straightforward tiered fee model.
+    // Fees are determined per-ton based on the remaining amount of water.
+    // The public API is calcWaterFee, which sums a fee per ton.
+    // Each ton contributes according to the tier thresholds:
+    //   - n > 10: 5 per ton
+    //   - 4 <= n <= 10: 4 per ton
+    //   - n <= 3: 3 per ton
+
+    // Computes the total water fee for a given amount of water in tons.
+    public static int calcWaterFee(int tons) {
+        int n = tons;
+        int fee = 0;
+
+        // Initialize the tiered-fee system for readability.
+        // Process each ton to accumulate the fee based on thresholds.
+        while (n > 0) {
+            if (n > 10) {
+                fee += 5;
+            } else if (n > 3) {
+                fee += 4;
+            } else {
+                fee += 3;
+            }
+            n--;
+        }
+
+        // Return the accumulated fee after processing all tons.
+        return fee;
+        // End of calculation step.
+        // The result has been computed and returned to the caller.
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+/// FSF
+T1: tons <= 0
+D1: return_value == 0
+
+T2: tons >= 1 && tons <= 3
+D2: return_value == 3 * tons
+
+T3: tons >= 4 && tons <= 10
+D3: return_value == 4 * tons - 3
+
+T4: tons >= 11
+D4: return_value == 5 * tons - 13
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--partially verified!
+Current conversation round is: [1]
+*end* role remark

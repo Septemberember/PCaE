@@ -1,0 +1,69 @@
+public class GetLowCaseLoop_M2 {
+    // Lightweight utility class illustrating a constrained lowercase-like computation.
+    //@ ensures (c >= 'A' && c <= 'F') ==> \result == (char)(c - 'A' + 'a');
+    //@ ensures !(c >= 'A' && c <= 'F') ==> \result == 0;
+    //@ ensures \result != 0 ==> ('a' <= \result && \result <= 'f');
+    public static /*@ pure @*/ char getLowCase(char c) {
+        char t = 'f';
+        // t is initialized to the ASCII value for 'f' to start the comparison.
+        //@ maintaining t <= 'f';
+        //@ maintaining (t >= 'a') ==> ('a' <= t && t <= 'f');
+        //@ maintaining (c >= 'A' && c <= 'F') ==> t >= (char)(c - 'A' + 'a');
+        //@ decreases t - 'a';
+        while(t >= 'a' && t != c - 'A' + 'a') {
+            if(c < 'A' || c > 'F') {
+                return 0;
+            }
+            t--;
+        }
+        // Return the computed character value.
+        return t;
+    }
+    // End of getLowCase method.
+}
+ // End of class GetLowCaseLoop_M2.
+==============================
+tmp/GetLowCaseLoop_M2.java:20: verify: The prover cannot establish an assertion (Postcondition: tmp/GetLowCaseLoop_M2.java:4:) in method getLowCase
+        return t;
+        ^
+tmp/GetLowCaseLoop_M2.java:4: verify: Associated declaration: tmp/GetLowCaseLoop_M2.java:20:
+    //@ ensures !(c >= 'A' && c <= 'F') ==> \result == 0;
+        ^
+2 verification failures
+
+==============================
+public class GetLowCaseLoop_M2 {
+    // Lightweight utility class illustrating a constrained lowercase-like computation.
+    //@ ensures (c >= 'A' && c <= 'F') ==> \result == (char)(c - 'A' + 'a');
+    //@ ensures !(c > 'A' && c < 'F') ==> \result == 0;  
+    //@ ensures \result != 0 ==> ('a' <= \result && \result <= 'f');
+    public static /*@ pure @*/ char getLowCase(char c) {
+        char t = 'f';
+        // t is initialized to the ASCII value for 'f' to start the comparison.
+        //@ maintaining t <= 'f';
+        //@ maintaining (t >= 'a') ==> ('a' <= t && t <= 'f');
+        //@ maintaining (c >= 'A' && c <= 'F') ==> t >= (char)(c - 'A' + 'a');
+        //@ decreases t - 'a';
+        while(t >= 'a' && t != c - 'A' + 'a') {
+            if(c < 'A' || c > 'F') {
+                return 0;
+            }
+            t--;
+        }
+        // Return the computed character value.
+        return t;
+    }
+    // End of getLowCase method.
+}
+ // End of class GetLowCaseLoop_M2.
+
+==============================
+tmp/GetLowCaseLoop_M2.java:20: verify: The prover cannot establish an assertion (Postcondition: tmp/GetLowCaseLoop_M2.java:4:) in method getLowCase
+        return t;
+        ^
+tmp/GetLowCaseLoop_M2.java:4: verify: Associated declaration: tmp/GetLowCaseLoop_M2.java:20:
+    //@ ensures !(c > 'A' && c < 'F') ==> \result == 0;  
+        ^
+2 verification failures
+
+==============================

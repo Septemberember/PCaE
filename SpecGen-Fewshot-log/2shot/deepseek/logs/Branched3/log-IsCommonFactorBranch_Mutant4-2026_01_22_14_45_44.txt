@@ -1,0 +1,51 @@
+public class IsCommonFactorBranch_Mutant4 {
+    //@ requires factor != 0;
+    //@ ensures \result == (a % factor == 0 && b % factor == 0);
+    //@ ensures \result == true <==> (a % factor == 0 && b % factor == 0);
+    //@ ensures \result == false <==> !(a % factor == 0 && b % factor == 0);
+    public static boolean isCommonFactor (int a, int b, int factor) {
+        // Determine divisibility of 'a' by 'factor'
+        if (a % factor != 0) {
+            // If 'a' is not divisible by 'factor', return false
+            return false;
+        }
+        // 'a' is divisible by 'factor'
+        return true;
+    }
+}
+==============================
+tmp/IsCommonFactorBranch_Mutant4.java:13: verify: The prover cannot establish an assertion (Postcondition: tmp/IsCommonFactorBranch_Mutant4.java:3:) in method isCommonFactor
+        return true;
+        ^
+tmp/IsCommonFactorBranch_Mutant4.java:3: verify: Associated declaration: tmp/IsCommonFactorBranch_Mutant4.java:13:
+    //@ ensures \result == (a % factor == 0 && b % factor == 0);
+        ^
+2 verification failures
+
+==============================
+public class IsCommonFactorBranch_Mutant4 {
+    //@ requires factor != 0;
+    //@ ensures \result == (a % factor == 0 && b % factor == 0);  
+    //@ ensures \result == true <==> (a % factor == 0 && b % factor == 0);
+    //@ ensures \result == false <==> !(a % factor == 0 && b % factor == 0);
+    public static boolean isCommonFactor (int a, int b, int factor) {
+        // Determine divisibility of 'a' by 'factor'
+        if (a % factor != 0) {
+            // If 'a' is not divisible by 'factor', return false
+            return false;
+        }
+        // 'a' is divisible by 'factor'
+        return true;
+    }
+}
+
+==============================
+tmp/IsCommonFactorBranch_Mutant4.java:13: verify: The prover cannot establish an assertion (Postcondition: tmp/IsCommonFactorBranch_Mutant4.java:3:) in method isCommonFactor
+        return true;
+        ^
+tmp/IsCommonFactorBranch_Mutant4.java:3: verify: Associated declaration: tmp/IsCommonFactorBranch_Mutant4.java:13:
+    //@ ensures \result == (a % factor == 0 && b % factor == 0);  
+        ^
+2 verification failures
+
+==============================

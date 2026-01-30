@@ -1,0 +1,8 @@
+experimentName: Gemini0shot
+model: google/gemini-3-flash-preview
+category: Nested-Loop3
+total number: 35
+success number: 2
+success rate: 5.71%
+failed number: 31
+exception number: 2

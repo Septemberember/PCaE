@@ -1,0 +1,8 @@
+experimentName: deepseekv30shot
+model: deepseek/deepseek-v3.2
+category: Multi-path-Loop3
+total number: 31
+success number: 7
+success rate: 22.58%
+failed number: 24
+exception number: 0

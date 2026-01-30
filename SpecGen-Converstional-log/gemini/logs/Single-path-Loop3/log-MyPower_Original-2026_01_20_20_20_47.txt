@@ -1,0 +1,136 @@
+public class MyPower_Original {
+    // Simple utility to compute integer powers iteratively
+    // Keeps multiplication-based result straightforward and efficient
+    //@ requires n >= 0;
+    //@ ensures \result == (int)\over(\pow(x, n));
+    public static int power(int x, int n) {
+        int res = 1;
+        // Begin iterative exponentiation: multiply x by itself n times
+        //@ maintaining 0 <= i && i <= n;
+        //@ maintaining res == (int)\over(\pow(x, i));
+        //@ decreases n - i;
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Original.java:5: error: This backslash token is unknown: \over
+    //@ ensures \result == (int)\over(\pow(x, n));
+                                ^
+tmp/MyPower_Original.java:5: error: This backslash token is unknown: \pow
+    //@ ensures \result == (int)\over(\pow(x, n));
+                                      ^
+tmp/MyPower_Original.java:10: error: This backslash token is unknown: \over
+        //@ maintaining res == (int)\over(\pow(x, i));
+                                    ^
+tmp/MyPower_Original.java:10: error: This backslash token is unknown: \pow
+        //@ maintaining res == (int)\over(\pow(x, i));
+                                          ^
+4 errors
+
+==============================
+public class MyPower_Original {
+    // Simple utility to compute integer powers iteratively
+    // Keeps multiplication-based result straightforward and efficient
+    //@ requires n >= 0;
+    //@ ensures \result == \product(int j; 0 <= j && j < n; x);
+    public static int power(int x, int n) {
+        int res = 1;
+        // Begin iterative exponentiation: multiply x by itself n times
+        //@ maintaining 0 <= i && i <= n;
+        //@ maintaining res == \product(int j; 0 <= j && j < i; x);
+        //@ decreases n - i;
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Original.java:5: error: illegal start of type
+    //@ ensures \result == \product(int j; 0 <= j && j < n; x);
+                                   ^
+tmp/MyPower_Original.java:5: error: illegal start of type
+    //@ ensures \result == \product(int j; 0 <= j && j < n; x);
+                                           ^
+tmp/MyPower_Original.java:5: error: <identifier> expected
+    //@ ensures \result == \product(int j; 0 <= j && j < n; x);
+                                                 ^
+tmp/MyPower_Original.java:5: error: > expected
+    //@ ensures \result == \product(int j; 0 <= j && j < n; x);
+                                                          ^
+tmp/MyPower_Original.java:5: error: <identifier> expected
+    //@ ensures \result == \product(int j; 0 <= j && j < n; x);
+                                                             ^
+tmp/MyPower_Original.java:10: error: illegal start of type
+        //@ maintaining res == \product(int j; 0 <= j && j < i; x);
+                                       ^
+tmp/MyPower_Original.java:10: error: not a statement
+        //@ maintaining res == \product(int j; 0 <= j && j < i; x);
+                                                      ^
+tmp/MyPower_Original.java:10: error: Expected a declaration or a JML construct inside the JML annotation here
+        //@ maintaining res == \product(int j; 0 <= j && j < i; x);
+                                               ^
+tmp/MyPower_Original.java:9: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining 0 <= i && i <= n;
+            ^
+tmp/MyPower_Original.java:10: error: not a statement
+        //@ maintaining res == \product(int j; 0 <= j && j < i; x);
+                                                                ^
+tmp/MyPower_Original.java:10: error: ';' expected
+        //@ maintaining res == \product(int j; 0 <= j && j < i; x);
+                                                                 ^
+11 errors
+
+==============================
+public class MyPower_Original {
+    // Simple utility to compute integer powers iteratively
+    // Keeps multiplication-based result straightforward and efficient
+    //@ requires n >= 0;
+    //@ ensures \result == (\product int j; 0 <= j && j < n; x);
+    public static int power(int x, int n) {
+        int res = 1;
+        // Begin iterative exponentiation: multiply x by itself n times
+        //@ maintaining 0 <= i && i <= n;
+        //@ maintaining res == (\product int j; 0 <= j && j < i; x);
+        //@ decreases n - i;
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Original.java:10: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method power
+        //@ maintaining res == (\product int j; 0 <= j && j < i; x);
+            ^
+1 verification failure
+
+==============================
+public class MyPower_Original {
+    // Simple utility to compute integer powers iteratively
+    // Keeps multiplication-based result straightforward and efficient
+    //@ requires n >= 0;
+    //@ ensures \result == (\product int j; 0 <= j && j < n; x);
+    public static int power(int x, int n) {
+        int res = 1;
+        // Begin iterative exponentiation: multiply x by itself n times
+        //@ maintaining 0 <= i && i <= n;
+        //@ maintaining res == (\product int j; 0 < j && j < i; x);  
+        //@ decreases n - i;
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        return res;
+    }
+}
+
+==============================
+tmp/MyPower_Original.java:10: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method power
+        //@ maintaining res == (\product int j; 0 < j && j < i; x);  
+            ^
+1 verification failure
+
+==============================

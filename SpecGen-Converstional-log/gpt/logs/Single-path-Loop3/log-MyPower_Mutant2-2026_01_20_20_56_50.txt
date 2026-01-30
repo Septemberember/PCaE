@@ -1,0 +1,179 @@
+public class MyPower_Mutant2 {
+    // Utility: computes x raised to the power n using iterative multiplication.
+    /*@ public normal_behavior
+      @   requires 0 <= n;
+      @   // avoid overflow of int during repeated multiplication (mathematical precondition)
+      @   requires (\forall int k; 0 <= k && k <= n; Integer.MIN_VALUE <= spec_pow(x,k) && spec_pow(x,k) <= Integer.MAX_VALUE);
+      @   ensures \result == spec_pow(x,n);
+      @*/
+    public static int power(int x, int n) {
+        // Start with multiplicative identity
+        int res = 1;
+        // Multiply x by itself n times
+        /*@ maintaining 1 <= i && i <= n + 1;
+          @ maintaining res == spec_pow(x, i - 1);
+          @ decreases n - i;
+          @*/
+        for(int i = 1; i <= n; i++){
+            res = res * x;
+        }
+        // End of power computation
+        return res;
+    }
+
+    /*@ public model pure static int spec_pow(int x, int n);
+      @ axiom spec_pow_base: (\forall int x; spec_pow(x,0) == 1);
+      @ axiom spec_pow_step: (\forall int x, int n; n > 0 ==> spec_pow(x,n) == spec_pow(x,n-1) * x);
+      @*/
+
+    // Class ends
+}
+==============================
+tmp/MyPower_Mutant2.java:26: error: <identifier> expected
+      @ axiom spec_pow_step: (\forall int x, int n; n > 0 ==> spec_pow(x,n) == spec_pow(x,n-1) * x);
+                                            ^
+tmp/MyPower_Mutant2.java:26: error: Expected a semicolon to separate the parts of a JML quantified expression
+      @ axiom spec_pow_step: (\forall int x, int n; n > 0 ==> spec_pow(x,n) == spec_pow(x,n-1) * x);
+                                             ^
+2 errors
+
+==============================
+public class MyPower_Mutant2 {
+    // Utility: computes x raised to the power n using iterative multiplication.
+    /*@ public normal_behavior
+      @   requires 0 <= n;
+      @   ensures \result == spec_pow(x, n);
+      @*/
+    public static int power(int x, int n) {
+        // Start with multiplicative identity
+        int res = 1;
+        // Multiply x by itself n times
+        /*@ maintaining 1 <= i && i <= n + 1;
+          @ maintaining res == spec_pow(x, i - 1);
+          @ decreases n - i;
+          @*/
+        for(int i = 1; i <= n; i++){
+            res = res * x;
+        }
+        // End of power computation
+        return res;
+    }
+
+    /*@ public model pure static int spec_pow(int x, int n);
+      @ axiom spec_pow_base:
+      @   (\forall int x; spec_pow(x, 0) == 1);
+      @ axiom spec_pow_step:
+      @   (\forall int x; (\forall int n; n > 0 ==> spec_pow(x, n) == spec_pow(x, n-1) * x));
+      @*/
+
+    // Class ends
+}
+==============================
+tmp/MyPower_Mutant2.java:7: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static int power(int x, int n) {
+                      ^
+1 verification failure
+
+==============================
+public class MyPower_Mutant2 {
+    // Utility: computes x raised to the power n using iterative multiplication.
+    /*@ public normal_behavior
+      @   requires 0 <= n;
+      @   assignable \nothing;
+      @   ensures \result == (int)(\product int k; 0 <= k && k < n; (\bigint)x);
+      @*/
+    public static int power(int x, int n) {
+        // Start with multiplicative identity
+        int res = 1;
+        // Multiply x by itself n times
+        /*@ maintaining 1 <= i && i <= n + 1;
+          @ maintaining res == (int)(\product int k; 0 <= k && k < (i - 1); (\bigint)x);
+          @ decreases n - i + 1;
+          @*/
+        for(int i = 1; i <= n; i++){
+            res = res * x;
+        }
+        // End of power computation
+        return res;
+    }
+
+    // Class ends
+}
+==============================
+tmp/MyPower_Mutant2.java:13: verify: The prover cannot establish an assertion (ArithmeticCastRange) in method power
+          @ maintaining res == (int)(\product int k; 0 <= k && k < (i - 1); (\bigint)x);
+                               ^
+1 verification failure
+
+==============================
+public class MyPower_Mutant2 {
+    // Utility: computes x raised to the power n using iterative multiplication.
+    /*@ public normal_behavior
+      @   requires 0 <= n;
+      @   // No-overflow condition for all intermediate results (including final result)
+      @   requires (\forall int k; 0 <= k && k <= n;
+      @                 Integer.MIN_VALUE <= (\product int j; 0 <= j && j < k; (\bigint)x)
+      @              && (\product int j; 0 <= j && j < k; (\bigint)x) <= Integer.MAX_VALUE);
+      @   assignable \nothing;
+      @   ensures (\bigint)\result == (\product int k; 0 <= k && k < n; (\bigint)x);
+      @*/
+    public static int power(int x, int n) {
+        // Start with multiplicative identity
+        int res = 1;
+        // Multiply x by itself n times
+        /*@ maintaining 1 <= i && i <= n + 1;
+          @ maintaining (\bigint)res == (\product int k; 0 <= k && k < (i - 1); (\bigint)x);
+          @ decreases n - i + 1;
+          @*/
+        for(int i = 1; i <= n; i++){
+            res = res * x;
+        }
+        // End of power computation
+        return res;
+    }
+
+    // Class ends
+}
+==============================
+tmp/MyPower_Mutant2.java:17: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method power
+          @ maintaining (\bigint)res == (\product int k; 0 <= k && k < (i - 1); (\bigint)x);
+            ^
+1 verification failure
+
+==============================
+public class MyPower_Mutant2 {
+    // Utility: computes x raised to the power n using iterative multiplication.
+    /*@ public normal_behavior
+      @   requires 0 <= n;
+      @   // No-overflow condition for all intermediate results (including final result)
+      @   requires (\forall int k; 0 <= k && k <= n;
+      @                 Integer.MIN_VALUE <= (\product int j; 0 <= j && j < k; (\bigint)x)
+      @              && (\product int j; 0 <= j && j < k; (\bigint)x) <= Integer.MAX_VALUE);
+      @   assignable \nothing;
+      @   ensures (\bigint)\result == (\product int k; 0 <= k && k < n; (\bigint)x);
+      @*/
+    public static int power(int x, int n) {
+        // Start with multiplicative identity
+        int res = 1;
+        // Multiply x by itself n times
+        /*@ maintaining 1 <= i && i <= n + 1;
+          @ maintaining (\bigint)res == (\product int k; 0 < k && k < (i - 1); (\bigint)x);  
+          @ decreases n - i + 1;
+          @*/
+        for(int i = 1; i <= n; i++){
+            res = res * x;
+        }
+        // End of power computation
+        return res;
+    }
+
+    // Class ends
+}
+
+==============================
+tmp/MyPower_Mutant2.java:17: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method power
+          @ maintaining (\bigint)res == (\product int k; 0 < k && k < (i - 1); (\bigint)x);  
+            ^
+1 verification failure
+
+==============================

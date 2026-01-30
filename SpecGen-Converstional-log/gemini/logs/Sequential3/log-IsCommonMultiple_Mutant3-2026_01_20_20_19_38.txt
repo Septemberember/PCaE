@@ -1,0 +1,43 @@
+public class IsCommonMultiple_Mutant3 {
+    // Utility: non-divisibility check for inputs a, b, m
+    // The method returns true when m is not divisible by either a or b.
+    //@ requires a != 0 && b != 0;
+    //@ ensures \result <==> (m % a != 0 && m % b != 0);
+    public static boolean isCommonMultiple(int a, int b, int m) {
+        // Check that m has non-zero remainders with both a and b
+        return m % a > 0 && m % b > 0;
+    }
+    // End of isCommonMultiple method
+}
+==============================
+tmp/IsCommonMultiple_Mutant3.java:8: verify: The prover cannot establish an assertion (Postcondition: tmp/IsCommonMultiple_Mutant3.java:5:) in method isCommonMultiple
+        return m % a > 0 && m % b > 0;
+        ^
+tmp/IsCommonMultiple_Mutant3.java:5: verify: Associated declaration: tmp/IsCommonMultiple_Mutant3.java:8:
+    //@ ensures \result <==> (m % a != 0 && m % b != 0);
+        ^
+2 verification failures
+
+==============================
+public class IsCommonMultiple_Mutant3 {
+    // Utility: non-divisibility check for inputs a, b, m
+    // The method returns true when m is not divisible by either a or b.
+    //@ requires a != 0 && b != 0;
+    //@ ensures \result <==> (m % a != 0 && m % b != 0);  
+    public static boolean isCommonMultiple(int a, int b, int m) {
+        // Check that m has non-zero remainders with both a and b
+        return m % a > 0 && m % b > 0;
+    }
+    // End of isCommonMultiple method
+}
+
+==============================
+tmp/IsCommonMultiple_Mutant3.java:8: verify: The prover cannot establish an assertion (Postcondition: tmp/IsCommonMultiple_Mutant3.java:5:) in method isCommonMultiple
+        return m % a > 0 && m % b > 0;
+        ^
+tmp/IsCommonMultiple_Mutant3.java:5: verify: Associated declaration: tmp/IsCommonMultiple_Mutant3.java:8:
+    //@ ensures \result <==> (m % a != 0 && m % b != 0);  
+        ^
+2 verification failures
+
+==============================

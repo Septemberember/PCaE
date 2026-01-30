@@ -1,0 +1,161 @@
+public class CompressionRatio {
+    /*@ public normal_behavior
+      @ requires fileSize >= Integer.MIN_VALUE && fileSize <= Integer.MAX_VALUE;
+      @ ensures \result != null;
+      @ ensures \result.startsWith("ratio:");
+      @ ensures \result.contains("level:");
+      @ ensures \result.contains("overhead:");
+      @ ensures (\forall int i; 0 <= i && i < \result.length(); 
+      @         \result.charAt(i) != '\u0000');
+      @ ensures \result.trim().equals(\result);
+      @*/
+    public static String calculateRatio(int fileSize) {
+        String ratioStr = null;
+        int level = 0;
+        int overhead = 0;
+
+        //@ maintaining fileSize >= 50;
+        if (fileSize < 50) {
+            fileSize = 50;
+            overhead = overhead - 3;
+            overhead *= fileSize / 10;
+        } else {
+            overhead = overhead + 1;
+            overhead *= fileSize / 100;
+        }
+
+        //@ maintaining fileSize <= 400;
+        if (fileSize > 400) {
+            fileSize = 400;
+            overhead = overhead + 5;
+            overhead *= fileSize / 100;
+        }
+
+        //@ maintaining overhead >= 0 && overhead <= 100;
+        if(overhead > 80){
+            overhead = overhead > 100 ? 100 : overhead;
+            overhead = overhead / 10;
+        }else{
+            overhead = overhead < 10 ? 10 : overhead;
+            overhead = overhead / 10;
+        }
+
+        int ratio = fileSize / 4 + 30;
+
+        //@ maintaining ratio >= 30 && ratio <= 130;
+        //@ maintaining level >= 0 && level <= 9;
+        if (ratio >= 45 && ratio <= 70) {
+            level = (ratio - 45) / 5;
+            if(level < 5) {
+                ratioStr = new String("ratio:" + ratio);
+            }
+        } else {
+            level = 5 + (ratio % 5);
+            ratioStr = new String("ratio:" + ratio);
+        }
+        ratioStr.trim();
+        ratioStr = ratioStr + " level:" + level + " overhead:" + overhead;
+        //@ assert ratioStr != null;
+        //@ assert ratioStr.contains("ratio:");
+        //@ assert ratioStr.contains("level:");
+        //@ assert ratioStr.contains("overhead:");
+        return ratioStr;
+    }
+}
+==============================
+tmp/CompressionRatio.java:17: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining fileSize >= 50;
+            ^
+tmp/CompressionRatio.java:27: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining fileSize <= 400;
+            ^
+tmp/CompressionRatio.java:34: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining overhead >= 0 && overhead <= 100;
+            ^
+tmp/CompressionRatio.java:45: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining ratio >= 30 && ratio <= 130;
+            ^
+4 errors
+
+==============================
+public class CompressionRatio {
+    /*@ public normal_behavior
+      @ requires fileSize >= Integer.MIN_VALUE && fileSize <= Integer.MAX_VALUE;
+      @ ensures \result != null;
+      @ ensures \result.startsWith("ratio:");
+      @ ensures \result.contains("level:");
+      @ ensures \result.contains("overhead:");
+      @ ensures (\forall int i; 0 <= i && i < \result.length(); 
+      @         \result.charAt(i) != '\u0000');
+      @ ensures \result.trim().equals(\result);
+      @*/
+    public static String calculateRatio(int fileSize) {
+        String ratioStr = null;
+        int level = 0;
+        int overhead = 0;
+
+        //@ maintaining fileSize > 50;  
+        if (fileSize < 50) {
+            fileSize = 50;
+            overhead = overhead - 3;
+            overhead *= fileSize / 10;
+        } else {
+            overhead = overhead + 1;
+            overhead *= fileSize / 100;
+        }
+
+        //@ maintaining fileSize < 400;  
+        if (fileSize > 400) {
+            fileSize = 400;
+            overhead = overhead + 5;
+            overhead *= fileSize / 100;
+        }
+
+        //@ maintaining overhead > 0 && overhead < 100;  
+        if(overhead > 80){
+            overhead = overhead > 100 ? 100 : overhead;
+            overhead = overhead / 10;
+        }else{
+            overhead = overhead < 10 ? 10 : overhead;
+            overhead = overhead / 10;
+        }
+
+        int ratio = fileSize / 4 + 30;
+
+        //@ maintaining ratio > 30 && ratio < 130;  
+        //@ maintaining level >= 0 && level <= 9;
+        if (ratio >= 45 && ratio <= 70) {
+            level = (ratio - 45) / 5;
+            if(level < 5) {
+                ratioStr = new String("ratio:" + ratio);
+            }
+        } else {
+            level = 5 + (ratio % 5);
+            ratioStr = new String("ratio:" + ratio);
+        }
+        ratioStr.trim();
+        ratioStr = ratioStr + " level:" + level + " overhead:" + overhead;
+        //@ assert ratioStr != null;
+        //@ assert ratioStr.contains("ratio:");
+        //@ assert ratioStr.contains("level:");
+        //@ assert ratioStr.contains("overhead:");
+        return ratioStr;
+    }
+}
+
+==============================
+tmp/CompressionRatio.java:17: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining fileSize > 50;  
+            ^
+tmp/CompressionRatio.java:27: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining fileSize < 400;  
+            ^
+tmp/CompressionRatio.java:34: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining overhead > 0 && overhead < 100;  
+            ^
+tmp/CompressionRatio.java:45: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining ratio > 30 && ratio < 130;  
+            ^
+4 errors
+
+==============================

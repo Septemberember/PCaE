@@ -1,0 +1,213 @@
+public class MetricsCalculator {
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   ensures !Double.isNaN(\result);
+      @   ensures !Double.isInfinite(\result);
+      @   ensures \result == (double)((long)\result); // result is an integer-valued double
+      @ also
+      @ public exceptional_behavior
+      @   assignable \nothing;
+      @   signals_only ArithmeticException;
+      @*/
+    public static double computeScore(int value, int limit) {
+        int result = 0;
+        int iteration = -26;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = -value;
+            polarity = polarity * -1;
+        }
+
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ maintaining (polarity == 1 || polarity == -1);
+        //@ maintaining 0 <= value;
+        //@ maintaining -26 <= iteration;
+        //@ maintaining 0 <= shift;
+        //@ decreases (limit > 0 ? limit : 0);
+        while (limit > 0) {
+            limit = (limit - value) / 2;
+            iteration = iteration + 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = iteration % 10;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class MetricsCalculator {
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   ensures true;
+      @ also
+      @ public exceptional_behavior
+      @   assignable \nothing;
+      @   signals (ArithmeticException e) true;
+      @*/
+    public static double computeScore(int value, int limit) {
+        int result = 0;
+        int iteration = -26;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = -value;
+            polarity = polarity * -1;
+        }
+
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ maintaining true;
+        while (limit > 0) {
+            limit = (limit - value) / 2;
+            iteration = iteration + 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = iteration % 10;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator.java:37: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method computeScore
+        result = value / iteration;
+                       ^
+1 verification failure
+
+==============================
+public class MetricsCalculator {
+    /*@ public behavior
+      @   assignable \nothing;
+      @   ensures true;
+      @   signals (ArithmeticException e) true;
+      @*/
+    public static double computeScore(int value, int limit) {
+        int result = 0;
+        int iteration = -26;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = -value;
+            polarity = polarity * -1;
+        }
+
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ maintaining true;
+        while (limit > 0) {
+            limit = (limit - value) / 2;
+            iteration = iteration + 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = iteration % 10;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator.java:34: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method computeScore
+        result = value / iteration;
+                       ^
+1 verification failure
+
+==============================
+public class MetricsCalculator {
+    /*@ public behavior
+      @   assignable \nothing;
+      @   ensures true;
+      @   signals (ArithmeticException e) true;
+      @*/
+    public static double computeScore(int value, int limit) {
+        int result = 0;
+        int iteration = -26;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = -value;
+            polarity = polarity * -1;
+        }
+
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ maintaining true;
+        while (limit > 0) {
+            limit = (limit - value) / 2;
+            iteration = iteration + 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = iteration % 10;
+        //@ assume iteration != 0;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+
+==============================

@@ -1,0 +1,17 @@
+public class AbsSeq_Mutant1 {
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   ensures \result == ((\old(num) <= 0) ? -\old(num) : \old(num));
+      @*/
+    public static int Abs(int num) {
+        if (num <= 0) {
+            num = -num;
+	    return num;
+        } else {
+            return num;
+        }
+    }
+}
+==============================
+
+==============================

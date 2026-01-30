@@ -1,0 +1,51 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class AddHalfSelf_Mutant3{
+    public static int addHalfSelf(int x){
+        // Prepare working variables
+        // addNum serves as the delta accumulator
+        int n = x;
+        int addNum = 0;
+        // Initialize and adjust inputs to drive the loop
+        if(x > 0){
+            // If x is positive, negate to ensure the subsequent loop processes negatives
+            n = -x;
+        }
+        // End pre-processing; begin counting parity inside the loop
+        while(n < 0){
+            // Count an even n value by incrementing addNum
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n++;
+        }
+        // Exiting the counting loop; addNum holds the adjustments
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            // Compute final result based on the sign of the original x
+            return x + addNum;
+        }
+    }
+}
+
+```
+*end* role user
+start role assistant
+```fsf
+T1: x % 2 == 0
+D1: return_value == x + x / 2
+
+T2: x % 2 != 0 && x >= 0
+D2: return_value == x + (x - 1) / 2
+
+T3: x % 2 != 0 && x < 0
+D3: return_value == x + (x + 1) / 2
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--partially verified!
+Current conversation round is: [1]
+*end* role remark

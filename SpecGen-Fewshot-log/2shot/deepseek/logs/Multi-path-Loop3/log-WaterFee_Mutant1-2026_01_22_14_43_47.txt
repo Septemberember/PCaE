@@ -1,0 +1,44 @@
+public class WaterFee_Mutant1 {
+ // WaterFee_Mutant1: computes a tiered water service fee based on usage in tons
+ // Base concept: start with a fixed base fee and add charges per usage interval
+ // The calculation uses a simple loop over the input amount
+    /*@ public normal_behavior
+      @ requires tons >= 0;
+      @ ensures \result == 15 + 
+      @   (tons > 30 ? 5*(tons-30) + 4*20 + 3*10 :
+      @    tons > 10 ? 4*(tons-10) + 3*10 :
+      @    3*tons);
+      @*/
+    public static int calcWaterFee(int tons) {
+        // Local copy of the input tons for iteration
+        int n = tons;
+        // Initial base fee
+        int fee = 15;
+        // Iterate while there is remaining usage to account for
+        //@ maintaining n >= 0;
+        //@ maintaining fee == 15 + 
+        //@   (tons > 30 ? 5*(tons - (n > 30 ? n : 30)) : 0) +
+        //@   (tons > 10 ? 4*(Math.min(tons,30) - (n > 10 ? Math.min(n,30) : 10)) : 0) +
+        //@   3*(Math.min(tons,10) - (n > 0 ? Math.min(n,10) : 0));
+        //@ decreases n;
+        while (n > 0) {
+            // Tier 1: very high usage
+            if (n > 30) {
+                fee += 5;
+            } else if (n > 10) {
+                // Tier 2: moderate usage
+                fee += 4;
+            } else {
+                // Tier 3: low usage
+                fee += 3;
+            }
+            // Consume one ton per loop iteration
+            n--;
+        }
+        // Return the computed total fee
+        return fee;
+    }
+}
+==============================
+TimeoutException
+==============================

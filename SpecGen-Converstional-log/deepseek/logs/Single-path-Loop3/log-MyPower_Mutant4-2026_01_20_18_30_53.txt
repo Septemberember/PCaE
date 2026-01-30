@@ -1,0 +1,265 @@
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    //@ requires n >= 0;
+    //@ ensures \result == (int)Math.pow(x, n+1);
+    public static int power(int x, int n) {
+        int res = 1;
+        //@ maintaining 0 <= i && i <= n+1;
+        //@ maintaining res == (int)Math.pow(x, i);
+        //@ decreases n+1 - i;
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    //@ requires n >= 0;
+    //@ ensures \result == \old((int)Math.pow(x, n+1));
+    public static int power(int x, int n) {
+        int res = 1;
+        //@ maintaining 0 <= i && i <= n+1;
+        //@ maintaining res == \old((int)Math.pow(x, i));
+        //@ decreases (n+1) - i;
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Mutant4.java:11: error: cannot find symbol
+        //@ maintaining res == \old((int)Math.pow(x, i));
+                                                     ^
+  symbol:   variable i
+  location: class MyPower_Mutant4
+1 error
+
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    //@ requires n >= 0;
+    //@ ensures \result == \old((int)Math.pow(x, n+1));
+    public static int power(int x, int n) {
+        int res = 1;
+        //@ maintaining 0 <= i && i <= n+1;
+        //@ maintaining res == \old((int)Math.pow(x, i));
+        //@ decreases (n+1) - i;
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Mutant4.java:11: error: cannot find symbol
+        //@ maintaining res == \old((int)Math.pow(x, i));
+                                                     ^
+  symbol:   variable i
+  location: class MyPower_Mutant4
+1 error
+
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    //@ requires n >= 0;
+    //@ ensures \result == \old((int)Math.pow(x, n+1));
+    public static int power(int x, int n) {
+        int res = 1;
+        //@ ghost int j = 0;
+        //@ maintaining 0 <= j && j <= n+1;
+        //@ maintaining res == \old((int)Math.pow(x, j));
+        //@ decreases (n+1) - j;
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+	        //@ set j = j + 1;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Mutant4.java:12: error: cannot find symbol
+        //@ maintaining res == \old((int)Math.pow(x, j));
+                                                     ^
+  symbol:   variable j
+  location: class MyPower_Mutant4
+1 error
+
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    //@ requires n >= 0;
+    //@ ensures \result == \old((int)Math.pow(x, n+1));
+    public static int power(int x, int n) {
+        int res = 1;
+        //@ ghost int j = 0;
+        //@ maintaining 0 <= j && j <= n+1;
+        //@ maintaining res == \old((int)Math.pow(x, j));
+        //@ decreases (n+1) - j;
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+	        //@ set j = j + 1;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Mutant4.java:12: error: cannot find symbol
+        //@ maintaining res == \old((int)Math.pow(x, j));
+                                                     ^
+  symbol:   variable j
+  location: class MyPower_Mutant4
+1 error
+
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    //@ requires n >= 0;
+    //@ ensures \result == \old((int)Math.pow(x, n+1));
+    public static int power(int x, int n) {
+        int res = 1;
+        //@ ghost int j = 0;
+        //@ maintaining 0 <= j && j <= n+1;
+        //@ maintaining res == \old((int)Math.pow(x, j));
+        //@ decreases (n+1) - j;
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+	        //@ set j = j + 1;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Mutant4.java:12: error: cannot find symbol
+        //@ maintaining res == \old((int)Math.pow(x, j));
+                                                     ^
+  symbol:   variable j
+  location: class MyPower_Mutant4
+1 error
+
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    //@ requires n >= 0;
+    //@ ensures \result == \old((int)Math.pow(x, n+1));
+    public static int power(int x, int n) {
+        int res = 1;
+        //@ maintaining 0 <= i && i <= n+1;
+        //@ maintaining res == (int)Math.pow(x, i);
+        //@ decreases (n+1) - i;
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    //@ requires n >= 0;
+    //@ ensures \result == (int)Math.pow(x, n+1);
+    public static int power(int x, int n) {
+        int res = 1;
+        //@ maintaining 0 <= i && i <= n+1;
+        //@ maintaining res == (int)Math.pow(x, i);
+        //@ decreases (n+1) - i;
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    //@ requires n >= 0;
+    //@ ensures \result == (\product int k; 0 <= k && k <= n; x);
+    public static int power(int x, int n) {
+        int res = 1;
+        //@ maintaining 0 <= i && i <= n+1;
+        //@ maintaining res == (\product int k; 0 <= k && k < i; x);
+        //@ decreases (n+1) - i;
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Mutant4.java:11: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method power
+        //@ maintaining res == (\product int k; 0 <= k && k < i; x);
+            ^
+1 verification failure
+
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    //@ requires n >= 0;
+    //@ ensures \result == (\product int k; 0 <= k && k <= n; x);
+    public static int power(int x, int n) {
+        int res = 1;
+        //@ maintaining 0 <= i && i <= n+1;
+        //@ maintaining res == (\product int k; 0 < k && k < i; x);  
+        //@ decreases (n+1) - i;
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        res = res * x;
+        }
+        return res;
+    }
+}
+
+==============================
+tmp/MyPower_Mutant4.java:11: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method power
+        //@ maintaining res == (\product int k; 0 < k && k < i; x);  
+            ^
+1 verification failure
+
+==============================

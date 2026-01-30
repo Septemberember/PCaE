@@ -1,0 +1,43 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class NumberOfCuts_Mutant4 {
+
+    // Number of cuts is a simple parity-based calculation
+    // The function returns n/2 for even n, otherwise n
+    // Special-case n == 2 is preserved as part of the test
+    // This block is intentionally left unchanged by design
+
+    public static int numberOfCuts(int n) {
+        if (n == 2) { // mutated line
+            // Careful: keep the original special-case intact
+            return 0; 
+        }
+        // Post-special-case evaluation based on parity
+        if (n % 2 == 0) {
+            return n / 2;
+        }
+        return n;
+        // End of parity-based logic
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: n == 2
+D1: return_value == 0
+
+T2: n % 2 == 0 && n != 2
+D2: return_value == n / 2
+
+T3: n % 2 != 0
+D3: return_value == n
+```
+
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

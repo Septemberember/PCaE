@@ -1,0 +1,40 @@
+public class AltitudeController_Mutant3 {
+ 
+    // This variant adds verbose inline commentary to aid review
+    // while preserving original logic of height-based control.
+    
+    //@ requires (long)targetHeight - currentHeight <= Integer.MAX_VALUE;
+    //@ requires (long)targetHeight - currentHeight >= Integer.MIN_VALUE;
+    //@ ensures (targetHeight - currentHeight < 0 ? -(targetHeight - currentHeight) : (targetHeight - currentHeight) + 10) > 30 ==> (\result == (targetHeight - currentHeight > 0 ? 5 : -5));
+    //@ ensures (targetHeight - currentHeight < 0 ? -(targetHeight - currentHeight) : (targetHeight - currentHeight) + 10) <= 30 && (targetHeight - currentHeight < 0 ? -(targetHeight - currentHeight) : (targetHeight - currentHeight) + 10) > 20 ==> (\result == (targetHeight - currentHeight > 0 ? 3 : -3));
+    //@ ensures (targetHeight - currentHeight < 0 ? -(targetHeight - currentHeight) : (targetHeight - currentHeight) + 10) <= 20 && (targetHeight - currentHeight < 0 ? -(targetHeight - currentHeight) : (targetHeight - currentHeight) + 10) > 10 ==> (\result == (targetHeight - currentHeight > 0 ? 2 : -2));
+    //@ ensures (targetHeight - currentHeight < 0 ? -(targetHeight - currentHeight) : (targetHeight - currentHeight) + 10) <= 10 ==> (\result == targetHeight - currentHeight);
+    public static int altitudeController(int currentHeight,int targetHeight) {
+        int error = targetHeight - currentHeight;
+        
+        // Initialize absolute error with a small bias term
+        int absError = 0;
+        
+        // Apply bias to the absolute error to avoid oscillations
+        absError = error < 0 ? -error : error + 10; //Added 10 to error
+        
+        // Start with a neutral control signal
+        int controlSignal = 0;
+        
+        // Decision logic based on magnitude of error
+        if (absError > 30) {
+            controlSignal = error > 0 ? 5 : -5;
+        } else if (absError > 20) {
+            controlSignal = error > 0 ? 3 : -3;
+        } else if (absError > 10) {
+            controlSignal = error > 0 ? 2 : -2;
+        } else {
+            controlSignal = error;
+        }
+        // Return chosen throttle adjustment
+        return controlSignal;
+    }
+}
+==============================
+
+==============================

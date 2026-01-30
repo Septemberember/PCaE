@@ -1,0 +1,99 @@
+public class MySqrt_Original {
+    // This class provides a simple integer square root implementation using binary search
+    // The method returns the floor of sqrt(x) for non-negative x
+    /*@ public normal_behavior
+      @   requires x >= 0;
+      @   ensures 0 <= \result;
+      @   ensures ((long)\result * (long)\result) <= x;
+      @   ensures ((long)(\result + 1) * (long)(\result + 1)) > x;
+      @*/
+    public static int mySqrt(int x) {
+        int l = 0, r = x, ans = -1;
+
+        // Initialize search range [l, r] and the best answer found so far
+        /*@ maintaining 0 <= l && l <= x + 1;
+          @ maintaining -1 <= r && r <= x;
+          @ maintaining -1 <= ans && ans <= x;
+          @ maintaining ((ans == -1) || (((long)ans * (long)ans) <= x));
+          @ maintaining (\forall int k; 0 <= k && k < l; ((long)k * (long)k) <= x);
+          @ maintaining (\forall int k; r < k && k <= x; ((long)k * (long)k) > x);
+          @ decreases r - l + 1;
+          @*/
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+
+            // Mid is a candidate for the integer square root
+            if ((long) mid * mid <= x) {
+                ans = mid;
+                // Look for a larger candidate; otherwise adjust r
+                l = mid + 1;
+            } else {
+                // Mid too large; shrink the search space
+                r = mid - 1;
+            }
+        }
+        // Finished search; result is in ans
+        // Return the floor of the square root
+        return ans;
+    }
+}
+==============================
+tmp/MySqrt_Original.java:37: verify: The prover cannot establish an assertion (Postcondition: tmp/MySqrt_Original.java:6:) in method mySqrt
+        return ans;
+        ^
+tmp/MySqrt_Original.java:6: verify: Associated declaration: tmp/MySqrt_Original.java:37:
+      @   ensures 0 <= \result;
+          ^
+2 verification failures
+
+==============================
+public class MySqrt_Original {
+    // This class provides a simple integer square root implementation using binary search
+    // The method returns the floor of sqrt(x) for non-negative x
+    /*@ public normal_behavior
+      @   requires x >= 0;
+      @   ensures 0 < \result;  
+      @   ensures ((long)\result * (long)\result) <= x;
+      @   ensures ((long)(\result + 1) * (long)(\result + 1)) > x;
+      @*/
+    public static int mySqrt(int x) {
+        int l = 0, r = x, ans = -1;
+
+        // Initialize search range [l, r] and the best answer found so far
+        /*@ maintaining 0 <= l && l <= x + 1;
+          @ maintaining -1 <= r && r <= x;
+          @ maintaining -1 <= ans && ans <= x;
+          @ maintaining ((ans == -1) || (((long)ans * (long)ans) <= x));
+          @ maintaining (\forall int k; 0 <= k && k < l; ((long)k * (long)k) <= x);
+          @ maintaining (\forall int k; r < k && k <= x; ((long)k * (long)k) > x);
+          @ decreases r - l + 1;
+          @*/
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+
+            // Mid is a candidate for the integer square root
+            if ((long) mid * mid <= x) {
+                ans = mid;
+                // Look for a larger candidate; otherwise adjust r
+                l = mid + 1;
+            } else {
+                // Mid too large; shrink the search space
+                r = mid - 1;
+            }
+        }
+        // Finished search; result is in ans
+        // Return the floor of the square root
+        return ans;
+    }
+}
+
+==============================
+tmp/MySqrt_Original.java:37: verify: The prover cannot establish an assertion (Postcondition: tmp/MySqrt_Original.java:6:) in method mySqrt
+        return ans;
+        ^
+tmp/MySqrt_Original.java:6: verify: Associated declaration: tmp/MySqrt_Original.java:37:
+      @   ensures 0 < \result;  
+          ^
+2 verification failures
+
+==============================

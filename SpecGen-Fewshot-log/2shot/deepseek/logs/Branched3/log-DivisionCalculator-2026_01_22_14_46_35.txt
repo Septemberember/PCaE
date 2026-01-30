@@ -1,0 +1,60 @@
+public class DivisionCalculator {
+
+    //@ requires denominator != 0;
+    //@ ensures \result != 0;
+    public static double calculateRatio(int numerator, int denominator) {
+        int sum = 0;
+        int diff = 0;
+        int product = 1;
+        int counter = 0;
+        double ratio = 0;
+        //@ maintaining sum == (\sum int k; 0 <= k && k < i; k) && 0 <= i && i <= 5;
+        //@ maintaining diff == (\sum int k; 0 <= k && k < i; -k) && 0 <= i && i <= 5;
+        //@ maintaining product == (\product int k; 1 <= k && k <= i; k) && 0 <= i && i <= 5;
+        //@ maintaining counter == i && 0 <= i && i <= 5;
+        //@ decreases 5 - i;
+        for (int i = 0; i < 5; i++) {
+            sum = sum + i;
+            diff = diff - i;
+            product =  product * (i + 1);
+            counter = counter + 1;
+        }
+        if(denominator <= 0){
+            denominator = 1;
+        }
+        if(numerator < counter || denominator > 7) {
+            numerator = numerator + diff * counter;
+        }else{
+            denominator = numerator - denominator;
+            ratio = (double) numerator / denominator;
+        }
+
+        double adjustment = 0.0;
+        //@ maintaining adjustment == (\sum int k; 0 <= k && k < j; k * 0.1) && 0 <= j && j <= 3;
+        //@ decreases 3 - j;
+        for (int j = 0; j < 3; j++) {
+            adjustment += j * 0.1;
+        }
+
+        double result = ratio + adjustment + sum - diff + product - counter + numerator;
+
+        boolean valid = result > 0;
+        if (valid) {
+            System.out.println("Computation successful.");
+        } else {
+            System.out.println("Computation result is non-positive.");
+        }
+
+        int check = 1;
+        //@ maintaining check <= 4;
+        //@ decreases 4 - check;
+        while (check < 4) {
+            result += check * 2;
+            check++;
+        }
+        return result;
+    }
+}
+==============================
+TimeoutException
+==============================

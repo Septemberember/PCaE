@@ -1,0 +1,51 @@
+import java.util.*;
+public class MixCollectSum {
+    /*@ ensures (\let int xi = (\old(x) > 220 ? 220 : \old(x));
+      @            (xi < 195 ==> \result == 0.0)
+      @         && (195 <= xi && xi <= 199 ==> \result == (double)((((long)(194 + (xi - 1))) * (xi - 194)) / 2))
+      @         && (xi >= 200 ==> \result == (double)((((long)(200 + (xi - 1))) * (xi - 200)) / 2 + 49))
+      @        );
+      @*/
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 220){
+            x = 220;
+        }
+        //@ ghost int xInit = x;
+        /*@ maintaining list != null;
+          @ maintaining sum == 0;
+          @ maintaining x <= xInit;
+          @ decreases (x >= 195 ? x - 194 : 0);
+          @*/
+        while(x >= 195){
+           if(x == 200){
+               x = x - 150;
+               sum = tmp / x;
+           }
+           x = x - 1;
+           list.add(x);
+        }
+        //@ ghost int k = 0;
+        /*@ maintaining 0 <= k && k <= list.size();
+          @ maintaining sum == (\sum int j; 0 <= j && j < k; list.get(j));
+          @ decreases list.size() - k;
+          @*/
+        for(int i : list){
+            //@ assert 0 <= k && k < list.size();
+            //@ assert i == list.get(k);
+            sum = sum + i;
+            //@ ghost k = k + 1;
+        }
+        return sum;
+    }
+}
+==============================
+tmp/MixCollectSum.java:40: error: <identifier> expected
+            //@ ghost k = k + 1;
+                       ^
+1 error
+
+==============================

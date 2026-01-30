@@ -1,0 +1,29 @@
+public class GyroHealthCheck_Original {
+    // GyroHealthCheck: compare axis differences and flag high variation
+
+    //@ ensures (\result == 1) <==> ((x - y < 0 ? -(x - y) : (x - y)) > 10 || (y - z < 0 ? -(y - z) : (y - z)) > 10 || (x - z < 0 ? -(x - z) : (x - z)) > 10);
+    //@ ensures (\result == 0) <==> ((x - y < 0 ? -(x - y) : (x - y)) <= 10 && (y - z < 0 ? -(y - z) : (y - z)) <= 10 && (x - z < 0 ? -(x - z) : (x - z)) <= 10);
+    //@ ensures \result == 0 || \result == 1;
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // Absolute difference for X and Y
+        if (diffXY < 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // Absolute difference for Y and Z
+        if (diffYZ < 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // Absolute difference for X and Z
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        int alarm = 0;
+        // Trigger alarm if any pairwise difference exceeds threshold
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        return alarm;
+        // End of gyroHealthCheck calculations
+    }
+    // End of GyroHealthCheck_Original class
+}
+==============================
+
+==============================

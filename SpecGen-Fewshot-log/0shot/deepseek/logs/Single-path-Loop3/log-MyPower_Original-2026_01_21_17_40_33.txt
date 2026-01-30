@@ -1,0 +1,63 @@
+public class MyPower_Original {
+    // Simple utility to compute integer powers iteratively
+    // Keeps multiplication-based result straightforward and efficient
+    
+    /*@
+      @ public normal_behavior
+      @ requires n >= 0;
+      @ ensures \result == (\product int i; 0 <= i && i < n; x);
+      @ ensures \result >= 0;
+      @*/
+    public static int power(int x, int n) {
+        int res = 1;
+        // Begin iterative exponentiation: multiply x by itself n times
+        /*@
+          @ maintaining 0 <= i && i <= n;
+          @ maintaining res == (\product int j; 0 <= j && j < i; x);
+          @ decreasing n - i;
+          @*/
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Original.java:16: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method power
+          @ maintaining res == (\product int j; 0 <= j && j < i; x);
+            ^
+1 verification failure
+
+==============================
+public class MyPower_Original {
+    // Simple utility to compute integer powers iteratively
+    // Keeps multiplication-based result straightforward and efficient
+    
+    /*@
+      @ public normal_behavior
+      @ requires n >= 0;
+      @ ensures \result == (\product int i; 0 <= i && i < n; x);
+      @ ensures \result >= 0;
+      @*/
+    public static int power(int x, int n) {
+        int res = 1;
+        // Begin iterative exponentiation: multiply x by itself n times
+        /*@
+          @ maintaining 0 <= i && i <= n;
+          @ maintaining res == (\product int j; 0 < j && j < i; x);  
+          @ decreasing n - i;
+          @*/
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        return res;
+    }
+}
+
+==============================
+tmp/MyPower_Original.java:16: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method power
+          @ maintaining res == (\product int j; 0 < j && j < i; x);  
+            ^
+1 verification failure
+
+==============================

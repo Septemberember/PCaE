@@ -1,0 +1,23 @@
+public class XOR_Mutant1 {
+
+    // XOR logic method that implements a simple boolean exclusive OR
+    /*@ public normal_behavior
+      @   ensures \result == (b1 ^ b2);
+      @   ensures b1 == true ==> \result == !b2;
+      @   ensures b1 == false ==> \result == b2;
+      @ pure
+      @*/
+    public static boolean xor(boolean b1, boolean b2) {
+
+        if(b1 == true) {
+            return !b2;
+        }
+        else {
+            return b2;
+        }
+    }
+
+}
+==============================
+
+==============================

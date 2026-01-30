@@ -1,0 +1,27 @@
+public class IsCommonFactor_Mutant3 {
+
+    /**
+     * IsCommonFactor utility with a simple predicate.
+     * The predicate checks divisibility against a given factor for two inputs.
+     * This variant demonstrates a straightforward boolean expression.
+     */
+
+    /*@ public normal_behavior
+      @ requires factor != 0;
+      @ ensures \result == (a % factor == 0 && b % factor != 0);
+      @ also
+      @ public exceptional_behavior
+      @ requires factor == 0;
+      @ signals (ArithmeticException) true;
+      @*/
+    public static boolean isCommonFactor(int a, int b, int factor) {
+        return a % factor == 0 && b % factor != 0; // changed '==' to '!=' at b % factor
+    }
+}
+==============================
+tmp/IsCommonFactor_Mutant3.java:18: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method isCommonFactor
+        return a % factor == 0 && b % factor != 0; // changed '==' to '!=' at b % factor
+                 ^
+1 verification failure
+
+==============================

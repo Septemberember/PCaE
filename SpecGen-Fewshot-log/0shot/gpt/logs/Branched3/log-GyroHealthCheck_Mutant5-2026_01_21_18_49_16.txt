@@ -1,0 +1,65 @@
+public class GyroHealthCheck_Mutant5 {
+    // This utility assesses if any pairwise coordinate difference is large.
+    // It returns 1 when an alarm condition is met; otherwise 0.
+    /*@ public normal_behavior
+      @   // Prevent overflow/undefined behavior in the intermediate int computations:
+      @   //  - subtraction x-y, y-z, x-z must fit in int
+      @   //  - negation of the computed difference must not overflow (i.e., difference != Integer.MIN_VALUE)
+      @   requires Integer.MIN_VALUE < ((\bigint)x - (\bigint)y) && ((\bigint)x - (\bigint)y) <= Integer.MAX_VALUE;
+      @   requires Integer.MIN_VALUE < ((\bigint)y - (\bigint)z) && ((\bigint)y - (\bigint)z) <= Integer.MAX_VALUE;
+      @   requires Integer.MIN_VALUE < ((\bigint)x - (\bigint)z) && ((\bigint)x - (\bigint)z) <= Integer.MAX_VALUE;
+      @
+      @   assignable \nothing;
+      @
+      @   ensures (\result == 0 || \result == 1);
+      @   ensures (\result == 1) <==>
+      @            (\abs((\bigint)x - (\bigint)y) >= 10 ||
+      @             \abs((\bigint)y - (\bigint)z) >= 10 ||
+      @             \abs((\bigint)x - (\bigint)z) >= 10);
+      @   ensures (\result == 0) <==>
+      @            (\abs((\bigint)x - (\bigint)y) < 10 &&
+      @             \abs((\bigint)y - (\bigint)z) < 10 &&
+      @             \abs((\bigint)x - (\bigint)z) < 10);
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // Determine the absolute difference for the XY pair.
+        if (diffXY < 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // Compute absolute difference for YZ pair.
+        if (diffYZ < 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // Compute absolute difference for XZ pair.
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        int alarm = 0;
+        // Initialize alarm flag; set to 1 if any pair meets threshold.
+        if (diffXY >= 10 || diffYZ >= 10 || diffXZ >= 10) {
+            alarm = 1;
+        }
+        // Alarm logic: if any delta >= 10, trigger the alarm.
+        return alarm;
+        // End of computation; return value has been determined.
+    }
+}
+==============================
+tmp/GyroHealthCheck_Mutant5.java:16: error: This backslash token is unknown: \abs
+      @            (\abs((\bigint)x - (\bigint)y) >= 10 ||
+                    ^
+tmp/GyroHealthCheck_Mutant5.java:17: error: This backslash token is unknown: \abs
+      @             \abs((\bigint)y - (\bigint)z) >= 10 ||
+                    ^
+tmp/GyroHealthCheck_Mutant5.java:18: error: This backslash token is unknown: \abs
+      @             \abs((\bigint)x - (\bigint)z) >= 10);
+                    ^
+tmp/GyroHealthCheck_Mutant5.java:20: error: This backslash token is unknown: \abs
+      @            (\abs((\bigint)x - (\bigint)y) < 10 &&
+                    ^
+tmp/GyroHealthCheck_Mutant5.java:21: error: This backslash token is unknown: \abs
+      @             \abs((\bigint)y - (\bigint)z) < 10 &&
+                    ^
+tmp/GyroHealthCheck_Mutant5.java:22: error: This backslash token is unknown: \abs
+      @             \abs((\bigint)x - (\bigint)z) < 10);
+                    ^
+6 errors
+
+==============================

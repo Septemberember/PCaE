@@ -1,0 +1,8 @@
+experimentName: Gemini2shot
+model: google/gemini-3-flash-preview
+category: Branched3
+total number: 150
+success number: 123
+success rate: 82.0%
+failed number: 26
+exception number: 1

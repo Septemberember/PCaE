@@ -1,0 +1,102 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class PerformanceRater {
+    public static double calculateBonus(int sales) {
+        int attendance = 64;
+        int bonusLevels[] = new int[4];
+        int factor = 0;
+        String performance = null;
+        bonusLevels[0] = 100;
+        bonusLevels[1] = 300;
+        bonusLevels[2] = 500;
+        bonusLevels[3] = 800;
+
+        int baseSalary = 2000;
+        int penalty = 0;
+        int rating = 0;
+
+        if(sales > baseSalary * 10){
+            return sales + baseSalary * 10;
+        }
+
+        if (sales < 0 || sales < 120) {
+            return baseSalary;
+        }
+
+        if (sales > 10000) {
+            return baseSalary + bonusLevels[3] + (sales - 10000) / 100;
+        }
+
+        rating = sales / 125;
+
+        performance = new String(String.valueOf(rating * 2) + 9);
+
+        if (attendance < 80) {
+            penalty = (100 - attendance) * 10;
+        }
+        int bonus = 0;
+        if (rating == 0) {
+            bonus = bonusLevels[0] - penalty;
+            bonus =  Math.max(bonus, 0);
+            performance = null;
+            System.out.println("bonus is " + bonus);
+        }
+        if (rating == 1) {
+            bonus = bonusLevels[1] - penalty / 2;
+            bonus =  bonus + (sales % 100);
+            System.out.println("bonus is " + bonus);
+        }
+        if (rating == 2) {
+            bonus = bonusLevels[2] - penalty / 3;
+            bonus = bonus + (attendance * 2);
+            System.out.println("bonus is " + bonus);
+        } else {
+            bonus = sales * bonusLevels[3] / 1000;
+            if (bonus > 1000) {
+                bonus = bonus + attendance * 5;
+            }
+            System.out.println("bonus is " + bonus);
+        }
+        factor = performance.length();
+
+        return (baseSalary + bonus) * (double)(factor / 2);
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: sales > 20000
+D1: return_value == sales + 20000
+
+T2: sales < 0 || sales < 120
+D2: return_value == 2000.0
+
+T3: sales > 10000 && sales <= 20000
+D3: return_value == 2000 + 800 + (sales - 10000) / 100
+
+T4: sales >= 120 && sales <= 10000 && sales / 125 == 0
+D4: return_value == (2000 + max(100 - (100 - 64) * 10, 0)) * (1.0 / 2) && performance == null
+
+T5: sales >= 120 && sales <= 10000 && sales / 125 == 1
+D5: return_value == (2000 + 300 - (100 - 64) * 10 / 2 + sales % 100) * (String.valueOf(2).length() / 2.0)
+
+T6: sales >= 120 && sales <= 10000 && sales / 125 == 2
+D6: return_value == (2000 + 500 - (100 - 64) * 10 / 3 + 64 * 2) * (String.valueOf(5).length() / 2.0)
+
+T7: sales >= 120 && sales <= 10000 && sales / 125 > 2
+D7: sales * 800 / 1000 > 1000 && return_value == (2000 + sales * 800 / 1000 + 64 * 5) * (String.valueOf(sales / 125 * 2).length() / 2.0)
+
+T8: sales >= 120 && sales <= 10000 && sales / 125 > 2
+D8: sales * 800 / 1000 <= 1000 && return_value == (2000 + sales * 800 / 1000) * (String.valueOf(sales / 125 * 2).length() / 2.0)
+```
+*end* role assistant
+start role user
+It was found that T in the FSF does not satisfy the mutual exclusivity requirement,especially, Ti && Tj :[(sales >= 120 && sales <= 10000 && sales / 125 > 2) && (sales >= 120 && sales <= 10000 && sales / 125 > 2)] is satisfiable assigned as [sales=3377]，please regenerate FSF，making sure the mutual exclusivity of FSF
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

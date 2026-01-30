@@ -1,0 +1,8 @@
+experimentName: Deepseek2shot
+model: deepseek/deepseek-v3.2
+category: Branched3
+total number: 150
+success number: 105
+success rate: 70.0%
+failed number: 43
+exception number: 2

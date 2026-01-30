@@ -1,0 +1,8 @@
+experimentName: DeepSeek3Conv
+model: deepseek/deepseek-v3.2
+category: Multi-path-Loop3
+total number: 31
+success number: 25
+success rate: 80.64%
+failed number: 6
+exception number: 0

@@ -1,0 +1,97 @@
+// Gyro health check utility class
+public class GyroHealthCheck_Mutant1 {
+    // Entry point: compute alarm based on pairwise axis differences
+    /*@ public normal_behavior
+      @   ensures \result == ((\absolute_value(x - y) > 10 || \absolute_value(y - z) > 10 || \absolute_value(x - z) > 10) ? 1 : 0);
+      @   assignable \nothing;
+      @
+      @   also
+      @
+      @   // Refined logic based on the specific mutant implementation:
+      @   // Note: diffXY and diffYZ are forced to be non-positive, 
+      @   // so (diffXY > 10) and (diffYZ > 10) are always false.
+      @   ensures \result == ((\absolute_value(x - z) > 10) ? 1 : 0);
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // If diffXY is positive, invert to its negative counterpart
+        if (diffXY > 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // If diffYZ is positive, invert to its negative counterpart
+        if (diffYZ > 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // If diffXZ is negative, take its absolute value
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        int alarm = 0;
+        // Alarm if any pairwise difference exceeds the threshold
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        return alarm;
+    }
+}
+==============================
+tmp/GyroHealthCheck_Mutant1.java:5: error: This backslash token is unknown: \absolute_value
+      @   ensures \result == ((\absolute_value(x - y) > 10 || \absolute_value(y - z) > 10 || \absolute_value(x - z) > 10) ? 1 : 0);
+                               ^
+tmp/GyroHealthCheck_Mutant1.java:5: error: This backslash token is unknown: \absolute_value
+      @   ensures \result == ((\absolute_value(x - y) > 10 || \absolute_value(y - z) > 10 || \absolute_value(x - z) > 10) ? 1 : 0);
+                                                              ^
+tmp/GyroHealthCheck_Mutant1.java:5: error: This backslash token is unknown: \absolute_value
+      @   ensures \result == ((\absolute_value(x - y) > 10 || \absolute_value(y - z) > 10 || \absolute_value(x - z) > 10) ? 1 : 0);
+                                                                                             ^
+tmp/GyroHealthCheck_Mutant1.java:13: error: This backslash token is unknown: \absolute_value
+      @   ensures \result == ((\absolute_value(x - z) > 10) ? 1 : 0);
+                               ^
+4 errors
+
+==============================
+// Gyro health check utility class
+public class GyroHealthCheck_Mutant1 {
+    // Entry point: compute alarm based on pairwise axis differences
+    /*@ public normal_behavior
+      @   ensures \result == ((\absolute_value(x - y) > 10 || \absolute_value(y - z) >= 10 || \absolute_value(x - z) > 10) ? 1 : 0);  
+      @   assignable \nothing;
+      @
+      @   also
+      @
+      @   // Refined logic based on the specific mutant implementation:
+      @   // Note: diffXY and diffYZ are forced to be non-positive, 
+      @   // so (diffXY > 10) and (diffYZ > 10) are always false.
+      @   ensures \result == ((\absolute_value(x - z) > 10) ? 1 : 0);  
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // If diffXY is positive, invert to its negative counterpart
+        if (diffXY > 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // If diffYZ is positive, invert to its negative counterpart
+        if (diffYZ > 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // If diffXZ is negative, take its absolute value
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        int alarm = 0;
+        // Alarm if any pairwise difference exceeds the threshold
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        return alarm;
+    }
+}
+
+==============================
+tmp/GyroHealthCheck_Mutant1.java:5: error: This backslash token is unknown: \absolute_value
+      @   ensures \result == ((\absolute_value(x - y) > 10 || \absolute_value(y - z) >= 10 || \absolute_value(x - z) > 10) ? 1 : 0);  
+                               ^
+tmp/GyroHealthCheck_Mutant1.java:5: error: This backslash token is unknown: \absolute_value
+      @   ensures \result == ((\absolute_value(x - y) > 10 || \absolute_value(y - z) >= 10 || \absolute_value(x - z) > 10) ? 1 : 0);  
+                                                              ^
+tmp/GyroHealthCheck_Mutant1.java:5: error: This backslash token is unknown: \absolute_value
+      @   ensures \result == ((\absolute_value(x - y) > 10 || \absolute_value(y - z) >= 10 || \absolute_value(x - z) > 10) ? 1 : 0);  
+                                                                                              ^
+tmp/GyroHealthCheck_Mutant1.java:13: error: This backslash token is unknown: \absolute_value
+      @   ensures \result == ((\absolute_value(x - z) > 10) ? 1 : 0);  
+                               ^
+4 errors
+
+==============================

@@ -1,0 +1,44 @@
+// AddLoop_Mutant2: descriptive header
+// This variant preserves the original logic using two branches
+// Comments are inserted to aid code comprehension without modifying behavior
+public class AddLoop_Mutant2 {
+    // Branch overview
+    // - if y > 0, increment sum by 1, for y iterations
+    // - else, decrement sum by 2, for -y iterations
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   ensures (y > 0 ==> \result == x + y)
+      @        && (y <= 0 ==> \result == x + 2*y);
+      @*/
+    public static int AddLoop(int x, int y) {
+        // Initialize accumulator with x
+        int sum = x;
+        if (y > 0) {
+            int n = y;
+            /*@ maintaining y > 0;
+              @ maintaining 0 <= n && n <= y;
+              @ maintaining sum == x + (y - n);
+              @ decreases n;
+              @*/
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+            }
+        } else {
+            int n = -y;
+            /*@ maintaining y <= 0;
+              @ maintaining 0 <= n && n <= -y;
+              @ maintaining sum == x - 2*((-y) - n);
+              @ decreases n;
+              @*/
+            while (n > 0) {
+                sum = sum - 2;
+                n = n - 1;
+            }
+        }
+        return sum;
+    }
+}
+==============================
+
+==============================

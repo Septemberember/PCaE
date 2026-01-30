@@ -1,0 +1,182 @@
+public class MetricsCalculator {
+    //@ spec_public
+    public static double computeScore(int value, int limit) {
+        //@ maintaining limit > 0 ==> \old(limit) > limit;
+        //@ maintaining iteration == \old(iteration) + 1;
+        //@ maintaining adjustment == \old(adjustment) + shift;
+        //@ maintaining shift == \old(shift) + 1;
+        //@ decreases limit;
+        while (limit > 0) {
+            limit = (limit - value) / 2;
+            iteration = iteration + 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = iteration % 10;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator.java:5: error: cannot find symbol
+        //@ maintaining iteration == \old(iteration) + 1;
+                        ^
+  symbol:   variable iteration
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:5: error: cannot find symbol
+        //@ maintaining iteration == \old(iteration) + 1;
+                                          ^
+  symbol:   variable iteration
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:6: error: cannot find symbol
+        //@ maintaining adjustment == \old(adjustment) + shift;
+                        ^
+  symbol:   variable adjustment
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:6: error: cannot find symbol
+        //@ maintaining adjustment == \old(adjustment) + shift;
+                                           ^
+  symbol:   variable adjustment
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:6: error: cannot find symbol
+        //@ maintaining adjustment == \old(adjustment) + shift;
+                                                         ^
+  symbol:   variable shift
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:7: error: cannot find symbol
+        //@ maintaining shift == \old(shift) + 1;
+                        ^
+  symbol:   variable shift
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:7: error: cannot find symbol
+        //@ maintaining shift == \old(shift) + 1;
+                                      ^
+  symbol:   variable shift
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:11: error: cannot find symbol
+            iteration = iteration + 1;
+            ^
+  symbol:   variable iteration
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:11: error: cannot find symbol
+            iteration = iteration + 1;
+                        ^
+  symbol:   variable iteration
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:12: error: cannot find symbol
+            adjustment = adjustment + shift;
+            ^
+  symbol:   variable adjustment
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:12: error: cannot find symbol
+            adjustment = adjustment + shift;
+                         ^
+  symbol:   variable adjustment
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:12: error: cannot find symbol
+            adjustment = adjustment + shift;
+                                      ^
+  symbol:   variable shift
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:13: error: cannot find symbol
+            shift = shift + 1;
+            ^
+  symbol:   variable shift
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:13: error: cannot find symbol
+            shift = shift + 1;
+                    ^
+  symbol:   variable shift
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:16: error: cannot find symbol
+        iteration = iteration % 10;
+        ^
+  symbol:   variable iteration
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:16: error: cannot find symbol
+        iteration = iteration % 10;
+                    ^
+  symbol:   variable iteration
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:17: error: cannot find symbol
+        result = value / iteration;
+        ^
+  symbol:   variable result
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:17: error: cannot find symbol
+        result = value / iteration;
+                         ^
+  symbol:   variable iteration
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:19: error: cannot find symbol
+        int blended = result + originalValue;
+                      ^
+  symbol:   variable result
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:19: error: cannot find symbol
+        int blended = result + originalValue;
+                               ^
+  symbol:   variable originalValue
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:20: error: cannot find symbol
+        int reduction = blended - originalLimit;
+                                  ^
+  symbol:   variable originalLimit
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:22: error: cannot find symbol
+        result = result + iteration;
+        ^
+  symbol:   variable result
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:22: error: cannot find symbol
+        result = result + iteration;
+                 ^
+  symbol:   variable result
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:22: error: cannot find symbol
+        result = result + iteration;
+                          ^
+  symbol:   variable iteration
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:23: error: cannot find symbol
+        result = result + adjustment;
+        ^
+  symbol:   variable result
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:23: error: cannot find symbol
+        result = result + adjustment;
+                 ^
+  symbol:   variable result
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:23: error: cannot find symbol
+        result = result + adjustment;
+                          ^
+  symbol:   variable adjustment
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:24: error: cannot find symbol
+        result = result + reduction;
+        ^
+  symbol:   variable result
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:24: error: cannot find symbol
+        result = result + reduction;
+                 ^
+  symbol:   variable result
+  location: class MetricsCalculator
+tmp/MetricsCalculator.java:26: error: cannot find symbol
+        return result;
+               ^
+  symbol:   variable result
+  location: class MetricsCalculator
+30 errors
+
+==============================

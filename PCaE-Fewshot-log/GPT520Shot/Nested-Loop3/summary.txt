@@ -1,0 +1,8 @@
+experimentName: GPT520Shot
+model: openai/gpt-5.2
+category: Nested-Loop3
+total number: 35
+success number: 16
+success rate: 45.71%
+failed number: 19
+exception number: 0

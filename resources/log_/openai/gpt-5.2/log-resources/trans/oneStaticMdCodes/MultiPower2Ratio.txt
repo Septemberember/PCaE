@@ -1,0 +1,72 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class MultiPower2Ratio {
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n / 2;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n / 2;
+                factor += n;
+            }
+        }
+        int tmpFactor = 1;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        if(sum < 0){
+            sum = sum * -1;
+        }
+        sum = sum + tmpFactor;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+
+```
+*end* role user
+start role assistant
+``` 
+T1: y == 0
+D1: return_value == 0
+
+T2: y != 0
+D2: exists y_abs, k, factor0, tmpFactor, sum0, denom .
+      ((y > 0 && y_abs == y) || (y < 0 && y_abs == -y)) &&
+      y_abs > 0 &&
+      k >= 1 &&
+      y_abs / (2 ** (k - 1)) > 0 &&
+      y_abs / (2 ** k) == 0 &&
+      sum0 == x + k &&
+      factor0 == 1 + Σ_{i=1..k}(y_abs / (2 ** i)) &&
+      ((factor0 <= 10 && tmpFactor == 1) ||
+       (tmpFactor >= 2 && (10 ** (tmpFactor - 1)) < factor0 && factor0 <= (10 ** tmpFactor))) &&
+      ((sum0 >= 0 && denom == sum0 + tmpFactor) ||
+       (sum0 < 0 && denom == -sum0 + tmpFactor)) &&
+      return_value == ((x * y_abs) / denom) * tmpFactor
+```
+*end* role assistant
+start role user
+Some errors occurred while verifyingT: y != 0	D: exists y_abs, k, factor0, tmpFactor, sum0, denom ., , please regenerate the FSF!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

@@ -1,0 +1,71 @@
+// PassPillow calculation utility
+public class PassPillowBranch_Original {
+
+    //@ requires n >= 2;
+    //@ requires time >= 0;
+    //@ requires n <= Integer.MAX_VALUE/2;
+    //@ ensures \result >= 1 && \result <= n;
+    //@ ensures \result == (time % ((n-1)*2) < n) ? (time % ((n-1)*2) + 1) : (2*n - time % ((n-1)*2) - 1);
+    //@ pure
+    public static int passPillow(int n, int time) {
+        // Guard against invalid input: n must be at least 1
+        if(n - 1 < 0){
+            throw new IllegalArgumentException("n is less than 1");
+        }
+        // Normalize the time within the two-phase cycle to handle wrap-around
+        time = time % ((n - 1) * 2);
+        if (time < n) {
+            // Phase 1: time within first half of the cycle
+            return time + 1;
+        }
+        // Phase 2: time in second half of the cycle, symmetric mapping
+        return n * 2 - time - 1;
+    }
+    // End of passPillow method
+}
+==============================
+tmp/PassPillowBranch_Original.java:8: error: incomparable types: int and boolean
+    //@ ensures \result == (time % ((n-1)*2) < n) ? (time % ((n-1)*2) + 1) : (2*n - time % ((n-1)*2) - 1);
+                        ^
+tmp/PassPillowBranch_Original.java:8: error: incompatible types: int cannot be converted to boolean
+    //@ ensures \result == (time % ((n-1)*2) < n) ? (time % ((n-1)*2) + 1) : (2*n - time % ((n-1)*2) - 1);
+                                                  ^
+2 errors
+
+==============================
+// PassPillow calculation utility
+public class PassPillowBranch_Original {
+
+    //@ requires n >= 2;
+    //@ requires time >= 0;
+    //@ requires n <= Integer.MAX_VALUE/2;
+    //@ ensures \result >= 1 && \result <= n;
+    //@ ensures \result == (time % ((n-1)*2) <= n) ? (time % ((n-1)*2) + 1) : (2*n - time % ((n-1)*2) - 1);  
+    //@ pure
+    public static int passPillow(int n, int time) {
+        // Guard against invalid input: n must be at least 1
+        if(n - 1 < 0){
+            throw new IllegalArgumentException("n is less than 1");
+        }
+        // Normalize the time within the two-phase cycle to handle wrap-around
+        time = time % ((n - 1) * 2);
+        if (time < n) {
+            // Phase 1: time within first half of the cycle
+            return time + 1;
+        }
+        // Phase 2: time in second half of the cycle, symmetric mapping
+        return n * 2 - time - 1;
+    }
+    // End of passPillow method
+}
+
+==============================
+tmp/PassPillowBranch_Original.java:8: error: incomparable types: int and boolean
+    //@ ensures \result == (time % ((n-1)*2) <= n) ? (time % ((n-1)*2) + 1) : (2*n - time % ((n-1)*2) - 1);  
+                        ^
+tmp/PassPillowBranch_Original.java:8: error: incompatible types: int cannot be converted to boolean
+    //@ ensures \result == (time % ((n-1)*2) <= n) ? (time % ((n-1)*2) + 1) : (2*n - time % ((n-1)*2) - 1);  
+                                                   ^
+2 errors
+
+==============================

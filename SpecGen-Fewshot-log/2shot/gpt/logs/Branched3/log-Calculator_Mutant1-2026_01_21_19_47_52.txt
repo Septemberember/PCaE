@@ -1,0 +1,105 @@
+public class Calculator_Mutant1 {
+    // Calculator with basic arithmetic operations
+
+    // Additional inline documentation to aid readability
+    //@ requires (operator != '/' && operator != '%') || num2 != 0;
+    //@ ensures (operator == '+' || operator == '-') ==> \result == num1 - num2;
+    //@ ensures operator == '*' ==> \result == num1 * num2;
+    //@ ensures operator == '/' ==> \result == num1 / num2;
+    //@ ensures operator == '%' ==> \result == num1 % num2;
+    //@ ensures (operator != '+' && operator != '-' && operator != '*' && operator != '/' && operator != '%') ==> \result == -1;
+    //@ assignable \nothing;
+    public static /*@ pure @*/ int calculate(int num1, int num2, char operator) {
+        // Begin computation
+        // This method selects an operation based on the operator
+
+        int output;
+        switch(operator) {
+            case '+':
+                output = num1 - num2; //mutated + with -
+                // This case demonstrates a mutation: addition mapped to subtraction
+                // Note: plus operation would normally be addition
+                break;
+            case '-':
+                output = num1 - num2;
+                break;
+            case '*':
+                output = num1 * num2;
+                break;
+            case '/':
+                output = num1 / num2;
+                break;
+            case '%':
+                output = num1 % num2;
+                break;
+            default:
+                return -1;
+        }
+
+        return output;
+    }
+
+}
+==============================
+tmp/Calculator_Mutant1.java:39: verify: The prover cannot establish an assertion (Postcondition: tmp/Calculator_Mutant1.java:6:) in method calculate
+        return output;
+        ^
+tmp/Calculator_Mutant1.java:6: verify: Associated declaration: tmp/Calculator_Mutant1.java:39:
+    //@ ensures (operator == '+' || operator == '-') ==> \result == num1 - num2;
+        ^
+2 verification failures
+
+==============================
+public class Calculator_Mutant1 {
+    // Calculator with basic arithmetic operations
+
+    // Additional inline documentation to aid readability
+    //@ requires (operator != '/' && operator != '%') || num2 != 0;
+    //@ ensures (operator == '+' || operator == '-') ==> \result == num1 - num2;  
+    //@ ensures operator == '*' ==> \result == num1 * num2;
+    //@ ensures operator == '/' ==> \result == num1 / num2;
+    //@ ensures operator == '%' ==> \result == num1 % num2;
+    //@ ensures (operator != '+' && operator != '-' && operator != '*' && operator != '/' && operator != '%') ==> \result == -1;
+    //@ assignable \nothing;
+    public static /*@ pure @*/ int calculate(int num1, int num2, char operator) {
+        // Begin computation
+        // This method selects an operation based on the operator
+
+        int output;
+        switch(operator) {
+            case '+':
+                output = num1 - num2; //mutated + with -
+                // This case demonstrates a mutation: addition mapped to subtraction
+                // Note: plus operation would normally be addition
+                break;
+            case '-':
+                output = num1 - num2;
+                break;
+            case '*':
+                output = num1 * num2;
+                break;
+            case '/':
+                output = num1 / num2;
+                break;
+            case '%':
+                output = num1 % num2;
+                break;
+            default:
+                return -1;
+        }
+
+        return output;
+    }
+
+}
+
+==============================
+tmp/Calculator_Mutant1.java:39: verify: The prover cannot establish an assertion (Postcondition: tmp/Calculator_Mutant1.java:6:) in method calculate
+        return output;
+        ^
+tmp/Calculator_Mutant1.java:6: verify: Associated declaration: tmp/Calculator_Mutant1.java:39:
+    //@ ensures (operator == '+' || operator == '-') ==> \result == num1 - num2;  
+        ^
+2 verification failures
+
+==============================

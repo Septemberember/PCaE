@@ -1,0 +1,74 @@
+public class FuelEfficiencyAnalyzer_S {
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures (\let int adjDist = (distance + 10) * 2;
+      @            \let boolean isHigh = adjDist > 100;
+      @            \let int amtRaw = fuelUsed - 3;
+      @            \let boolean fuelInvalid = isHigh && (amtRaw <= 0);
+      @            \let int amt = (isHigh && fuelInvalid) ? 1 : amtRaw;
+      @            \let int finalAdjDist = isHigh ? adjDist : (adjDist + 20);
+      @            \let double effRaw = isHigh ? 
+      @                ((adjDist % 2 == 0) ? ((double)adjDist / amt) : ((double)(adjDist + 5 - 2) + amt)) :
+      @                ((fuelUsed > 10) ? (finalAdjDist * 0.5) : (finalAdjDist * 0.3));
+      @            \let double effAdj = isHigh ? 
+      @                ((effRaw > 50) ? (effRaw * 0.9) : (effRaw + 3.0)) : effRaw;
+      @            \let boolean valid = isHigh ? !fuelInvalid : (fuelUsed > 10);
+      @            \let double correction = valid ? 1.2 : 0.8;
+      @            \result == (effAdj * correction + finalAdjDist * 0.05));
+      @*/
+    public static double analyzeEfficiency(int distance, int fuelUsed) {
+        int adjustedDistance = distance;
+        int threshold = 100;
+        double efficiency = 0.0;
+        boolean valid = true;
+
+        adjustedDistance += 10;
+        adjustedDistance = adjustedDistance * 2;
+
+        if (adjustedDistance > threshold) {
+            int amt = fuelUsed - 3;
+
+            if (amt <= 0) {
+                System.out.println("Warning: invalid fuel input.");
+                amt = 1;
+                valid = false;
+            }
+
+            if (adjustedDistance % 2 == 0) {
+                efficiency = (double) adjustedDistance / amt;
+            } else {
+                adjustedDistance += 5;
+                efficiency = (double) (adjustedDistance - 2) + amt;
+            }
+
+            if (efficiency > 50) {
+                efficiency = efficiency * 0.9;
+            } else {
+                efficiency = efficiency + 3.0;
+            }
+
+        } else {
+            adjustedDistance += 20;
+
+            if (fuelUsed > 10) {
+                efficiency = adjustedDistance * 0.5;
+            } else {
+                efficiency = adjustedDistance * 0.3;
+                valid = false;
+            }
+        }
+        double correction = valid ? 1.2 : 0.8;
+        double finalValue = efficiency * correction + adjustedDistance * 0.05;
+
+        return finalValue;
+    }
+}
+==============================
+tmp/FuelEfficiencyAnalyzer_S.java:12: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                ((adjDist % 2 == 0) ? ((double)adjDist / amt) : ((double)(adjDist + 5 - 2) + amt)) :
+                                              ^
+  Reason: Unknown type tag DOUBLE
+1 error
+
+==============================

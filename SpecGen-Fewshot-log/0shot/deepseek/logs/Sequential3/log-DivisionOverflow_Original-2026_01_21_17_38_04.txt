@@ -1,0 +1,34 @@
+public class DivisionOverflow_Original {
+
+    // Demonstration: integer division in Java
+    // This class contains a single static method that performs
+    // a straightforward division of nom by denom.
+
+    /**
+     * Performs integer division of nom by denom.
+     * Note: division by zero will throw ArithmeticException.
+     * 
+     * @param nom the numerator
+     * @param denom the denominator
+     * @return the integer quotient of nom divided by denom
+     * @throws ArithmeticException if denom == 0
+     */
+    /*@ public normal_behavior
+      @   requires denom != 0;
+      @   ensures \result == nom / denom;
+      @   signals (ArithmeticException e) denom == 0;
+      @*/
+    public static int division_test_fail_overflow(int nom, int denom) {
+        // The following line computes the quotient of nom divided by denom.
+        int tmp = nom / denom;
+        // Return the computed quotient to the caller.
+        return tmp;
+    }
+}
+==============================
+tmp/DivisionOverflow_Original.java:19: error: Signals clauses are not permitted in normal specification cases
+      @   signals (ArithmeticException e) denom == 0;
+          ^
+1 error
+
+==============================

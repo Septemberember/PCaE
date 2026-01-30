@@ -1,0 +1,57 @@
+public class Return100_Mutant4 {
+    public static int return100 () {
+        //@ ensures \result == 101;
+        // Start of return100 method: initializes an accumulator and iterates.
+        int res = 1; // CHANGED: initialized res to 1 instead of 0
+        // The accumulator 'res' is seeded with 1.
+        int i = 0;
+        // Counter variable 'i' controls loop iterations.
+        //@ maintaining 0 <= i && i <= 100 && res == 1 + i;
+        for(i = 0; i < 100; i++) {
+            res = res + 1;
+        }
+        // Loop completes after 100 iterations.
+        // Final value is returned by the method.
+        return res;
+        // End of return100 method.
+    }
+}
+==============================
+tmp/Return100_Mutant4.java:9: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method return100
+        //@ maintaining 0 <= i && i <= 100 && res == 1 + i;
+            ^
+tmp/Return100_Mutant4.java:3: verify: The prover cannot establish an assertion (Postcondition) in method return100
+        //@ ensures \result == 101;
+            ^
+2 verification failures
+
+==============================
+public class Return100_Mutant4 {
+    public static int return100 () {
+        //@ ensures \result == 101;  
+        // Start of return100 method: initializes an accumulator and iterates.
+        int res = 1; // CHANGED: initialized res to 1 instead of 0
+        // The accumulator 'res' is seeded with 1.
+        int i = 0;
+        // Counter variable 'i' controls loop iterations.
+        //@ maintaining 0 < i && i < 100 && res == 1 + i;  
+        for(i = 0; i < 100; i++) {
+            res = res + 1;
+        }
+        // Loop completes after 100 iterations.
+        // Final value is returned by the method.
+        return res;
+        // End of return100 method.
+    }
+}
+
+==============================
+tmp/Return100_Mutant4.java:9: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method return100
+        //@ maintaining 0 < i && i < 100 && res == 1 + i;  
+            ^
+tmp/Return100_Mutant4.java:3: verify: The prover cannot establish an assertion (Postcondition) in method return100
+        //@ ensures \result == 101;  
+            ^
+2 verification failures
+
+==============================

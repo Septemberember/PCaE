@@ -1,0 +1,105 @@
+public class CompressionRatio {
+    /*@ public normal_behavior
+      @   requires !(160 <= fileSize && fileSize <= 163); // avoids ratio==70, which would leave ratioStr==null and cause a NullPointerException at trim()
+      @   ensures \result != null;
+      @   ensures \result.equals(spec_resultString(fileSize));
+      @   assignable \nothing;
+      @*/
+    public static String calculateRatio(int fileSize) {
+        String ratioStr = null;
+        int level = 0;
+        int overhead = 0;
+
+        if (fileSize < 50) {
+            fileSize = 50;
+            overhead = overhead - 3;
+            overhead *= fileSize / 10;
+        } else {
+            overhead = overhead + 1;
+            overhead *= fileSize / 100;
+        }
+
+        if (fileSize > 400) {
+            fileSize = 400;
+            overhead = overhead + 5;
+            overhead *= fileSize / 100;
+        }
+
+        if(overhead > 80){
+            overhead = overhead > 100 ? 100 : overhead;
+            overhead = overhead / 10;
+        }else{
+            overhead = overhead < 10 ? 10 : overhead;
+            overhead = overhead / 10;
+        }
+
+        int ratio = fileSize / 4 + 30;
+
+        if (ratio >= 45 && ratio <= 70) {
+            level = (ratio - 45) / 5;
+            if(level < 5) {
+                ratioStr = new String("ratio:" + ratio);
+            }
+        } else {
+            level = 5 + (ratio % 5);
+            ratioStr = new String("ratio:" + ratio);
+        }
+        ratioStr.trim();
+        ratioStr = ratioStr + " level:" + level + " overhead:" + overhead;
+        return ratioStr;
+    }
+
+    /*@ public model static pure int spec_clampedFileSize(int fileSize) {
+      @     return (fileSize < 50) ? 50 : ((fileSize > 400) ? 400 : fileSize);
+      @ } @*/
+
+    /*@ public model static pure int spec_ratio(int fileSize) {
+      @     return spec_clampedFileSize(fileSize) / 4 + 30;
+      @ } @*/
+
+    /*@ public model static pure int spec_overhead(int fileSize) {
+      @     int fs = fileSize;
+      @     int overhead = 0;
+      @
+      @     if (fs < 50) {
+      @         fs = 50;
+      @         overhead = overhead - 3;
+      @         overhead *= fs / 10;
+      @     } else {
+      @         overhead = overhead + 1;
+      @         overhead *= fs / 100;
+      @     }
+      @
+      @     if (fs > 400) {
+      @         fs = 400;
+      @         overhead = overhead + 5;
+      @         overhead *= fs / 100;
+      @     }
+      @
+      @     if (overhead > 80) {
+      @         overhead = overhead > 100 ? 100 : overhead;
+      @         overhead = overhead / 10;
+      @     } else {
+      @         overhead = overhead < 10 ? 10 : overhead;
+      @         overhead = overhead / 10;
+      @     }
+      @
+      @     return overhead;
+      @ } @*/
+
+    /*@ public model static pure int spec_level(int fileSize) {
+      @     int ratio = spec_ratio(fileSize);
+      @     if (ratio >= 45 && ratio <= 70) {
+      @         return (ratio - 45) / 5;
+      @     } else {
+      @         return 5 + (ratio % 5);
+      @     }
+      @ } @*/
+
+    /*@ public model static pure String spec_resultString(int fileSize) {
+      @     return "ratio:" + spec_ratio(fileSize) + " level:" + spec_level(fileSize) + " overhead:" + spec_overhead(fileSize);
+      @ } @*/
+}
+==============================
+TimeoutException
+==============================

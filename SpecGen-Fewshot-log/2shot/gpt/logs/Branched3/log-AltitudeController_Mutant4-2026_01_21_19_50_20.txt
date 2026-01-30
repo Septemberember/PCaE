@@ -1,0 +1,85 @@
+public class AltitudeController_Mutant4 {
+    /*@ public normal_behavior
+      @   requires ((\bigint)targetHeight - (\bigint)currentHeight) <= Integer.MAX_VALUE;
+      @   requires ((\bigint)targetHeight - (\bigint)currentHeight) >= Integer.MIN_VALUE;
+      @   // Prevent overflow in: absError = error < 0 ? -error : error;
+      @   requires ((int)((\bigint)targetHeight - (\bigint)currentHeight)) != Integer.MIN_VALUE;
+      @   assignable \nothing;
+      @   ensures -5 <= \result && \result <= 5;
+      @   ensures (\let int error = targetHeight - currentHeight;
+      @            \let int absError = (error < 0 ? -error : error);
+      @              (absError >= 30 ==> \result == (error > 0 ? 5 : -5)) &&
+      @              (absError < 30 && absError > 20 ==> \result == (error > 0 ? 3 : -3)) &&
+      @              (absError <= 20 && absError > 10 ==> \result == (error > 0 ? 2 : -2)) &&
+      @              (absError <= 10 ==> \result == error));
+      @*/
+    public static int altitudeController(int currentHeight,int targetHeight) {
+        int error = targetHeight - currentHeight;
+        int absError = 0;
+        absError = error < 0 ? -error : error;
+        int controlSignal = 0;
+        if (absError >= 30) { //Changed > to >=
+            controlSignal = error > 0 ? 5 : -5;
+        } else if (absError > 20) {
+            controlSignal = error > 0 ? 3 : -3;
+        } else if (absError > 10) {
+            controlSignal = error > 0 ? 2 : -2;
+        } else {
+            controlSignal = error;
+        }
+        return controlSignal;
+    }
+}
+==============================
+tmp/AltitudeController_Mutant4.java:30: verify: The prover cannot establish an assertion (Postcondition: tmp/AltitudeController_Mutant4.java:8:) in method altitudeController
+        return controlSignal;
+        ^
+tmp/AltitudeController_Mutant4.java:8: verify: Associated declaration: tmp/AltitudeController_Mutant4.java:30:
+      @   ensures -5 <= \result && \result <= 5;
+          ^
+2 verification failures
+
+==============================
+public class AltitudeController_Mutant4 {
+    /*@ public normal_behavior
+      @   requires ((\bigint)targetHeight - (\bigint)currentHeight) <= Integer.MAX_VALUE;
+      @   requires ((\bigint)targetHeight - (\bigint)currentHeight) >= Integer.MIN_VALUE;
+      @   // Prevent overflow in: absError = error < 0 ? -error : error;
+      @   requires ((int)((\bigint)targetHeight - (\bigint)currentHeight)) != Integer.MIN_VALUE;
+      @   assignable \nothing;
+      @   ensures -5 < \result && \result < 5;  
+      @   ensures (\let int error = targetHeight - currentHeight;
+      @            \let int absError = (error < 0 ? -error : error);
+      @              (absError >= 30 ==> \result == (error > 0 ? 5 : -5)) &&
+      @              (absError < 30 && absError > 20 ==> \result == (error > 0 ? 3 : -3)) &&
+      @              (absError <= 20 && absError > 10 ==> \result == (error > 0 ? 2 : -2)) &&
+      @              (absError <= 10 ==> \result == error));
+      @*/
+    public static int altitudeController(int currentHeight,int targetHeight) {
+        int error = targetHeight - currentHeight;
+        int absError = 0;
+        absError = error < 0 ? -error : error;
+        int controlSignal = 0;
+        if (absError >= 30) { //Changed > to >=
+            controlSignal = error > 0 ? 5 : -5;
+        } else if (absError > 20) {
+            controlSignal = error > 0 ? 3 : -3;
+        } else if (absError > 10) {
+            controlSignal = error > 0 ? 2 : -2;
+        } else {
+            controlSignal = error;
+        }
+        return controlSignal;
+    }
+}
+
+==============================
+tmp/AltitudeController_Mutant4.java:30: verify: The prover cannot establish an assertion (Postcondition: tmp/AltitudeController_Mutant4.java:8:) in method altitudeController
+        return controlSignal;
+        ^
+tmp/AltitudeController_Mutant4.java:8: verify: Associated declaration: tmp/AltitudeController_Mutant4.java:30:
+      @   ensures -5 < \result && \result < 5;  
+          ^
+2 verification failures
+
+==============================

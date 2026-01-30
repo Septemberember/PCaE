@@ -1,0 +1,145 @@
+public class DivisionCalculator {
+
+    //@ spec_public
+    public static double calculateRatio(int numerator, int denominator) {
+        //@ maintaining 0 <= i && i <= 5;
+        //@ maintaining sum == (\sum int j; 0 <= j && j < i; j);
+        //@ maintaining diff == (\sum int j; 0 <= j && j < i; -j);
+        //@ maintaining product == (\product int j; 1 <= j && j <= i; j);
+        //@ maintaining counter == i;
+        //@ maintaining i <= 5;
+        //@ decreases 5 - i;
+        int sum = 0;
+        int diff = 0;
+        int product = 1;
+        int counter = 0;
+        double ratio = 0;
+        for (int i = 0; i < 5; i++) {
+            sum = sum + i;
+            diff = diff - i;
+            product =  product * (i + 1);
+            counter = counter + 1;
+        }
+        //@ ensures denominator > 0;
+        if(denominator <= 0){
+            denominator = 1;
+        }
+        if(numerator < counter || denominator > 7) {
+            numerator = numerator + diff * counter;
+        }else{
+            denominator = numerator - denominator;
+            ratio = (double) numerator / denominator;
+        }
+
+        double adjustment = 0.0;
+        //@ maintaining 0 <= j && j <= 3;
+        //@ maintaining adjustment == (\sum int k; 0 <= k && k < j; k * 0.1);
+        //@ decreases 3 - j;
+        for (int j = 0; j < 3; j++) {
+            adjustment += j * 0.1;
+        }
+
+        double result = ratio + adjustment + sum - diff + product - counter + numerator;
+
+        boolean valid = result > 0;
+        if (valid) {
+            System.out.println("Computation successful.");
+        } else {
+            System.out.println("Computation result is non-positive.");
+        }
+
+        int check = 1;
+        //@ maintaining 1 <= check && check <= 4;
+        //@ maintaining result == \old(result) + (\sum int k; 1 <= k && k < check; k * 2);
+        //@ decreases 4 - check;
+        while (check < 4) {
+            result += check * 2;
+            check++;
+        }
+        //@ ensures \result == ratio + adjustment + sum - diff + product - counter + numerator + (\sum int k; 1 <= k && k <= 3; k * 2);
+        return result;
+    }
+}
+==============================
+tmp/DivisionCalculator.java:12: error: variable declaration not allowed here
+        int sum = 0;
+            ^
+tmp/DivisionCalculator.java:5: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining 0 <= i && i <= 5;
+            ^
+2 errors
+
+==============================
+public class DivisionCalculator {
+
+    //@ spec_public
+    public static double calculateRatio(int numerator, int denominator) {
+        //@ maintaining 0 < i && i < 5;  
+        //@ maintaining sum == (\sum int j; 0 <= j && j < i; j);
+        //@ maintaining diff == (\sum int j; 0 <= j && j < i; -j);
+        //@ maintaining product == (\product int j; 1 <= j && j <= i; j);
+        //@ maintaining counter == i;
+        //@ maintaining i <= 5;
+        //@ decreases 5 - i;
+        int sum = 0;
+        int diff = 0;
+        int product = 1;
+        int counter = 0;
+        double ratio = 0;
+        for (int i = 0; i < 5; i++) {
+            sum = sum + i;
+            diff = diff - i;
+            product =  product * (i + 1);
+            counter = counter + 1;
+        }
+        //@ ensures denominator > 0;
+        if(denominator <= 0){
+            denominator = 1;
+        }
+        if(numerator < counter || denominator > 7) {
+            numerator = numerator + diff * counter;
+        }else{
+            denominator = numerator - denominator;
+            ratio = (double) numerator / denominator;
+        }
+
+        double adjustment = 0.0;
+        //@ maintaining 0 <= j && j <= 3;
+        //@ maintaining adjustment == (\sum int k; 0 <= k && k < j; k * 0.1);
+        //@ decreases 3 - j;
+        for (int j = 0; j < 3; j++) {
+            adjustment += j * 0.1;
+        }
+
+        double result = ratio + adjustment + sum - diff + product - counter + numerator;
+
+        boolean valid = result > 0;
+        if (valid) {
+            System.out.println("Computation successful.");
+        } else {
+            System.out.println("Computation result is non-positive.");
+        }
+
+        int check = 1;
+        //@ maintaining 1 <= check && check <= 4;
+        //@ maintaining result == \old(result) + (\sum int k; 1 <= k && k < check; k * 2);
+        //@ decreases 4 - check;
+        while (check < 4) {
+            result += check * 2;
+            check++;
+        }
+        //@ ensures \result == ratio + adjustment + sum - diff + product - counter + numerator + (\sum int k; 1 <= k && k <= 3; k * 2);
+        return result;
+    }
+}
+
+==============================
+tmp/DivisionCalculator.java:12: error: variable declaration not allowed here
+        int sum = 0;
+            ^
+tmp/DivisionCalculator.java:5: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining 0 < i && i < 5;  
+            ^
+2 errors
+
+==============================

@@ -1,0 +1,62 @@
+public class Calculator_Mutant3 {
+    // Arithmetic calculator with basic operators
+    // All operations are performed on two integer operands
+    // Simple utility for demonstration purposes
+
+    /*@ public normal_behavior
+      @   // For operators that perform division/modulus, the divisor must be non-zero
+      @   requires (operator == '*' || operator == '/' || operator == '%') ==> (num2 != 0);
+      @   assignable \nothing;
+      @   ensures
+      @     (operator == '+') ==> (\result == num1 + num2);
+      @   ensures
+      @     (operator == '-') ==> (\result == num1 - num2);
+      @   ensures
+      @     (operator == '*') ==> (\result == num1 / num2); // mutated behavior
+      @   ensures
+      @     (operator == '/') ==> (\result == num1 / num2);
+      @   ensures
+      @     (operator == '%') ==> (\result == num1 % num2);
+      @   ensures
+      @     (operator != '+' && operator != '-' && operator != '*' && operator != '/' && operator != '%')
+      @       ==> (\result == -1);
+      @ also
+      @ public exceptional_behavior
+      @   // If division/modulus is requested with a zero divisor, Java throws ArithmeticException
+      @   requires (operator == '*' || operator == '/' || operator == '%') && (num2 == 0);
+      @   assignable \nothing;
+      @   signals_only ArithmeticException;
+      @*/
+    public static int calculate(int num1, int num2, char operator) {
+        int output;
+        // Determine operation based on the operator
+        switch(operator) {
+            case '+':
+                output = num1 + num2;
+                break;
+            // Subtraction
+            case '-':
+                output = num1 - num2;
+                break;
+            // Multiplication (note: in this mutant, '*' uses division)
+            case '*':
+                output = num1 / num2; //mutated * with /
+                break;
+            // Division
+            case '/':
+                output = num1 / num2;
+                break;
+            // Modulus
+            case '%':
+                output = num1 % num2;
+                break;
+            default:
+                // Unrecognized operator
+                return -1;
+        }
+        return output;
+    }
+}
+==============================
+TimeoutException
+==============================

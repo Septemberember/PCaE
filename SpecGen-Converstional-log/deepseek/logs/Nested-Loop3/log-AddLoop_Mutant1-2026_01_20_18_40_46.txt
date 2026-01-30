@@ -1,0 +1,93 @@
+public class AddLoop_Mutant1 {
+    //@ requires y >= 0 ==> Integer.MIN_VALUE <= x + y && x + y <= Integer.MAX_VALUE;
+    //@ requires y < 0 ==> Integer.MIN_VALUE <= x + y && x + y <= Integer.MAX_VALUE;
+    //@ ensures \result == x + y;
+    public static int AddLoop(int x, int y) {
+        int sum = x;
+        // Initialize accumulator with x
+        // Branch on sign of y
+        if (y > 0) {
+            int n = y;
+            // Positive-y path: increment sum
+            // Each iteration increases sum by 1
+            // Decrement n by 2
+            //@ decreases n;
+            //@ maintaining sum == x + y - n && 0 <= n;
+            while (n > 0) {
+                sum = sum + 1;
+                // Move toward termination
+                n = n - 2;
+            }
+            // End of positive-y loop
+        } else {
+            int n = -y;
+            // Negative-y path: decrement sum
+            // Each iteration decreases sum by 1
+            // Decrement n by 2
+            //@ decreases n;
+            //@ maintaining sum == x + y + n && 0 <= n;
+            while (n > 0) {
+                sum = sum - 1;
+                // Move toward termination
+                n = n - 2;
+            }
+            // End of negative-y path
+        }
+        // Return final computed sum
+        return sum;
+    }
+}
+==============================
+tmp/AddLoop_Mutant1.java:15: verify: The prover cannot establish an assertion (LoopInvariant) in method AddLoop
+            //@ maintaining sum == x + y - n && 0 <= n;
+                ^
+1 verification failure
+
+==============================
+public class AddLoop_Mutant1 {
+    //@ requires y >= 0 ==> Integer.MIN_VALUE <= x + y && x + y <= Integer.MAX_VALUE;
+    //@ requires y < 0 ==> Integer.MIN_VALUE <= x + y && x + y <= Integer.MAX_VALUE;
+    //@ ensures \result == x + y;
+    public static int AddLoop(int x, int y) {
+        int sum = x;
+        // Initialize accumulator with x
+        // Branch on sign of y
+        if (y > 0) {
+            int n = y;
+            // Positive-y path: increment sum
+            // Each iteration increases sum by 1
+            // Decrement n by 2
+            //@ decreases n;
+            //@ maintaining sum == x + y - n && 0 < n;  
+            while (n > 0) {
+                sum = sum + 1;
+                // Move toward termination
+                n = n - 2;
+            }
+            // End of positive-y loop
+        } else {
+            int n = -y;
+            // Negative-y path: decrement sum
+            // Each iteration decreases sum by 1
+            // Decrement n by 2
+            //@ decreases n;
+            //@ maintaining sum == x + y + n && 0 <= n;
+            while (n > 0) {
+                sum = sum - 1;
+                // Move toward termination
+                n = n - 2;
+            }
+            // End of negative-y path
+        }
+        // Return final computed sum
+        return sum;
+    }
+}
+
+==============================
+tmp/AddLoop_Mutant1.java:15: verify: The prover cannot establish an assertion (LoopInvariant) in method AddLoop
+            //@ maintaining sum == x + y - n && 0 < n;  
+                ^
+1 verification failure
+
+==============================

@@ -1,0 +1,52 @@
+start role user
+Please generate an FSF for the program below:
+```
+// Utility: normalize ASCII alphabetic characters by toggling case.
+// The implementation leaves non-letter characters unchanged and handles A-Z and a-z.
+
+public class ChangeCase_Mutant3 {
+
+    // Converts ASCII alphabetic characters between cases; others are preserved.
+    public static char changeCase(char c) {
+        // Initialize result with a default value; may be overridden by branches.
+        char result = ' ';
+        if (c > 'z') {
+            result = c;
+        } else if (c >= 'a') {
+            result = (char) (c - 'a' + 'A');
+        } else if (c > 'Z') {
+            result = c;
+        } else if (c >= 'A') {
+            result = (char) (c - 'A' + 'a');
+        } else {
+            result = c;
+        }
+        // Return the computed character after case normalization.
+        return result;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: c > 122
+D1: return_value == c
+
+T2: c >= 97 && c <= 122
+D2: return_value == c - 32
+
+T3: c > 90 && c < 97
+D3: return_value == c
+
+T4: c >= 65 && c <= 90
+D4: return_value == c + 32
+
+T5: c < 65
+D5: return_value == c
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

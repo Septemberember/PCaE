@@ -1,0 +1,102 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class DensityEvaluator {
+
+    public static double calculateDensity(int mass, int volume) {
+        int adjusted = mass;
+        double density = 0.0;
+        boolean valid = true;
+        int factor = 4;
+        int divisor = 0;
+        divisor = mass - volume;
+
+        adjusted += 5;
+        adjusted *= 2;
+        adjusted -= factor;
+        adjusted = adjusted + 3;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (volume > 2 && mass < 20) {
+                adjusted = adjusted + volume;
+
+                if (volume < 8) {
+                    divisor = volume - 5;
+                    density = (double) adjusted / divisor;
+                } else {
+                    adjusted += 5;
+                    density = adjusted * 1.3;
+                    valid = false;
+                }
+
+                if (density > 60) {
+                    density = density * 0.9;
+                } else {
+                    density = density + 10;
+                }
+
+            } else {
+                adjusted += 2;
+                density = adjusted * 0.8;
+                valid = false;
+            }
+
+        } else {
+            adjusted -= 5;
+            divisor++;
+            if (mass < 20) {
+                adjusted += 4;
+                density = adjusted * 0.5;
+            } else {
+                density = adjusted * 0.6;
+                valid = false;
+            }
+
+            if (density < 30) {
+                density = density + 6;
+            } else {
+                density = density * 0.95;
+            }
+        }
+
+        double correction = (valid ? 1.1 : 0.85) * divisor;
+        double finalDensity = density * correction + adjusted * 0.05;
+        return finalDensity;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: mass - volume == 0
+D1: Exception
+
+T2: mass != volume && adjusted <= 40 && mass < 20 && divisor == (mass - volume + 1)
+D2: density == (adjusted + 4) * 0.5 && correction == (1.1 * (mass - volume + 1)) && finalDensity == (adjusted + 4) * 0.5 * (1.1 * (mass - volume + 1)) + (adjusted + 4) * 0.05
+
+T3: mass != volume && adjusted <= 40 && mass >= 20 && divisor == (mass - volume + 1)
+D3: density == (adjusted - 5) * 0.6 && correction == (0.85 * (mass - volume + 1)) && finalDensity == (adjusted - 5) * 0.6 * (0.85 * (mass - volume + 1)) + (adjusted - 5) * 0.05
+
+T4: mass != volume && adjusted > 40 && volume > 2 && mass < 20 && volume < 8 && volume - 5 == 0
+D4: Exception
+
+T5: mass != volume && adjusted > 40 && volume > 2 && mass < 20 && volume < 8 && volume - 5 != 0
+D5: density == (adjusted + 6 + volume) / (volume - 5) && correction == (1.1 * (volume - 5)) && finalDensity == ((adjusted + 6 + volume) / (volume - 5)) * (1.1 * (volume - 5)) + (adjusted + 6 + volume) * 0.05
+
+T6: mass != volume && adjusted > 40 && volume > 2 && mass < 20 && volume >= 8
+D6: density == ((adjusted + 6 + volume + 5) * 1.3) && correction == (0.85 * (mass - volume)) && finalDensity == ((adjusted + 6 + volume + 5) * 1.3) * (0.85 * (mass - volume)) + (adjusted + 6 + volume + 5) * 0.05
+
+T7: mass != volume && adjusted > 40 && !(volume > 2 && mass < 20)
+D7: density == (adjusted + 6 + 2) * 0.8 && correction == (0.85 * (mass - volume)) && finalDensity == ((adjusted + 6 + 2) * 0.8) * (0.85 * (mass - volume)) + (adjusted + 6 + 2) * 0.05
+```
+*end* role assistant
+start role user
+There exist variables which do not belong to input params of the program:divisor,adjusted, please regenerate the FSF, avoiding these variables!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

@@ -1,0 +1,71 @@
+public class GyroHealthCheck_Mutant4 {
+    // Performs a health check by comparing pairwise gyro differences.
+    //@ ensures \result == 0 ==> (Math.abs(x - y) <= 10 && Math.abs(y - z) <= 10 && Math.abs(x - z) <= 10);
+    //@ ensures \result == 2 ==> (Math.abs(x - y) > 10 || Math.abs(y - z) > 10 || Math.abs(x - z) > 10);
+    //@ ensures \result == 0 || \result == 2;
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // Normalize to absolute difference for XY
+        if (diffXY < 0) diffXY = -diffXY;
+        //@ assert diffXY == Math.abs(x - y);
+        int diffYZ = y - z;
+        // Normalize to absolute difference for YZ
+        if (diffYZ < 0) diffYZ = -diffYZ;
+        //@ assert diffYZ == Math.abs(y - z);
+        int diffXZ = x - z;
+        // Normalize to absolute difference for XZ
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        //@ assert diffXZ == Math.abs(x - z);
+
+        int alarm = 0;
+        // Trigger alarm if any pair differs by more than 10
+        //@ maintaining alarm == 0;
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 2;
+        }
+        return alarm;
+    }
+}
+==============================
+tmp/GyroHealthCheck_Mutant4.java:22: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining alarm == 0;
+            ^
+1 error
+
+==============================
+public class GyroHealthCheck_Mutant4 {
+    // Performs a health check by comparing pairwise gyro differences.
+    //@ ensures \result == 0 ==> (Math.abs(x - y) <= 10 && Math.abs(y - z) <= 10 && Math.abs(x - z) <= 10);
+    //@ ensures \result == 2 ==> (Math.abs(x - y) > 10 || Math.abs(y - z) > 10 || Math.abs(x - z) > 10);
+    //@ ensures \result == 0 || \result == 2;
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // Normalize to absolute difference for XY
+        if (diffXY < 0) diffXY = -diffXY;
+        //@ assert diffXY == Math.abs(x - y);
+        int diffYZ = y - z;
+        // Normalize to absolute difference for YZ
+        if (diffYZ < 0) diffYZ = -diffYZ;
+        //@ assert diffYZ == Math.abs(y - z);
+        int diffXZ = x - z;
+        // Normalize to absolute difference for XZ
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        //@ assert diffXZ == Math.abs(x - z);
+
+        int alarm = 0;
+        // Trigger alarm if any pair differs by more than 10
+        //@ maintaining alarm == 0;  
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 2;
+        }
+        return alarm;
+    }
+}
+
+==============================
+tmp/GyroHealthCheck_Mutant4.java:22: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining alarm == 0;  
+            ^
+1 error
+
+==============================

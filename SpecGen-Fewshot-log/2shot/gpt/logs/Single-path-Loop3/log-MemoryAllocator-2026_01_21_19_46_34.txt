@@ -1,0 +1,97 @@
+import java.util.ArrayList;
+
+public class MemoryAllocator {
+    //@ ensures \result >= 0;
+    //@ ensures (\let int ps1 = (\old(processSize) < 10 ? 10 : \old(processSize));
+    //@         int ps  = (ps1 > 500 ? 500 : ps1);
+    //@         int a   = ps * 2 - 15;
+    //@         (85 <= a && a <= 185) ==> \result == ((a - 135 < 0) ? 0 : (a - 135));
+    //@        !(85 <= a && a <= 185) ==> \result == a);
+    public static int allocateMemory(int processSize) {
+        ArrayList<Integer> memoryBlocks = new ArrayList<Integer>(11);
+        //@ maintaining 0 <= i && i <= 11;
+        //@ maintaining memoryBlocks != null;
+        //@ maintaining memoryBlocks.size() == i;
+        //@ maintaining (\forall int j; 0 <= j && j < i; memoryBlocks.get(j) == 0);
+        //@ decreases 11 - i;
+        for (int i = 0; i < 11; i++) {
+            memoryBlocks.add(0);
+        }
+        int fragmentation = 0;
+
+        int blockIndex = 0;
+
+        if (processSize < 10) {
+            processSize = 10;
+            fragmentation = fragmentation - 8;
+        } else {
+            fragmentation = fragmentation + 3;
+        }
+
+        if (processSize > 500) {
+            processSize = 500;
+            fragmentation = fragmentation + 12;
+        }
+
+        int allocated = processSize * 2 - 15;
+
+        if (allocated >= 85 && allocated <= 185) {
+            blockIndex = (allocated - 75) / 10;
+            allocated = allocated - 135;
+            if(allocated < 0){
+                allocated = 0;
+            }
+            memoryBlocks.get(blockIndex);
+        } else {
+            blockIndex = allocated % 11;
+        }
+        System.out.println("blockIndex is " + blockIndex + " and the fragmentation is " + fragmentation);
+        return allocated;
+    }
+}
+==============================
+tmp/MemoryAllocator.java:6: error: '.class' expected
+    //@         int ps  = (ps1 > 500 ? 500 : ps1);
+                    ^
+tmp/MemoryAllocator.java:7: error: Method specs may not precede a variable declaration
+    //@         int a   = ps * 2 - 15;
+                    ^
+tmp/MemoryAllocator.java:8: error: illegal start of type
+    //@         (85 <= a && a <= 185) ==> \result == ((a - 135 < 0) ? 0 : (a - 135));
+                ^
+tmp/MemoryAllocator.java:8: error: illegal start of type
+    //@         (85 <= a && a <= 185) ==> \result == ((a - 135 < 0) ? 0 : (a - 135));
+                 ^
+tmp/MemoryAllocator.java:8: error: ';' expected
+    //@         (85 <= a && a <= 185) ==> \result == ((a - 135 < 0) ? 0 : (a - 135));
+                                     ^
+tmp/MemoryAllocator.java:8: error: <identifier> expected
+    //@         (85 <= a && a <= 185) ==> \result == ((a - 135 < 0) ? 0 : (a - 135));
+                                                                ^
+tmp/MemoryAllocator.java:8: error: illegal start of type
+    //@         (85 <= a && a <= 185) ==> \result == ((a - 135 < 0) ? 0 : (a - 135));
+                                                                 ^
+tmp/MemoryAllocator.java:8: error: <identifier> expected
+    //@         (85 <= a && a <= 185) ==> \result == ((a - 135 < 0) ? 0 : (a - 135));
+                                                                            ^
+tmp/MemoryAllocator.java:9: error: illegal start of type
+    //@        !(85 <= a && a <= 185) ==> \result == a);
+               ^
+tmp/MemoryAllocator.java:9: error: <identifier> expected
+    //@        !(85 <= a && a <= 185) ==> \result == a);
+                        ^
+tmp/MemoryAllocator.java:9: error: <identifier> expected
+    //@        !(85 <= a && a <= 185) ==> \result == a);
+                             ^
+tmp/MemoryAllocator.java:9: error: Token \result is not a type
+    //@        !(85 <= a && a <= 185) ==> \result == a);
+                                          ^
+tmp/MemoryAllocator.java:9: error: ';' expected
+    //@        !(85 <= a && a <= 185) ==> \result == a);
+                                                 ^
+tmp/MemoryAllocator.java:9: error: <identifier> expected
+    //@        !(85 <= a && a <= 185) ==> \result == a);
+                                                      ^
+14 errors
+
+==============================

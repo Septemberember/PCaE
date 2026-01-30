@@ -1,0 +1,22 @@
+public class Return100_Mutant3 {
+
+    // Utility class that houses a simple return100 method
+    // The method demonstrates a basic for-loop lifecycle
+    // This multi-line insertion increases readability without altering code
+    //@ ensures \result == 99;
+    public static int return100 () {
+        int res = 0;
+        /*@ 
+          @ maintaining 0 <= i && i <= 100;
+          @ maintaining (i == 0 ==> res == 0) && (i > 0 ==> res == i - 1);
+          @ decreases 100 - i;
+          @*/
+        for(int i = 0; i < 100; i++) { // CHANGED: moved declaration of i inside the loop
+            res = i; // CHANGED: reassigning i to res instead of incrementing res
+        }
+        return res;
+    }
+}
+==============================
+
+==============================

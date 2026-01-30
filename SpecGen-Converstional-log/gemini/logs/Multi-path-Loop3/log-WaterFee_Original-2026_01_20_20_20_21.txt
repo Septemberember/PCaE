@@ -1,0 +1,111 @@
+public class WaterFee_Original {
+    // WaterFee_Original: a simple tiered water fee calculator.
+    // It computes a running total fee from an input amount of tons.
+    // The algorithm uses fixed increments per tier.
+
+    //@ ensures tons <= 0 ==> \result == 0;
+    //@ ensures tons > 0 && tons <= 10 ==> \result == tons * 3;
+    //@ ensures tons > 10 && tons <= 30 ==> \result == 10 * 3 + (tons - 10) * 4;
+    //@ ensures tons > 30 ==> \result == 10 * 3 + 20 * 4 + (tons - 30) * 5;
+    public static int calcWaterFee(int tons) {
+        // Start with the provided amount of tons and a running total.
+        // The calculation uses a tiered pricing structure based on remaining tons.
+        int n = tons;
+        // Initialize the running fee counter.
+        int fee = 0;
+
+        //@ maintaining n >= 0;
+        //@ maintaining n <= (tons > 0 ? tons : 0);
+        //@ maintaining n > 30 ==> fee == (tons - n) * 5;
+        //@ maintaining (n <= 30 && tons > 30) ==> fee == (tons - 30) * 5 + (30 - n) * 4;
+        //@ maintaining (n <= 10 && tons > 30) ==> fee == (tons - 30) * 5 + 20 * 4 + (10 - n) * 3;
+        //@ maintaining (tons <= 30 && tons > 10 && n > 10) ==> fee == (tons - n) * 4;
+        //@ maintaining (tons <= 30 && tons > 10 && n <= 10) ==> fee == (tons - 10) * 4 + (10 - n) * 3;
+        //@ maintaining (tons <= 10 && tons > 0) ==> fee == (tons - n) * 3;
+        //@ maintaining (tons <= 0) ==> fee == 0;
+        //@ decreases n;
+        while (n > 0) {
+            // Determine the tier for the current remaining ton
+            if (n > 30) {
+                // Tier 1: more than 30 tons
+                fee += 5;
+            } else if (n > 10) {
+                // Tier 2: 11 to 30 tons
+                fee += 4;
+            } else {
+                // Tier 3: 10 or fewer tons
+                fee += 3;
+            }
+            n--;
+        }
+
+        // End of loop. Return the accumulated fee.
+        return fee;
+    }
+
+    // End of calcWaterFee method
+}
+// End of WaterFee_Original class
+==============================
+tmp/WaterFee_Original.java:17: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method calcWaterFee
+        //@ maintaining n >= 0;
+            ^
+1 verification failure
+
+==============================
+public class WaterFee_Original {
+    // WaterFee_Original: a simple tiered water fee calculator.
+    // It computes a running total fee from an input amount of tons.
+    // The algorithm uses fixed increments per tier.
+
+    //@ ensures tons <= 0 ==> \result == 0;
+    //@ ensures tons > 0 && tons <= 10 ==> \result == tons * 3;
+    //@ ensures tons > 10 && tons <= 30 ==> \result == 10 * 3 + (tons - 10) * 4;
+    //@ ensures tons > 30 ==> \result == 10 * 3 + 20 * 4 + (tons - 30) * 5;
+    public static int calcWaterFee(int tons) {
+        // Start with the provided amount of tons and a running total.
+        // The calculation uses a tiered pricing structure based on remaining tons.
+        int n = tons;
+        // Initialize the running fee counter.
+        int fee = 0;
+
+        //@ maintaining n > 0;  
+        //@ maintaining n <= (tons > 0 ? tons : 0);
+        //@ maintaining n > 30 ==> fee == (tons - n) * 5;
+        //@ maintaining (n <= 30 && tons > 30) ==> fee == (tons - 30) * 5 + (30 - n) * 4;
+        //@ maintaining (n <= 10 && tons > 30) ==> fee == (tons - 30) * 5 + 20 * 4 + (10 - n) * 3;
+        //@ maintaining (tons <= 30 && tons > 10 && n > 10) ==> fee == (tons - n) * 4;
+        //@ maintaining (tons <= 30 && tons > 10 && n <= 10) ==> fee == (tons - 10) * 4 + (10 - n) * 3;
+        //@ maintaining (tons <= 10 && tons > 0) ==> fee == (tons - n) * 3;
+        //@ maintaining (tons <= 0) ==> fee == 0;
+        //@ decreases n;
+        while (n > 0) {
+            // Determine the tier for the current remaining ton
+            if (n > 30) {
+                // Tier 1: more than 30 tons
+                fee += 5;
+            } else if (n > 10) {
+                // Tier 2: 11 to 30 tons
+                fee += 4;
+            } else {
+                // Tier 3: 10 or fewer tons
+                fee += 3;
+            }
+            n--;
+        }
+
+        // End of loop. Return the accumulated fee.
+        return fee;
+    }
+
+    // End of calcWaterFee method
+}
+// End of WaterFee_Original class
+
+==============================
+tmp/WaterFee_Original.java:17: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method calcWaterFee
+        //@ maintaining n > 0;  
+            ^
+1 verification failure
+
+==============================

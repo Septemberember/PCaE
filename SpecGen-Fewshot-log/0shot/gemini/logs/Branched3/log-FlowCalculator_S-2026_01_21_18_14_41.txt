@@ -1,0 +1,88 @@
+public class FlowCalculator_S {
+
+    /*@ public normal_behavior
+      @   requires rate >= 5 && pressure < 10 ==> rate != 5;
+      @   ensures \result == (\let int adj1 = (pressure + 7) * 2 - 3 + 4;
+      @     (\let int adj2 = (adj1 > 40 ? adj1 + 6 : adj1 - 6);
+      @       (\let double f1 = (adj1 > 40 ? 
+      @         (rate >= 5 ? 
+      @           (pressure < 10 ? (double)(adj2 + rate) / (rate - 5) : (adj2 + rate + 8) * 0.95) : 
+      @           (adj2 - 4) * 1.1) :
+      @         (rate < 3 ? (adj2 + 5) * 0.7 : adj2 * 0.8));
+      @        \let double f2 = (adj1 > 40 ?
+      @         (rate >= 5 ? (f1 > 80 ? f1 * 0.9 : f1 + 10) : f1) :
+      @         (f1 < 20 ? f1 + 5 : f1 * 0.95));
+      @        \let boolean s = (adj1 > 40 ? 
+      @         (rate >= 5 ? (pressure < 10 ? true : false) : false) :
+      @         (rate < 3 ? true : false));
+      @        \let int adjFinal = (adj1 > 40 ? 
+      @         (rate >= 5 ? (pressure < 10 ? adj2 + rate : adj2 + rate + 8) : adj2 - 4) :
+      @         (rate < 3 ? adj2 + 5 : adj2));
+      @        f2 * (s ? 1.1 : 0.85) + adjFinal * 0.05)));
+      @   assignable \nothing;
+      @*/
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure < 10) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+TimeoutException
+==============================

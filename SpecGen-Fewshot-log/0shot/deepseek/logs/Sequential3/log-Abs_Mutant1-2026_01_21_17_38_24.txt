@@ -1,0 +1,27 @@
+//@ model import org.jmlspecs.models.JMLMath;
+
+public class Abs_Mutant1 {
+
+    // Identity function: returns the input unchanged.
+    // This class provides a minimal stub that can be extended later.
+
+    /*@ public normal_behavior
+      @   ensures \result == num;
+      @*/
+    public static int Abs(int num) {
+        return num;
+    }
+
+    // The method above currently performs no numeric transformation.
+    // It serves as a simple demonstration of preserving existing logic.
+
+    // Additional comments for clarity and spacing
+    // End of class scaffold
+}
+==============================
+tmp/Abs_Mutant1.java:1: error: package org.jmlspecs.models does not exist
+//@ model import org.jmlspecs.models.JMLMath;
+                                    ^
+1 error
+
+==============================

@@ -1,0 +1,31 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class ReLUSeq_Mutant3 {
+    // Evaluate a simple ReLU-like function variant.
+    // Returns x when the input is non-positive; otherwise returns 0.0.
+    public static double computeReLU(double x) {
+        // Piecewise behavior: keep x if it's not positive
+        return ((x <= 0.0) ? x : 0);
+        // End of piecewise evaluation
+    }
+
+    // The class intentionally contains minimal structure to accompany tests.
+    // Additional utility methods could be added in future iterations.
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: x <= 0.0
+D1: return_value == x
+
+T2: x > 0.0
+D2: return_value == 0
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

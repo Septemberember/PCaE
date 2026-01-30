@@ -1,0 +1,77 @@
+public class GetUpCaseLoop {
+
+    // This utility maps a..f to their corresponding uppercase characters.
+    // It returns 0 for values outside the handled range.
+    // The mapping is achieved by a small downward scan from 'F'.
+    /*@ public normal_behavior
+      @   ensures (c < 'a' || c > 'f') ==> \result == (char)0;
+      @   ensures ('a' <= c && c <= 'f') ==> \result == (char)(c - 'a' + 'A');
+      @   assignable \nothing;
+      @*/
+    public static char getUpCase(char c) {
+        // Validate input: only lowercase a..f are considered
+        // Return 0 for any other input value
+        if(c < 'a' || c > 'f') {
+            return 0;
+        }
+        // Start with the uppercase boundary corresponding to 'F'
+        char t = 'F';
+        // Move downward until reaching the target uppercase letter
+        while(t >= 'A' && t != c - 'a' + 'A') {
+            /*@ maintaining 'a' <= c && c <= 'f';
+              @ maintaining (int)t <= (int)'F';
+              @ maintaining (int)t >= (int)(c - 'a' + 'A');
+              @ decreasing (int)t - (int)(c - 'a' + 'A');
+              @*/
+            t--;
+        }
+        // t now holds the mapped uppercase character
+        return t;
+    }
+}
+==============================
+tmp/GetUpCaseLoop_Original.java:21: error: Loop specifications must immediately precede a loop statement
+            /*@ maintaining 'a' <= c && c <= 'f';
+                ^
+1 error
+
+==============================
+public class GetUpCaseLoop {
+
+    // This utility maps a..f to their corresponding uppercase characters.
+    // It returns 0 for values outside the handled range.
+    // The mapping is achieved by a small downward scan from 'F'.
+    /*@ public normal_behavior
+      @   ensures (c < 'a' || c > 'f') ==> \result == (char)0;
+      @   ensures ('a' <= c && c <= 'f') ==> \result == (char)(c - 'a' + 'A');
+      @   assignable \nothing;
+      @*/
+    public static char getUpCase(char c) {
+        // Validate input: only lowercase a..f are considered
+        // Return 0 for any other input value
+        if(c < 'a' || c > 'f') {
+            return 0;
+        }
+        // Start with the uppercase boundary corresponding to 'F'
+        char t = 'F';
+        // Move downward until reaching the target uppercase letter
+        while(t >= 'A' && t != c - 'a' + 'A') {
+            /*@ maintaining 'a' < c && c < 'f';  
+              @ maintaining (int)t <= (int)'F';
+              @ maintaining (int)t >= (int)(c - 'a' + 'A');
+              @ decreasing (int)t - (int)(c - 'a' + 'A');
+              @*/
+            t--;
+        }
+        // t now holds the mapped uppercase character
+        return t;
+    }
+}
+
+==============================
+tmp/GetUpCaseLoop_Original.java:21: error: Loop specifications must immediately precede a loop statement
+            /*@ maintaining 'a' < c && c < 'f';  
+                ^
+1 error
+
+==============================

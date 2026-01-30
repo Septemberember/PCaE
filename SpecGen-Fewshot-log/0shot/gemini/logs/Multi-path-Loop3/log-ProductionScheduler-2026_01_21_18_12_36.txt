@@ -1,0 +1,60 @@
+import java.util.ArrayList;
+
+public class ProductionScheduler {
+    /*@ public normal_behavior
+      @   ensures (\exists int eff, h; 
+      @     (hours < 4 ? (h == 4 && eff == -2) : (h == (hours > 24 ? 24 : hours) && (hours > 24 ? eff == 4 : eff == 1))) &&
+      @     (\let int out = h * 30 + 50;
+      @      \let int idx = (out >= 200 && out <= 350) ? (out / 50) : (out % 8);
+      @      \result == (0 * eff > 24 ? out + eff * 2 : out - eff)));
+      @*/
+    public static int calculateOutput(int hours) {
+        ArrayList<Integer> productionSlots = new ArrayList<Integer>(8);
+        /*@ maintaining 0 <= i && i <= 8;
+          @ maintaining productionSlots.size() == i;
+          @ decreases 8 - i;
+          @*/
+        for (int i = 0; i < 8; i++) {
+            productionSlots.add(0);
+        }
+        int cal = 0;
+        int MAX_HOURS = 24;
+        int MIN_HOURS = 4;
+        int efficiency = 0;
+
+        int slotIndex = 0;
+
+        if (hours < MIN_HOURS) {
+            hours = MIN_HOURS;
+            efficiency = efficiency - 2;
+        } else {
+            efficiency = efficiency + 1;
+        }
+
+        if (hours > MAX_HOURS) {
+            hours = MAX_HOURS;
+            efficiency = efficiency + 3;
+        }
+
+        int output = hours * 30 + 50;
+
+        if (output >= 200 && output <= 350) {
+            slotIndex = output / 50;
+        } else {
+            slotIndex = output % 8;
+        }
+
+        cal = productionSlots.get(slotIndex);
+
+        if(cal * efficiency > MAX_HOURS) {
+            output = output + efficiency * 2;
+        } else {
+            output = output - efficiency;
+        }
+
+        return output;
+    }
+}
+==============================
+
+==============================

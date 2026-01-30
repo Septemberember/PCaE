@@ -1,0 +1,85 @@
+public class WaterFee_Mutant4 {
+    // Water fee calculator utility
+    // Computes fee based on input tonnage using a tiered pricing model.
+    //@ ensures (tons <= 0) ==> (\result == 0);
+    //@ ensures (tons > 0 && tons < 3) ==> (\result == 3 * tons);
+    //@ ensures (tons >= 3 && tons < 10) ==> (\result == 3 * 2 + 4 * (tons - 2));
+    //@ ensures (tons >= 10) ==> (\result == 3 * 2 + 4 * 7 + 5 * (tons - 9));
+    public static int calcWaterFee(int tons) {
+        // Initialize remaining amount to process
+        int n = tons;
+        // Initialize total fee accumulator
+        int fee = 0;
+        // Process one ton at a time
+        //@ maintaining n <= tons;
+        //@ maintaining n >= 0;
+        //@ maintaining (tons <= 0) ==> (fee == 0 && n == tons);
+        //@ maintaining (tons > 0 && n >= 10) ==> (fee == (tons - n) * 5);
+        //@ maintaining (tons > 0 && n >= 3 && n < 10) ==> (fee == (tons >= 10 ? (tons - 9) * 5 + (9 - n) * 4 : (tons - n) * 4));
+        //@ maintaining (tons > 0 && n < 3) ==> (fee == (tons >= 10 ? (tons - 9) * 5 + 7 * 4 + (2 - n) * 3 : (tons >= 3 ? (tons - 2) * 4 + (2 - n) * 3 : (tons - n) * 3)));
+        //@ decreases n;
+        while (n > 0) {
+            // Determine fee tier for current remaining tons
+            if (n < 3) {
+                fee += 3;
+            } else if (n < 10) {
+                fee += 4;
+            } else {
+                fee += 5;
+            }
+            n--;
+        }
+        // End of processing loop
+        return fee;
+    }
+}
+==============================
+tmp/WaterFee_Mutant4.java:15: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method calcWaterFee
+        //@ maintaining n >= 0;
+            ^
+1 verification failure
+
+==============================
+public class WaterFee_Mutant4 {
+    // Water fee calculator utility
+    // Computes fee based on input tonnage using a tiered pricing model.
+    //@ ensures (tons <= 0) ==> (\result == 0);
+    //@ ensures (tons > 0 && tons < 3) ==> (\result == 3 * tons);
+    //@ ensures (tons >= 3 && tons < 10) ==> (\result == 3 * 2 + 4 * (tons - 2));
+    //@ ensures (tons >= 10) ==> (\result == 3 * 2 + 4 * 7 + 5 * (tons - 9));
+    public static int calcWaterFee(int tons) {
+        // Initialize remaining amount to process
+        int n = tons;
+        // Initialize total fee accumulator
+        int fee = 0;
+        // Process one ton at a time
+        //@ maintaining n <= tons;
+        //@ maintaining n > 0;  
+        //@ maintaining (tons <= 0) ==> (fee == 0 && n == tons);
+        //@ maintaining (tons > 0 && n >= 10) ==> (fee == (tons - n) * 5);
+        //@ maintaining (tons > 0 && n >= 3 && n < 10) ==> (fee == (tons >= 10 ? (tons - 9) * 5 + (9 - n) * 4 : (tons - n) * 4));
+        //@ maintaining (tons > 0 && n < 3) ==> (fee == (tons >= 10 ? (tons - 9) * 5 + 7 * 4 + (2 - n) * 3 : (tons >= 3 ? (tons - 2) * 4 + (2 - n) * 3 : (tons - n) * 3)));
+        //@ decreases n;
+        while (n > 0) {
+            // Determine fee tier for current remaining tons
+            if (n < 3) {
+                fee += 3;
+            } else if (n < 10) {
+                fee += 4;
+            } else {
+                fee += 5;
+            }
+            n--;
+        }
+        // End of processing loop
+        return fee;
+    }
+}
+
+==============================
+tmp/WaterFee_Mutant4.java:15: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method calcWaterFee
+        //@ maintaining n > 0;  
+            ^
+1 verification failure
+
+==============================

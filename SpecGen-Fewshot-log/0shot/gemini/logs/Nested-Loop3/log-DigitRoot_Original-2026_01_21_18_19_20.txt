@@ -1,0 +1,97 @@
+public class DigitRoot_Original {
+
+    // Digit root computation: repeatedly sum digits until a single digit remains
+    // This implementation mirrors the classic digital root approach
+
+    /*@ public normal_behavior
+      @   requires num >= 0;
+      @   ensures \result >= 0 && \result < 10;
+      @   ensures (num == 0) ==> (\result == 0);
+      @   ensures (num > 0) ==> (\result == (num - 1) % 9 + 1);
+      @   assignable \nothing;
+      @*/
+    public static int function(int num) {
+        // Outer loop reduces to a single-digit sum
+        /*@ maintaining num >= 0;
+          @ maintaining (num == 0) ==> (\old(num) == 0);
+          @ maintaining (num > 0) ==> (num % 9 == \old(num) % 9 || (num % 9 == 0 && \old(num) % 9 == 0));
+          @ decreasing num;
+          @*/
+        while (num >= 10) {
+            int sum = 0;
+            int tempNum = num;
+            // Sum all digits of the current number
+            /*@ maintaining tempNum >= 0 && sum >= 0;
+              @ maintaining (sum + tempNum) % 9 == num % 9;
+              @ decreasing tempNum;
+              @*/
+            while (tempNum > 0) {
+                sum = sum + (tempNum % 10);
+                tempNum = tempNum / 10;
+            }
+
+            // Replace num with the sum of its digits
+            num = sum;
+        }
+        return num;
+    }
+}
+==============================
+tmp/DigitRoot_Original.java:36: verify: The prover cannot establish an assertion (Postcondition: tmp/DigitRoot_Original.java:9:) in method function
+        return num;
+        ^
+tmp/DigitRoot_Original.java:9: verify: Associated declaration: tmp/DigitRoot_Original.java:36:
+      @   ensures (num == 0) ==> (\result == 0);
+          ^
+2 verification failures
+
+==============================
+public class DigitRoot_Original {
+
+    // Digit root computation: repeatedly sum digits until a single digit remains
+    // This implementation mirrors the classic digital root approach
+
+    /*@ public normal_behavior
+      @   requires num >= 0;
+      @   ensures \result >= 0 && \result < 10;
+      @   ensures (num == 0) ==> (\result == 0);  
+      @   ensures (num > 0) ==> (\result == (num - 1) % 9 + 1);
+      @   assignable \nothing;
+      @*/
+    public static int function(int num) {
+        // Outer loop reduces to a single-digit sum
+        /*@ maintaining num >= 0;
+          @ maintaining (num == 0) ==> (\old(num) == 0);
+          @ maintaining (num > 0) ==> (num % 9 == \old(num) % 9 || (num % 9 == 0 && \old(num) % 9 == 0));
+          @ decreasing num;
+          @*/
+        while (num >= 10) {
+            int sum = 0;
+            int tempNum = num;
+            // Sum all digits of the current number
+            /*@ maintaining tempNum >= 0 && sum >= 0;
+              @ maintaining (sum + tempNum) % 9 == num % 9;
+              @ decreasing tempNum;
+              @*/
+            while (tempNum > 0) {
+                sum = sum + (tempNum % 10);
+                tempNum = tempNum / 10;
+            }
+
+            // Replace num with the sum of its digits
+            num = sum;
+        }
+        return num;
+    }
+}
+
+==============================
+tmp/DigitRoot_Original.java:36: verify: The prover cannot establish an assertion (Postcondition: tmp/DigitRoot_Original.java:9:) in method function
+        return num;
+        ^
+tmp/DigitRoot_Original.java:9: verify: Associated declaration: tmp/DigitRoot_Original.java:36:
+      @   ensures (num == 0) ==> (\result == 0);  
+          ^
+2 verification failures
+
+==============================

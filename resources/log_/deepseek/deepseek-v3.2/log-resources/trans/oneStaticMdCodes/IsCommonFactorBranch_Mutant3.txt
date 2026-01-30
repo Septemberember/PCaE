@@ -1,0 +1,42 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class IsCommonFactorBranch_Mutant3 {
+
+    // Core logic: check that both inputs leave a remainder of 1 when divided by factor
+    public static boolean isCommonFactor (int a, int b, int factor) {
+        if (a % factor != 1) {
+            return false;
+        }
+
+        // Validate second input against the same remainder condition
+        if (b % factor != 1) {
+            return false;
+        }
+
+        // Both inputs satisfy the remainder condition; factor is common
+        return true;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: factor == 0
+D1: Exception
+
+T2: factor != 0 && a % factor != 1
+D2: return_value == false
+
+T3: factor != 0 && a % factor == 1 && b % factor != 1
+D3: return_value == false
+
+T4: factor != 0 && a % factor == 1 && b % factor == 1
+D4: return_value == true
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

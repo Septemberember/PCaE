@@ -1,0 +1,24 @@
+public class PowerOfTwoBranch_Original {
+
+    /*@ public normal_behavior
+      @   ensures \result <==> (n > 0 && ((n & (n - 1)) == 0));
+      @   assignable \nothing;
+      @   pure;
+      @*/
+    public static boolean isPowerOfTwo(int n) {
+        if (n <= 0) {
+            return false;
+        }
+        if ((n & (n - 1)) != 0) {
+            return false;
+        }
+        return true;
+    }
+}
+==============================
+tmp/PowerOfTwoBranch_Original.java:6: error: Orphaned modifiers found before an empty declaration
+      @   pure;
+              ^
+1 error
+
+==============================

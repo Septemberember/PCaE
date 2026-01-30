@@ -1,0 +1,87 @@
+import java.util.*;
+public class MixCollectSum {
+    /*@ spec_public @*/
+    public static double mixSum(int x) {
+        /*@ spec_public @*/ ArrayList<Integer> list = new ArrayList<>();
+        /*@ spec_public @*/ int sum = 0;
+        /*@ spec_public @*/ int times = 0;
+        /*@ spec_public @*/ int tmp = 10;
+        //@ maintaining x <= 220;
+        if(x > 220){
+            x = 220;
+        }
+        //@ maintaining x >= 195 ==> x <= \old(x);
+        //@ maintaining x < 195 ==> list != null;
+        while(x >= 195){
+           //@ maintaining x >= 195 && x <= \old(x);
+           if(x == 200){
+               x = x - 150;
+               sum = tmp / x;
+           }
+           x = x - 1;
+           list.add(x);
+        }
+        //@ maintaining 0 <= \count <= list.size();
+        //@ maintaining sum == (\sum int j; 0 <= j && j < \count; list.get(j));
+        for(int i : list){
+            sum = sum + i;
+        }
+        //@ ensures \result == sum;
+        //@ ensures \result >= 0;
+        return sum;
+    }
+}
+==============================
+tmp/MixCollectSum.java:9: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining x <= 220;
+            ^
+tmp/MixCollectSum.java:16: error: Loop specifications must immediately precede a loop statement
+           //@ maintaining x >= 195 && x <= \old(x);
+               ^
+2 errors
+
+==============================
+import java.util.*;
+public class MixCollectSum {
+    /*@ spec_public @*/
+    public static double mixSum(int x) {
+        /*@ spec_public @*/ ArrayList<Integer> list = new ArrayList<>();
+        /*@ spec_public @*/ int sum = 0;
+        /*@ spec_public @*/ int times = 0;
+        /*@ spec_public @*/ int tmp = 10;
+        //@ maintaining x < 220;  
+        if(x > 220){
+            x = 220;
+        }
+        //@ maintaining x >= 195 ==> x <= \old(x);
+        //@ maintaining x < 195 ==> list != null;
+        while(x >= 195){
+           //@ maintaining x > 195 && x < \old(x);  
+           if(x == 200){
+               x = x - 150;
+               sum = tmp / x;
+           }
+           x = x - 1;
+           list.add(x);
+        }
+        //@ maintaining 0 <= \count <= list.size();
+        //@ maintaining sum == (\sum int j; 0 <= j && j < \count; list.get(j));
+        for(int i : list){
+            sum = sum + i;
+        }
+        //@ ensures \result == sum;
+        //@ ensures \result >= 0;
+        return sum;
+    }
+}
+
+==============================
+tmp/MixCollectSum.java:9: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining x < 220;  
+            ^
+tmp/MixCollectSum.java:16: error: Loop specifications must immediately precede a loop statement
+           //@ maintaining x > 195 && x < \old(x);  
+               ^
+2 errors
+
+==============================

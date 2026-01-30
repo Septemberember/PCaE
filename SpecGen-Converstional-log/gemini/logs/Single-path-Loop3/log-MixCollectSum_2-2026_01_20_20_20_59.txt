@@ -1,0 +1,103 @@
+import java.util.*;
+public class MixCollectSum_2 {
+    //@ ensures \result == (x > 3000 ? (3000 >= 1000 ? (\sum int j; 0 <= j && j < (3000-900)/100; 3000 - 100*(j+1)) : 0) : (x >= 1000 ? (\sum int j; 0 <= j && j < (x-900)/100; x - 100*(j+1)) : 0));
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 3000){
+            x = 3000;
+        }
+        int initialX = x;
+        //@ maintaining 900 <= x && x <= initialX;
+        //@ maintaining list.size() == (initialX - x) / 100;
+        //@ maintaining (\forall int j; 0 <= j && j < list.size(); list.get(j) == initialX - 100 * (j + 1));
+        //@ maintaining x < 1000 ==> sum == (initialX >= 1000 && (initialX - 1000) % 100 == 0 ? tmp / 1000 : 0);
+        //@ decreases x;
+        while(x >= 1000){
+           if(x == 1000){
+               sum = tmp / x;
+           }
+           x = x - 100;
+           list.add(x);
+        }
+        
+        int n = list.size();
+        //@ maintaining 0 <= i && i <= n;
+        //@ maintaining sum == (initialX >= 1000 && (initialX - 1000) % 100 == 0 ? tmp / 1000 : 0) + (\sum int j; 0 <= j && j < i; (int)list.get(j));
+        //@ decreases n - i;
+        for(int i = 0; i < list.size(); i++){
+            int val = list.get(i);
+            sum = sum + val;
+        }
+        return sum;
+    }
+}
+==============================
+error: An internal JML error occurred, possibly recoverable.  Please report the bug with as much information as you can.
+  Reason: class com.sun.tools.javac.code.Type$TypeVar cannot be cast to class com.sun.tools.javac.code.Type$ClassType (com.sun.tools.javac.code.Type$TypeVar and com.sun.tools.javac.code.Type$ClassType are in module jdk.compiler of loader 'app')
+  java.lang.ClassCastException: class com.sun.tools.javac.code.Type$TypeVar cannot be cast to class com.sun.tools.javac.code.Type$ClassType (com.sun.tools.javac.code.Type$TypeVar and com.sun.tools.javac.code.Type$ClassType are in module jdk.compiler of loader 'app')
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.createUnboxingExpr(JmlAssertionAdder.java:12313)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitTypeCast(JmlAssertionAdder.java:14255)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCTypeCast.accept(JCTree.java:2140)
+  	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+  	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertJML(JmlAssertionAdder.java:1648)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertJML(JmlAssertionAdder.java:1665)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertNoSplit(JmlAssertionAdder.java:1701)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlQuantifiedExpr(JmlAssertionAdder.java:18260)
+  	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlQuantifiedExpr.accept(JmlTree.java:2855)
+  	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+  	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitParens(JmlAssertionAdder.java:12077)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCParens.accept(JCTree.java:1969)
+  	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+  	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+  	at jdk.compiler/org.jmlspecs.openjml.ext.Arithmetic.makeBinaryOp(Arithmetic.java:300)
+  	at jdk.compiler/org.jmlspecs.openjml.ext.Arithmetic$Math.rewriteBinary(Arithmetic.java:688)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitBinary(JmlAssertionAdder.java:13588)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBinary.accept(JCTree.java:2111)
+  	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+  	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitBinary(JmlAssertionAdder.java:13597)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBinary.accept(JCTree.java:2111)
+  	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+  	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertJML(JmlAssertionAdder.java:1648)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertJML(JmlAssertionAdder.java:1665)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.loopHelperInitialInvariant(JmlAssertionAdder.java:16669)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlForLoop(JmlAssertionAdder.java:16937)
+  	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlForLoop.accept(JmlTree.java:1984)
+  	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+  	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convert(JmlAssertionAdder.java:1441)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertMethodBodyNoInit(JmlAssertionAdder.java:1235)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlMethodDecl(JmlAssertionAdder.java:17247)
+  	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodDecl.accept(JmlTree.java:1383)
+  	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+  	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlClassDecl(JmlAssertionAdder.java:15904)
+  	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlClassDecl.accept(JmlTree.java:1295)
+  	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+  	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convert(JmlAssertionAdder.java:1441)
+  	at jdk.compiler/org.jmlspecs.openjml.esc.JmlEsc.check(JmlEsc.java:112)
+  	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.esc(JmlCompiler.java:536)
+  	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.flow(JmlCompiler.java:362)
+  	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.compile(JavaCompiler.java:936)
+  	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.compile(JmlCompiler.java:197)
+  	at jdk.compiler/com.sun.tools.javac.main.Main.compile(Main.java:321)
+  	at jdk.compiler/org.jmlspecs.openjml.Main.compile(Main.java:534)
+  	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:374)
+  	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:332)
+  	at jdk.compiler/org.jmlspecs.openjml.Main.main(Main.java:295)
+  	at jdk.compiler/com.sun.tools.javac.Main.main(Main.java:53)
+1 error
+
+==============================

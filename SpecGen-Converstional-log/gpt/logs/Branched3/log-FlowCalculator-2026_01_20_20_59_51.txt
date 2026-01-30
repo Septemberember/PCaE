@@ -1,0 +1,239 @@
+public class FlowCalculator {
+
+    /*@ requires !(pressure >= 13 && pressure <= 14 && rate == 5); // avoids divisor == 0 in the (double) adjusted / (rate-5) branch
+      @
+      @ ensures \let int modifier = 3;
+      @         \let int sheld = 14;
+      @         \let int a1 = (((pressure + 7) * 2) - modifier) + 4; // initial adjusted after the 4 assignments
+      @
+      @         \let boolean stableFinal =
+      @             (a1 > 40)
+      @               ? ((rate >= 5)
+      @                    ? ((pressure <= sheld) ? true : false)
+      @                    : false)
+      @               : ((rate < 3) ? true : false);
+      @
+      @         \let int adjustedFinal =
+      @             (a1 > 40)
+      @               ? (\let int a2 = a1 + 6;
+      @                  (rate >= 5)
+      @                    ? (\let int a3 = a2 + rate;
+      @                       (pressure <= sheld)
+      @                         ? a3
+      @                         : (a3 + 8))
+      @                    : (a2 - 4))
+      @               : (\let int a2 = a1 - 6;
+      @                  (rate < 3)
+      @                    ? (a2 + 5)
+      @                    : a2);
+      @
+      @         \let double flowAfter =
+      @             (a1 > 40)
+      @               ? (\let int a2 = a1 + 6;
+      @                  (rate >= 5)
+      @                    ? (\let int a3 = a2 + rate;
+      @                       \let double flow0 =
+      @                           (pressure <= sheld)
+      @                             ? ((double) a3) / (rate - 5)
+      @                             : ((a3 + 8) * 0.95);
+      @                       (flow0 > 80) ? (flow0 * 0.9) : (flow0 + 10))
+      @                    : ((a2 - 4) * 1.1))
+      @               : (\let int a2 = a1 - 6;
+      @                  \let double flow0 =
+      @                      (rate < 3)
+      @                        ? ((a2 + 5) * 0.7)
+      @                        : (a2 * 0.8);
+      @                  (flow0 < 20) ? (flow0 + 5) : (flow0 * 0.95));
+      @
+      @         \let double correction = stableFinal ? 1.1 : 0.85;
+      @
+      @         \result == (flowAfter * correction + adjustedFinal * 0.05);
+      @*/
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure ;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+        int sheld = 14;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure <= sheld) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+tmp/FlowCalculator.java:37: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                             ? ((double) a3) / (rate - 5)
+                                       ^
+  Reason: Unknown type tag DOUBLE
+1 error
+
+==============================
+public class FlowCalculator {
+
+    /*@ requires !(pressure >= 13 && pressure <= 14 && rate == 5); // avoids divisor == 0 in the (adjusted)/(rate-5) branch
+      @
+      @ ensures \let int modifier = 3;
+      @         \let int sheld = 14;
+      @         \let int a1 = (((pressure + 7) * 2) - modifier) + 4; // initial adjusted after the 4 assignments
+      @
+      @         \let boolean stableFinal =
+      @             (a1 > 40)
+      @               ? ((rate >= 5)
+      @                    ? ((pressure <= sheld) ? true : false)
+      @                    : false)
+      @               : ((rate < 3) ? true : false);
+      @
+      @         \let int adjustedFinal =
+      @             (a1 > 40)
+      @               ? (\let int a2 = a1 + 6;
+      @                  (rate >= 5)
+      @                    ? (\let int a3 = a2 + rate;
+      @                       (pressure <= sheld)
+      @                         ? a3
+      @                         : (a3 + 8))
+      @                    : (a2 - 4))
+      @               : (\let int a2 = a1 - 6;
+      @                  (rate < 3)
+      @                    ? (a2 + 5)
+      @                    : a2);
+      @
+      @         \let double flowAfter =
+      @             (a1 > 40)
+      @               ? (\let int a2 = a1 + 6;
+      @                  (rate >= 5)
+      @                    ? (\let int a3 = a2 + rate;
+      @                       \let double flow0 =
+      @                           (pressure <= sheld)
+      @                             ? (a3 * 1.0) / (rate - 5)
+      @                             : ((a3 + 8) * 0.95);
+      @                       (flow0 > 80) ? (flow0 * 0.9) : (flow0 + 10))
+      @                    : ((a2 - 4) * 1.1))
+      @               : (\let int a2 = a1 - 6;
+      @                  \let double flow0 =
+      @                      (rate < 3)
+      @                        ? ((a2 + 5) * 0.7)
+      @                        : (a2 * 0.8);
+      @                  (flow0 < 20) ? (flow0 + 5) : (flow0 * 0.95));
+      @
+      @         \let double correction = stableFinal ? 1.1 : 0.85;
+      @
+      @         \result == (flowAfter * correction + adjustedFinal * 0.05);
+      @*/
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure ;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+        int sheld = 14;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure <= sheld) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+
+==============================

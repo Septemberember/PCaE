@@ -1,0 +1,107 @@
+public class AddLoop_Mutant5 {
+    // Class scope: focused on a simple additive looping example.
+
+    // Note: This class demonstrates a simple additive loop.
+    /*@ public normal_behavior
+      @   requires true;
+      @   assignable \nothing;
+      @   ensures \result == (y > 0 ? (x + y + 1) : (x + y - 1));
+      @*/
+    public static int AddLoop(int x, int y) {
+        // Initialize the accumulator with the starting value x.
+        int sum = x;
+        if (y > 0) {
+            // Positive input path: prepares to iterate downward.
+            // Positive path: start from y and count down to 0.
+            int n = y;
+            while (n >= 0) {
+                /*@ maintaining sum == x + (y - n);
+                  @ maintaining n >= -1 && n <= y;
+                  @ decreasing n + 1;
+                  @*/
+                sum = sum + 1;
+                n = n - 1;
+            }
+        } else {
+            // Negative path: operate on absolute value of y.
+            // Negative path: handle absolute value of y.
+            int n = -y;
+            while (n >= 0) {
+                /*@ maintaining sum == x - ((-y) - n);
+                  @ maintaining n >= -1 && n <= -y;
+                  @ decreasing n + 1;
+                  @*/
+                sum = sum - 1;
+                n = n - 1;
+            }
+        }
+        // Return the final accumulated sum.
+        // Final value computed by the accumulation loop.
+        return sum;
+        // End of AddLoop computation.
+    }
+}
+==============================
+tmp/AddLoop_Mutant5.java:18: error: Loop specifications must immediately precede a loop statement
+                /*@ maintaining sum == x + (y - n);
+                    ^
+tmp/AddLoop_Mutant5.java:30: error: Loop specifications must immediately precede a loop statement
+                /*@ maintaining sum == x - ((-y) - n);
+                    ^
+2 errors
+
+==============================
+public class AddLoop_Mutant5 {
+    // Class scope: focused on a simple additive looping example.
+
+    // Note: This class demonstrates a simple additive loop.
+    /*@ public normal_behavior
+      @   requires true;
+      @   assignable \nothing;
+      @   ensures \result == (y > 0 ? (x + y + 1) : (x + y - 1));
+      @*/
+    public static int AddLoop(int x, int y) {
+        // Initialize the accumulator with the starting value x.
+        int sum = x;
+        if (y > 0) {
+            // Positive input path: prepares to iterate downward.
+            // Positive path: start from y and count down to 0.
+            int n = y;
+            while (n >= 0) {
+                /*@ maintaining sum == x + (y - n);  
+                  @ maintaining n >= -1 && n <= y;
+                  @ decreasing n + 1;
+                  @*/
+                sum = sum + 1;
+                n = n - 1;
+            }
+        } else {
+            // Negative path: operate on absolute value of y.
+            // Negative path: handle absolute value of y.
+            int n = -y;
+            while (n >= 0) {
+                /*@ maintaining sum == x - ((-y) - n);  
+                  @ maintaining n >= -1 && n <= -y;
+                  @ decreasing n + 1;
+                  @*/
+                sum = sum - 1;
+                n = n - 1;
+            }
+        }
+        // Return the final accumulated sum.
+        // Final value computed by the accumulation loop.
+        return sum;
+        // End of AddLoop computation.
+    }
+}
+
+==============================
+tmp/AddLoop_Mutant5.java:18: error: Loop specifications must immediately precede a loop statement
+                /*@ maintaining sum == x + (y - n);  
+                    ^
+tmp/AddLoop_Mutant5.java:30: error: Loop specifications must immediately precede a loop statement
+                /*@ maintaining sum == x - ((-y) - n);  
+                    ^
+2 errors
+
+==============================

@@ -1,0 +1,49 @@
+import java.util.*;
+public class MixCollectSum_2 {
+    /*@ public normal_behavior
+      @   ensures (\let int x0 = (x > 3000 ? 3000 : x);
+      @           \let int n  = (x0 >= 1000 ? ((x0 - 1000) / 100) + 1 : 0);
+      @           \result == (double)(\sum int j; 1 <= j && j <= n; (x0 - 100 * j)));
+      @*/
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        if(x > 3000){
+            x = 3000;
+        }
+        //@ ghost int xStart = x;
+        /*@ maintaining 0 <= list.size();
+          @ maintaining x == xStart - 100 * list.size();
+          @ maintaining (\forall int k; 0 <= k && k < list.size();
+          @                   list.get(k) == xStart - 100 * (k + 1));
+          @ decreasing x;
+          @*/
+        while(x >= 1000){
+           if(x == 1000){
+               sum = tmp / x;
+           }
+           x = x - 100;
+           list.add(x);
+        }
+        //@ ghost int sum0 = sum;
+        //@ ghost int idx = 0;
+        /*@ maintaining 0 <= idx && idx <= list.size();
+          @ maintaining sum == sum0 + (\sum int k; 0 <= k && k < idx; list.get(k));
+          @ decreasing list.size() - idx;
+          @*/
+        for(int i : list){
+            sum = sum + i;
+            //@ ghost idx = idx + 1;
+        }
+        return sum;
+    }
+}
+==============================
+tmp/MixCollectSum_2.java:38: error: <identifier> expected
+            //@ ghost idx = idx + 1;
+                         ^
+1 error
+
+==============================

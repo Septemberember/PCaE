@@ -1,0 +1,12 @@
+total_tokens=1458
+prompt_tokens=1440
+total_tokens=1506
+prompt_tokens=1487
+total_tokens=1578
+prompt_tokens=1534
+total_tokens=1630
+prompt_tokens=1612
+total_tokens=5617
+prompt_tokens=1659
+total_tokens=1755
+prompt_tokens=1739

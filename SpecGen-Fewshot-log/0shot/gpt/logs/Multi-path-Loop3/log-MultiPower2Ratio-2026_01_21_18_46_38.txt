@@ -1,0 +1,251 @@
+public class MultiPower2Ratio {
+
+    /*@ public pure model static int absNonMin(int v) {
+      @     return (v < 0) ? -v : v;
+      @ }
+      @*/
+
+    /*@ public pure model static int bitLength(int n) {
+      @     return (n <= 0) ? 0 : 1 + bitLength(n / 2);
+      @ }
+      @*/
+
+    /*@ public pure model static int tailSum(int n) {
+      @     return (n <= 0) ? 0 : (n / 2) + tailSum(n / 2);
+      @ }
+      @*/
+
+    /*@ public pure model static int tmpFactorVal(int f) {
+      @     return (f <= 10) ? 1 : 1 + tmpFactorVal(f / 10);
+      @ }
+      @*/
+
+    /*@ public normal_behavior
+      @   requires x != Integer.MIN_VALUE;
+      @   requires y != Integer.MIN_VALUE;
+      @   requires absNonMin(y) <= Integer.MAX_VALUE - 1; // prevents factor overflow at y == Integer.MAX_VALUE
+      @   requires ((\bigint)x) * ((\bigint)absNonMin(y)) <= (\bigint)Integer.MAX_VALUE;
+      @   requires ((\bigint)x) * ((\bigint)absNonMin(y)) >= (\bigint)Integer.MIN_VALUE;
+      @   assignable \nothing;
+      @   ensures (\let int y0 = \old(y);
+      @            int yAbs = absNonMin(y0);
+      @            int sum1 = x + bitLength(yAbs);
+      @            int factor0 = 1 + tailSum(yAbs);
+      @            int tF = tmpFactorVal(factor0);
+      @            int denom = ((sum1 < 0) ? -sum1 : sum1) + tF;
+      @            int multi = x * yAbs;
+      @            \result == (multi / denom) * tF);
+      @*/
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            while (n > 0) {
+                /*@ maintaining n >= 0;
+                  @ maintaining n <= y;
+                  @ maintaining sum == x + bitLength(y) - bitLength(n);
+                  @ maintaining factor == 1 + tailSum(y) - tailSum(n);
+                  @ decreasing n;
+                  @*/
+                sum = sum + 1;
+                n = n / 2;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            while (n > 0) {
+                /*@ maintaining n >= 0;
+                  @ maintaining n == 0;
+                  @ maintaining sum == x;
+                  @ maintaining factor == 1;
+                  @ decreasing n;
+                  @*/
+                sum = sum - 1;
+                n = n / 2;
+                factor += n;
+            }
+        }
+        int tmpFactor = 1;
+        while(factor > 10){
+            /*@ maintaining tmpFactor >= 1;
+              @ maintaining factor >= 0;
+              @ decreasing factor;
+              @*/
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        if(sum < 0){
+            sum = sum * -1;
+        }
+        sum = sum + tmpFactor;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+==============================
+tmp/MultiPower2Ratio.java:31: error: '.class' expected
+      @            int yAbs = absNonMin(y0);
+                       ^
+tmp/MultiPower2Ratio.java:32: error: Method specs may not precede a variable declaration
+      @            int sum1 = x + bitLength(yAbs);
+                       ^
+tmp/MultiPower2Ratio.java:37: error: Token \result is not a type
+      @            \result == (multi / denom) * tF);
+                   ^
+tmp/MultiPower2Ratio.java:37: error: ';' expected
+      @            \result == (multi / denom) * tF);
+                          ^
+tmp/MultiPower2Ratio.java:37: error: <identifier> expected
+      @            \result == (multi / denom) * tF);
+                                    ^
+tmp/MultiPower2Ratio.java:37: error: <identifier> expected
+      @            \result == (multi / denom) * tF);
+                                            ^
+tmp/MultiPower2Ratio.java:37: error: <identifier> expected
+      @            \result == (multi / denom) * tF);
+                                                  ^
+tmp/MultiPower2Ratio.java:49: error: Loop specifications must immediately precede a loop statement
+                /*@ maintaining n >= 0;
+                    ^
+tmp/MultiPower2Ratio.java:62: error: Loop specifications must immediately precede a loop statement
+                /*@ maintaining n >= 0;
+                    ^
+tmp/MultiPower2Ratio.java:75: error: Loop specifications must immediately precede a loop statement
+            /*@ maintaining tmpFactor >= 1;
+                ^
+10 errors
+
+==============================
+public class MultiPower2Ratio {
+
+    /*@ public pure model static int absNonMin(int v) {
+      @     return (v < 0) ? -v : v;
+      @ }
+      @*/
+
+    /*@ public pure model static int bitLength(int n) {
+      @     return (n <= 0) ? 0 : 1 + bitLength(n / 2);
+      @ }
+      @*/
+
+    /*@ public pure model static int tailSum(int n) {
+      @     return (n <= 0) ? 0 : (n / 2) + tailSum(n / 2);
+      @ }
+      @*/
+
+    /*@ public pure model static int tmpFactorVal(int f) {
+      @     return (f <= 10) ? 1 : 1 + tmpFactorVal(f / 10);
+      @ }
+      @*/
+
+    /*@ public normal_behavior
+      @   requires x != Integer.MIN_VALUE;
+      @   requires y != Integer.MIN_VALUE;
+      @   requires absNonMin(y) <= Integer.MAX_VALUE - 1; // prevents factor overflow at y == Integer.MAX_VALUE
+      @   requires ((\bigint)x) * ((\bigint)absNonMin(y)) <= (\bigint)Integer.MAX_VALUE;
+      @   requires ((\bigint)x) * ((\bigint)absNonMin(y)) >= (\bigint)Integer.MIN_VALUE;
+      @   assignable \nothing;
+      @   ensures (\let int y0 = \old(y);
+      @            int yAbs = absNonMin(y0);
+      @            int sum1 = x + bitLength(yAbs);
+      @            int factor0 = 1 + tailSum(yAbs);
+      @            int tF = tmpFactorVal(factor0);
+      @            int denom = ((sum1 < 0) ? -sum1 : sum1) + tF;
+      @            int multi = x * yAbs;
+      @            \result == (multi / denom) * tF);
+      @*/
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            while (n > 0) {
+                /*@ maintaining n > 0;  
+                  @ maintaining n <= y;
+                  @ maintaining sum == x + bitLength(y) - bitLength(n);
+                  @ maintaining factor == 1 + tailSum(y) - tailSum(n);
+                  @ decreasing n;
+                  @*/
+                sum = sum + 1;
+                n = n / 2;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            while (n > 0) {
+                /*@ maintaining n > 0;  
+                  @ maintaining n == 0;
+                  @ maintaining sum == x;
+                  @ maintaining factor == 1;
+                  @ decreasing n;
+                  @*/
+                sum = sum - 1;
+                n = n / 2;
+                factor += n;
+            }
+        }
+        int tmpFactor = 1;
+        while(factor > 10){
+            /*@ maintaining tmpFactor > 1;  
+              @ maintaining factor >= 0;
+              @ decreasing factor;
+              @*/
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        if(sum < 0){
+            sum = sum * -1;
+        }
+        sum = sum + tmpFactor;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+
+==============================
+tmp/MultiPower2Ratio.java:31: error: '.class' expected
+      @            int yAbs = absNonMin(y0);
+                       ^
+tmp/MultiPower2Ratio.java:32: error: Method specs may not precede a variable declaration
+      @            int sum1 = x + bitLength(yAbs);
+                       ^
+tmp/MultiPower2Ratio.java:37: error: Token \result is not a type
+      @            \result == (multi / denom) * tF);
+                   ^
+tmp/MultiPower2Ratio.java:37: error: ';' expected
+      @            \result == (multi / denom) * tF);
+                          ^
+tmp/MultiPower2Ratio.java:37: error: <identifier> expected
+      @            \result == (multi / denom) * tF);
+                                    ^
+tmp/MultiPower2Ratio.java:37: error: <identifier> expected
+      @            \result == (multi / denom) * tF);
+                                            ^
+tmp/MultiPower2Ratio.java:37: error: <identifier> expected
+      @            \result == (multi / denom) * tF);
+                                                  ^
+tmp/MultiPower2Ratio.java:49: error: Loop specifications must immediately precede a loop statement
+                /*@ maintaining n > 0;  
+                    ^
+tmp/MultiPower2Ratio.java:62: error: Loop specifications must immediately precede a loop statement
+                /*@ maintaining n > 0;  
+                    ^
+tmp/MultiPower2Ratio.java:75: error: Loop specifications must immediately precede a loop statement
+            /*@ maintaining tmpFactor > 1;  
+                ^
+10 errors
+
+==============================

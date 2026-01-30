@@ -1,0 +1,36 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class PassPillowBranch_Mutant1 {
+ // Note: This source preserves the public API and adds commentary only.
+ // The core logic computes a small range value from time and n.
+ // No changes to method signature, imports, or control flow beyond comments.
+ // The implementation uses modulo and a simple conditional expression.
+ // The following block keeps behavior deterministic for testing purposes.
+    public static int passPillow(int n, int time) {
+        time = time % (n + 1) * 2; // changed subtraction to addition
+        if (time < n) {
+            return time + 1;
+        }
+        return n * 2 - time - 1;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: n == -1
+D1: Exception
+
+T2: n != -1 && (time % (n + 1)) * 2 < n
+D2: return_value == (time % (n + 1)) * 2 + 1
+
+T3: n != -1 && (time % (n + 1)) * 2 >= n
+D3: return_value == n * 2 - (time % (n + 1)) * 2 - 1
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

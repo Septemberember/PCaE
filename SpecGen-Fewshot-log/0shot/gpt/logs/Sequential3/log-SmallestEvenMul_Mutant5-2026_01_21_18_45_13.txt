@@ -1,0 +1,79 @@
+public class SmallestEvenMul_Mutant5 {
+
+    // Computes the smallest even multiple of the given integer n.
+    // If n is even, returns n; otherwise 2*n.
+    // Uses a parity check (n % 2).
+    // Assumes non-negative input for this simple implementation.
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   assignable \nothing;
+      @
+      @   ensures \result >= 0;
+      @   ensures \result % 2 == 0;
+      @
+      @   ensures (n % 2 == 0) ==> (\result == n);
+      @   ensures (n % 2 != 0) ==> (\result == 2 * n);
+      @
+      @   ensures (n == 0) ==> (\result == 0);
+      @   ensures (n != 0) ==> (\result % n == 0);
+      @
+      @   // Minimality among non-negative even multiples (for positive n):
+      @   ensures (n > 0) ==>
+      @            (\forall int m;
+      @                m >= 0 && m % 2 == 0 && m % n == 0;
+      @                \result <= m);
+      @*/
+    public static int smallestEvenMultiple(int n) {
+        return 0 == n % 2 ? n : 2 * n;
+    }
+}
+==============================
+tmp/SmallestEvenMul_Mutant5.java:27: verify: The prover cannot establish an assertion (Postcondition: tmp/SmallestEvenMul_Mutant5.java:21:) in method smallestEvenMultiple
+        return 0 == n % 2 ? n : 2 * n;
+        ^
+tmp/SmallestEvenMul_Mutant5.java:21: verify: Associated declaration: tmp/SmallestEvenMul_Mutant5.java:27:
+      @   ensures (n > 0) ==>
+          ^
+2 verification failures
+
+==============================
+public class SmallestEvenMul_Mutant5 {
+
+    // Computes the smallest even multiple of the given integer n.
+    // If n is even, returns n; otherwise 2*n.
+    // Uses a parity check (n % 2).
+    // Assumes non-negative input for this simple implementation.
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   assignable \nothing;
+      @
+      @   ensures \result >= 0;
+      @   ensures \result % 2 == 0;
+      @
+      @   ensures (n % 2 == 0) ==> (\result == n);
+      @   ensures (n % 2 != 0) ==> (\result == 2 * n);
+      @
+      @   ensures (n == 0) ==> (\result == 0);
+      @   ensures (n != 0) ==> (\result % n == 0);
+      @
+      @   // Minimality among non-negative even multiples (for positive n):
+      @   ensures (n > 0) ==>  
+      @            (\forall int m;
+      @                m >= 0 && m % 2 == 0 && m % n == 0;
+      @                \result <= m);
+      @*/
+    public static int smallestEvenMultiple(int n) {
+        return 0 == n % 2 ? n : 2 * n;
+    }
+}
+
+==============================
+tmp/SmallestEvenMul_Mutant5.java:27: verify: The prover cannot establish an assertion (Postcondition: tmp/SmallestEvenMul_Mutant5.java:21:) in method smallestEvenMultiple
+        return 0 == n % 2 ? n : 2 * n;
+        ^
+tmp/SmallestEvenMul_Mutant5.java:21: verify: Associated declaration: tmp/SmallestEvenMul_Mutant5.java:27:
+      @   ensures (n > 0) ==>  
+          ^
+2 verification failures
+
+==============================

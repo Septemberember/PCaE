@@ -1,0 +1,90 @@
+public class TemperatureConverter {
+    //@ spec_public
+    public static int convertTemperature(int celsius, int base) {
+        //@ spec_public
+        int lookupTable[] = new int[8];
+        //@ spec_public
+        int MAX_TEMP = 40;
+        //@ spec_public
+        int MIN_TEMP = 0;
+        
+        //@ spec_public
+        int index = 0;
+
+        /*@ requires true;
+          @ ensures celsius < MIN_TEMP ==> celsius == MIN_TEMP;
+          @ ensures celsius < MIN_TEMP ==> base == \old(base) + MIN_TEMP;
+          @ ensures celsius >= MIN_TEMP ==> base == \old(base) - MIN_TEMP;
+          @*/
+        if (celsius < MIN_TEMP) {
+            celsius = MIN_TEMP;
+            base = base + MIN_TEMP;
+        }else{
+            base = base - MIN_TEMP;
+        }
+
+        /*@ requires true;
+          @ ensures base > MAX_TEMP ==> base == MIN_TEMP + (MAX_TEMP - MIN_TEMP) / 2;
+          @ ensures base <= MAX_TEMP ==> base == \old(base);
+          @*/
+        if(base > MAX_TEMP) {
+            base = MIN_TEMP + (MAX_TEMP - MIN_TEMP) / 2;
+        }
+        int tmp = celsius;
+        /*@ maintaining tmp >= 0;
+          @ maintaining base >= \old(base);
+          @ decreases tmp;
+          @*/
+        while(tmp / 10 > 0){
+            tmp = tmp / 10;
+            base = base + 1;
+        }
+
+        //@ ensures \result == celsius * 9 / 5 + 32;
+        int fahrenheit = celsius * 9 / 5 + 32;
+
+        /*@ requires true;
+          @ ensures (fahrenheit <= 104 && fahrenheit > 14) ==> 
+          @         index == (celsius + base) / 5;
+          @ ensures !(fahrenheit <= 104 && fahrenheit > 14) ==> 
+          @         index == celsius % 8;
+          @*/
+        if (fahrenheit <= 104 && fahrenheit > 14) {
+            index = (celsius + base) / 5;
+        } else {
+            index = celsius % 8;
+        }
+        /*@ requires true;
+          @ ensures index >= 0;
+          @*/
+        if(index < 0){
+            index = -index;
+        }
+        
+        /*@ requires index >= 0 && index < lookupTable.length;
+          @ ensures lookupTable[index] == fahrenheit + base;
+          @*/
+        lookupTable[index] = fahrenheit + base;
+        
+        /*@ ensures \result == fahrenheit;
+          @ ensures \result == celsius * 9 / 5 + 32;
+          @*/
+        return fahrenheit;
+    }
+}
+==============================
+tmp/TemperatureConverter.java:4: error: This JML modifier is not allowed for a local variable declaration
+        //@ spec_public
+            ^
+tmp/TemperatureConverter.java:6: error: This JML modifier is not allowed for a local variable declaration
+        //@ spec_public
+            ^
+tmp/TemperatureConverter.java:8: error: This JML modifier is not allowed for a local variable declaration
+        //@ spec_public
+            ^
+tmp/TemperatureConverter.java:11: error: This JML modifier is not allowed for a local variable declaration
+        //@ spec_public
+            ^
+4 errors
+
+==============================

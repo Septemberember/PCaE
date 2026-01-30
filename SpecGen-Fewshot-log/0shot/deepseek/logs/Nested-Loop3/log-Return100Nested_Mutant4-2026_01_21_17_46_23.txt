@@ -1,0 +1,77 @@
+// Demo: small method returning 100 through nested loops
+public class Return100Nested_Mutant4 {
+    // Execute a simple accumulation to reach 100 using nested loops
+    /*@ ensures \result == 100;
+      @*/
+    public static int return100 () {
+        // Start with initial value
+        int res = 1;
+        // Outer loop iterates ten times
+        /*@ maintaining 0 <= i && i <= 10;
+          @ maintaining res == 1 + (i * 10);
+          @ decreasing 10 - i;
+          @*/
+        for(int i = 0; i < 10; i++) {
+            // Inner loop iterates ten times for each outer iteration
+            /*@ maintaining 0 <= j && j <= 10;
+              @ maintaining res == 1 + (i * 10) + j;
+              @ decreasing 10 - j;
+              @*/
+            for(int j = 0; j < 10; j++) {
+                // Increment result to reflect total count
+                res = res + 1;
+            }
+        }
+        // Return the accumulated value
+        return res;
+    }
+}
+==============================
+tmp/Return100Nested_Mutant4.java:26: verify: The prover cannot establish an assertion (Postcondition: tmp/Return100Nested_Mutant4.java:4:) in method return100
+        return res;
+        ^
+tmp/Return100Nested_Mutant4.java:4: verify: Associated declaration: tmp/Return100Nested_Mutant4.java:26:
+    /*@ ensures \result == 100;
+        ^
+2 verification failures
+
+==============================
+// Demo: small method returning 100 through nested loops
+public class Return100Nested_Mutant4 {
+    // Execute a simple accumulation to reach 100 using nested loops
+    /*@ ensures \result == 100;  
+      @*/
+    public static int return100 () {
+        // Start with initial value
+        int res = 1;
+        // Outer loop iterates ten times
+        /*@ maintaining 0 <= i && i <= 10;
+          @ maintaining res == 1 + (i * 10);
+          @ decreasing 10 - i;
+          @*/
+        for(int i = 0; i < 10; i++) {
+            // Inner loop iterates ten times for each outer iteration
+            /*@ maintaining 0 <= j && j <= 10;
+              @ maintaining res == 1 + (i * 10) + j;
+              @ decreasing 10 - j;
+              @*/
+            for(int j = 0; j < 10; j++) {
+                // Increment result to reflect total count
+                res = res + 1;
+            }
+        }
+        // Return the accumulated value
+        return res;
+    }
+}
+
+==============================
+tmp/Return100Nested_Mutant4.java:26: verify: The prover cannot establish an assertion (Postcondition: tmp/Return100Nested_Mutant4.java:4:) in method return100
+        return res;
+        ^
+tmp/Return100Nested_Mutant4.java:4: verify: Associated declaration: tmp/Return100Nested_Mutant4.java:26:
+    /*@ ensures \result == 100;  
+        ^
+2 verification failures
+
+==============================

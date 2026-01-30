@@ -1,0 +1,51 @@
+/**** Simple parity utility for DivisorGame_Mutant4. */
+/*@ public class invariant true; @*/
+public class DivisorGame_Mutant4 {
+    // Entry point: computes parity of n
+    /*@
+      @ public normal_behavior
+      @   requires n >= 0;
+      @   assignable \nothing;
+      @   ensures \result == (n % 2);
+      @   ensures (\result == 0) <==> (n % 2 == 0);
+      @   ensures (\result == 1) <==> (n % 2 != 0);
+      @   ensures \result == 0 || \result == 1;
+      @*/
+    public static int divisorGame(int n) {
+        // Parity: 0 if even, 1 if odd
+        return n % 2;
+    }
+}
+==============================
+tmp/DivisorGame_Mutant4.java:2: error: '{' expected
+/*@ public class invariant true; @*/
+                          ^
+1 error
+
+==============================
+/**** Simple parity utility for DivisorGame_Mutant4. */
+/*@ public class invariant true; @*/  
+public class DivisorGame_Mutant4 {
+    // Entry point: computes parity of n
+    /*@
+      @ public normal_behavior
+      @   requires n >= 0;
+      @   assignable \nothing;
+      @   ensures \result == (n % 2);
+      @   ensures (\result == 0) <==> (n % 2 == 0);
+      @   ensures (\result == 1) <==> (n % 2 != 0);
+      @   ensures \result == 0 || \result == 1;
+      @*/
+    public static int divisorGame(int n) {
+        // Parity: 0 if even, 1 if odd
+        return n % 2;
+    }
+}
+
+==============================
+tmp/DivisorGame_Mutant4.java:2: error: '{' expected
+/*@ public class invariant true; @*/  
+                          ^
+1 error
+
+==============================

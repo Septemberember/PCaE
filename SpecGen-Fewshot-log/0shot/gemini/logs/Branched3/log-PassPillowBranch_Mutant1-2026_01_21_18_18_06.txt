@@ -1,0 +1,27 @@
+public class PassPillowBranch_Mutant1 {
+ // Note: This source preserves the public API and adds commentary only.
+ // The core logic computes a small range value from time and n.
+ // No changes to method signature, imports, or control flow beyond comments.
+ // The implementation uses modulo and a simple conditional expression.
+ // The following block keeps behavior deterministic for testing purposes.
+    
+    /*@ public normal_behavior
+      @   requires n + 1 != 0;
+      @   ensures ((\old(time) % (n + 1) * 2) < n) ==> (\result == (\old(time) % (n + 1) * 2) + 1);
+      @   ensures ((\old(time) % (n + 1) * 2) >= n) ==> (\result == n * 2 - (\old(time) % (n + 1) * 2) - 1);
+      @*/
+    public static int passPillow(int n, int time) {
+        time = time % (n + 1) * 2; // changed subtraction to addition
+        if (time < n) {
+            return time + 1;
+        }
+        return n * 2 - time - 1;
+    }
+}
+==============================
+tmp/PassPillowBranch_Mutant1.java:13: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static int passPillow(int n, int time) {
+                      ^
+1 verification failure
+
+==============================

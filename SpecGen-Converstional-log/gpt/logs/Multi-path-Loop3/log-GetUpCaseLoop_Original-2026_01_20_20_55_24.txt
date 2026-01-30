@@ -1,0 +1,109 @@
+public class GetUpCaseLoop {
+
+    // This utility maps a..f to their corresponding uppercase characters.
+    // It returns 0 for values outside the handled range.
+    // The mapping is achieved by a small downward scan from 'F'.
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   ensures (c < 'a' || c > 'f') ==> \result == 0;
+      @   ensures ('a' <= c && c <= 'f') ==> \result == (char)(c - 'a' + 'A');
+      @*/
+    public static char getUpCase(char c) {
+        // Validate input: only lowercase a..f are considered
+        // Return 0 for any other input value
+        if(c < 'a' || c > 'f') {
+            return 0;
+        }
+        // Start with the uppercase boundary corresponding to 'F'
+        char t = 'F';
+        // Move downward until reaching the target uppercase letter
+        //@ maintaining 'A' <= t && t <= 'F';
+        //@ maintaining t >= (char)(c - 'a' + 'A');
+        //@ decreases t;
+        while(t >= 'A' && t != c - 'a' + 'A') {
+            t--;
+        }
+        // t now holds the mapped uppercase character
+        return t;
+    }
+}
+==============================
+tmp/GetUpCaseLoop_Original.java:1: error: class GetUpCaseLoop is public, should be declared in a file named GetUpCaseLoop.java
+public class GetUpCaseLoop {
+       ^
+1 error
+
+==============================
+// NOTE: Because this class is declared public, the source file must be named GetUpCaseLoop.java
+public class GetUpCaseLoop {
+
+    // This utility maps a..f to their corresponding uppercase characters.
+    // It returns 0 for values outside the handled range.
+    // The mapping is achieved by a small downward scan from 'F'.
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   ensures (c < 'a' || c > 'f') ==> \result == 0;
+      @   ensures ('a' <= c && c <= 'f') ==> \result == (char)(c - 'a' + 'A');
+      @*/
+    public static char getUpCase(char c) {
+        // Validate input: only lowercase a..f are considered
+        // Return 0 for any other input value
+        if(c < 'a' || c > 'f') {
+            return 0;
+        }
+        // Start with the uppercase boundary corresponding to 'F'
+        char t = 'F';
+        //@ ghost char target = (char)(c - 'a' + 'A');
+        // Move downward until reaching the target uppercase letter
+        //@ maintaining 'A' <= t && t <= 'F';
+        //@ maintaining target == (char)(c - 'a' + 'A');
+        //@ maintaining t >= target;
+        //@ decreases (int)t - (int)target;
+        while(t >= 'A' && t != c - 'a' + 'A') {
+            t--;
+        }
+        // t now holds the mapped uppercase character
+        return t;
+    }
+}
+==============================
+tmp/GetUpCaseLoop_Original.java:2: error: class GetUpCaseLoop is public, should be declared in a file named GetUpCaseLoop.java
+public class GetUpCaseLoop {
+       ^
+1 error
+
+==============================
+class GetUpCaseLoop {
+
+    // This utility maps a..f to their corresponding uppercase characters.
+    // It returns 0 for values outside the handled range.
+    // The mapping is achieved by a small downward scan from 'F'.
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   ensures (c < 'a' || c > 'f') ==> \result == 0;
+      @   ensures ('a' <= c && c <= 'f') ==> \result == (char)(c - 'a' + 'A');
+      @*/
+    public static char getUpCase(char c) {
+        // Validate input: only lowercase a..f are considered
+        // Return 0 for any other input value
+        if(c < 'a' || c > 'f') {
+            return 0;
+        }
+        // Start with the uppercase boundary corresponding to 'F'
+        char t = 'F';
+        //@ ghost char target = (char)(c - 'a' + 'A');
+        // Move downward until reaching the target uppercase letter
+        //@ maintaining 'A' <= t && t <= 'F';
+        //@ maintaining target == (char)(c - 'a' + 'A');
+        //@ maintaining t >= target;
+        //@ decreases (int)t - (int)target;
+        while(t >= 'A' && t != c - 'a' + 'A') {
+            t--;
+        }
+        // t now holds the mapped uppercase character
+        return t;
+    }
+}
+==============================
+
+==============================

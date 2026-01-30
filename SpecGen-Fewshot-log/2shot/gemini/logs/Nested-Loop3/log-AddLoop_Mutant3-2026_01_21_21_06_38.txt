@@ -1,0 +1,37 @@
+public class AddLoop_Mutant3 {
+    // Utility: compute sum using loop-based accumulation
+    // The method demonstrates two branches dependent on y
+    //@ requires y > 0 ==> x + 2L * y <= Integer.MAX_VALUE;
+    //@ requires y <= 0 ==> x + y >= Integer.MIN_VALUE;
+    //@ ensures (y > 0 ==> \result == x + 2 * y) && (y <= 0 ==> \result == x + y);
+    public static int AddLoop(int x, int y) {
+        int sum = x;
+        // Start with the provided x as the base and update in the loop
+        // For y > 0, each iteration increases sum by 2
+        if (y > 0) {
+            int n = y;
+            // Iterate n times, incrementing sum by 2 per iteration
+            //@ maintaining n >= 0 && n <= y;
+            //@ maintaining sum == x + 2 * (y - n);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 2;
+                n = n - 1;
+            }
+        } else {
+            int n = -y;
+            // Iterate n times, decrementing sum by 1 per iteration
+            //@ maintaining n >= 0 && n <= -y;
+            //@ maintaining sum == x - ((-y) - n);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+            }
+        }
+        return sum;
+    }
+}
+==============================
+
+==============================

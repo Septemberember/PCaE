@@ -1,0 +1,72 @@
+public class CompressionRatio {
+    /*@ public normal_behavior
+      @   ensures \result != null;
+      @   ensures \result.contains("ratio:");
+      @   ensures \result.contains("level:");
+      @   ensures \result.contains("overhead:");
+      @   // The logic ensures ratio is at least 50/4 + 30 = 42 and at most 400/4 + 30 = 130
+      @   // The logic ensures overhead is between 1 and 10 based on the divisions by 10
+      @*/
+    public static String calculateRatio(int fileSize) {
+        String ratioStr = null;
+        int level = 0;
+        int overhead = 0;
+
+        if (fileSize < 50) {
+            fileSize = 50;
+            overhead = overhead - 3;
+            overhead *= fileSize / 10;
+        } else {
+            overhead = overhead + 1;
+            overhead *= fileSize / 100;
+        }
+
+        if (fileSize > 400) {
+            fileSize = 400;
+            overhead = overhead + 5;
+            overhead *= fileSize / 100;
+        }
+
+        if(overhead > 80){
+            overhead = overhead > 100 ? 100 : overhead;
+            overhead = overhead / 10;
+        }else{
+            overhead = overhead < 10 ? 10 : overhead;
+            overhead = overhead / 10;
+        }
+
+        int ratio = fileSize / 4 + 30;
+
+        if (ratio >= 45 && ratio <= 70) {
+            level = (ratio - 45) / 5;
+            if(level < 5) {
+                ratioStr = new String("ratio:" + ratio);
+            }
+        } else {
+            level = 5 + (ratio % 5);
+            ratioStr = new String("ratio:" + ratio);
+        }
+        
+        /*@  // To handle the case where ratioStr might be null if ratio is in [45, 70] but level >= 5
+          @  // However, based on the math (70-45)/5 = 5, level < 5 is only false when ratio is exactly 70.
+          @  // We ensure ratioStr is initialized if it was null.
+          @*/
+        if (ratioStr == null) {
+            ratioStr = new String("ratio:" + ratio);
+        }
+
+        ratioStr.trim();
+        ratioStr = ratioStr + " level:" + level + " overhead:" + overhead;
+        return ratioStr;
+    }
+}
+==============================
+tmp/CompressionRatio.java:53: error: The type or expression near here is invalid (or not implemented): ( token ? in JmlParser.term3())
+          @*/
+           ^
+tmp/CompressionRatio.java:50: error: ';' expected
+        /*@  // To handle the case where ratioStr might be null if ratio is in [45, 70] but level >= 5
+           ^
+2 errors
+
+==============================

@@ -1,0 +1,41 @@
+public class SubLoop_Mutant1 {
+    // SubLoop_Mutant1 demonstrates a simple accumulation pattern.
+
+    //@ requires (y > 0 ==> x + y <= Integer.MAX_VALUE) && (y <= 0 ==> x - y <= Integer.MAX_VALUE);
+    //@ ensures (y > 0) ==> (\result == x + y);
+    //@ ensures (y <= 0) ==> (\result == x - y);
+    public static int subLoop(int x, int y) {
+        int sum = x;
+
+        // If y is positive, count up from y to 0, adding to sum.
+        if (y > 0) {
+            int n = y;
+            //@ maintaining 0 <= n && n <= y;
+            //@ maintaining sum == x + (y - n);
+            //@ decreases n;
+            // Decrement n while accumulating into sum.
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+            }
+
+        } else {
+            // For non-positive y, convert to positive magnitude and accumulate.
+            int n = -y;
+            //@ maintaining 0 <= n && n <= -y;
+            //@ maintaining sum == x + (-y - n);
+            //@ decreases n;
+            // Decrement n until it reaches zero, incrementing sum similarly.
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+            }
+        }
+
+        // Return the cumulative sum after both branches.
+        return sum;
+    }
+}
+==============================
+
+==============================

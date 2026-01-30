@@ -1,0 +1,234 @@
+public class GyroHealthCheck_Original {
+    // GyroHealthCheck: compare axis differences and flag high variation
+
+    /*@ requires ((\bigint)x - (\bigint)y) >= Integer.MIN_VALUE && ((\bigint)x - (\bigint)y) <= Integer.MAX_VALUE;
+      @ requires ((\bigint)y - (\bigint)z) >= Integer.MIN_VALUE && ((\bigint)y - (\bigint)z) <= Integer.MAX_VALUE;
+      @ requires ((\bigint)x - (\bigint)z) >= Integer.MIN_VALUE && ((\bigint)x - (\bigint)z) <= Integer.MAX_VALUE;
+      @ ensures \result == 0 || \result == 1;
+      @ ensures \result == 1 <==>
+      @   (   ( ((\bigint)x - (\bigint)y) >= 0 ? ((\bigint)x - (\bigint)y) : -((\bigint)x - (\bigint)y)) > 10 )
+      @    || ( ((\bigint)y - (\bigint)z) >= 0 ? ((\bigint)y - (\bigint)z) : -((\bigint)y - (\bigint)z)) > 10 )
+      @    || ( ((\bigint)x - (\bigint)z) >= 0 ? ((\bigint)x - (\bigint)z) : -((\bigint)x - (\bigint)z)) > 10 )
+      @   );
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // Absolute difference for X and Y
+        if (diffXY < 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // Absolute difference for Y and Z
+        if (diffYZ < 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // Absolute difference for X and Z
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        int alarm = 0;
+        // Trigger alarm if any pairwise difference exceeds threshold
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        return alarm;
+        // End of gyroHealthCheck calculations
+    }
+    // End of GyroHealthCheck_Original class
+}
+==============================
+tmp/GyroHealthCheck_Original.java:10: error: Incorrectly formed or terminated ensures statement near here
+      @    || ( ((\bigint)y - (\bigint)z) >= 0 ? ((\bigint)y - (\bigint)z) : -((\bigint)y - (\bigint)z)) > 10 )
+                                                                                                              ^
+1 error
+
+==============================
+public class GyroHealthCheck_Original {
+    // GyroHealthCheck: compare axis differences and flag high variation
+
+    /*@ requires ((\bigint)x - (\bigint)y) >= Integer.MIN_VALUE && ((\bigint)x - (\bigint)y) <= Integer.MAX_VALUE;
+      @ requires ((\bigint)y - (\bigint)z) >= Integer.MIN_VALUE && ((\bigint)y - (\bigint)z) <= Integer.MAX_VALUE;
+      @ requires ((\bigint)x - (\bigint)z) >= Integer.MIN_VALUE && ((\bigint)x - (\bigint)z) <= Integer.MAX_VALUE;
+      @ ensures (\result == 0) || (\result == 1);
+      @ ensures (\result == 1) <==>
+      @   (   ( (((\bigint)x - (\bigint)y) >= 0 ? ((\bigint)x - (\bigint)y) : -((\bigint)x - (\bigint)y)) > 10) )
+      @    || ( (((\bigint)y - (\bigint)z) >= 0 ? ((\bigint)y - (\bigint)z) : -((\bigint)y - (\bigint)z)) > 10) )
+      @    || ( (((\bigint)x - (\bigint)z) >= 0 ? ((\bigint)x - (\bigint)z) : -((\bigint)x - (\bigint)z)) > 10) )
+      @   );
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // Absolute difference for X and Y
+        if (diffXY < 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // Absolute difference for Y and Z
+        if (diffYZ < 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // Absolute difference for X and Z
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        int alarm = 0;
+        // Trigger alarm if any pairwise difference exceeds threshold
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        return alarm;
+        // End of gyroHealthCheck calculations
+    }
+    // End of GyroHealthCheck_Original class
+}
+==============================
+tmp/GyroHealthCheck_Original.java:10: error: Incorrectly formed or terminated ensures statement near here
+      @    || ( (((\bigint)y - (\bigint)z) >= 0 ? ((\bigint)y - (\bigint)z) : -((\bigint)y - (\bigint)z)) > 10) )
+                                                                                                                ^
+1 error
+
+==============================
+public class GyroHealthCheck_Original {
+    // GyroHealthCheck: compare axis differences and flag high variation
+    /*@ requires ((\bigint)x - (\bigint)y) >= Integer.MIN_VALUE && ((\bigint)x - (\bigint)y) <= Integer.MAX_VALUE;
+      @ requires ((\bigint)y - (\bigint)z) >= Integer.MIN_VALUE && ((\bigint)y - (\bigint)z) <= Integer.MAX_VALUE;
+      @ requires ((\bigint)x - (\bigint)z) >= Integer.MIN_VALUE && ((\bigint)x - (\bigint)z) <= Integer.MAX_VALUE;
+      @ ensures (\result == 0) || (\result == 1);
+      @ ensures (\result == 1) <==>
+      @   ( (\abs((\bigint)x - (\bigint)y) > 10)
+      @   || (\abs((\bigint)y - (\bigint)z) > 10)
+      @   || (\abs((\bigint)x - (\bigint)z) > 10) );
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // Absolute difference for X and Y
+        if (diffXY < 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // Absolute difference for Y and Z
+        if (diffYZ < 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // Absolute difference for X and Z
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        int alarm = 0;
+        // Trigger alarm if any pairwise difference exceeds threshold
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        return alarm;
+        // End of gyroHealthCheck calculations
+    }
+    // End of GyroHealthCheck_Original class
+}
+==============================
+tmp/GyroHealthCheck_Original.java:8: error: This backslash token is unknown: \abs
+      @   ( (\abs((\bigint)x - (\bigint)y) > 10)
+             ^
+tmp/GyroHealthCheck_Original.java:9: error: This backslash token is unknown: \abs
+      @   || (\abs((\bigint)y - (\bigint)z) > 10)
+              ^
+tmp/GyroHealthCheck_Original.java:10: error: This backslash token is unknown: \abs
+      @   || (\abs((\bigint)x - (\bigint)z) > 10) );
+              ^
+3 errors
+
+==============================
+public class GyroHealthCheck_Original {
+    // GyroHealthCheck: compare axis differences and flag high variation
+
+    /*@ requires (((\bigint)x) - ((\bigint)y)) >= Integer.MIN_VALUE && (((\bigint)x) - ((\bigint)y)) <= Integer.MAX_VALUE;
+      @ requires (((\bigint)y) - ((\bigint)z)) >= Integer.MIN_VALUE && (((\bigint)y) - ((\bigint)z)) <= Integer.MAX_VALUE;
+      @ requires (((\bigint)x) - ((\bigint)z)) >= Integer.MIN_VALUE && (((\bigint)x) - ((\bigint)z)) <= Integer.MAX_VALUE;
+      @ ensures (\result == 0) || (\result == 1);
+      @ ensures (\result == 1) <==>
+      @   (   ((((\bigint)x) - ((\bigint)y)) > 10) || ((((\bigint)x) - ((\bigint)y)) < -10))
+      @    || ((((\bigint)y) - ((\bigint)z)) > 10) || ((((\bigint)y) - ((\bigint)z)) < -10))
+      @    || ((((\bigint)x) - ((\bigint)z)) > 10) || ((((\bigint)x) - ((\bigint)z)) < -10))
+      @   );
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // Absolute difference for X and Y
+        if (diffXY < 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // Absolute difference for Y and Z
+        if (diffYZ < 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // Absolute difference for X and Z
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        int alarm = 0;
+        // Trigger alarm if any pairwise difference exceeds threshold
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        return alarm;
+        // End of gyroHealthCheck calculations
+    }
+    // End of GyroHealthCheck_Original class
+}
+==============================
+tmp/GyroHealthCheck_Original.java:10: error: Incorrectly formed or terminated ensures statement near here
+      @    || ((((\bigint)y) - ((\bigint)z)) > 10) || ((((\bigint)y) - ((\bigint)z)) < -10))
+                                                                                           ^
+1 error
+
+==============================
+public class GyroHealthCheck_Original {
+    // GyroHealthCheck: compare axis differences and flag high variation
+
+    /*@ requires ((\bigint)x - (\bigint)y) >= Integer.MIN_VALUE && ((\bigint)x - (\bigint)y) <= Integer.MAX_VALUE;
+      @ requires ((\bigint)y - (\bigint)z) >= Integer.MIN_VALUE && ((\bigint)y - (\bigint)z) <= Integer.MAX_VALUE;
+      @ requires ((\bigint)x - (\bigint)z) >= Integer.MIN_VALUE && ((\bigint)x - (\bigint)z) <= Integer.MAX_VALUE;
+      @ ensures (\result == 0) || (\result == 1);
+      @ ensures (\result == 1) <==>
+      @   ( ((((\bigint)x - (\bigint)y) > 10) || ((\bigint)x - (\bigint)y) < -10))
+      @  || ((((\bigint)y - (\bigint)z) > 10) || ((\bigint)y - (\bigint)z) < -10))
+      @  || ((((\bigint)x - (\bigint)z) > 10) || ((\bigint)x - (\bigint)z) < -10)) );
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // Absolute difference for X and Y
+        if (diffXY < 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // Absolute difference for Y and Z
+        if (diffYZ < 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // Absolute difference for X and Z
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        int alarm = 0;
+        // Trigger alarm if any pairwise difference exceeds threshold
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        return alarm;
+        // End of gyroHealthCheck calculations
+    }
+    // End of GyroHealthCheck_Original class
+}
+==============================
+tmp/GyroHealthCheck_Original.java:10: error: Incorrectly formed or terminated ensures statement near here
+      @  || ((((\bigint)y - (\bigint)z) > 10) || ((\bigint)y - (\bigint)z) < -10))
+                                                                                 ^
+1 error
+
+==============================
+public class GyroHealthCheck_Original {
+
+    /*@ requires ((\bigint)x - (\bigint)y) >= Integer.MIN_VALUE && ((\bigint)x - (\bigint)y) <= Integer.MAX_VALUE;
+      @ requires ((\bigint)y - (\bigint)z) >= Integer.MIN_VALUE && ((\bigint)y - (\bigint)z) <= Integer.MAX_VALUE;
+      @ requires ((\bigint)x - (\bigint)z) >= Integer.MIN_VALUE && ((\bigint)x - (\bigint)z) <= Integer.MAX_VALUE;
+      @ requires ((\bigint)x - (\bigint)y) != Integer.MIN_VALUE;
+      @ requires ((\bigint)y - (\bigint)z) != Integer.MIN_VALUE;
+      @ requires ((\bigint)x - (\bigint)z) != Integer.MIN_VALUE;
+      @ ensures (\result == 0) || (\result == 1);
+      @ ensures (\result == 1) <==> ( (((\bigint)x - (\bigint)y) > 10) || (((\bigint)x - (\bigint)y) < (0-10)) || (((\bigint)y - (\bigint)z) > 10) || (((\bigint)y - (\bigint)z) < (0-10)) || (((\bigint)x - (\bigint)z) > 10) || (((\bigint)x - (\bigint)z) < (0-10)) );
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        if (diffXY < 0) diffXY = -diffXY;
+
+        int diffYZ = y - z;
+        if (diffYZ < 0) diffYZ = -diffYZ;
+
+        int diffXZ = x - z;
+        if (diffXZ < 0) diffXZ = -diffXZ;
+
+        int alarm = 0;
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        return alarm;
+    }
+}
+==============================
+
+==============================

@@ -1,0 +1,119 @@
+public class PerformanceRater {
+    /*@ 
+      @   // The implementation may dereference `performance` after setting it to null
+      @   // when `rating == 0` (i.e., when 120 <= sales <= 124). Exclude that range.
+      @   requires sales < 120 || sales >= 125;
+      @
+      @   // Case 1: early return for very large sales
+      @   ensures (sales > 2000 * 10) ==> (\result == sales + 2000 * 10);
+      @
+      @   // Case 2: early return for negative / too-small sales
+      @   ensures ((sales < 0 || sales < 120) && !(sales > 2000 * 10))
+      @           ==> (\result == 2000);
+      @
+      @   // Case 3: early return for sales above 10000 (but not exceeding the first early-return guard)
+      @   ensures (sales > 10000 && !(sales > 2000 * 10) && !(sales < 0 || sales < 120))
+      @           ==> (\result == 2000 + 800 + (sales - 10000) / 100);
+      @
+      @   // Case 4: remaining path (125 <= sales <= 10000)
+      @   ensures (sales >= 125 && sales <= 10000)
+      @           ==> (
+      @                 \result
+      @                 ==
+      @                 (
+      @                   (2000 +
+      @                     (
+      @                       // due to the "if (rating == 2) { ... } else { ... }" structure,
+      @                       // the final bonus equals 508 when rating==2, otherwise it is the else-branch bonus.
+      @                       ((sales / 125) == 2)
+      @                         ? (500 - ((100 - 64) * 10) / 3 + (64 * 2))
+      @                         : (
+      @                             (sales * 800) / 1000
+      @                             + ((((sales * 800) / 1000) > 1000) ? (64 * 5) : 0)
+      @                           )
+      @                     )
+      @                   )
+      @                   *
+      @                   (double)(
+      @                     (
+      @                       // factor = performance.length(), where performance == new String(String.valueOf((sales/125)*2) + 9)
+      @                       // so factor == length(String.valueOf((sales/125)*2) + "9"), and factor/2 is integer division
+      @                       ( (String.valueOf((sales / 125) * 2) + "9").length() ) / 2
+      @                     )
+      @                   )
+      @               );
+      @
+      @   // Overall: result is one of the case results above.
+      @   ensures \result == sales + 2000 * 10
+      @        || \result == 2000
+      @        || \result == 2000 + 800 + (sales - 10000) / 100
+      @        || (sales >= 125 && sales <= 10000);
+      @*/
+    public static double calculateBonus(int sales) {
+        int attendance = 64;
+        int bonusLevels[] = new int[4];
+        int factor = 0;
+        String performance = null;
+        bonusLevels[0] = 100;
+        bonusLevels[1] = 300;
+        bonusLevels[2] = 500;
+        bonusLevels[3] = 800;
+
+        int baseSalary = 2000;
+        int penalty = 0;
+        int rating = 0;
+
+        if(sales > baseSalary * 10){
+            return sales + baseSalary * 10;
+        }
+
+        if (sales < 0 || sales < 120) {
+            return baseSalary;
+        }
+
+        if (sales > 10000) {
+            return baseSalary + bonusLevels[3] + (sales - 10000) / 100;
+        }
+
+        rating = sales / 125;
+
+        performance = new String(String.valueOf(rating * 2) + 9);
+
+        if (attendance < 80) {
+            penalty = (100 - attendance) * 10;
+        }
+        int bonus = 0;
+        if (rating == 0) {
+            bonus = bonusLevels[0] - penalty;
+            bonus =  Math.max(bonus, 0);
+            performance = null;
+            System.out.println("bonus is " + bonus);
+        }
+        if (rating == 1) {
+            bonus = bonusLevels[1] - penalty / 2;
+            bonus =  bonus + (sales % 100);
+            System.out.println("bonus is " + bonus);
+        }
+        if (rating == 2) {
+            bonus = bonusLevels[2] - penalty / 3;
+            bonus = bonus + (attendance * 2);
+            System.out.println("bonus is " + bonus);
+        } else {
+            bonus = sales * bonusLevels[3] / 1000;
+            if (bonus > 1000) {
+                bonus = bonus + attendance * 5;
+            }
+            System.out.println("bonus is " + bonus);
+        }
+        factor = performance.length();
+
+        return (baseSalary + bonus) * (double)(factor / 2);
+    }
+}
+==============================
+tmp/PerformanceRater.java:44: error: ')' expected
+      @               );
+                       ^
+1 error
+
+==============================

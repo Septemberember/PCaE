@@ -1,0 +1,103 @@
+public class MyPower_Mutant5 {
+    // Utility: compute x raised to the power n using repeated multiplication
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   // Prevent arithmetic overflow for all intermediate powers and the final result
+      @   requires (\forall int k; 0 <= k && k <= n;
+      @               ((\bigint)Integer.MIN_VALUE) <= \pow((\bigint)x, k)
+      @            && \pow((\bigint)x, k) <= ((\bigint)Integer.MAX_VALUE));
+      @   requires ((\bigint)Integer.MIN_VALUE) <= (\pow((\bigint)x, n) - 1)
+      @        && (\pow((\bigint)x, n) - 1) <= ((\bigint)Integer.MAX_VALUE);
+      @   assignable \nothing;
+      @   ensures \result == (int)(\pow((\bigint)x, n) - 1);
+      @*/
+    public static int power(int x, int n) {
+        // Initialize result
+        int res = 1;
+        // Multiply x by itself n times
+        /*@ maintaining 0 <= i && i <= n;
+          @ maintaining res == (int)\pow((\bigint)x, i);
+          @ decreasing n - i;
+          @*/
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        // Subtract 1 from the final result to demonstrate post-processing
+        return res - 1;  // Subtract 1 from the result
+    }
+    // End of power method
+}
+==============================
+tmp/MyPower_Mutant5.java:7: error: This backslash token is unknown: \pow
+      @               ((\bigint)Integer.MIN_VALUE) <= \pow((\bigint)x, k)
+                                                      ^
+tmp/MyPower_Mutant5.java:8: error: This backslash token is unknown: \pow
+      @            && \pow((\bigint)x, k) <= ((\bigint)Integer.MAX_VALUE));
+                      ^
+tmp/MyPower_Mutant5.java:9: error: This backslash token is unknown: \pow
+      @   requires ((\bigint)Integer.MIN_VALUE) <= (\pow((\bigint)x, n) - 1)
+                                                    ^
+tmp/MyPower_Mutant5.java:10: error: This backslash token is unknown: \pow
+      @        && (\pow((\bigint)x, n) - 1) <= ((\bigint)Integer.MAX_VALUE);
+                   ^
+tmp/MyPower_Mutant5.java:12: error: This backslash token is unknown: \pow
+      @   ensures \result == (int)(\pow((\bigint)x, n) - 1);
+                                   ^
+tmp/MyPower_Mutant5.java:19: error: This backslash token is unknown: \pow
+          @ maintaining res == (int)\pow((\bigint)x, i);
+                                    ^
+6 errors
+
+==============================
+public class MyPower_Mutant5 {
+    // Utility: compute x raised to the power n using repeated multiplication
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   // Prevent arithmetic overflow for all intermediate powers and the final result
+      @   requires (\forall int k; 0 <= k && k <= n;
+      @               ((\bigint)Integer.MIN_VALUE) <= \pow((\bigint)x, k)
+      @            && \pow((\bigint)x, k) <= ((\bigint)Integer.MAX_VALUE));
+      @   requires ((\bigint)Integer.MIN_VALUE) <= (\pow((\bigint)x, n) - 1)
+      @        && (\pow((\bigint)x, n) - 1) <= ((\bigint)Integer.MAX_VALUE);
+      @   assignable \nothing;
+      @   ensures \result == (int)(\pow((\bigint)x, n) - 1);  
+      @*/
+    public static int power(int x, int n) {
+        // Initialize result
+        int res = 1;
+        // Multiply x by itself n times
+        /*@ maintaining 0 <= i && i <= n;
+          @ maintaining res == (int)\pow((\bigint)x, i);  
+          @ decreasing n - i;
+          @*/
+        for(int i = 0; i < n; i++){
+	        res = res * x;
+        }
+        // Subtract 1 from the final result to demonstrate post-processing
+        return res - 1;  // Subtract 1 from the result
+    }
+    // End of power method
+}
+
+==============================
+tmp/MyPower_Mutant5.java:7: error: This backslash token is unknown: \pow
+      @               ((\bigint)Integer.MIN_VALUE) <= \pow((\bigint)x, k)
+                                                      ^
+tmp/MyPower_Mutant5.java:8: error: This backslash token is unknown: \pow
+      @            && \pow((\bigint)x, k) <= ((\bigint)Integer.MAX_VALUE));
+                      ^
+tmp/MyPower_Mutant5.java:9: error: This backslash token is unknown: \pow
+      @   requires ((\bigint)Integer.MIN_VALUE) <= (\pow((\bigint)x, n) - 1)
+                                                    ^
+tmp/MyPower_Mutant5.java:10: error: This backslash token is unknown: \pow
+      @        && (\pow((\bigint)x, n) - 1) <= ((\bigint)Integer.MAX_VALUE);
+                   ^
+tmp/MyPower_Mutant5.java:12: error: This backslash token is unknown: \pow
+      @   ensures \result == (int)(\pow((\bigint)x, n) - 1);  
+                                   ^
+tmp/MyPower_Mutant5.java:19: error: This backslash token is unknown: \pow
+          @ maintaining res == (int)\pow((\bigint)x, i);  
+                                    ^
+6 errors
+
+==============================

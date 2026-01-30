@@ -1,0 +1,30 @@
+public class TO_BASE {
+    //@ requires 1 <= b && b <= 36;
+    //@ ensures b == 1 ==> \result.equals("0");
+    //@ ensures b > 1 ==> (\forall int i; 0 <= i && i < \result.length(); 
+    //@                     \result.charAt(i) >= '0' && \result.charAt(i) <= '9' || 
+    //@                     \result.charAt(i) >= 'A' && \result.charAt(i) <= 'Z');
+    public static String to_base(int b) {
+        int num = (b + 200) / 3;
+        String result = "";
+        String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int i;
+        if(b == 1){
+            return "0";
+        }
+        //@ maintaining num >= 0;
+        //@ maintaining (\forall int j; 0 <= j && j < result.length(); 
+        //@               result.charAt(result.length() - 1 - j) == alphabet.charAt((num * (int)Math.pow(b, j+1)) % b));
+        //@ decreases num;
+        while (num > 0) {
+            i = num % b;
+            num = num / b;
+            result = result + String.valueOf(alphabet.charAt(i));
+        }
+
+        return result;
+    }
+}
+==============================
+TimeoutException
+==============================

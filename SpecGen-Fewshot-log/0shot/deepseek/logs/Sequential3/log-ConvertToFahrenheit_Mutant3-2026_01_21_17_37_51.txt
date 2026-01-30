@@ -1,0 +1,59 @@
+/* 
+ * ConvertToFahrenheit_Mutant3
+ * Simple Celsius to Fahrenheit conversion using a linear map.
+ * This variant uses a straightforward transformation but intentionally keeps the final division as part of the calculation.
+ */
+
+public class ConvertToFahrenheit_Mutant3 {
+    /*@
+      @ requires Double.isFinite(celsius);
+      @ ensures \result == (celsius * 1.80 + 32.00) / 2.0;
+      @ ensures Double.isFinite(\result);
+      @*/
+    public static double convertTemperature(double celsius) {
+        // Multiply by 1.80 to convert Celsius to Fahrenheit
+        // Add 32.00 as offset to align with the Fahrenheit scale
+        // Final value is divided by 2.0 as part of this variant
+        return (celsius * 1.80 + 32.00) / 2.0;
+    }
+}
+==============================
+tmp/ConvertToFahrenheit_Mutant3.java:17: verify: The prover cannot establish an assertion (Postcondition: tmp/ConvertToFahrenheit_Mutant3.java:11:) in method convertTemperature
+        return (celsius * 1.80 + 32.00) / 2.0;
+        ^
+tmp/ConvertToFahrenheit_Mutant3.java:11: verify: Associated declaration: tmp/ConvertToFahrenheit_Mutant3.java:17:
+      @ ensures Double.isFinite(\result);
+        ^
+2 verification failures
+
+==============================
+/* 
+ * ConvertToFahrenheit_Mutant3
+ * Simple Celsius to Fahrenheit conversion using a linear map.
+ * This variant uses a straightforward transformation but intentionally keeps the final division as part of the calculation.
+ */
+
+public class ConvertToFahrenheit_Mutant3 {
+    /*@
+      @ requires Double.isFinite(celsius);
+      @ ensures \result == (celsius * 1.80 + 32.00) / 2.0;
+      @ ensures Double.isFinite(\result);  
+      @*/
+    public static double convertTemperature(double celsius) {
+        // Multiply by 1.80 to convert Celsius to Fahrenheit
+        // Add 32.00 as offset to align with the Fahrenheit scale
+        // Final value is divided by 2.0 as part of this variant
+        return (celsius * 1.80 + 32.00) / 2.0;
+    }
+}
+
+==============================
+tmp/ConvertToFahrenheit_Mutant3.java:17: verify: The prover cannot establish an assertion (Postcondition: tmp/ConvertToFahrenheit_Mutant3.java:11:) in method convertTemperature
+        return (celsius * 1.80 + 32.00) / 2.0;
+        ^
+tmp/ConvertToFahrenheit_Mutant3.java:11: verify: Associated declaration: tmp/ConvertToFahrenheit_Mutant3.java:17:
+      @ ensures Double.isFinite(\result);  
+        ^
+2 verification failures
+
+==============================

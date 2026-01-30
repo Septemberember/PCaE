@@ -1,0 +1,43 @@
+public class SubLoop_Mutant5 {
+    // This class provides a small utility method used in loop-based computation
+
+    /*@ public normal_behavior
+      @   requires y != Integer.MIN_VALUE;
+      @   requires (y <= 0) ==> ((long)Integer.MIN_VALUE <= (long)x - (long)y && (long)x - (long)y <= (long)Integer.MAX_VALUE);
+      @   assignable \nothing;
+      @   ensures (y > 0)  ==> (\result == x);
+      @   ensures (y <= 0) ==> (\result == x - y);
+      @*/
+    public static int subLoop(int x, int y) {
+        // Initialize the accumulator with the initial value
+        int sum = x;
+        // Branch based on the sign of y to determine loop behavior
+        if (y > 0) {
+            // When y is positive, perform a decrement loop
+            int n = 0;
+            //@ maintaining sum == x;
+            //@ maintaining n == 0;
+            //@ maintaining 0 <= n;
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+            }
+        } else {
+            // When y is non-positive, perform an increment loop
+            int n = -y;
+            //@ maintaining 0 <= n;
+            //@ maintaining sum + n == x + (-y);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+            }
+        }
+        // Return the computed sum
+        return sum;
+    }
+}
+==============================
+
+==============================

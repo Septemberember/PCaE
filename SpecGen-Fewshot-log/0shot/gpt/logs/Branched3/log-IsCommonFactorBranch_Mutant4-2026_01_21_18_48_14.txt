@@ -1,0 +1,26 @@
+public class IsCommonFactorBranch_Mutant4 {
+    /*@ public normal_behavior
+      @   requires factor != 0;
+      @   ensures \result <==> (a % factor == 0);
+      @ also
+      @ public exceptional_behavior
+      @   requires factor == 0;
+      @   signals (ArithmeticException) true;
+      @*/
+    public static boolean isCommonFactor (int a, int b, int factor) {
+        // Determine divisibility of 'a' by 'factor'
+        if (a % factor != 0) {
+            // If 'a' is not divisible by 'factor', return false
+            return false;
+        }
+        // 'a' is divisible by 'factor'
+        return true;
+    }
+}
+==============================
+tmp/IsCommonFactorBranch_Mutant4.java:12: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method isCommonFactor
+        if (a % factor != 0) {
+              ^
+1 verification failure
+
+==============================

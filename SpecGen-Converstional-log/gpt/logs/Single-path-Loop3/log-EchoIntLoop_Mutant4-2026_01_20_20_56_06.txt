@@ -1,0 +1,26 @@
+public class EchoIntLoop_Mutant4 {
+ // Demonstration of a simple loop-based doubling operation
+ // The echo method adds 2 to an accumulator x times
+    /*@ public normal_behavior
+      @   requires x >= 0;
+      @   assignable \nothing;
+      @   ensures \result == 2 * x;
+      @*/
+    public static int echo(int x) {
+        // Initialize accumulator to zero
+        int res = 0;
+        // Loop x times, adding 2 each iteration
+        /*@ maintaining 0 <= i && i <= x;
+          @ maintaining res == 2 * i;
+          @ decreases x - i;
+          @*/
+        for(int i = 0; i < x; i++) {
+            res = res + 2;
+        }
+        // Return accumulated result
+        return res;
+    }
+}
+==============================
+
+==============================

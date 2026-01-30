@@ -1,0 +1,29 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class ReLUSeq_Mutant1 {
+    // ReLU activation utility for a single scalar input.
+    // This method returns the input when positive; otherwise it returns zero.
+    public static double computeReLU(double x) {
+        return ((x > 0.0) ? x : 0);
+    }
+    // Note: The implementation uses a ternary operator for clarity.
+    // A minimalistic logic path could be used, but readability is preserved here.
+    // This class provides a simple ReLU computation with a single method.
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: x > 0.0
+D1: return_value == x
+
+T2: x <= 0.0
+D2: return_value == 0
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

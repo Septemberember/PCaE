@@ -1,0 +1,75 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class MultiPower2Ratio {
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n / 2;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n / 2;
+                factor += n;
+            }
+        }
+        int tmpFactor = 1;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        if(sum < 0){
+            sum = sum * -1;
+        }
+        sum = sum + tmpFactor;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: (x * y) / ( (x + floor(log2(abs(y) + 1)) + floor(log2(abs(y)))) + (1 + floor(log10(1 + floor(y < 0 ? 0 : (y - 1))))) ) == Exception && (y != 0 || x == 0)
+D1: Exception
+
+T2: y == 0 && (x + 1) == 0
+D2: Exception
+
+T3: y == 0 && (x + 1) != 0
+D3: return_value == 0
+
+T4: y > 0 && (x + (int)(Math.log(y)/Math.log(2)) + 1 + (int)(Math.log(y)/Math.log(2))) == 0
+D4: Exception
+
+T5: y < 0 && (x + (int)(Math.log(-y)/Math.log(2)) + 1 + (int)(Math.log(-y)/Math.log(2))) == 0
+D5: Exception
+
+T6: y > 0 && (x + (int)(Math.log(y)/Math.log(2)) + 1 + (int)(Math.log(y)/Math.log(2))) != 0
+D6: return_value == ((x * y) / abs(x + floor(log2(y)) + floor(log2(y)))) * (1 + floor(log10(max(1, floor(y - 1)))))
+
+T7: y < 0 && (x + (int)(Math.log(-y)/Math.log(2)) + 1 + (int)(Math.log(-y)/Math.log(2))) != 0
+D7: return_value == ((x * y) / abs(x + floor(log2(-y)) + floor(log2(-y)))) * (1 + floor(log10(max(1, floor(-y - 1)))))
+```
+*end* role assistant
+start role user
+There exist variables which do not belong to input params of the program:Math,Exception, please regenerate the FSF, avoiding these variables!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

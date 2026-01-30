@@ -1,0 +1,22 @@
+public class EchoIntLoop_Mutant1 {
+    // EchoIntLoop_Mutant1: a simple incremental loop demonstration
+    //@ ensures x >= 0 ==> \result == x + 1;
+    //@ ensures x < 0 ==> \result == 0;
+    public static int echo(int x) {
+        // accumulator for result
+        int res = 0;
+        // iterate from 0 through x inclusive
+        //@ maintaining 0 <= i && i <= (x < 0 ? 0 : x + 1);
+        //@ maintaining i == res;
+        //@ decreases (x < 0 ? -1 : x) - i;
+        for(int i = 0; i <= x; i++) {
+            // increment the accumulator by one per iteration
+            res = res + 1;
+        }
+        // return the accumulated value
+        return res;
+    }
+}
+==============================
+
+==============================

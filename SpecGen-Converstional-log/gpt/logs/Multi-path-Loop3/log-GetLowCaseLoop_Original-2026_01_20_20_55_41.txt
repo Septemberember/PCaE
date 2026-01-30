@@ -1,0 +1,28 @@
+public class GetLowCaseLoop_Original {
+    // GetLowCase: determine the lowercase-like proxy for an ASCII letter
+    
+    // Helper: maps an input character to its lowercase equivalent when valid
+    /*@ ensures (c < 'A' || c > 'Z') ==> \result == 0;
+      @ ensures ('A' <= c && c <= 'Z') ==> \result == (char)(c - 'A' + 'a');
+      @ ensures \result == 0 || ('a' <= \result && \result <= 'z');
+      @*/
+    public static /*@ pure @*/ char getLowCase(char c) {
+        char t = 'z';
+        /*@ maintaining 'a' <= t && t <= 'z';
+          @ maintaining ('A' <= c && c <= 'Z') ==> (t >= (char)(c - 'A' + 'a'));
+          @ decreases ((int)t) - ((int)'a') + 1;
+          @*/
+        while(t >= 'a' && t != c - 'A' + 'a') {
+            // If the current character is not an uppercase ASCII letter, mapping is not applicable
+            if(c < 'A' || c > 'Z') {
+                return 0;
+            }
+            // Step downward to locate a matching lowercase proxy
+            t--;
+        }
+        return t;
+    }
+}
+==============================
+
+==============================

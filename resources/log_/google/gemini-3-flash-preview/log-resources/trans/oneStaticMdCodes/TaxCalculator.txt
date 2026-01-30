@@ -1,0 +1,96 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class TaxCalculator {
+    public static int calculateTax(int income) {
+        int taxBrackets[] = new int[5];
+        taxBrackets[0] = 0;
+        taxBrackets[1] = 1;
+        taxBrackets[2] = 2;
+        taxBrackets[3] = 3;
+        taxBrackets[4] = 4;
+
+        int deduction = 1000;
+        int tax = 0;
+        int level = 0;
+        
+        if(income < 0) {
+            return 0;
+        }
+        if(income > 16000){
+            return income / 2;
+        }
+        
+        int taxableIncome = income - deduction;
+        if(taxableIncome <= 0) {
+            return 0;
+        }
+        
+        level = taxableIncome / 3000;
+        if(level < 0) {
+            level = 0;
+        }
+        
+        if(level == 0) {
+            tax = taxableIncome * taxBrackets[1] / 10;
+            if(tax < 100){
+                tax = 0;
+            } else {
+                tax = tax - 100;
+            }
+
+        }
+        if(level == 1) {
+            tax = (taxableIncome - 3000) * taxBrackets[2] / 10 + 300;
+            tax = tax + (taxableIncome % 500);
+        }
+        if(level == 2) {
+            tax = (taxableIncome - 6000) * taxBrackets[3] / 10 + 900;
+            tax = tax - (tax % 200);
+        } else {
+            tax = taxableIncome * taxBrackets[level] / 10;
+            if(tax > 5000) {
+                tax = tax + taxBrackets[4] * 10;
+            }
+        }
+        tax = tax < 0 ? 0 : tax;
+        return tax;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: income < 0 || (income >= 0 && income <= 1000)
+D1: return_value == 0
+
+T2: income > 1000 && income <= 2000
+D2: return_value == 0
+
+T3: income > 2000 && income <= 4000
+D3: return_value == (income - 1000) * 1 / 10 - 100
+
+T4: income > 4000 && income <= 7000
+D4: return_value == (income - 4000) * 2 / 10 + 300 + (income - 1000) % 500
+
+T5: income > 7000 && income <= 10000
+D5: return_value == (income - 7000) * 3 / 10 + 900 - ((income - 7000) * 3 / 10 + 900) % 200
+
+T6: income > 10000 && income <= 13000
+D6: (income - 1000) * 3 / 10 > 5000 ? return_value == (income - 1000) * 3 / 10 + 40 : return_value == (income - 1000) * 3 / 10
+
+T7: income > 13000 && income <= 16000
+D7: (income - 1000) * 4 / 10 > 5000 ? return_value == (income - 1000) * 4 / 10 + 40 : return_value == (income - 1000) * 4 / 10
+
+T8: income > 16000
+D8: return_value == income / 2
+```
+*end* role assistant
+start role user
+Some errors occurred while verifyingT: income > 1000 && income <= 2000	D: return_value == 0, , please regenerate the FSF!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

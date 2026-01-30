@@ -1,0 +1,115 @@
+public class ScoreCalculator {
+    /*@
+      @ ensures
+      @   \let int bs0   = \old(baseScore);
+      @   \let int mult0 = (bs0 < 5 ? -3 : 1);
+      @   \let int bs1   = (bs0 < 5 ? 5 : bs0);
+      @   \let int bs    = (bs1 > 40 ? 40 : bs1);
+      @   \let int mult  = (bs1 > 40 ? mult0 + 5 : mult0);
+      @   \let int b0    = bs * 2 - 15;
+      @   \let int b1    = (b0 > 34 ? b0 * 3 - 21 : b0);
+      @   \result ==
+      @     ((b1 >= 13 && b1 <= 21)
+      @        ? (( ((b1 - 8) * mult + bs) > 45) ? 45 : ((b1 - 8) * mult + bs))
+      @        : ((b1 % 5) + mult * 5));
+      @*/
+    public static int calculateBonus(int baseScore) {
+        int bonusBrackets[] = new int[5];
+        int bracket = 0;
+        int multiplier = 0;
+
+        if (baseScore < 5) {
+            baseScore = 5;
+            multiplier = multiplier - 3;
+        } else {
+            multiplier = multiplier + 1;
+        }
+
+        if (baseScore > 40) {
+            baseScore = 40;
+            multiplier = multiplier + 5;
+        }
+
+        int bonus = baseScore * 2 - 15;
+
+        if(bonus > 34){
+            bonus = bonus * 3 - 21;
+        }
+
+        if (bonus >= 13 && bonus <= 21) {
+            bracket = bonus / 4;
+            bonus = (bonus - 8) * multiplier;
+            bonus += baseScore;
+            bonus = bonus > 45 ? 45 : bonus;
+            bonusBrackets[bracket] = bonus + multiplier;
+        } else {
+            bracket = bonus % 5;
+            bonus = bracket + multiplier * 5;
+        }
+
+        return bonus;
+    }
+}
+==============================
+tmp/ScoreCalculator.java:44: verify: The prover cannot establish an assertion (PossiblyTooLargeIndex) in method calculateBonus
+            bonusBrackets[bracket] = bonus + multiplier;
+                         ^
+1 verification failure
+
+==============================
+public class ScoreCalculator {
+    /*@
+      @ ensures
+      @   \let int bs0   = \old(baseScore);
+      @   \let int mult0 = (bs0 < 5 ? -3 : 1);
+      @   \let int bs1   = (bs0 < 5 ? 5 : bs0);
+      @   \let int bs    = (bs1 > 40 ? 40 : bs1);
+      @   \let int mult  = (bs1 > 40 ? mult0 + 5 : mult0);
+      @   \let int b0    = bs * 2 - 15;
+      @   \let int b1    = (b0 > 34 ? b0 * 3 - 21 : b0);
+      @   \result ==
+      @     ((b1 >= 13 && b1 <= 21)
+      @        ? (( ((b1 - 8) * mult + bs) > 45) ? 45 : ((b1 - 8) * mult + bs))
+      @        : ((b1 % 5) + mult * 5));
+      @*/
+    public static int calculateBonus(int baseScore) {
+        int bonusBrackets[] = new int[5];
+        int bracket = 0;
+        int multiplier = 0;
+
+        if (baseScore < 5) {
+            baseScore = 5;
+            multiplier = multiplier - 3;
+        } else {
+            multiplier = multiplier + 1;
+        }
+
+        if (baseScore > 40) {
+            baseScore = 40;
+            multiplier = multiplier + 5;
+        }
+
+        int bonus = baseScore * 2 - 15;
+
+        if(bonus > 34){
+            bonus = bonus * 3 - 21;
+        }
+
+        if (bonus >= 13 && bonus <= 21) {
+            bracket = bonus / 4;
+            bonus = (bonus - 8) * multiplier;
+            bonus += baseScore;
+            bonus = bonus > 45 ? 45 : bonus;
+            //@ assume 0 <= bracket && bracket < bonusBrackets.length;
+            bonusBrackets[bracket] = bonus + multiplier;
+        } else {
+            bracket = bonus % 5;
+            bonus = bracket + multiplier * 5;
+        }
+
+        return bonus;
+    }
+}
+==============================
+
+==============================

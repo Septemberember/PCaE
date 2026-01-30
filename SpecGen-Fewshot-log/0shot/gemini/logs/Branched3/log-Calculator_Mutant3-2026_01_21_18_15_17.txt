@@ -1,0 +1,60 @@
+public class Calculator_Mutant3 {
+    // Arithmetic calculator with basic operators
+    // All operations are performed on two integer operands
+    // Simple utility for demonstration purposes
+
+    /*@ public normal_behavior
+      @   requires operator == '+' || operator == '-' || operator == '*' || operator == '/' || operator == '%';
+      @   requires (operator == '*' || operator == '/' || operator == '%') ==> num2 != 0;
+      @   requires operator == '+' ==> \num_eligible_low_level_check(num1 + num2);
+      @   requires operator == '-' ==> \num_eligible_low_level_check(num1 - num2);
+      @   ensures (operator == '+') ==> \result == num1 + num2;
+      @   ensures (operator == '-') ==> \result == num1 - num2;
+      @   ensures (operator == '*') ==> \result == num1 / num2;
+      @   ensures (operator == '/') ==> \result == num1 / num2;
+      @   ensures (operator == '%') ==> \result == num1 % num2;
+      @ also
+      @ public normal_behavior
+      @   requires operator != '+' && operator != '-' && operator != '*' && operator != '/' && operator != '%';
+      @   ensures \result == -1;
+      @*/
+    public static int calculate(int num1, int num2, char operator) {
+        int output;
+        // Determine operation based on the operator
+        switch(operator) {
+            case '+':
+                output = num1 + num2;
+                break;
+            // Subtraction
+            case '-':
+                output = num1 - num2;
+                break;
+            // Multiplication (note: in this mutant, '*' uses division)
+            case '*':
+                output = num1 / num2; //mutated * with /
+                break;
+            // Division
+            case '/':
+                output = num1 / num2;
+                break;
+            // Modulus
+            case '%':
+                output = num1 % num2;
+                break;
+            default:
+                // Unrecognized operator
+                return -1;
+        }
+        return output;
+    }
+}
+==============================
+tmp/Calculator_Mutant3.java:9: error: This backslash token is unknown: \num_eligible_low_level_check
+      @   requires operator == '+' ==> \num_eligible_low_level_check(num1 + num2);
+                                       ^
+tmp/Calculator_Mutant3.java:10: error: This backslash token is unknown: \num_eligible_low_level_check
+      @   requires operator == '-' ==> \num_eligible_low_level_check(num1 - num2);
+                                       ^
+2 errors
+
+==============================

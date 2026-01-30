@@ -1,0 +1,87 @@
+public class CompressionRatio {
+    /*@ public normal_behavior
+      @   requires fileSize < 160 || fileSize > 163;
+      @   ensures \result != null;
+      @   ensures
+      @     (\let int fs1 = (fileSize < 50 ? 50 : fileSize);
+      @      \let int fs  = (fs1 > 400 ? 400 : fs1);
+      @
+      @      \let int ov1 =
+      @            (fileSize < 50
+      @               ? ((-3) * (50 / 10))           // == -15
+      @               : ((1) * (fileSize / 100)));  // == fileSize/100
+      @      \let int ov2 =
+      @            (fs1 > 400
+      @               ? ((ov1 + 5) * (400 / 100))    // multiply by 4 after clamping to 400
+      @               : ov1);
+      @      \let int overheadFinal =
+      @            (ov2 > 80
+      @               ? (((ov2 > 100 ? 100 : ov2)) / 10)
+      @               : (((ov2 < 10 ? 10 : ov2)) / 10));
+      @
+      @      \let int ratio = fs / 4 + 30;
+      @      \let int level =
+      @            ((ratio >= 45 && ratio <= 69)
+      @               ? ((ratio - 45) / 5)
+      @               : (5 + (ratio % 5)));
+      @
+      @      1 <= overheadFinal && overheadFinal <= 10
+      @   && 0 <= level && level <= 9
+      @   && \result.equals("ratio:" + ratio + " level:" + level + " overhead:" + overheadFinal));
+      @ also
+      @ public exceptional_behavior
+      @   requires 160 <= fileSize && fileSize <= 163;
+      @   signals_only NullPointerException;
+      @   signals (NullPointerException e) true;
+      @*/
+    public static String calculateRatio(int fileSize) {
+        String ratioStr = null;
+        int level = 0;
+        int overhead = 0;
+
+        if (fileSize < 50) {
+            fileSize = 50;
+            overhead = overhead - 3;
+            overhead *= fileSize / 10;
+        } else {
+            overhead = overhead + 1;
+            overhead *= fileSize / 100;
+        }
+
+        if (fileSize > 400) {
+            fileSize = 400;
+            overhead = overhead + 5;
+            overhead *= fileSize / 100;
+        }
+
+        if(overhead > 80){
+            overhead = overhead > 100 ? 100 : overhead;
+            overhead = overhead / 10;
+        }else{
+            overhead = overhead < 10 ? 10 : overhead;
+            overhead = overhead / 10;
+        }
+
+        int ratio = fileSize / 4 + 30;
+
+        if (ratio >= 45 && ratio <= 70) {
+            level = (ratio - 45) / 5;
+            if(level < 5) {
+                ratioStr = new String("ratio:" + ratio);
+            }
+        } else {
+            level = 5 + (ratio % 5);
+            ratioStr = new String("ratio:" + ratio);
+        }
+        ratioStr.trim();
+        ratioStr = ratioStr + " level:" + level + " overhead:" + overhead;
+        return ratioStr;
+    }
+}
+==============================
+tmp/CompressionRatio.java:37: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static String calculateRatio(int fileSize) {
+                         ^
+1 verification failure
+
+==============================

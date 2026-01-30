@@ -1,0 +1,73 @@
+public class FizzBuzz_Mutant4 {
+    // Utility: FizzBuzz evaluation with a simple additive model.
+    // This method preserves the original control flow and result construction.
+    // Added lines are comments only; existing code remains unchanged.
+    // Begin core computation for fizzBuzz.
+    /*@ public normal_behavior
+      @ requires 0 <= n && n <= Integer.MAX_VALUE;
+      @ ensures \result == ((n % 3 == 0 ? 3 : 0) + (n % 5 != 0 ? 5 : 0));
+      @ ensures 0 <= \result && \result <= 8;
+      @*/
+    public static int fizzBuzz(int n) {
+        int res = 0;
+        // Initialize running total for the calculation.
+        //@ maintaining res == 0;
+        if (n % 3 == 0) {
+            res += 3;
+        }
+        // Determine whether to include five as part of the score.
+        //@ maintaining res == (n % 3 == 0 ? 3 : 0);
+        if (n % 5 != 0) { // changed == to !=
+            res += 5;
+        }
+        // Return the accumulated result for the given n.
+        return res;
+    }
+}
+==============================
+tmp/FizzBuzz_Mutant4.java:14: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining res == 0;
+            ^
+tmp/FizzBuzz_Mutant4.java:19: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining res == (n % 3 == 0 ? 3 : 0);
+            ^
+2 errors
+
+==============================
+public class FizzBuzz_Mutant4 {
+    // Utility: FizzBuzz evaluation with a simple additive model.
+    // This method preserves the original control flow and result construction.
+    // Added lines are comments only; existing code remains unchanged.
+    // Begin core computation for fizzBuzz.
+    /*@ public normal_behavior
+      @ requires 0 <= n && n <= Integer.MAX_VALUE;
+      @ ensures \result == ((n % 3 == 0 ? 3 : 0) + (n % 5 != 0 ? 5 : 0));
+      @ ensures 0 <= \result && \result <= 8;
+      @*/
+    public static int fizzBuzz(int n) {
+        int res = 0;
+        // Initialize running total for the calculation.
+        //@ maintaining res == 0;  
+        if (n % 3 == 0) {
+            res += 3;
+        }
+        // Determine whether to include five as part of the score.
+        //@ maintaining res == (n % 3 == 0 ? 3 : 0);  
+        if (n % 5 != 0) { // changed == to !=
+            res += 5;
+        }
+        // Return the accumulated result for the given n.
+        return res;
+    }
+}
+
+==============================
+tmp/FizzBuzz_Mutant4.java:14: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining res == 0;  
+            ^
+tmp/FizzBuzz_Mutant4.java:19: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining res == (n % 3 == 0 ? 3 : 0);  
+            ^
+2 errors
+
+==============================

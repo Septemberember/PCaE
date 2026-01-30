@@ -1,0 +1,79 @@
+import java.util.*;
+public class MixCollectSum {
+    //@ requires true;
+    //@ ensures \result >= 0;
+    //@ ensures \result <= Double.MAX_VALUE;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        //@ maintaining x >= 194 && x <= 220;
+        //@ maintaining list.size() == 220 - x;
+        //@ maintaining (\forall int i; 0 <= i && i < list.size(); list.get(i) >= 194 && list.get(i) <= 219);
+        //@ decreases x - 194;
+        while(x >= 195){
+           if(x == 200){
+               x = x - 150;
+               sum = tmp / x;
+           }
+           x = x - 1;
+           list.add(x);
+        }
+        //@ maintaining sum >= 0;
+        //@ maintaining sum <= Integer.MAX_VALUE;
+        //@ maintaining (\forall int i; 0 <= i && i < list.size(); list.get(i) >= 194 && list.get(i) <= 219);
+        //@ decreases list.size() - i;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+tmp/MixCollectSum.java:25: error: variable i is already defined in method mixSum(int)
+        //@ maintaining (\forall int i; 0 <= i && i < list.size(); list.get(i) >= 194 && list.get(i) <= 219);
+                                     ^
+1 error
+
+==============================
+import java.util.*;
+public class MixCollectSum {
+    //@ requires true;
+    //@ ensures \result >= 0;
+    //@ ensures \result <= Double.MAX_VALUE;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        //@ maintaining x >= 194 && x <= 220;
+        //@ maintaining list.size() == 220 - x;
+        //@ maintaining (\forall int i; 0 <= i && i < list.size(); list.get(i) >= 194 && list.get(i) <= 219);
+        //@ decreases x - 194;
+        while(x >= 195){
+           if(x == 200){
+               x = x - 150;
+               sum = tmp / x;
+           }
+           x = x - 1;
+           list.add(x);
+        }
+        //@ maintaining sum >= 0;
+        //@ maintaining sum <= Integer.MAX_VALUE;
+        //@ maintaining (\forall int i; 0 < i && i < list.size(); list.get(i) > 194 && list.get(i) < 219);  
+        //@ decreases list.size() - i;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+
+==============================
+tmp/MixCollectSum.java:25: error: variable i is already defined in method mixSum(int)
+        //@ maintaining (\forall int i; 0 < i && i < list.size(); list.get(i) > 194 && list.get(i) < 219);  
+                                     ^
+1 error
+
+==============================

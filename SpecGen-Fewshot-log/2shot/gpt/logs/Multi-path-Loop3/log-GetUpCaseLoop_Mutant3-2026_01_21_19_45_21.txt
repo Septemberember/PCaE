@@ -1,0 +1,31 @@
+public class GetUpCaseLoop_Mutant3 {
+    // Compute the corresponding uppercase letter for a lowercase input, if applicable.
+    /*@ public normal_behavior
+      @   ensures (c < 'f' || c > 'z') ==> \result == (char)0;
+      @   ensures (c >= 'f' && c <= 'z') ==> \result == (char)(c - 'a' + 'A');
+      @   ensures (c >= 'f' && c <= 'z') ==> ('F' <= \result && \result <= 'Z');
+      @*/
+    public static /*@ pure @*/ char getUpCase(char c) {
+        // Validate the input character: only lowercase 'a'..'z' are considered.
+        if(c < 'f' || c > 'z') {
+            return 0;
+        }
+        // Start with the uppercase offset from 'A'
+        char t = 'F';
+        // Iterate until we reach the target uppercase character corresponding to c
+        /*@ maintaining 'F' <= t && t <= (char)('Z' + 1);
+          @ maintaining (c >= 'f' && c <= 'z') ==> ('F' <= (char)(c - 'a' + 'A') && (char)(c - 'a' + 'A') <= 'Z');
+          @ maintaining (c >= 'f' && c <= 'z') ==> ((int)t <= (int)((char)(c - 'a' + 'A')) + 1);
+          @ maintaining (c >= 'f' && c <= 'z') ==> (\forall int u; 'F' <= u && u < (int)t; (char)u != (char)(c - 'a' + 'A'));
+          @ decreases (int)('Z' - t + 1);
+          @*/
+        while(t <= 'Z' && t != c - 'a' + 'A') {
+            t++;
+        }
+        // Return the computed uppercase character
+        return t;
+    }
+}
+==============================
+
+==============================

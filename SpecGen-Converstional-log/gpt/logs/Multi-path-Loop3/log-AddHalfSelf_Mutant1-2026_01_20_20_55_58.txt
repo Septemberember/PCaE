@@ -1,0 +1,93 @@
+public class AddHalfSelf_Mutant1{
+
+    // Utility: helper for integer halving adjustments
+    //@ requires x != Integer.MIN_VALUE;
+    //@ requires (x < 0 ==> (Integer.MIN_VALUE <= (\bigint)x - ((\bigint)(-x))/2 - 1 && (\bigint)x - ((\bigint)(-x))/2 - 1 <= Integer.MAX_VALUE));
+    //@ requires (x >= 0 ==> (Integer.MIN_VALUE <= (\bigint)x + ((\bigint)x)/2 + 1 && (\bigint)x + ((\bigint)x)/2 + 1 <= Integer.MAX_VALUE));
+    //@ ensures (x < 0  ==> \result == x - ((-x)/2) - 1);
+    //@ ensures (x >= 0 ==> \result == x + (x/2) + 1);
+    public static int addHalfSelf(int x){
+        int n = x;
+        int addNum = 0;
+
+        // If the input is negative, work with its absolute value for counting
+        if(x < 0){
+            n = -x;
+        }
+
+        // Count how many even numbers appear as n decreases to zero
+        /*@
+          @ maintaining 0 <= n && n <= (x < 0 ? -x : x);
+          @ maintaining addNum == (\num_of int k; n < k && k <= (x < 0 ? -x : x); k % 2 == 0);
+          @ decreases n;
+          @*/
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n--;
+        }
+
+        // Apply sign-based adjustment to obtain the final result
+        if(x < 0){
+            return x - addNum - 1;
+        }
+        else{
+            return x + addNum + 1;
+        }
+    }
+}
+==============================
+tmp/AddHalfSelf_Mutant1.java:21: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method addHalfSelf
+          @ maintaining addNum == (\num_of int k; n < k && k <= (x < 0 ? -x : x); k % 2 == 0);
+            ^
+1 verification failure
+
+==============================
+public class AddHalfSelf_Mutant1{
+
+    // Utility: helper for integer halving adjustments
+    //@ requires x != Integer.MIN_VALUE;
+    //@ requires (x < 0 ==> (Integer.MIN_VALUE <= (\bigint)x - ((\bigint)(-x))/2 - 1 && (\bigint)x - ((\bigint)(-x))/2 - 1 <= Integer.MAX_VALUE));
+    //@ requires (x >= 0 ==> (Integer.MIN_VALUE <= (\bigint)x + ((\bigint)x)/2 + 1 && (\bigint)x + ((\bigint)x)/2 + 1 <= Integer.MAX_VALUE));
+    //@ ensures (x < 0  ==> \result == x - ((-x)/2) - 1);
+    //@ ensures (x >= 0 ==> \result == x + (x/2) + 1);
+    public static int addHalfSelf(int x){
+        int n = x;
+        int addNum = 0;
+
+        // If the input is negative, work with its absolute value for counting
+        if(x < 0){
+            n = -x;
+        }
+
+        // Count how many even numbers appear as n decreases to zero
+        /*@
+          @ maintaining 0 <= n && n <= (x < 0 ? -x : x);
+          @ maintaining addNum == (\num_of int k; n < k && k < (x < 0 ? -x : x); k % 2 == 0);  
+          @ decreases n;
+          @*/
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n--;
+        }
+
+        // Apply sign-based adjustment to obtain the final result
+        if(x < 0){
+            return x - addNum - 1;
+        }
+        else{
+            return x + addNum + 1;
+        }
+    }
+}
+
+==============================
+tmp/AddHalfSelf_Mutant1.java:21: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method addHalfSelf
+          @ maintaining addNum == (\num_of int k; n < k && k < (x < 0 ? -x : x); k % 2 == 0);  
+            ^
+1 verification failure
+
+==============================

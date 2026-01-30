@@ -1,0 +1,65 @@
+public class MetricsCalculator_2 {
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   ensures \result == (double)((int)\result);
+      @   ensures ((double)Integer.MIN_VALUE) <= \result && \result <= ((double)Integer.MAX_VALUE);
+      @ also
+      @ public exceptional_behavior
+      @   assignable \nothing;
+      @   signals (ArithmeticException e) true;
+      @*/
+    public static double computeScore( int limit) {
+        int value = limit - 100;
+        int result = 0;
+        int iteration = 17;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = value * -1;
+            polarity = polarity * -1;
+        }
+        value = (value % 10) + 1;
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ ghost int k = 0;
+        //@ ghost int initialLimit = limit;
+        //@ ghost int iter0 = iteration;
+        //@ ghost int adjust0 = adjustment;
+        //@ ghost int shift0 = shift;
+        //@ maintaining k >= 0;
+        //@ maintaining value >= 1 && value <= 10;
+        //@ maintaining limit == initialLimit - k * value;
+        //@ maintaining iteration == iter0 - k;
+        //@ maintaining shift == shift0 + k;
+        //@ maintaining (\bigint)adjustment == (\bigint)adjust0 + (\bigint)k * (\bigint)shift0 + ((\bigint)k * ((\bigint)k - 1)) / 2;
+        //@ decreases limit;
+        while (limit > 0) {
+            limit = limit - value;
+            iteration = iteration - 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+            //@ set k = k + 1;
+        }
+
+        iteration = (iteration % 10) + 1;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+TimeoutException
+==============================

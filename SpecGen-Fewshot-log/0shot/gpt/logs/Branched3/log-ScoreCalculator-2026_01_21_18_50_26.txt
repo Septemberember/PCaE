@@ -1,0 +1,62 @@
+public class ScoreCalculator {
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures
+      @     (\let int b0 = baseScore;
+      @      \let int b1 = (b0 < 5 ? 5 : b0);
+      @      \let int m1 = (b0 < 5 ? -3 : 1);
+      @      \let int b2 = (b1 > 40 ? 40 : b1);
+      @      \let int m2 = (b1 > 40 ? m1 + 5 : m1);
+      @      \let int bon0 = b2 * 2 - 15;
+      @      \let int bon1 = (bon0 > 34 ? bon0 * 3 - 21 : bon0);
+      @        ((bon1 >= 13 && bon1 <= 21)
+      @           ? (\let int bon2pre = (bon1 - 8) * m2 + b2;
+      @              \let int bon2 = (bon2pre > 45 ? 45 : bon2pre);
+      @              \result == bon2)
+      @           : (\let int br = bon1 % 5;
+      @              \result == br + m2 * 5)));
+      @*/
+    public static int calculateBonus(int baseScore) {
+        int bonusBrackets[] = new int[5];
+        int bracket = 0;
+        int multiplier = 0;
+
+        if (baseScore < 5) {
+            baseScore = 5;
+            multiplier = multiplier - 3;
+        } else {
+            multiplier = multiplier + 1;
+        }
+
+        if (baseScore > 40) {
+            baseScore = 40;
+            multiplier = multiplier + 5;
+        }
+
+        int bonus = baseScore * 2 - 15;
+
+        if(bonus > 34){
+            bonus = bonus * 3 - 21;
+        }
+
+        if (bonus >= 13 && bonus <= 21) {
+            bracket = bonus / 4;
+            bonus = (bonus - 8) * multiplier;
+            bonus += baseScore;
+            bonus = bonus > 45 ? 45 : bonus;
+            bonusBrackets[bracket] = bonus + multiplier;
+        } else {
+            bracket = bonus % 5;
+            bonus = bracket + multiplier * 5;
+        }
+
+        return bonus;
+    }
+}
+==============================
+tmp/ScoreCalculator.java:47: verify: The prover cannot establish an assertion (PossiblyTooLargeIndex) in method calculateBonus
+            bonusBrackets[bracket] = bonus + multiplier;
+                         ^
+1 verification failure
+
+==============================

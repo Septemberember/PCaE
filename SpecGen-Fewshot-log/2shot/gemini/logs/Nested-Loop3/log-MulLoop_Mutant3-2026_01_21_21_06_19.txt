@@ -1,0 +1,42 @@
+/*
+ * MulLoop_Mutant3
+ * This variant demonstrates a loop-based multiplication by repeated addition or subtraction.
+ * It intentionally uses subtraction for non-negative b and addition for negative b.
+ */
+ 
+public class MulLoop_Mutant3 {
+
+    // Compute product via repeated addition/subtraction.
+    // Positive b uses addition, negative b uses subtraction.
+    // Simple loop-based implementation to accumulate the result.
+    //@ requires (b >= 0 ==> \bigint_abs((long)a * (long)b) <= Integer.MAX_VALUE);
+    //@ requires (b < 0 ==> \bigint_abs((long)a * (long)b) <= Integer.MAX_VALUE);
+    //@ ensures \result == -(a * b);
+    public static int mulLoop(int a, int b) {
+        int res = 0;
+        if (b >= 0) {
+            //@ maintaining 0 <= i && i <= b;
+            //@ maintaining res == -(a * i);
+            for(int i = 0; i < b; i++) {
+                res = res - a;  // changed the operator from + to -
+            }
+        } else {
+            //@ maintaining 0 <= i && i <= -b;
+            //@ maintaining res == a * i;
+            for(int i = 0; i < -b; i++) {
+                res = res + a;  // changed the operator from - to +
+            }
+        }
+        return res;
+    }
+}
+==============================
+tmp/MulLoop_Mutant3.java:12: error: This backslash token is unknown: \bigint_abs
+    //@ requires (b >= 0 ==> \bigint_abs((long)a * (long)b) <= Integer.MAX_VALUE);
+                             ^
+tmp/MulLoop_Mutant3.java:13: error: This backslash token is unknown: \bigint_abs
+    //@ requires (b < 0 ==> \bigint_abs((long)a * (long)b) <= Integer.MAX_VALUE);
+                            ^
+2 errors
+
+==============================

@@ -1,0 +1,172 @@
+public class SpeedEstimator {
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures \result == (
+      @     let int adj0 = (distance + 10) * 2 - 2 + 5;
+      @     let boolean cond1 = adj0 > -50 && adj0 <= 67;
+      @     let int adj1 = cond1 ? adj0 + 4 : adj0;
+      @     let boolean cond2 = cond1 && time < 5;
+      @     let int adj2 = cond2 ? adj1 + time * 2 : adj1;
+      @     let boolean cond3 = cond2 && distance > 20;
+      @     let int adj3 = cond3 ? adj2 + distance - 4 : adj2;
+      @     let double spd1 = cond3 ? adj3 * 0.75 : 0.0;
+      @     let int adj4 = cond3 ? adj3 - 5 : adj3;
+      @     let boolean cond4 = cond3 && time > 0;
+      @     let int adj5 = cond4 ? adj4 + 2 : adj4;
+      @     let double spd2 = cond4 ? (time != 1 ? (double)adj5 / (time - 1) : spd1) : spd1;
+      @     let boolean vld1 = cond4 ? (time != 1 ? true : false) : true;
+      @     let int adj6 = (cond3 && time <= 0) ? adj4 + 3 : adj5;
+      @     let double spd3 = (cond3 && time <= 0) ? adj6 * 0.6 : spd2;
+      @     let int adj7 = (cond2 && distance <= 20) ? adj2 + 3 : adj6;
+      @     let double spd4 = (cond2 && distance <= 20) ? adj7 * 1.1 : spd3;
+      @     let boolean vld2 = (cond2 && distance <= 20) ? false : vld1;
+      @     let int adj8 = (cond1 && time >= 5) ? adj1 - 6 : adj7;
+      @     let double spd5 = (cond1 && time >= 5) ? adj8 * 0.8 : spd4;
+      @     let boolean vld3 = (cond1 && time >= 5) ? false : vld2;
+      @     let double fct = vld3 ? 1.1 : 0.85;
+      @     (spd5 * fct + adj8 * 0.04)
+      @   );
+      @   assignable \nothing;
+      @*/
+    public static double estimateSpeed(int distance,int time) {
+        int adjusted = distance;
+        double speed = 0.0;
+        boolean valid = true;
+        int bias = 2;
+
+        adjusted += 10;
+        adjusted *= 2;
+        adjusted -= bias;
+        adjusted = adjusted + 5;
+
+        if (adjusted > -50 && adjusted <= 67) {
+            adjusted += 4;
+            if (time < 5) {
+                adjusted = adjusted + time * 2;
+
+                if (distance > 20) {
+                    adjusted = adjusted + distance - 4;
+                    speed = adjusted * 0.75;
+                    adjusted -= 5;
+
+                    if (time > 0) {
+                        adjusted += 2;
+
+                        if (time != 0) {
+                            int divisor = time - 1;
+                            speed = (double) adjusted / divisor;
+                        } else {
+                            adjusted += 4;
+                            speed = adjusted * 1.05;
+                            valid = false;
+                        }
+
+                    } else {
+                        adjusted += 3;
+                        speed = adjusted * 0.6;
+                    }
+                } else {
+                    adjusted += 3;
+                    speed = adjusted * 1.1;
+                    valid = false;
+                }
+
+            } else {
+                adjusted -= 6;
+                speed = adjusted * 0.8;
+                valid = false;
+            }
+
+        }
+        double factor = valid ? 1.1 : 0.85;
+        double finalSpeed = speed * factor + adjusted * 0.04;
+        System.out.println("Speed result: " + finalSpeed);
+        return finalSpeed;
+    }
+}
+==============================
+tmp/SpeedEstimator.java:6: error: ',', ')', or '[' expected
+      @     let int adj0 = (distance + 10) * 2 - 2 + 5;
+               ^
+tmp/SpeedEstimator.java:6: error: '.class' expected
+      @     let int adj0 = (distance + 10) * 2 - 2 + 5;
+                    ^
+tmp/SpeedEstimator.java:7: error: <identifier> expected
+      @     let boolean cond1 = adj0 > -50 && adj0 <= 67;
+               ^
+tmp/SpeedEstimator.java:7: error: Method specs may not precede a variable declaration
+      @     let boolean cond1 = adj0 > -50 && adj0 <= 67;
+                ^
+tmp/SpeedEstimator.java:8: error: <identifier> expected
+      @     let int adj1 = cond1 ? adj0 + 4 : adj0;
+               ^
+tmp/SpeedEstimator.java:9: error: <identifier> expected
+      @     let boolean cond2 = cond1 && time < 5;
+               ^
+tmp/SpeedEstimator.java:10: error: <identifier> expected
+      @     let int adj2 = cond2 ? adj1 + time * 2 : adj1;
+               ^
+tmp/SpeedEstimator.java:11: error: <identifier> expected
+      @     let boolean cond3 = cond2 && distance > 20;
+               ^
+tmp/SpeedEstimator.java:12: error: <identifier> expected
+      @     let int adj3 = cond3 ? adj2 + distance - 4 : adj2;
+               ^
+tmp/SpeedEstimator.java:13: error: <identifier> expected
+      @     let double spd1 = cond3 ? adj3 * 0.75 : 0.0;
+               ^
+tmp/SpeedEstimator.java:14: error: <identifier> expected
+      @     let int adj4 = cond3 ? adj3 - 5 : adj3;
+               ^
+tmp/SpeedEstimator.java:15: error: <identifier> expected
+      @     let boolean cond4 = cond3 && time > 0;
+               ^
+tmp/SpeedEstimator.java:16: error: <identifier> expected
+      @     let int adj5 = cond4 ? adj4 + 2 : adj4;
+               ^
+tmp/SpeedEstimator.java:17: error: <identifier> expected
+      @     let double spd2 = cond4 ? (time != 1 ? (double)adj5 / (time - 1) : spd1) : spd1;
+               ^
+tmp/SpeedEstimator.java:18: error: <identifier> expected
+      @     let boolean vld1 = cond4 ? (time != 1 ? true : false) : true;
+               ^
+tmp/SpeedEstimator.java:19: error: <identifier> expected
+      @     let int adj6 = (cond3 && time <= 0) ? adj4 + 3 : adj5;
+               ^
+tmp/SpeedEstimator.java:20: error: <identifier> expected
+      @     let double spd3 = (cond3 && time <= 0) ? adj6 * 0.6 : spd2;
+               ^
+tmp/SpeedEstimator.java:21: error: <identifier> expected
+      @     let int adj7 = (cond2 && distance <= 20) ? adj2 + 3 : adj6;
+               ^
+tmp/SpeedEstimator.java:22: error: <identifier> expected
+      @     let double spd4 = (cond2 && distance <= 20) ? adj7 * 1.1 : spd3;
+               ^
+tmp/SpeedEstimator.java:23: error: <identifier> expected
+      @     let boolean vld2 = (cond2 && distance <= 20) ? false : vld1;
+               ^
+tmp/SpeedEstimator.java:24: error: <identifier> expected
+      @     let int adj8 = (cond1 && time >= 5) ? adj1 - 6 : adj7;
+               ^
+tmp/SpeedEstimator.java:25: error: <identifier> expected
+      @     let double spd5 = (cond1 && time >= 5) ? adj8 * 0.8 : spd4;
+               ^
+tmp/SpeedEstimator.java:26: error: <identifier> expected
+      @     let boolean vld3 = (cond1 && time >= 5) ? false : vld2;
+               ^
+tmp/SpeedEstimator.java:27: error: <identifier> expected
+      @     let double fct = vld3 ? 1.1 : 0.85;
+               ^
+tmp/SpeedEstimator.java:28: error: illegal start of type
+      @     (spd5 * fct + adj8 * 0.04)
+            ^
+tmp/SpeedEstimator.java:28: error: <identifier> expected
+      @     (spd5 * fct + adj8 * 0.04)
+                 ^
+tmp/SpeedEstimator.java:28: error: ';' expected
+      @     (spd5 * fct + adj8 * 0.04)
+                                      ^
+27 errors
+
+==============================

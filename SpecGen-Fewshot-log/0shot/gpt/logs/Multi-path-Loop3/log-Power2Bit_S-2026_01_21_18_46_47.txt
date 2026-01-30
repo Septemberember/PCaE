@@ -1,0 +1,54 @@
+public class Power2Bit {
+    /*@ public normal_behavior
+      @   requires n != Integer.MIN_VALUE;
+      @   assignable \nothing;
+      @   ensures \result == ((java.lang.Math.abs(n) <= 2) ? 1 : 2);
+      @   ensures \result == 1 || \result == 2;
+      @*/
+    public static int power2Bit(int n) {
+        int x = 2;
+        int MAX_LENGTH = 8;
+        int MKS = 88;
+        int base = 0;
+        int res = 1;
+        String s = null;
+        if(n < 0){
+            n = -n;
+        }
+        if(n >= 0){
+            if(n < 6){
+                /*@ maintaining 0 <= i && i <= n + 1;
+                  @ maintaining n < 6;
+                  @ maintaining res == (1 << i);
+                  @ maintaining (i == 0 ==> s == null);
+                  @ maintaining (i > 0 ==> (s != null && s.equals(String.valueOf(res))));
+                  @ maintaining base == 0 || base == 2;
+                  @ maintaining (base == 2 ==> i > 3);
+                  @ decreases n - i + 1;
+                  @*/
+                for(int i = 0; i <= n; i++){
+                    res = res * x;
+                    String resStr = new String(String.valueOf(res));
+                    s = resStr;
+                    if(i == 3 && res > MKS){
+                        base = 2;
+                    }
+                }
+            }else{
+                res = MAX_LENGTH;
+                String resStr = new String(String.valueOf(res));
+                s = resStr;
+                base = 1;
+            }
+        }
+        res = s.length();
+        return res + base;
+    }
+}
+==============================
+tmp/Power2Bit_S.java:1: error: class Power2Bit is public, should be declared in a file named Power2Bit.java
+public class Power2Bit {
+       ^
+1 error
+
+==============================

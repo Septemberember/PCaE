@@ -1,0 +1,106 @@
+public class PerformanceRater {
+    /*@
+      requires sales >= 0;
+      ensures \result >= 0;
+      ensures (sales > 20000) ==> \result == sales + 20000.0;
+      ensures (sales < 120) ==> \result == 2000.0;
+      ensures (sales >= 120 && sales <= 10000) ==> \result == (2000 + calculateBonusLogic(sales)) * (calculateFactor(sales) / 2.0);
+      ensures (sales > 10000 && sales <= 20000) ==> \result == 2000.0 + 800.0 + (sales - 10000) / 100.0;
+    @*/
+    public static double calculateBonus(int sales) {
+        int attendance = 64;
+        int bonusLevels[] = new int[4];
+        int factor = 0;
+        String performance = null;
+        bonusLevels[0] = 100;
+        bonusLevels[1] = 300;
+        bonusLevels[2] = 500;
+        bonusLevels[3] = 800;
+
+        int baseSalary = 2000;
+        int penalty = 0;
+        int rating = 0;
+
+        if(sales > baseSalary * 10){
+            return sales + baseSalary * 10;
+        }
+
+        if (sales < 0 || sales < 120) {
+            return baseSalary;
+        }
+
+        if (sales > 10000) {
+            return baseSalary + bonusLevels[3] + (sales - 10000) / 100;
+        }
+
+        rating = sales / 125;
+
+        performance = new String(String.valueOf(rating * 2) + 9);
+
+        if (attendance < 80) {
+            penalty = (100 - attendance) * 10;
+        }
+        int bonus = 0;
+        if (rating == 0) {
+            bonus = bonusLevels[0] - penalty;
+            bonus =  Math.max(bonus, 0);
+            performance = null;
+            System.out.println("bonus is " + bonus);
+        }
+        if (rating == 1) {
+            bonus = bonusLevels[1] - penalty / 2;
+            bonus =  bonus + (sales % 100);
+            System.out.println("bonus is " + bonus);
+        }
+        if (rating == 2) {
+            bonus = bonusLevels[2] - penalty / 3;
+            bonus = bonus + (attendance * 2);
+            System.out.println("bonus is " + bonus);
+        } else {
+            bonus = sales * bonusLevels[3] / 1000;
+            if (bonus > 1000) {
+                bonus = bonus + attendance * 5;
+            }
+            System.out.println("bonus is " + bonus);
+        }
+        factor = performance.length();
+
+        return (baseSalary + bonus) * (double)(factor / 2);
+    }
+    
+    /*@
+      requires sales >= 120 && sales <= 10000;
+      ensures \result >= 0;
+      ensures (\forall int i; i >= 0 && i < 4; bonusLevels[i] >= 0);
+    @*/
+    // Helper method specification for bonus calculation logic
+    private static int calculateBonusLogic(int sales) {
+        // Implementation would go here
+        return 0;
+    }
+    
+    /*@
+      requires sales >= 120 && sales <= 10000;
+      ensures \result >= 1 && \result <= 4;
+    @*/
+    // Helper method specification for factor calculation
+    private static int calculateFactor(int sales) {
+        // Implementation would go here
+        return 1;
+    }
+}
+==============================
+tmp/PerformanceRater.java:7: error: An identifier with private visibility may not be used in a ensures clause with public visibility
+      ensures (sales >= 120 && sales <= 10000) ==> \result == (2000 + calculateBonusLogic(sales)) * (calculateFactor(sales) / 2.0);
+                                                                      ^
+tmp/PerformanceRater.java:7: error: An identifier with private visibility may not be used in a ensures clause with public visibility
+      ensures (sales >= 120 && sales <= 10000) ==> \result == (2000 + calculateBonusLogic(sales)) * (calculateFactor(sales) / 2.0);
+                                                                                                     ^
+tmp/PerformanceRater.java:74: error: cannot find symbol
+      ensures (\forall int i; i >= 0 && i < 4; bonusLevels[i] >= 0);
+                                               ^
+  symbol:   variable bonusLevels
+  location: class PerformanceRater
+3 errors
+
+==============================

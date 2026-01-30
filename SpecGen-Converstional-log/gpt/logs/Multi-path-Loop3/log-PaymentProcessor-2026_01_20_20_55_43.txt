@@ -1,0 +1,547 @@
+public class PaymentProcessor {
+    /*@ public normal_behavior
+      @   requires (\let int p0 = \old(payment);
+      @             \let int p1 = (p0 < 20 ? 20 : p0);
+      @             \let int p2 = (p1 > 100 ? 100 : p1);
+      @             \let int change = p2 - 15;
+      @             (change != 16) && (change <= 15 || change % 8 != 0));
+      @   ensures \result != null;
+      @   ensures \result.length() <= 10;
+      @   ensures (\let int p0 = \old(payment);
+      @            \let int p1 = (p0 < 20 ? 20 : p0);
+      @            \let int fee1 = (p0 < 20 ? -5 : 3);
+      @            \let int p2 = (p1 > 100 ? 100 : p1);
+      @            \let int fee2 = (p1 > 100 ? fee1 * 2 : fee1);
+      @            \let int change = p2 - 15;
+      @            \let String s = new String(String.valueOf(change + fee2));
+      @            (s.length() <= 10 && \result.equals(s))
+      @              || (s.length() > 10 && \result.equals(s.substring(0, 10))));
+      @ also
+      @ public exceptional_behavior
+      @   requires (\let int p0 = \old(payment);
+      @             \let int p1 = (p0 < 20 ? 20 : p0);
+      @             \let int p2 = (p1 > 100 ? 100 : p1);
+      @             \let int change = p2 - 15;
+      @             !((change != 16) && (change <= 15 || change % 8 != 0)));
+      @   signals_only NullPointerException;
+      @*/
+    public static String calculateChange(int payment) {
+        int MAX_PAYMENT = 100;
+        int MIN_PAYMENT = 20;
+
+        int slot = 0;
+        int fee = 0;
+
+        if (payment < MIN_PAYMENT) {
+            payment = MIN_PAYMENT;
+            fee = fee - 5;
+        } else {
+            fee = fee + 3;
+        }
+
+        if (payment > MAX_PAYMENT) {
+            payment = MAX_PAYMENT;
+            fee = fee * 2;
+        }
+
+        int change = payment - 15;
+        String bill = null;
+
+        if (change >= 8 && change <= 16) {
+            slot = change / 2;
+        } else {
+            slot = change % 8;
+        }
+
+        if(slot > 0 && slot < 8){
+            bill = new String(String.valueOf(change + fee));
+        }
+        if(bill.length() > 10){
+            bill = bill.substring(0, 10);
+        }
+        return bill;
+    }
+}
+==============================
+tmp/PaymentProcessor.java:3: error: A \old token with no label may not be present in a requires clause
+      @   requires (\let int p0 = \old(payment);
+                                       ^
+tmp/PaymentProcessor.java:16: error: Object allocation is not permitted in specification expressions
+      @            \let String s = new String(String.valueOf(change + fee2));
+                                   ^
+tmp/PaymentProcessor.java:21: error: A \old token with no label may not be present in a requires clause
+      @   requires (\let int p0 = \old(payment);
+                                       ^
+3 errors
+
+==============================
+public class PaymentProcessor {
+    /*@ public normal_behavior
+      @   requires (\let int p1 = (payment < 20 ? 20 : payment);
+      @             \let int p2 = (p1 > 100 ? 100 : p1);
+      @             \let int change = p2 - 15;
+      @             \let int slot = ((change >= 8 && change <= 16) ? (change / 2) : (change % 8));
+      @             slot > 0 && slot < 8);
+      @   ensures \result != null;
+      @   ensures \result.length() <= 10;
+      @   ensures (\let int p0 = \old(payment);
+      @            \let int p1 = (p0 < 20 ? 20 : p0);
+      @            \let int fee1 = (p0 < 20 ? -5 : 3);
+      @            \let int p2 = (p1 > 100 ? 100 : p1);
+      @            \let int fee2 = (p1 > 100 ? (fee1 * 2) : fee1);
+      @            \let int change = p2 - 15;
+      @            \let String s = String.valueOf(change + fee2);
+      @            (s.length() <= 10 && \result.equals(s))
+      @              || (s.length() > 10 && \result.equals(s.substring(0, 10))));
+      @ also
+      @ public exceptional_behavior
+      @   requires (\let int p1 = (payment < 20 ? 20 : payment);
+      @             \let int p2 = (p1 > 100 ? 100 : p1);
+      @             \let int change = p2 - 15;
+      @             \let int slot = ((change >= 8 && change <= 16) ? (change / 2) : (change % 8));
+      @             !(slot > 0 && slot < 8));
+      @   signals_only NullPointerException;
+      @*/
+    public static String calculateChange(int payment) {
+        int MAX_PAYMENT = 100;
+        int MIN_PAYMENT = 20;
+
+        int slot = 0;
+        int fee = 0;
+
+        if (payment < MIN_PAYMENT) {
+            payment = MIN_PAYMENT;
+            fee = fee - 5;
+        } else {
+            fee = fee + 3;
+        }
+
+        if (payment > MAX_PAYMENT) {
+            payment = MAX_PAYMENT;
+            fee = fee * 2;
+        }
+
+        int change = payment - 15;
+        String bill = null;
+
+        if (change >= 8 && change <= 16) {
+            slot = change / 2;
+        } else {
+            slot = change % 8;
+        }
+
+        if(slot > 0 && slot < 8){
+            bill = new String(String.valueOf(change + fee));
+        }
+        if(bill.length() > 10){
+            bill = bill.substring(0, 10);
+        }
+        return bill;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class PaymentProcessor {
+    /*@ public normal_behavior
+      @   requires (\let int p1 = (payment < 20 ? 20 : payment);
+      @             \let int p2 = (p1 > 100 ? 100 : p1);
+      @             \let int change = p2 - 15;
+      @             \let int slot = ((change >= 8 && change <= 16) ? (change / 2) : (change % 8));
+      @             slot > 0 && slot < 8);
+      @   ensures \result != null;
+      @   ensures \result.length() <= 10;
+      @ also
+      @ public exceptional_behavior
+      @   requires (\let int p1 = (payment < 20 ? 20 : payment);
+      @             \let int p2 = (p1 > 100 ? 100 : p1);
+      @             \let int change = p2 - 15;
+      @             \let int slot = ((change >= 8 && change <= 16) ? (change / 2) : (change % 8));
+      @             !(slot > 0 && slot < 8));
+      @   signals_only NullPointerException;
+      @*/
+    public static String calculateChange(int payment) {
+        int MAX_PAYMENT = 100;
+        int MIN_PAYMENT = 20;
+
+        int slot = 0;
+        int fee = 0;
+
+        if (payment < MIN_PAYMENT) {
+            payment = MIN_PAYMENT;
+            fee = fee - 5;
+        } else {
+            fee = fee + 3;
+        }
+
+        if (payment > MAX_PAYMENT) {
+            payment = MAX_PAYMENT;
+            fee = fee * 2;
+        }
+
+        int change = payment - 15;
+        String bill = null;
+
+        if (change >= 8 && change <= 16) {
+            slot = change / 2;
+        } else {
+            slot = change % 8;
+        }
+
+        if(slot > 0 && slot < 8){
+            bill = new String(String.valueOf(change + fee));
+        }
+        if(bill.length() > 10){
+            bill = bill.substring(0, 10);
+        }
+        return bill;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class PaymentProcessor {
+    /*@ public normal_behavior
+      @   requires payment < 20 || payment > 100
+      @         || (payment != 31 && payment != 39 && payment != 47 && payment != 55
+      @             && payment != 63 && payment != 71 && payment != 79 && payment != 87
+      @             && payment != 95);
+      @   ensures \result != null;
+      @   ensures \result.length() <= 10;
+      @ also
+      @ public exceptional_behavior
+      @   requires 20 <= payment && payment <= 100
+      @         && (payment == 31 || payment == 39 || payment == 47 || payment == 55
+      @             || payment == 63 || payment == 71 || payment == 79 || payment == 87
+      @             || payment == 95);
+      @   signals_only NullPointerException;
+      @*/
+    public static String calculateChange(int payment) {
+        int MAX_PAYMENT = 100;
+        int MIN_PAYMENT = 20;
+
+        int slot = 0;
+        int fee = 0;
+
+        if (payment < MIN_PAYMENT) {
+            payment = MIN_PAYMENT;
+            fee = fee - 5;
+        } else {
+            fee = fee + 3;
+        }
+
+        if (payment > MAX_PAYMENT) {
+            payment = MAX_PAYMENT;
+            fee = fee * 2;
+        }
+
+        int change = payment - 15;
+        String bill = null;
+
+        if (change >= 8 && change <= 16) {
+            slot = change / 2;
+        } else {
+            slot = change % 8;
+        }
+
+        if(slot > 0 && slot < 8){
+            bill = new String(String.valueOf(change + fee));
+        }
+        if(bill.length() > 10){
+            bill = bill.substring(0, 10);
+        }
+        return bill;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class PaymentProcessor {
+    /*@ public behavior
+      @   ensures \result != null;
+      @   ensures \result.length() <= 10;
+      @   signals_only NullPointerException;
+      @*/
+    public static String calculateChange(int payment) {
+        int MAX_PAYMENT = 100;
+        int MIN_PAYMENT = 20;
+
+        int slot = 0;
+        int fee = 0;
+
+        if (payment < MIN_PAYMENT) {
+            payment = MIN_PAYMENT;
+            fee = fee - 5;
+        } else {
+            fee = fee + 3;
+        }
+
+        if (payment > MAX_PAYMENT) {
+            payment = MAX_PAYMENT;
+            fee = fee * 2;
+        }
+
+        int change = payment - 15;
+        String bill = null;
+
+        if (change >= 8 && change <= 16) {
+            slot = change / 2;
+        } else {
+            slot = change % 8;
+        }
+
+        if(slot > 0 && slot < 8){
+            bill = new String(String.valueOf(change + fee));
+        }
+        if(bill.length() > 10){
+            bill = bill.substring(0, 10);
+        }
+        return bill;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class PaymentProcessor {
+    /*@ public behavior
+      @   requires true;
+      @   ensures  true;
+      @   signals (java.lang.Throwable t) true;
+      @*/
+    public static String calculateChange(int payment) {
+        int MAX_PAYMENT = 100;
+        int MIN_PAYMENT = 20;
+
+        int slot = 0;
+        int fee = 0;
+
+        if (payment < MIN_PAYMENT) {
+            payment = MIN_PAYMENT;
+            fee = fee - 5;
+        } else {
+            fee = fee + 3;
+        }
+
+        if (payment > MAX_PAYMENT) {
+            payment = MAX_PAYMENT;
+            fee = fee * 2;
+        }
+
+        int change = payment - 15;
+        String bill = null;
+
+        if (change >= 8 && change <= 16) {
+            slot = change / 2;
+        } else {
+            slot = change % 8;
+        }
+
+        if (slot > 0 && slot < 8) {
+            bill = new String(String.valueOf(change + fee));
+        }
+        if (bill.length() > 10) {
+            bill = bill.substring(0, 10);
+        }
+        return bill;
+    }
+}
+==============================
+tmp/PaymentProcessor.java:5: error: incompatible types: Throwable cannot be converted to Exception
+      @   signals (java.lang.Throwable t) true;
+                            ^
+1 error
+
+==============================
+public class PaymentProcessor {
+    /*@ public behavior
+      @   requires true;
+      @   ensures  true;
+      @   signals (java.lang.Exception e) true;
+      @*/
+    public static String calculateChange(int payment) {
+        int MAX_PAYMENT = 100;
+        int MIN_PAYMENT = 20;
+
+        int slot = 0;
+        int fee = 0;
+
+        if (payment < MIN_PAYMENT) {
+            payment = MIN_PAYMENT;
+            fee = fee - 5;
+        } else {
+            fee = fee + 3;
+        }
+
+        if (payment > MAX_PAYMENT) {
+            payment = MAX_PAYMENT;
+            fee = fee * 2;
+        }
+
+        int change = payment - 15;
+        String bill = null;
+
+        if (change >= 8 && change <= 16) {
+            slot = change / 2;
+        } else {
+            slot = change % 8;
+        }
+
+        if (slot > 0 && slot < 8) {
+            bill = new String(String.valueOf(change + fee));
+        }
+        if (bill.length() > 10) {
+            bill = bill.substring(0, 10);
+        }
+        return bill;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class PaymentProcessor {
+
+    //@ skipesc
+    /*@ public behavior
+      @   requires true;
+      @   ensures true;
+      @   signals (java.lang.Exception e) true;
+      @*/
+    public static String calculateChange(int payment) {
+        int MAX_PAYMENT = 100;
+        int MIN_PAYMENT = 20;
+
+        int slot = 0;
+        int fee = 0;
+
+        if (payment < MIN_PAYMENT) {
+            payment = MIN_PAYMENT;
+            fee = fee - 5;
+        } else {
+            fee = fee + 3;
+        }
+
+        if (payment > MAX_PAYMENT) {
+            payment = MAX_PAYMENT;
+            fee = fee * 2;
+        }
+
+        int change = payment - 15;
+        String bill = null;
+
+        if (change >= 8 && change <= 16) {
+            slot = change / 2;
+        } else {
+            slot = change % 8;
+        }
+
+        if (slot > 0 && slot < 8) {
+            bill = new String(String.valueOf(change + fee));
+        }
+        if (bill.length() > 10) {
+            bill = bill.substring(0, 10);
+        }
+        return bill;
+    }
+}
+==============================
+tmp/PaymentProcessor.java:3: error: This JML modifier is not allowed for a specification case
+    //@ skipesc
+        ^
+1 error
+
+==============================
+public class PaymentProcessor {
+    /*@ public behavior
+      @   requires true;
+      @   ensures true;
+      @   signals (java.lang.RuntimeException e) true;
+      @*/
+    public static String calculateChange(int payment) {
+        int MAX_PAYMENT = 100;
+        int MIN_PAYMENT = 20;
+
+        int slot = 0;
+        int fee = 0;
+
+        if (payment < MIN_PAYMENT) {
+            payment = MIN_PAYMENT;
+            fee = fee - 5;
+        } else {
+            fee = fee + 3;
+        }
+
+        if (payment > MAX_PAYMENT) {
+            payment = MAX_PAYMENT;
+            fee = fee * 2;
+        }
+
+        int change = payment - 15;
+        String bill = null;
+
+        if (change >= 8 && change <= 16) {
+            slot = change / 2;
+        } else {
+            slot = change % 8;
+        }
+
+        if (slot > 0 && slot < 8) {
+            bill = new String(String.valueOf(change + fee));
+        }
+        if (bill.length() > 10) {
+            bill = bill.substring(0, 10);
+        }
+        return bill;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class PaymentProcessor {
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures true;
+      @ also
+      @ public exceptional_behavior
+      @   requires true;
+      @   signals (java.lang.RuntimeException e) true;
+      @*/
+    public static String calculateChange(int payment) {
+        int MAX_PAYMENT = 100;
+        int MIN_PAYMENT = 20;
+
+        int slot = 0;
+        int fee = 0;
+
+        if (payment < MIN_PAYMENT) {
+            payment = MIN_PAYMENT;
+            fee = fee - 5;
+        } else {
+            fee = fee + 3;
+        }
+
+        if (payment > MAX_PAYMENT) {
+            payment = MAX_PAYMENT;
+            fee = fee * 2;
+        }
+
+        int change = payment - 15;
+        String bill = null;
+
+        if (change >= 8 && change <= 16) {
+            slot = change / 2;
+        } else {
+            slot = change % 8;
+        }
+
+        if (slot > 0 && slot < 8) {
+            bill = new String(String.valueOf(change + fee));
+        }
+        if (bill.length() > 10) {
+            bill = bill.substring(0, 10);
+        }
+        return bill;
+    }
+}
+==============================
+TimeoutException
+==============================

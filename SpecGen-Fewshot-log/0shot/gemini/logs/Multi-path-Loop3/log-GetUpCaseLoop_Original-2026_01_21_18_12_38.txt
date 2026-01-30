@@ -1,0 +1,38 @@
+public class GetUpCaseLoop {
+
+    // This utility maps a..f to their corresponding uppercase characters.
+    // It returns 0 for values outside the handled range.
+    // The mapping is achieved by a small downward scan from 'F'.
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures (c >= 'a' && c <= 'f') ==> (\result == c - 'a' + 'A');
+      @   ensures (c < 'a' || c > 'f') ==> (\result == 0);
+      @   assignable \nothing;
+      @*/
+    public static char getUpCase(char c) {
+        // Validate input: only lowercase a..f are considered
+        // Return 0 for any other input value
+        if(c < 'a' || c > 'f') {
+            return 0;
+        }
+        // Start with the uppercase boundary corresponding to 'F'
+        char t = 'F';
+        // Move downward until reaching the target uppercase letter
+        /*@ maintaining t >= (c - 'a' + 'A') && t <= 'F';
+          @ decreasing t - (c - 'a' + 'A');
+          @ assignable \nothing;
+          @*/
+        while(t >= 'A' && t != c - 'a' + 'A') {
+            t--;
+        }
+        // t now holds the mapped uppercase character
+        return t;
+    }
+}
+==============================
+tmp/GetUpCaseLoop_Original.java:23: error: Expected loop specifications while in JML: assignable is not a loop specification keyword
+          @ assignable \nothing;
+            ^
+1 error
+
+==============================

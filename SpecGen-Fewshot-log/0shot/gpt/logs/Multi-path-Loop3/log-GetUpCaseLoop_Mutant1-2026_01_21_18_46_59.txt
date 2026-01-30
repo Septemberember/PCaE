@@ -1,0 +1,31 @@
+public class GetUpCaseLoop_Mutant1 {
+	/**
+	 * Converts a character in the range 'a'..'f' to its uppercase counterpart 'A'..'F'.
+	 * For inputs outside the range, the function yields 0.
+	 */
+	// The original logic uses a decrementing loop starting from 'F' to reach the target.
+
+    /*@ public normal_behavior
+      @   ensures (c < 'a' || c > 'f') ==> (\result == 0);
+      @   ensures ('a' <= c && c <= 'f') ==> (\result == (char)(c - 'a' + 'A'));
+      @   assignable \nothing;
+      @*/
+    public static char getUpCase(char c) {
+        if(c < 'a' || c > 'f') {
+            return 0;
+        }
+        char t = 'F';
+        /*@ maintaining ('a' <= c && c <= 'f');
+          @ maintaining (int)'A' <= (int)(c - 'a' + 'A') && (int)(c - 'a' + 'A') <= (int)'F';
+          @ maintaining (int)(c - 'a' + 'A') <= (int)t && (int)t <= (int)'F';
+          @ decreases (int)t - (int)(c - 'a' + 'A');
+          @*/
+        while(t >= 'A' && t != c - 'a' + 'A') {
+            t--;
+        }
+        return t;
+    }
+}
+==============================
+
+==============================

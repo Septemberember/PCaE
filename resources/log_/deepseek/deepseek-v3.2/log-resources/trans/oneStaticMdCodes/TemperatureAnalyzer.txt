@@ -1,0 +1,87 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class TemperatureAnalyzer {
+
+    public static double analyzeTemperature(int modifier) {
+        int temp = 96;
+        int offset = 5;
+        double average = 0.0;
+        boolean alert = false;
+
+        temp = temp + modifier;
+        temp = temp - offset;
+        temp = temp * 2;
+
+        int factor = 3;
+        int divisor = modifier - 2;
+        double result = 0.0;
+
+        if (temp > 50) {
+            divisor = divisor + 1;
+            temp = temp - 10;
+            result = (double) temp / divisor;
+            average = result + temp * 0.1;
+            alert = average > 30;
+        } else {
+            temp = temp + 15;
+            divisor = divisor - 1;
+            average = temp * 0.2;
+            alert = average < 10;
+        }
+
+        double correction = 1.0;
+        for (int i = 0; i < 4; i++) {
+            correction += i * 0.05;
+        }
+
+        double finalValue = average + correction + temp - factor;
+
+        if (alert) {
+            finalValue += 2.0;
+        } else {
+            finalValue -= 1.0;
+        }
+        return finalValue;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: divisor + 1 == 0 && (modifier < 0 || modifier > 0) && temp > 50
+D1: Exception
+
+T2: divisor - 1 == 0 && temp <= 50 && (modifier < 0 || modifier > 0)
+D2: Exception
+
+T3: divisor + 1 != 0 && temp > 50
+D3: finalValue == result + temp * 0.1 + (1.0 + 0.0 * 0.05 + 1.0 * 0.05 + 2.0 * 0.05 + 3.0 * 0.05) + (96 + modifier - 5) * 2 - 10 - 3 + 2.0 && result == (double) ((96 + modifier - 5) * 2 - 10) / (modifier - 2 + 1) && result + temp * 0.1 > 30
+
+T4: divisor - 1 != 0 && temp <= 50 && modifier != 2
+D4: finalValue == (96 + modifier - 5) * 2 * 0.2 + (1.0 + 0.0 * 0.05 + 1.0 * 0.05 + 2.0 * 0.05 + 3.0 * 0.05) + (96 + modifier - 5) * 2 + 15 - 3 - 1.0 && (96 + modifier - 5) * 2 * 0.2 < 10
+
+T5: divisor - 1 != 0 && temp <= 50 && modifier != 2
+D5: finalValue == (96 + modifier - 5) * 2 * 0.2 + (1.0 + 0.0 * 0.05 + 1.0 * 0.05 + 2.0 * 0.05 + 3.0 * 0.05) + (96 + modifier - 5) * 2 + 15 - 3 + 2.0 && (96 + modifier - 5) * 2 * 0.2 >= 10
+
+T6: divisor + 1 != 0 && temp > 50
+D6: finalValue == result + temp * 0.1 + (1.0 + 0.0 * 0.05 + 1.0 * 0.05 + 2.0 * 0.05 + 3.0 * 0.05) + (96 + modifier - 5) * 2 - 10 - 3 - 1.0 && result == (double) ((96 + modifier - 5) * 2 - 10) / (modifier - 2 + 1) && result + temp * 0.1 <= 30
+
+T7: divisor - 1 == 0 && temp <= 50 && modifier == 2
+D7: Exception
+
+T8: divisor + 1 == 0 && temp > 50 && modifier == 1
+D8: Exception
+
+T9: divisor - 1 != 0 && temp <= 50 && modifier == 2
+D9: Exception
+```
+*end* role assistant
+start role user
+There exist variables which do not belong to input params of the program:divisor,temp, please regenerate the FSF, avoiding these variables!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

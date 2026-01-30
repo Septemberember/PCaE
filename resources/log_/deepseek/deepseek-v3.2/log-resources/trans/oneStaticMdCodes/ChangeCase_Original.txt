@@ -1,0 +1,74 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class ChangeCase_Original {
+
+    // ASCII-case utility helpers
+    // Ensures only ASCII A-Z and a-z are toggled
+    // Non-letter characters are preserved as-is
+
+    // Helper: case conversion utility
+    // Keeps non-letter characters intact
+    // This method flips the case of ASCII letters or leaves others unchanged
+
+    public static char changeCase(char c) {
+        char result = ' ';
+        if (c > 'z') {
+            result = c;
+        } else if (c >= 'a') {
+            result = (char) (c - 'a' + 'A');
+        } else if (c > 'Z') {
+            result = c;
+        } else if (c >= 'A') {
+            result = (char) (c - 'A' + 'a');
+        } else {
+            result = c;
+        }
+        return result;
+    }
+
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: c > 'z'
+D1: result == c
+
+T2: c >= 'a' && c <= 'z'
+D2: result == (c - 'a' + 'A')
+
+T3: c > 'Z' && c < 'a'
+D3: result == c
+
+T4: c >= 'A' && c <= 'Z'
+D4: result == (c - 'A' + 'a')
+
+T5: c < 'A'
+D5: result == c
+```
+```
+T1: c > 'z'
+D1: result == c
+
+T2: c >= 'a' && c <= 'z'
+D2: result == (c - 'a' + 'A')
+
+T3: c > 'Z' && c < 'a'
+D3: result == c
+
+T4: c >= 'A' && c <= 'Z'
+D4: result == (c - 'A' + 'a')
+
+T5: c < 'A'
+D5: result == c
+```
+*end* role assistant
+start role user
+It was found that T in the FSF does not satisfy the mutual exclusivity requirement,especially, Ti && Tj :[(c > 'z') && (c > 'z')] is satisfiable assigned as [c={]，please regenerate FSF，making sure the mutual exclusivity of FSF
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

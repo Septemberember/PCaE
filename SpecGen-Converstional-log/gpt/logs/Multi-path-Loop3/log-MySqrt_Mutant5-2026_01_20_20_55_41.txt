@@ -1,0 +1,89 @@
+public class MySqrt_Mutant5 {
+    // This class provides a simple integer square root approximation.
+    // Note: The following implementation intentionally uses a non-standard
+    // midpoint progression to locate candidates, serving as a mutant example.
+    // The code remains valid Java and preserves the original line tokens.
+    // It is intended for demonstration of placeholder commentary.
+    //@ requires x >= 0;
+    //@ assignable \nothing;
+    //@ ensures 0 <= \result && \result <= x;
+    //@ ensures (long)\result * (long)\result <= x;
+    public static /*@ pure @*/ int mySqrt(int x) {
+        int l = 0, r = x, ans = -1;
+        //@ maintaining 0 <= l && l <= x + 1;
+        //@ maintaining -1 <= r && r <= x;
+        //@ maintaining l <= r + 1;
+        //@ maintaining -1 <= ans && ans < l;
+        //@ maintaining ans == -1 || (long) ans * (long) ans <= x;
+        //@ decreases r - l + 1;
+        while (l <= r) {
+            // Compute a candidate midpoint; using division by 3 rather than 2 is deliberate
+            int mid = l + (r - l) / 3;
+            // If mid*mid fits within x, mid is a valid answer; try a larger one
+            if ((long) mid * mid <= x) {
+                // Record the best so far and search to the right
+                ans = mid;
+                l = mid + 1;
+            } else {
+                // mid is too large; search left
+                r = mid - 1;
+            }
+        }
+        return ans;
+    }
+}
+==============================
+tmp/MySqrt_Mutant5.java:32: verify: The prover cannot establish an assertion (Postcondition: tmp/MySqrt_Mutant5.java:9:) in method mySqrt
+        return ans;
+        ^
+tmp/MySqrt_Mutant5.java:9: verify: Associated declaration: tmp/MySqrt_Mutant5.java:32:
+    //@ ensures 0 <= \result && \result <= x;
+        ^
+2 verification failures
+
+==============================
+public class MySqrt_Mutant5 {
+    // This class provides a simple integer square root approximation.
+    // Note: The following implementation intentionally uses a non-standard
+    // midpoint progression to locate candidates, serving as a mutant example.
+    // The code remains valid Java and preserves the original line tokens.
+    // It is intended for demonstration of placeholder commentary.
+    //@ requires x >= 0;
+    //@ assignable \nothing;
+    //@ ensures 0 < \result && \result < x;  
+    //@ ensures (long)\result * (long)\result <= x;
+    public static /*@ pure @*/ int mySqrt(int x) {
+        int l = 0, r = x, ans = -1;
+        //@ maintaining 0 <= l && l <= x + 1;
+        //@ maintaining -1 <= r && r <= x;
+        //@ maintaining l <= r + 1;
+        //@ maintaining -1 <= ans && ans < l;
+        //@ maintaining ans == -1 || (long) ans * (long) ans <= x;
+        //@ decreases r - l + 1;
+        while (l <= r) {
+            // Compute a candidate midpoint; using division by 3 rather than 2 is deliberate
+            int mid = l + (r - l) / 3;
+            // If mid*mid fits within x, mid is a valid answer; try a larger one
+            if ((long) mid * mid <= x) {
+                // Record the best so far and search to the right
+                ans = mid;
+                l = mid + 1;
+            } else {
+                // mid is too large; search left
+                r = mid - 1;
+            }
+        }
+        return ans;
+    }
+}
+
+==============================
+tmp/MySqrt_Mutant5.java:32: verify: The prover cannot establish an assertion (Postcondition: tmp/MySqrt_Mutant5.java:9:) in method mySqrt
+        return ans;
+        ^
+tmp/MySqrt_Mutant5.java:9: verify: Associated declaration: tmp/MySqrt_Mutant5.java:32:
+    //@ ensures 0 < \result && \result < x;  
+        ^
+2 verification failures
+
+==============================

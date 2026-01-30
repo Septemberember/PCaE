@@ -1,0 +1,64 @@
+public class MetricsCalculator {
+    /*@ public behavior
+      @   requires true;
+      @   assignable \nothing;
+      @   ensures true;
+      @ also
+      @ public exceptional_behavior
+      @   requires true;
+      @   assignable \nothing;
+      @   signals_only ArithmeticException;
+      @   signals (ArithmeticException e) true;
+      @*/
+    public static double computeScore(int value, int limit) {
+        int result = 0;
+        int iteration = -26;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = -value;
+            polarity = polarity * -1;
+        }
+
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        /*@ maintaining limit > 0;
+          @ maintaining value >= 0;
+          @ maintaining iteration >= -26;
+          @ maintaining shift >= (validation % 3);
+          @ decreasing (limit > 0 ? limit : 0);
+          @ assignable limit, iteration, adjustment, shift;
+          @*/
+        while (limit > 0) {
+            limit = (limit - value) / 2;
+            iteration = iteration + 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = iteration % 10;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator.java:36: error: Expected loop specifications while in JML: assignable is not a loop specification keyword
+          @ assignable limit, iteration, adjustment, shift;
+            ^
+1 error
+
+==============================

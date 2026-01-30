@@ -1,0 +1,351 @@
+import java.util.ArrayList;
+
+public class MemoryAllocator {
+    /*@ public normal_behavior
+      @   requires
+      @     // Avoid ArrayList.get(11) when the clamped process size becomes 100 (allocated becomes 185).
+      @     ((\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize))) != 100);
+      @   assignable \everything;
+      @   ensures \result >= 0;
+      @   ensures \result
+      @     ==
+      @     ( // let ps = clamp(processSize, 10, 500)
+      @       ((
+      @          ((\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize))) * 2 - 15) >= 85
+      @        && ((\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize))) * 2 - 15) <= 185
+      @       )
+      @       ?
+      @       ( // allocated := allocated - 135; if negative then 0
+      @         (((\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize))) * 2 - 15) - 135) < 0
+      @           ? 0
+      @           : (((\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize))) * 2 - 15) - 135)
+      @         )
+      @       )
+      @       :
+      @       ( // allocated unchanged
+      @         ((\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize))) * 2 - 15)
+      @       )
+      @     );
+      @ also
+      @ public exceptional_behavior
+      @   requires
+      @     ((\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize))) == 100);
+      @   assignable \everything;
+      @   signals_only IndexOutOfBoundsException;
+      @*/
+    public static int allocateMemory(int processSize) {
+        ArrayList<Integer> memoryBlocks = new ArrayList<Integer>(11);
+        //@ maintaining 0 <= i && i <= 11;
+        //@ maintaining memoryBlocks != null;
+        //@ maintaining memoryBlocks.size() == i;
+        //@ maintaining (\forall int k; 0 <= k && k < i; memoryBlocks.get(k).intValue() == 0);
+        //@ decreases 11 - i;
+        for (int i = 0; i < 11; i++) {
+            memoryBlocks.add(0);
+        }
+        int fragmentation = 0;
+
+        int blockIndex = 0;
+
+        if (processSize < 10) {
+            processSize = 10;
+            fragmentation = fragmentation - 8;
+        } else {
+            fragmentation = fragmentation + 3;
+        }
+
+        if (processSize > 500) {
+            processSize = 500;
+            fragmentation = fragmentation + 12;
+        }
+
+        int allocated = processSize * 2 - 15;
+
+        if (allocated >= 85 && allocated <= 185) {
+            blockIndex = (allocated - 75) / 10;
+            allocated = allocated - 135;
+            if(allocated < 0){
+                allocated = 0;
+            }
+            memoryBlocks.get(blockIndex);
+        } else {
+            blockIndex = allocated % 11;
+        }
+        System.out.println("blockIndex is " + blockIndex + " and the fragmentation is " + fragmentation);
+        return allocated;
+    }
+}
+==============================
+tmp/MemoryAllocator.java:22: error: : expected
+      @         )
+                 ^
+tmp/MemoryAllocator.java:23: error: illegal start of expression
+      @       )
+              ^
+tmp/MemoryAllocator.java:23: error: ')' expected
+      @       )
+               ^
+tmp/MemoryAllocator.java:24: error: Incorrectly formed or terminated ensures statement near here
+      @       :
+              ^
+4 errors
+
+==============================
+import java.util.ArrayList;
+
+public class MemoryAllocator {
+    /*@ public normal_behavior
+      @   // When the (clamped) process size is 100, allocated becomes 185, which makes
+      @   // blockIndex = (185-75)/10 = 11 and thus memoryBlocks.get(11) throws.
+      @   requires (\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize))) != 100;
+      @   assignable \everything;
+      @   ensures \result ==
+      @     (\let int ps = (\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize)));
+      @      \let int a0 = ps * 2 - 15;
+      @        ((a0 >= 85 && a0 <= 185)
+      @          ? (((a0 - 135) < 0) ? 0 : (a0 - 135))
+      @          : a0));
+      @ also
+      @ public exceptional_behavior
+      @   requires (\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize))) == 100;
+      @   assignable \everything;
+      @   signals_only IndexOutOfBoundsException;
+      @*/
+    public static int allocateMemory(int processSize) {
+        ArrayList<Integer> memoryBlocks = new ArrayList<Integer>(11);
+        //@ maintaining 0 <= i && i <= 11;
+        //@ maintaining memoryBlocks != null;
+        //@ maintaining memoryBlocks.size() == i;
+        //@ maintaining (\forall int k; 0 <= k && k < i; memoryBlocks.get(k).intValue() == 0);
+        //@ decreases 11 - i;
+        for (int i = 0; i < 11; i++) {
+            memoryBlocks.add(0);
+        }
+        int fragmentation = 0;
+
+        int blockIndex = 0;
+
+        if (processSize < 10) {
+            processSize = 10;
+            fragmentation = fragmentation - 8;
+        } else {
+            fragmentation = fragmentation + 3;
+        }
+
+        if (processSize > 500) {
+            processSize = 500;
+            fragmentation = fragmentation + 12;
+        }
+
+        int allocated = processSize * 2 - 15;
+
+        if (allocated >= 85 && allocated <= 185) {
+            blockIndex = (allocated - 75) / 10;
+            allocated = allocated - 135;
+            if(allocated < 0){
+                allocated = 0;
+            }
+            memoryBlocks.get(blockIndex);
+        } else {
+            blockIndex = allocated % 11;
+        }
+        System.out.println("blockIndex is " + blockIndex + " and the fragmentation is " + fragmentation);
+        return allocated;
+    }
+}
+==============================
+tmp/MemoryAllocator.java:7: error: A \old token with no label may not be present in a requires clause
+      @   requires (\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize))) != 100;
+                         ^
+tmp/MemoryAllocator.java:7: error: A \old token with no label may not be present in a requires clause
+      @   requires (\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize))) != 100;
+                                                        ^
+tmp/MemoryAllocator.java:7: error: A \old token with no label may not be present in a requires clause
+      @   requires (\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize))) != 100;
+                                                                                        ^
+tmp/MemoryAllocator.java:10: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @     (\let int ps = (\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize)));
+                      ^
+  Reason: Exception attributing VariableDecl //@ int ps = (\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize)))
+java.lang.NullPointerException: Cannot invoke "com.sun.tools.javac.tree.JCTree.hasTag(com.sun.tools.javac.tree.JCTree$Tag)" because "tree" is null
+	at jdk.compiler/com.sun.tools.javac.tree.TreeInfo.skipParens(TreeInfo.java:841)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeInfo.symbol(TreeInfo.java:953)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.isBooleanOrNumeric(Attr.java:1962)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.isBooleanOrNumeric(JmlAttr.java:7906)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.isBooleanOrNumeric(Attr.java:1956)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.isBooleanOrNumeric(JmlAttr.java:7906)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.isBooleanOrNumeric(Attr.java:1952)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.isBooleanOrNumeric(JmlAttr.java:7906)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.isBooleanOrNumeric(Attr.java:1956)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.isBooleanOrNumeric(JmlAttr.java:7906)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitConditional(Attr.java:1893)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitConditional(JmlAttr.java:4786)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCConditional.accept(JCTree.java:1472)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitParens(Attr.java:3826)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCParens.accept(JCTree.java:1969)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribExpr(Attr.java:726)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribExpr(JmlAttr.java:7570)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitVarDef(Attr.java:1327)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlVariableDecl(JmlAttr.java:7410)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlVariableDecl.accept(JmlTree.java:1517)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribStat(Attr.java:754)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribStat(JmlAttr.java:581)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribStats(Attr.java:773)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitLetExpr(JmlAttr.java:4486)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlLetExpr.accept(JmlTree.java:4131)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitParens(Attr.java:3826)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCParens.accept(JCTree.java:1969)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribExpr(Attr.java:733)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitBinary(Attr.java:3910)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitBinary(JmlAttr.java:4806)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBinary.accept(JCTree.java:2111)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribExpr(Attr.java:726)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribExpr(JmlAttr.java:7570)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlMethodClauseExpr(JmlAttr.java:3848)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodClauseExpr.accept(JmlTree.java:2501)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlSpecificationCase(JmlAttr.java:4195)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlSpecificationCase.accept(JmlTree.java:3046)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlMethodSpecs(JmlAttr.java:4270)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodSpecs.accept(JmlTree.java:2709)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attrSpecs(JmlAttr.java:8110)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribMethodSpecsAndBody(JmlAttr.java:1468)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitMethodDef(Attr.java:1243)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitMethodDef(JmlAttr.java:1349)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlMethodDecl(JmlAttr.java:7323)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodDecl.accept(JmlTree.java:1383)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribStat(Attr.java:754)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribStat(JmlAttr.java:581)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribClassBody(Attr.java:5378)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribClassBody(JmlAttr.java:557)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribClass(Attr.java:5269)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribClass(JmlAttr.java:423)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribClass(Attr.java:5107)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attrib(Attr.java:5052)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.attribute(JavaCompiler.java:1320)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.attribute(JmlCompiler.java:304)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.compile(JavaCompiler.java:936)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.compile(JmlCompiler.java:197)
+	at jdk.compiler/com.sun.tools.javac.main.Main.compile(Main.java:321)
+	at jdk.compiler/org.jmlspecs.openjml.Main.compile(Main.java:534)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:374)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:332)
+	at jdk.compiler/org.jmlspecs.openjml.Main.main(Main.java:295)
+	at jdk.compiler/com.sun.tools.javac.Main.main(Main.java:53)
+com.sun.tools.javac.util.PropagatedException: java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke "com.sun.tools.javac.tree.JCTree.hasTag(com.sun.tools.javac.tree.JCTree$Tag)" because "tree" is null
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlVariableDecl(JmlAttr.java:7517)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlVariableDecl.accept(JmlTree.java:1517)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribStat(Attr.java:754)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribStat(JmlAttr.java:581)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribStats(Attr.java:773)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitLetExpr(JmlAttr.java:4486)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlLetExpr.accept(JmlTree.java:4131)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitParens(Attr.java:3826)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCParens.accept(JCTree.java:1969)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribExpr(Attr.java:733)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitBinary(Attr.java:3910)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitBinary(JmlAttr.java:4806)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBinary.accept(JCTree.java:2111)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribExpr(Attr.java:726)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribExpr(JmlAttr.java:7570)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlMethodClauseExpr(JmlAttr.java:3848)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodClauseExpr.accept(JmlTree.java:2501)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlSpecificationCase(JmlAttr.java:4195)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlSpecificationCase.accept(JmlTree.java:3046)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlMethodSpecs(JmlAttr.java:4270)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodSpecs.accept(JmlTree.java:2709)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attrSpecs(JmlAttr.java:8110)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribMethodSpecsAndBody(JmlAttr.java:1468)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitMethodDef(Attr.java:1243)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitMethodDef(JmlAttr.java:1349)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlMethodDecl(JmlAttr.java:7323)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodDecl.accept(JmlTree.java:1383)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribStat(Attr.java:754)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribStat(JmlAttr.java:581)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribClassBody(Attr.java:5378)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribClassBody(JmlAttr.java:557)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribClass(Attr.java:5269)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribClass(JmlAttr.java:423)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribClass(Attr.java:5107)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attrib(Attr.java:5052)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.attribute(JavaCompiler.java:1320)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.attribute(JmlCompiler.java:304)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.compile(JavaCompiler.java:936)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.compile(JmlCompiler.java:197)
+	at jdk.compiler/com.sun.tools.javac.main.Main.compile(Main.java:321)
+	at jdk.compiler/org.jmlspecs.openjml.Main.compile(Main.java:534)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:374)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:332)
+	at jdk.compiler/org.jmlspecs.openjml.Main.main(Main.java:295)
+	at jdk.compiler/com.sun.tools.javac.Main.main(Main.java:53)
+Caused by: java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke "com.sun.tools.javac.tree.JCTree.hasTag(com.sun.tools.javac.tree.JCTree$Tag)" because "tree" is null
+	... 55 more
+Caused by: java.lang.NullPointerException: Cannot invoke "com.sun.tools.javac.tree.JCTree.hasTag(com.sun.tools.javac.tree.JCTree$Tag)" because "tree" is null
+	at jdk.compiler/com.sun.tools.javac.tree.TreeInfo.skipParens(TreeInfo.java:841)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeInfo.symbol(TreeInfo.java:953)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.isBooleanOrNumeric(Attr.java:1962)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.isBooleanOrNumeric(JmlAttr.java:7906)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.isBooleanOrNumeric(Attr.java:1956)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.isBooleanOrNumeric(JmlAttr.java:7906)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.isBooleanOrNumeric(Attr.java:1952)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.isBooleanOrNumeric(JmlAttr.java:7906)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.isBooleanOrNumeric(Attr.java:1956)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.isBooleanOrNumeric(JmlAttr.java:7906)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitConditional(Attr.java:1893)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitConditional(JmlAttr.java:4786)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCConditional.accept(JCTree.java:1472)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitParens(Attr.java:3826)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCParens.accept(JCTree.java:1969)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribTree(Attr.java:680)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribTree(JmlAttr.java:4766)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribExpr(Attr.java:726)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribExpr(JmlAttr.java:7570)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.visitVarDef(Attr.java:1327)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.visitJmlVariableDecl(JmlAttr.java:7410)
+	... 54 more
+EXZCEPTION ON STAT MemoryAllocator //@ int ps = (\old(processSize) < 10 ? 10 : (\old(processSize) > 500 ? 500 : \old(processSize))) RNV: Env[AttrContext[Scope[ps |  |  | processSize | super, this]],outer=Env[AttrContext[Scope[MemoryAllocator]]]]
+MISMATCHED JMLENV
+java.lang.RuntimeException
+	at jdk.compiler/org.jmlspecs.openjml.Utils.dumpStack(Utils.java:1988)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr$JmlEnv.pop(JmlAttr.java:8447)
+	at jdk.compiler/com.sun.tools.javac.comp.JmlAttr.attribClass(JmlAttr.java:462)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attribClass(Attr.java:5107)
+	at jdk.compiler/com.sun.tools.javac.comp.Attr.attrib(Attr.java:5052)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.attribute(JavaCompiler.java:1320)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.attribute(JmlCompiler.java:304)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.compile(JavaCompiler.java:936)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.compile(JmlCompiler.java:197)
+	at jdk.compiler/com.sun.tools.javac.main.Main.compile(Main.java:321)
+	at jdk.compiler/org.jmlspecs.openjml.Main.compile(Main.java:534)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:374)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:332)
+	at jdk.compiler/org.jmlspecs.openjml.Main.main(Main.java:295)
+	at jdk.compiler/com.sun.tools.javac.Main.main(Main.java:53)
+4 errors
+
+==============================

@@ -1,0 +1,8 @@
+experimentName: GPT5Nano
+model: openai/gpt-5-nano
+category: Branched3
+total number: 156
+success number: 134
+success rate: 85.89%
+failed number: 17
+exception number: 5

@@ -1,0 +1,315 @@
+public class MultiSumRatio {
+    //@ requires y != 0 && sum != 0;
+    //@ requires Integer.MIN_VALUE <= x + y && x + y <= Integer.MAX_VALUE;
+    //@ requires Integer.MIN_VALUE <= x * y && x * y <= Integer.MAX_VALUE;
+    //@ requires y != Integer.MIN_VALUE;
+    //@ ensures \result == ((x * y) / (x + y)) * tmpFactor;
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining sum == x + y - n && 0 <= n;
+            //@ maintaining factor == 1 + (\sum int i; 0 <= i && i < y - n; i);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining sum == x + y + n && 0 <= n;
+            //@ maintaining factor == 1 + (\sum int i; 0 <= i && i < -y - n; i);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        int tmpFactor = 0;
+        //@ maintaining 0 <= factor && factor <= \old(factor);
+        //@ maintaining tmpFactor == (\sum int i; 0 <= i && i < \old(factor); (\old(factor) / (10^i)) > 10 ? 1 : 0);
+        //@ decreases factor;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+==============================
+tmp/MultiSumRatio.java:2: error: cannot find symbol
+    //@ requires y != 0 && sum != 0;
+                           ^
+  symbol:   variable sum
+  location: class MultiSumRatio
+tmp/MultiSumRatio.java:6: error: cannot find symbol
+    //@ ensures \result == ((x * y) / (x + y)) * tmpFactor;
+                                                 ^
+  symbol:   variable tmpFactor
+  location: class MultiSumRatio
+tmp/MultiSumRatio.java:36: error: cannot find symbol
+        //@ maintaining 0 <= factor && factor <= \old(factor);
+                                                      ^
+  symbol:   variable factor
+  location: class MultiSumRatio
+tmp/MultiSumRatio.java:37: error: cannot find symbol
+        //@ maintaining tmpFactor == (\sum int i; 0 <= i && i < \old(factor); (\old(factor) / (10^i)) > 10 ? 1 : 0);
+                                                                     ^
+  symbol:   variable factor
+  location: class MultiSumRatio
+tmp/MultiSumRatio.java:37: error: cannot find symbol
+        //@ maintaining tmpFactor == (\sum int i; 0 <= i && i < \old(factor); (\old(factor) / (10^i)) > 10 ? 1 : 0);
+                                                                                    ^
+  symbol:   variable factor
+  location: class MultiSumRatio
+5 errors
+
+==============================
+public class MultiSumRatio {
+    //@ requires y != 0;
+    //@ requires Integer.MIN_VALUE <= x + y && x + y <= Integer.MAX_VALUE;
+    //@ requires Integer.MIN_VALUE <= x * y && x * y <= Integer.MAX_VALUE;
+    //@ requires y != Integer.MIN_VALUE;
+    //@ ensures \result == ((x * y) / (x + y)) * (\old(factor) > 10 ? (int)Math.log10(\old(factor)) : 0);
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        //@ ghost int originalY = y;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining sum == x + originalY - n && 0 <= n;
+            //@ maintaining factor == 1 + (\sum int i; 0 <= i && i < y - n; i);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining sum == x + originalY + n && 0 <= n;
+            //@ maintaining factor == 1 + (\sum int i; 0 <= i && i < -y - n; i);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        //@ ghost int originalFactor = factor;
+        int tmpFactor = 0;
+        //@ maintaining 0 <= factor && factor <= originalFactor;
+        //@ maintaining tmpFactor == (\num_of int i; 0 <= i && i < originalFactor; (originalFactor / (int)Math.pow(10, i)) > 10);
+        //@ decreases factor;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+==============================
+tmp/MultiSumRatio.java:6: error: cannot find symbol
+    //@ ensures \result == ((x * y) / (x + y)) * (\old(factor) > 10 ? (int)Math.log10(\old(factor)) : 0);
+                                                       ^
+  symbol:   variable factor
+  location: class MultiSumRatio
+tmp/MultiSumRatio.java:6: error: cannot find symbol
+    //@ ensures \result == ((x * y) / (x + y)) * (\old(factor) > 10 ? (int)Math.log10(\old(factor)) : 0);
+                                                                                           ^
+  symbol:   variable factor
+  location: class MultiSumRatio
+2 errors
+
+==============================
+public class MultiSumRatio {
+    //@ requires y != 0;
+    //@ requires Integer.MIN_VALUE <= x + y && x + y <= Integer.MAX_VALUE;
+    //@ requires Integer.MIN_VALUE <= x * y && x * y <= Integer.MAX_VALUE;
+    //@ requires y != Integer.MIN_VALUE;
+    //@ ensures \result == ((x * y) / (x + y)) * tmpFactor;
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        //@ ghost int originalY = y;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining sum == x + originalY - n && 0 <= n;
+            //@ maintaining factor == 1 + (\sum int i; 0 <= i && i < y - n; i);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining sum == x + originalY + n && 0 <= n;
+            //@ maintaining factor == 1 + (\sum int i; 0 <= i && i < -y - n; i);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        //@ ghost int originalFactor = factor;
+        int tmpFactor = 0;
+        //@ maintaining 0 <= factor && factor <= originalFactor;
+        //@ maintaining tmpFactor == (\num_of int i; 0 <= i && i < originalFactor; (originalFactor / (int)Math.pow(10, i)) > 10);
+        //@ decreases factor;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+==============================
+tmp/MultiSumRatio.java:6: error: cannot find symbol
+    //@ ensures \result == ((x * y) / (x + y)) * tmpFactor;
+                                                 ^
+  symbol:   variable tmpFactor
+  location: class MultiSumRatio
+1 error
+
+==============================
+public class MultiSumRatio {
+    //@ requires y != 0;
+    //@ requires Integer.MIN_VALUE <= x + y && x + y <= Integer.MAX_VALUE;
+    //@ requires Integer.MIN_VALUE <= x * y && x * y <= Integer.MAX_VALUE;
+    //@ requires y != Integer.MIN_VALUE;
+    //@ ensures \result == ((x * y) / (x + y)) * (\result / ((x * y) / (x + y)));
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        //@ ghost int originalY = y;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining sum == x + originalY - n && 0 <= n;
+            //@ maintaining factor == 1 + (\sum int i; 0 <= i && i < y - n; i);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining sum == x + originalY + n && 0 <= n;
+            //@ maintaining factor == 1 + (\sum int i; 0 <= i && i < -y - n; i);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        //@ ghost int originalFactor = factor;
+        int tmpFactor = 0;
+        //@ maintaining 0 <= factor && factor <= originalFactor;
+        //@ maintaining tmpFactor == (\num_of int i; 0 <= i && i < originalFactor; (originalFactor / (int)Math.pow(10, i)) > 10);
+        //@ decreases factor;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+==============================
+tmp/MultiSumRatio.java:17: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method multiSumRatio
+            //@ maintaining sum == x + originalY - n && 0 <= n;
+                ^
+1 verification failure
+
+==============================
+public class MultiSumRatio {
+    //@ requires y != 0;
+    //@ requires Integer.MIN_VALUE <= x + y && x + y <= Integer.MAX_VALUE;
+    //@ requires Integer.MIN_VALUE <= x * y && x * y <= Integer.MAX_VALUE;
+    //@ requires y != Integer.MIN_VALUE;
+    //@ ensures \result == ((x * y) / (x + y)) * (\result / ((x * y) / (x + y)));
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        //@ ghost int originalY = y;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining sum == x + originalY - n && 0 < n;  
+            //@ maintaining factor == 1 + (\sum int i; 0 <= i && i < y - n; i);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining sum == x + originalY + n && 0 <= n;
+            //@ maintaining factor == 1 + (\sum int i; 0 <= i && i < -y - n; i);
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        //@ ghost int originalFactor = factor;
+        int tmpFactor = 0;
+        //@ maintaining 0 <= factor && factor <= originalFactor;
+        //@ maintaining tmpFactor == (\num_of int i; 0 <= i && i < originalFactor; (originalFactor / (int)Math.pow(10, i)) > 10);
+        //@ decreases factor;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+
+==============================
+tmp/MultiSumRatio.java:17: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method multiSumRatio
+            //@ maintaining sum == x + originalY - n && 0 < n;  
+                ^
+1 verification failure
+
+==============================

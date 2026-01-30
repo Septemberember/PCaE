@@ -1,0 +1,338 @@
+public class FlowCalculator_S {
+
+    //@ requires pressure < 10 && rate >= 5 ==> rate != 5;
+    //@ ensures \result == ((((pressure + 7) * 2 - 3 + 4) + (((pressure + 7) * 2 - 3 + 4) > 40 ? (6 + (rate >= 5 ? rate + (pressure < 10 ? 0 : 8) : -4)) : -6 + (rate < 3 ? 5 : 0))) * 0.05) + ((((pressure + 7) * 2 - 3 + 4) > 40 ? (rate >= 5 ? (pressure < 10 ? (double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5) : ((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95) : ((pressure + 7) * 2 - 3 + 4 + 6 - 4) * 1.1) : (rate < 3 ? ((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 : ((pressure + 7) * 2 - 3 + 4 - 6) * 0.8)) * (((pressure + 7) * 2 - 3 + 4) > 40 ? (rate >= 5 ? (pressure < 10 ? ((((double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5)) > 80 ? 0.9 : 1.0)) : ((((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95) > 80 ? 0.9 : 1.0)) : 1.0) : ((((rate < 3 ? ((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 : ((pressure + 7) * 2 - 3 + 4 - 6) * 0.8)) < 20 ? 1.0 : 0.95))) + (((pressure + 7) * 2 - 3 + 4) > 40 ? (rate >= 5 ? (pressure < 10 ? ((((double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5)) > 80 ? 0 : 10)) : ((((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95) > 80 ? 0 : 10)) : 0) : ((((rate < 3 ? ((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 : ((pressure + 7) * 2 - 3 + 4 - 6) * 0.8)) < 20 ? 5 : 0)))) * (((pressure + 7) * 2 - 3 + 4) > 40 ? (rate >= 5 ? (pressure < 10 ? true : false) : false) : (rate < 3 ? true : false) ? 1.1 : 0.85);
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure < 10) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+tmp/FlowCalculator_S.java:4: error: bad operand types for binary operator '*'
+    //@ ensures \result == ((((pressure + 7) * 2 - 3 + 4) + (((pressure + 7) * 2 - 3 + 4) > 40 ? (6 + (rate >= 5 ? rate + (pressure < 10 ? 0 : 8) : -4)) : -6 + (rate < 3 ? 5 : 0))) * 0.05) + ((((pressure + 7) * 2 - 3 + 4) > 40 ? (rate >= 5 ? (pressure < 10 ? (double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5) : ((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95) : ((pressure + 7) * 2 - 3 + 4 + 6 - 4) * 1.1) : (rate < 3 ? ((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 : ((pressure + 7) * 2 - 3 + 4 - 6) * 0.8)) * (((pressure + 7) * 2 - 3 + 4) > 40 ? (rate >= 5 ? (pressure < 10 ? ((((double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5)) > 80 ? 0.9 : 1.0)) : ((((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95) > 80 ? 0.9 : 1.0)) : 1.0) : ((((rate < 3 ? ((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 : ((pressure + 7) * 2 - 3 + 4 - 6) * 0.8)) < 20 ? 1.0 : 0.95))) + (((pressure + 7) * 2 - 3 + 4) > 40 ? (rate >= 5 ? (pressure < 10 ? ((((double)((pressure + 7) * 2 - 3 + 4 + 6 + rate) / (rate - 5)) > 80 ? 0 : 10)) : ((((pressure + 7) * 2 - 3 + 4 + 6 + rate + 8) * 0.95) > 80 ? 0 : 10)) : 0) : ((((rate < 3 ? ((pressure + 7) * 2 - 3 + 4 - 6 + 5) * 0.7 : ((pressure + 7) * 2 - 3 + 4 - 6) * 0.8)) < 20 ? 5 : 0)))) * (((pressure + 7) * 2 - 3 + 4) > 40 ? (rate >= 5 ? (pressure < 10 ? true : false) : false) : (rate < 3 ? true : false) ? 1.1 : 0.85);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ^
+  first type:  double
+  second type: INT#1
+  where INT#1,INT#2 are intersection types:
+    INT#1 extends Object,Serializable,Comparable<? extends INT#2>,Constable
+    INT#2 extends Object,Serializable,Comparable<?>,Constable
+1 error
+
+==============================
+public class FlowCalculator_S {
+
+    /*@ public normal_behavior
+      @   requires pressure < 10 && rate >= 5 ==> rate != 5;
+      @   ensures \result == (\old(computeFlow(pressure, rate)));
+      @   ensures (pressure * 2 + 15 > 40) ==> 
+      @     (rate >= 5 ==> 
+      @       (pressure < 10 ==> \result == (((((double)(pressure * 2 + 15 + 6 + rate) / (rate - 5)) > 80 ? ((double)(pressure * 2 + 15 + 6 + rate) / (rate - 5)) * 0.9 : ((double)(pressure * 2 + 15 + 6 + rate) / (rate - 5)) + 10) * 1.1) + (pressure * 2 + 15 + 6 + rate) * 0.05)) &&
+      @       (pressure >= 10 ==> \result == (((((pressure * 2 + 15 + 6 + rate + 8) * 0.95) > 80 ? ((pressure * 2 + 15 + 6 + rate + 8) * 0.95) * 0.9 : ((pressure * 2 + 15 + 6 + rate + 8) * 0.95) + 10) * 0.85) + (pressure * 2 + 15 + 6 + rate + 8) * 0.05))
+      @     ) &&
+      @     (rate < 5 ==> \result == ((((pressure * 2 + 15 + 6 - 4) * 1.1) * 0.85) + (pressure * 2 + 15 + 6 - 4) * 0.05));
+      @   ensures (pressure * 2 + 15 <= 40) ==>
+      @     (rate < 3 ==> \result == (((((pressure * 2 + 15 - 6 + 5) * 0.7) < 20 ? ((pressure * 2 + 15 - 6 + 5) * 0.7) + 5 : ((pressure * 2 + 15 - 6 + 5) * 0.7) * 0.95) * 1.1) + (pressure * 2 + 15 - 6 + 5) * 0.05)) &&
+      @     (rate >= 3 ==> \result == (((((pressure * 2 + 15 - 6) * 0.8) < 20 ? ((pressure * 2 + 15 - 6) * 0.8) + 5 : ((pressure * 2 + 15 - 6) * 0.8) * 0.95) * 0.85) + (pressure * 2 + 15 - 6) * 0.05));
+      @*/
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure < 10) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+tmp/FlowCalculator_S.java:5: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @   ensures \result == (\old(computeFlow(pressure, rate)));
+                                              ^
+  Reason: No logical function for method FlowCalculator_S.computeFlow(pressure, rate) computeFlow(int,int)
+error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+  Reason: Unexpected exception: APPLY-HELPER java.lang.NullPointerException: Cannot read field "type" because "arg" is null
+java.lang.NullPointerException: Cannot read field "type" because "arg" is null
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.makeOld(JmlAssertionAdder.java:15784)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.makeOld(JmlAssertionAdder.java:15770)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlMethodInvocation(JmlAssertionAdder.java:17571)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodInvocation.accept(JmlTree.java:2399)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitParens(JmlAssertionAdder.java:12077)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCParens.accept(JCTree.java:1969)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitBinary(JmlAssertionAdder.java:13597)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBinary.accept(JCTree.java:2111)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertJML(JmlAssertionAdder.java:1648)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.applyHelper(JmlAssertionAdder.java:10710)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitApply(JmlAssertionAdder.java:8031)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCMethodInvocation.accept(JCTree.java:1752)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlMethodInvocation(JmlAssertionAdder.java:17568)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodInvocation.accept(JmlTree.java:2399)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitParens(JmlAssertionAdder.java:12077)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCParens.accept(JCTree.java:1969)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitBinary(JmlAssertionAdder.java:13597)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBinary.accept(JCTree.java:2111)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertJML(JmlAssertionAdder.java:1648)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.addPostConditions(JmlAssertionAdder.java:5428)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertMethodBodyNoInit(JmlAssertionAdder.java:1256)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlMethodDecl(JmlAssertionAdder.java:17247)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodDecl.accept(JmlTree.java:1383)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlClassDecl(JmlAssertionAdder.java:15904)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlClassDecl.accept(JmlTree.java:1295)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convert(JmlAssertionAdder.java:1441)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlEsc.check(JmlEsc.java:112)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.esc(JmlCompiler.java:536)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.flow(JmlCompiler.java:362)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.compile(JavaCompiler.java:936)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.compile(JmlCompiler.java:197)
+	at jdk.compiler/com.sun.tools.javac.main.Main.compile(Main.java:321)
+	at jdk.compiler/org.jmlspecs.openjml.Main.compile(Main.java:534)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:374)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:332)
+	at jdk.compiler/org.jmlspecs.openjml.Main.main(Main.java:295)
+	at jdk.compiler/com.sun.tools.javac.Main.main(Main.java:53)
+java.lang.NullPointerException: Cannot read field "type" because "arg" is null
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.makeOld(JmlAssertionAdder.java:15784)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.makeOld(JmlAssertionAdder.java:15770)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlMethodInvocation(JmlAssertionAdder.java:17571)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodInvocation.accept(JmlTree.java:2399)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitParens(JmlAssertionAdder.java:12077)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCParens.accept(JCTree.java:1969)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitBinary(JmlAssertionAdder.java:13597)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBinary.accept(JCTree.java:2111)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertJML(JmlAssertionAdder.java:1648)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.applyHelper(JmlAssertionAdder.java:10710)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitApply(JmlAssertionAdder.java:8031)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCMethodInvocation.accept(JCTree.java:1752)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlMethodInvocation(JmlAssertionAdder.java:17568)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodInvocation.accept(JmlTree.java:2399)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitParens(JmlAssertionAdder.java:12077)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCParens.accept(JCTree.java:1969)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitBinary(JmlAssertionAdder.java:13597)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBinary.accept(JCTree.java:2111)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertJML(JmlAssertionAdder.java:1648)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.addPostConditions(JmlAssertionAdder.java:5428)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertMethodBodyNoInit(JmlAssertionAdder.java:1256)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlMethodDecl(JmlAssertionAdder.java:17247)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodDecl.accept(JmlTree.java:1383)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlClassDecl(JmlAssertionAdder.java:15904)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlClassDecl.accept(JmlTree.java:1295)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convert(JmlAssertionAdder.java:1441)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlEsc.check(JmlEsc.java:112)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.esc(JmlCompiler.java:536)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.flow(JmlCompiler.java:362)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.compile(JavaCompiler.java:936)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.compile(JmlCompiler.java:197)
+	at jdk.compiler/com.sun.tools.javac.main.Main.compile(Main.java:321)
+	at jdk.compiler/org.jmlspecs.openjml.Main.compile(Main.java:534)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:374)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:332)
+	at jdk.compiler/org.jmlspecs.openjml.Main.main(Main.java:295)
+	at jdk.compiler/com.sun.tools.javac.Main.main(Main.java:53)
+java.lang.RuntimeException: MISMATCHED BLOCKS
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.popBlock(JmlAssertionAdder.java:1854)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.popBlock(JmlAssertionAdder.java:1838)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.applyHelper(JmlAssertionAdder.java:11040)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitApply(JmlAssertionAdder.java:8031)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCMethodInvocation.accept(JCTree.java:1752)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlMethodInvocation(JmlAssertionAdder.java:17568)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodInvocation.accept(JmlTree.java:2399)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitParens(JmlAssertionAdder.java:12077)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCParens.accept(JCTree.java:1969)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitBinary(JmlAssertionAdder.java:13597)
+	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBinary.accept(JCTree.java:2111)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertExpr(JmlAssertionAdder.java:1554)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertJML(JmlAssertionAdder.java:1648)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.addPostConditions(JmlAssertionAdder.java:5428)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convertMethodBodyNoInit(JmlAssertionAdder.java:1256)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlMethodDecl(JmlAssertionAdder.java:17247)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlMethodDecl.accept(JmlTree.java:1383)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.visitJmlClassDecl(JmlAssertionAdder.java:15904)
+	at jdk.compiler/org.jmlspecs.openjml.JmlTree$JmlClassDecl.accept(JmlTree.java:1295)
+	at jdk.compiler/com.sun.tools.javac.tree.TreeScanner.scan(TreeScanner.java:49)
+	at jdk.compiler/org.jmlspecs.openjml.visitors.JmlTreeScanner.scan(JmlTreeScanner.java:70)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlAssertionAdder.convert(JmlAssertionAdder.java:1441)
+	at jdk.compiler/org.jmlspecs.openjml.esc.JmlEsc.check(JmlEsc.java:112)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.esc(JmlCompiler.java:536)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.flow(JmlCompiler.java:362)
+	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.compile(JavaCompiler.java:936)
+	at jdk.compiler/com.sun.tools.javac.main.JmlCompiler.compile(JmlCompiler.java:197)
+	at jdk.compiler/com.sun.tools.javac.main.Main.compile(Main.java:321)
+	at jdk.compiler/org.jmlspecs.openjml.Main.compile(Main.java:534)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:374)
+	at jdk.compiler/org.jmlspecs.openjml.Main.execute(Main.java:332)
+	at jdk.compiler/org.jmlspecs.openjml.Main.main(Main.java:295)
+	at jdk.compiler/com.sun.tools.javac.Main.main(Main.java:53)
+2 errors
+
+==============================

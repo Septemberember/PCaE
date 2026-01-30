@@ -1,0 +1,93 @@
+public class FlowCalculator {
+
+    /*@ public normal_behavior
+      @   requires rate != 5 || !((((pressure + 7) * 2 - 3 + 4) > 40) && (pressure <= 14));
+      @   ensures \result == (\let int adjusted_init = ((pressure + 7) * 2 - 3 + 4);
+      @             \let int adj_1 = (adjusted_init > 40 ? adjusted_init + 6 : adjusted_init - 6);
+      @             \let double flow_pre = (adjusted_init > 40 ? 
+      @                 (rate >= 5 ? 
+      @                     (pressure <= 14 ? (double)(adj_1 + rate) / (rate - 5) : (adj_1 + rate + 8) * 0.95) : 
+      @                     (adj_1 - 4) * 1.1) :
+      @                 (rate < 3 ? (adj_1 + 5) * 0.7 : adj_1 * 0.8));
+      @             \let double flow_mid = (adjusted_init > 40 ? 
+      @                 (rate >= 5 ? (flow_pre > 80 ? flow_pre * 0.9 : flow_pre + 10) : flow_pre) :
+      @                 (flow_pre < 20 ? flow_pre + 5 : flow_pre * 0.95));
+      @             \let boolean is_stable = (adjusted_init > 40 ? 
+      @                 (rate >= 5 ? (pressure <= 14 ? true : false) : false) :
+      @                 (rate < 3 ? true : false));
+      @             \let int adj_final = (adjusted_init > 40 ? 
+      @                 (rate >= 5 ? (pressure <= 14 ? adj_1 + rate : adj_1 + rate + 8) : adj_1 - 4) :
+      @                 (rate < 3 ? adj_1 + 5 : adj_1));
+      @             flow_mid * (is_stable ? 1.1 : 0.85) + adj_final * 0.05);
+      @   assignable \nothing;
+      @ also
+      @   public exceptional_behavior
+      @     requires ((pressure + 7) * 2 - 3 + 4) > 40 && rate == 5 && pressure <= 14;
+      @     signals (ArithmeticException) true;
+      @*/
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure ;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+        int sheld = 14;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure <= sheld) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+TimeoutException
+==============================

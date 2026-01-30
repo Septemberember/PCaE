@@ -1,0 +1,8 @@
+experimentName: DeepSeek3Conv
+model: deepseek/deepseek-v3.2
+category: Branched3
+total number: 150
+success number: 133
+success rate: 88.66%
+failed number: 15
+exception number: 2

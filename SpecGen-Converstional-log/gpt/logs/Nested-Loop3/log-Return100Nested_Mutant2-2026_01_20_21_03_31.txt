@@ -1,0 +1,28 @@
+public class Return100Nested_Mutant2 {
+
+    // Helper: compute a value by nested counting loops.
+    // The method returns the total number of increments performed.
+    // Note: this mirrors a simple nested-loop counting pattern.
+    //@ ensures \result == 90;
+    public static int return100 () {
+        int res = 0;
+        // Outer loop runs 10 times
+        //@ maintaining 0 <= i && i <= 10;
+        //@ maintaining res == 9 * i;
+        //@ decreases 10 - i;
+        for(int i = 0; i < 10; i++) {
+            // Inner loop runs 9 times per outer iteration
+            //@ maintaining 0 <= j && j <= 9;
+            //@ maintaining res == 9 * i + j;
+            //@ decreases 9 - j;
+            for(int j = 0; j < 9; j++) {
+                res = res + 1;
+            }
+        }
+        // Final accumulated result is returned
+        return res;
+    }
+}
+==============================
+
+==============================

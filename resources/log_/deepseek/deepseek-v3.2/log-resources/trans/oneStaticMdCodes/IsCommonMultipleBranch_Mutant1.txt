@@ -1,0 +1,49 @@
+start role user
+Please generate an FSF for the program below:
+```
+/*
+ * IsCommonMultipleBranch_Mutant1
+ * Simple divisibility-based check implemented in isCommonMultiple.
+ * Note: This version contains a straightforward branching structure.
+ */
+public class IsCommonMultipleBranch_Mutant1 {
+    public static boolean isCommonMultiple(int a, int b, int m) {
+        // If m is divisible by a, this path immediately yields false
+        if (m % a == 0) {
+            // Early exit when m is a multiple of a
+            return false;
+        }
+        // Ensure m is a multiple of b to pass both divisibility checks
+        if (m % b != 0) {
+            // m not divisible by b implies it cannot be a common multiple
+            return false;
+        }
+        // If neither of the above failure conditions hold, m is a common multiple
+        return true;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: m % a == 0
+D1: return_value == false
+
+T2: m % a != 0 && m % b != 0
+D2: return_value == false
+
+T3: m % a != 0 && m % b == 0
+D3: return_value == true
+```
+*end* role assistant
+start role user
+Unexpected exception thrown by the program under T: m % a != 0 && m % b != 0, please regenerate the FSF according to this exception!Exception founded:Exception in thread "main" java.lang.ArithmeticException: / by zero
+	at IsCommonMultipleBranch_Mutant1.isCommonMultiple(IsCommonMultipleBranch_Mutant1.java:14)
+	at IsCommonMultipleBranch_Mutant1.main(IsCommonMultipleBranch_Mutant1.java:29)
+
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

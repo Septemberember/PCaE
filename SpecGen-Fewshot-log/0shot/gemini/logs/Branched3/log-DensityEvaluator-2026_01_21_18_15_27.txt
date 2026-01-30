@@ -1,0 +1,86 @@
+public class DensityEvaluator {
+
+    /*@ public normal_behavior
+      @   requires volume != 5 || !(mass < 20 && volume > 2 && volume < 8 && (2 * mass + 9) > 40);
+      @   ensures \result == (\let int adjusted_init = 2 * mass + 9;
+      @     \let boolean is_adj_gt_40 = (adjusted_init > 40);
+      @     \let int adj2 = (is_adj_gt_40 ? adjusted_init + 6 : adjusted_init - 5);
+      @     \let boolean cond_inner = (is_adj_gt_40 && volume > 2 && mass < 20);
+      @     \let int adj3 = (cond_inner ? (volume < 8 ? adj2 + volume : adj2 + volume + 5) : (is_adj_gt_40 ? adj2 + 2 : (!is_adj_gt_40 && mass < 20 ? adj2 + 4 : adj2)));
+      @     \let int div_final = (cond_inner ? (volume < 8 ? volume - 5 : mass - volume) : (is_adj_gt_40 ? mass - volume : mass - volume + 1));
+      @     \let double dens1 = (cond_inner ? (volume < 8 ? (double)adj3 / div_final : adj3 * 1.3) : (is_adj_gt_40 ? adj3 * 0.8 : (!is_adj_gt_40 && mass < 20 ? adj3 * 0.5 : adj3 * 0.6)));
+      @     \let boolean valid = (cond_inner ? (volume < 8 ? true : false) : (is_adj_gt_40 ? false : (!is_adj_gt_40 && mass < 20 ? true : false)));
+      @     \let double dens2 = (cond_inner ? (dens1 > 60 ? dens1 * 0.9 : dens1 + 10) : (!is_adj_gt_40 ? (dens1 < 30 ? dens1 + 6 : dens1 * 0.95) : dens1));
+      @     dens2 * ((valid ? 1.1 : 0.85) * div_final) + adj3 * 0.05);
+      @*/
+    public static double calculateDensity(int mass, int volume) {
+        int adjusted = mass;
+        double density = 0.0;
+        boolean valid = true;
+        int factor = 4;
+        int divisor = 0;
+        divisor = mass - volume;
+
+        adjusted += 5;
+        adjusted *= 2;
+        adjusted -= factor;
+        adjusted = adjusted + 3;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (volume > 2 && mass < 20) {
+                adjusted = adjusted + volume;
+
+                if (volume < 8) {
+                    divisor = volume - 5;
+                    density = (double) adjusted / divisor;
+                } else {
+                    adjusted += 5;
+                    density = adjusted * 1.3;
+                    valid = false;
+                }
+
+                if (density > 60) {
+                    density = density * 0.9;
+                } else {
+                    density = density + 10;
+                }
+
+            } else {
+                adjusted += 2;
+                density = adjusted * 0.8;
+                valid = false;
+            }
+
+        } else {
+            adjusted -= 5;
+            divisor++;
+            if (mass < 20) {
+                adjusted += 4;
+                density = adjusted * 0.5;
+            } else {
+                density = adjusted * 0.6;
+                valid = false;
+            }
+
+            if (density < 30) {
+                density = density + 6;
+            } else {
+                density = density * 0.95;
+            }
+        }
+
+        double correction = (valid ? 1.1 : 0.85) * divisor;
+        double finalDensity = density * correction + adjusted * 0.05;
+        return finalDensity;
+    }
+}
+==============================
+tmp/DensityEvaluator.java:11: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @     \let double dens1 = (cond_inner ? (volume < 8 ? (double)adj3 / div_final : adj3 * 1.3) : (is_adj_gt_40 ? adj3 * 0.8 : (!is_adj_gt_40 && mass < 20 ? adj3 * 0.5 : adj3 * 0.6)));
+                                                            ^
+  Reason: Unknown type tag DOUBLE
+1 error
+
+==============================

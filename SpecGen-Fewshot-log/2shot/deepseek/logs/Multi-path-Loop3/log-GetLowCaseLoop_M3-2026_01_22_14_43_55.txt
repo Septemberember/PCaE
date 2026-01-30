@@ -1,0 +1,77 @@
+// GetLowCaseLoop_M3: Map an uppercase ASCII character to lowercase using a small loop
+// Returns the lowercase letter for 'A'..'Z'; returns 0 for non-uppercase input
+// The method initializes a candidate t with the first lowercase letter and searches for a match
+
+public class GetLowCaseLoop_M3 {
+    //@ requires true;
+    //@ ensures ('A' <= c && c <= 'Z') ==> (\result == (char)(c - 'A' + 'a'));
+    //@ ensures (c < 'A' || c > 'Z') ==> \result == 0;
+    //@ ensures \result == 0 || ('a' <= \result && \result <= 'z');
+    public static char getLowCase(char c) {
+        // Initialize the candidate to the first lowercase letter
+        char t = 'a';
+        // Loop until we reach the matching lowercase representation
+        //@ maintaining 'a' <= t && t <= 'z' + 1;
+        //@ maintaining t == 'a' + (\old(t) - 'a');
+        //@ maintaining ('A' <= c && c <= 'Z') ==> (t <= (char)(c - 'A' + 'a'));
+        //@ decreases 'z' - t;
+        while(t <= 'z' && t != c - 'A' + 'a') {
+            // If input is not an uppercase ASCII letter, no lowercase mapping exists
+            if(c < 'A' || c > 'Z') {
+                return 0;
+            }
+            // Move to the next possible lowercase candidate
+            t++;
+        }
+        // Return the found lowercase character or the initial candidate
+        return t;
+    }
+}
+==============================
+tmp/GetLowCaseLoop_M3.java:15: error: cannot find symbol
+        //@ maintaining t == 'a' + (\old(t) - 'a');
+                                         ^
+  symbol:   variable t
+  location: class GetLowCaseLoop_M3
+1 error
+
+==============================
+// GetLowCaseLoop_M3: Map an uppercase ASCII character to lowercase using a small loop
+// Returns the lowercase letter for 'A'..'Z'; returns 0 for non-uppercase input
+// The method initializes a candidate t with the first lowercase letter and searches for a match
+
+public class GetLowCaseLoop_M3 {
+    //@ requires true;
+    //@ ensures ('A' <= c && c <= 'Z') ==> (\result == (char)(c - 'A' + 'a'));
+    //@ ensures (c < 'A' || c > 'Z') ==> \result == 0;
+    //@ ensures \result == 0 || ('a' <= \result && \result <= 'z');
+    public static char getLowCase(char c) {
+        // Initialize the candidate to the first lowercase letter
+        char t = 'a';
+        // Loop until we reach the matching lowercase representation
+        //@ maintaining 'a' <= t && t <= 'z' + 1;
+        //@ maintaining t == 'a' + (\old(t) - 'a');  
+        //@ maintaining ('A' <= c && c <= 'Z') ==> (t <= (char)(c - 'A' + 'a'));
+        //@ decreases 'z' - t;
+        while(t <= 'z' && t != c - 'A' + 'a') {
+            // If input is not an uppercase ASCII letter, no lowercase mapping exists
+            if(c < 'A' || c > 'Z') {
+                return 0;
+            }
+            // Move to the next possible lowercase candidate
+            t++;
+        }
+        // Return the found lowercase character or the initial candidate
+        return t;
+    }
+}
+
+==============================
+tmp/GetLowCaseLoop_M3.java:15: error: cannot find symbol
+        //@ maintaining t == 'a' + (\old(t) - 'a');  
+                                         ^
+  symbol:   variable t
+  location: class GetLowCaseLoop_M3
+1 error
+
+==============================

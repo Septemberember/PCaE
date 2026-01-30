@@ -1,0 +1,127 @@
+import java.util.ArrayList;
+
+public class ProductionScheduler {
+    //@ public model non_null ArrayList<Integer> productionSlots;
+    //@ private represents productionSlots = \old(new ArrayList<Integer>(8));
+    
+    public static int calculateOutput(int hours) {
+        //@ maintaining 0 <= i && i <= 8;
+        //@ maintaining (\forall int j; 0 <= j && j < i; productionSlots.get(j) == 0);
+        //@ decreases 8 - i;
+        ArrayList<Integer> productionSlots = new ArrayList<Integer>(8);
+        for (int i = 0; i < 8; i++) {
+            productionSlots.add(0);
+        }
+        int cal = 0;
+        int MAX_HOURS = 24;
+        int MIN_HOURS = 4;
+        int efficiency = 0;
+
+        int slotIndex = 0;
+
+        if (hours < MIN_HOURS) {
+            hours = MIN_HOURS;
+            efficiency = efficiency - 2;
+        } else {
+            efficiency = efficiency + 1;
+        }
+
+        if (hours > MAX_HOURS) {
+            hours = MAX_HOURS;
+            efficiency = efficiency + 3;
+        }
+
+        int output = hours * 30 + 50;
+
+        if (output >= 200 && output <= 350) {
+            slotIndex = output / 50;
+        } else {
+            slotIndex = output % 8;
+        }
+
+        cal = productionSlots.get(slotIndex);
+
+        if(cal * efficiency > MAX_HOURS) {
+            output = output + efficiency * 2;
+        } else {
+            output = output - efficiency;
+        }
+
+        //@ ensures \result == output;
+        return output;
+    }
+}
+==============================
+tmp/ProductionScheduler.java:11: error: variable declaration not allowed here
+        ArrayList<Integer> productionSlots = new ArrayList<Integer>(8);
+                           ^
+tmp/ProductionScheduler.java:8: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining 0 <= i && i <= 8;
+            ^
+2 errors
+
+==============================
+import java.util.ArrayList;
+
+public class ProductionScheduler {
+    //@ public model non_null ArrayList<Integer> productionSlots;
+    //@ private represents productionSlots = \old(new ArrayList<Integer>(8));
+    
+    public static int calculateOutput(int hours) {
+        //@ maintaining 0 < i && i < 8;  
+        //@ maintaining (\forall int j; 0 <= j && j < i; productionSlots.get(j) == 0);
+        //@ decreases 8 - i;
+        ArrayList<Integer> productionSlots = new ArrayList<Integer>(8);
+        for (int i = 0; i < 8; i++) {
+            productionSlots.add(0);
+        }
+        int cal = 0;
+        int MAX_HOURS = 24;
+        int MIN_HOURS = 4;
+        int efficiency = 0;
+
+        int slotIndex = 0;
+
+        if (hours < MIN_HOURS) {
+            hours = MIN_HOURS;
+            efficiency = efficiency - 2;
+        } else {
+            efficiency = efficiency + 1;
+        }
+
+        if (hours > MAX_HOURS) {
+            hours = MAX_HOURS;
+            efficiency = efficiency + 3;
+        }
+
+        int output = hours * 30 + 50;
+
+        if (output >= 200 && output <= 350) {
+            slotIndex = output / 50;
+        } else {
+            slotIndex = output % 8;
+        }
+
+        cal = productionSlots.get(slotIndex);
+
+        if(cal * efficiency > MAX_HOURS) {
+            output = output + efficiency * 2;
+        } else {
+            output = output - efficiency;
+        }
+
+        //@ ensures \result == output;
+        return output;
+    }
+}
+
+==============================
+tmp/ProductionScheduler.java:11: error: variable declaration not allowed here
+        ArrayList<Integer> productionSlots = new ArrayList<Integer>(8);
+                           ^
+tmp/ProductionScheduler.java:8: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining 0 < i && i < 8;  
+            ^
+2 errors
+
+==============================

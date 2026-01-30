@@ -1,0 +1,93 @@
+/*
+ * GPSCheck_Original.java
+ * Lightweight utility to determine an alarm code based on satellite count and signal strength.
+ * The GPSCheck method returns:
+ *   0 - no alarm
+ *   1 - insufficient satellites
+ *   2 - weak signal
+ * This implementation intentionally uses simple threshold checks.
+ */
+
+public class GPSCheck_Original {
+    /**
+     * Determines the alarm status from the given satellites and signalStrength.
+     * Thresholds:
+     * - satellites < 4 => alarm = 1
+     * - signalStrength < 20 => alarm = 2
+     * If neither condition is met, alarm remains 0.
+     */
+    //@ requires satellites >= 0 && signalStrength >= 0;
+    //@ ensures \result == 0 <==> satellites >= 4 && signalStrength >= 20;
+    //@ ensures \result == 1 <==> satellites < 4;
+    //@ ensures \result == 2 <==> satellites >= 4 && signalStrength < 20;
+    public static int GPSCheck(int satellites, int signalStrength) {
+        int alarm = 0;
+        // Check if we have enough satellites
+        if (satellites < 4) {
+            alarm = 1;
+        }
+        // Evaluate signal strength as a secondary criterion
+        if (signalStrength < 20) {
+            alarm = 2;
+        }
+        return alarm;
+    }
+    // End of GPSCheck method
+}
+==============================
+tmp/GPSCheck_Original.java:33: verify: The prover cannot establish an assertion (Postcondition: tmp/GPSCheck_Original.java:21:) in method GPSCheck
+        return alarm;
+        ^
+tmp/GPSCheck_Original.java:21: verify: Associated declaration: tmp/GPSCheck_Original.java:33:
+    //@ ensures \result == 1 <==> satellites < 4;
+        ^
+2 verification failures
+
+==============================
+/*
+ * GPSCheck_Original.java
+ * Lightweight utility to determine an alarm code based on satellite count and signal strength.
+ * The GPSCheck method returns:
+ *   0 - no alarm
+ *   1 - insufficient satellites
+ *   2 - weak signal
+ * This implementation intentionally uses simple threshold checks.
+ */
+
+public class GPSCheck_Original {
+    /**
+     * Determines the alarm status from the given satellites and signalStrength.
+     * Thresholds:
+     * - satellites < 4 => alarm = 1
+     * - signalStrength < 20 => alarm = 2
+     * If neither condition is met, alarm remains 0.
+     */
+    //@ requires satellites >= 0 && signalStrength >= 0;
+    //@ ensures \result == 0 <==> satellites >= 4 && signalStrength >= 20;
+    //@ ensures \result == 1 <==> satellites < 4;  
+    //@ ensures \result == 2 <==> satellites >= 4 && signalStrength < 20;
+    public static int GPSCheck(int satellites, int signalStrength) {
+        int alarm = 0;
+        // Check if we have enough satellites
+        if (satellites < 4) {
+            alarm = 1;
+        }
+        // Evaluate signal strength as a secondary criterion
+        if (signalStrength < 20) {
+            alarm = 2;
+        }
+        return alarm;
+    }
+    // End of GPSCheck method
+}
+
+==============================
+tmp/GPSCheck_Original.java:33: verify: The prover cannot establish an assertion (Postcondition: tmp/GPSCheck_Original.java:21:) in method GPSCheck
+        return alarm;
+        ^
+tmp/GPSCheck_Original.java:21: verify: Associated declaration: tmp/GPSCheck_Original.java:33:
+    //@ ensures \result == 1 <==> satellites < 4;  
+        ^
+2 verification failures
+
+==============================

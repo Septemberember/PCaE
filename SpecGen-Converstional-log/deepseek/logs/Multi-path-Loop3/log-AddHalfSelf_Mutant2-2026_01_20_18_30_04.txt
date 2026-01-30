@@ -1,0 +1,134 @@
+public class AddHalfSelf_Mutant2{
+    // AddHalfSelf: computes a small adjustment based on the number of set bits in |x|
+
+    //@ ensures \result == x + (x < 0 ? -(\num_of int i; 1 <= i && i <= -x; i % 2 == 1) : (\num_of int i; 1 <= i && i <= x; i % 2 == 1));
+    public static int addHalfSelf(int x){
+        // Read original input
+        int n = x;
+        // Accumulator for the count of 1-bits in the magnitude
+        int addNum = 0;
+        if(x < 0){
+            n = -x;
+        }
+
+        // Count set bits in the magnitude of n
+        //@ maintaining 0 <= n && n <= \old(n);
+        //@ maintaining addNum == (\num_of int i; n+1 <= i && i <= \old(n); i % 2 == 1);
+        //@ decreases n;
+        while(n > 0){
+            // If the least significant bit is 1, count it
+            if(n % 2 == 1){
+                addNum++;
+            }
+            // Move to the next magnitude value
+            n--;
+        }
+
+        // Apply the accumulated offset with correct sign
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+}
+==============================
+tmp/AddHalfSelf_Mutant2.java:15: error: cannot find symbol
+        //@ maintaining 0 <= n && n <= \old(n);
+                                            ^
+  symbol:   variable n
+  location: class AddHalfSelf_Mutant2
+tmp/AddHalfSelf_Mutant2.java:16: error: cannot find symbol
+        //@ maintaining addNum == (\num_of int i; n+1 <= i && i <= \old(n); i % 2 == 1);
+                                                                        ^
+  symbol:   variable n
+  location: class AddHalfSelf_Mutant2
+2 errors
+
+==============================
+public class AddHalfSelf_Mutant2{
+    // AddHalfSelf: computes a small adjustment based on the number of set bits in |x|
+
+    //@ ensures \result == x + (x < 0 ? -(\num_of int i; 1 <= i && i <= -x; i % 2 == 1) : (\num_of int i; 1 <= i && i <= x; i % 2 == 1));
+    public static int addHalfSelf(int x){
+        // Read original input
+        int n = x;
+        // Accumulator for the count of 1-bits in the magnitude
+        int addNum = 0;
+        if(x < 0){
+            n = -x;
+        }
+
+        // Count set bits in the magnitude of n
+        //@ maintaining 0 <= n && n <= (\old(x) < 0 ? -\old(x) : \old(x));
+        //@ maintaining addNum == (\num_of int i; n+1 <= i && i <= (\old(x) < 0 ? -\old(x) : \old(x)); i % 2 == 1);
+        //@ decreases n;
+        while(n > 0){
+            // If the least significant bit is 1, count it
+            if(n % 2 == 1){
+                addNum++;
+            }
+            // Move to the next magnitude value
+            n--;
+        }
+
+        // Apply the accumulated offset with correct sign
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+}
+==============================
+tmp/AddHalfSelf_Mutant2.java:16: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method addHalfSelf
+        //@ maintaining addNum == (\num_of int i; n+1 <= i && i <= (\old(x) < 0 ? -\old(x) : \old(x)); i % 2 == 1);
+            ^
+1 verification failure
+
+==============================
+public class AddHalfSelf_Mutant2{
+    // AddHalfSelf: computes a small adjustment based on the number of set bits in |x|
+
+    //@ ensures \result == x + (x < 0 ? -(\num_of int i; 1 <= i && i <= -x; i % 2 == 1) : (\num_of int i; 1 <= i && i <= x; i % 2 == 1));
+    public static int addHalfSelf(int x){
+        // Read original input
+        int n = x;
+        // Accumulator for the count of 1-bits in the magnitude
+        int addNum = 0;
+        if(x < 0){
+            n = -x;
+        }
+
+        // Count set bits in the magnitude of n
+        //@ maintaining 0 <= n && n <= (\old(x) < 0 ? -\old(x) : \old(x));
+        //@ maintaining addNum == (\num_of int i; n+1 < i && i < (\old(x) < 0 ? -\old(x) : \old(x)); i % 2 == 1);  
+        //@ decreases n;
+        while(n > 0){
+            // If the least significant bit is 1, count it
+            if(n % 2 == 1){
+                addNum++;
+            }
+            // Move to the next magnitude value
+            n--;
+        }
+
+        // Apply the accumulated offset with correct sign
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+}
+
+==============================
+tmp/AddHalfSelf_Mutant2.java:16: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method addHalfSelf
+        //@ maintaining addNum == (\num_of int i; n+1 < i && i < (\old(x) < 0 ? -\old(x) : \old(x)); i % 2 == 1);  
+            ^
+1 verification failure
+
+==============================

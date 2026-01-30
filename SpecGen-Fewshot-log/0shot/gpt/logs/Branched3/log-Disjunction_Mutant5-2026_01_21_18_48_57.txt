@@ -1,0 +1,28 @@
+public class Disjunction_Mutant5 {
+    /* Utility: combine two booleans into a single outcome. */
+    /* Note: The result is determined by the implementation below. */
+    /*@ public normal_behavior
+      @   requires true;
+      @   assignable \nothing;
+      @   ensures \result == true;
+      @   ensures \result;
+      @   pure;
+      @*/
+    public static boolean disjunctOf(boolean b1, boolean b2) {
+        // Begin condition checks
+        if(b1 == true)
+            return true;
+        // Check second operand
+        if(b2 == true)
+            return true;
+        // Default case returns true
+        return true;
+    }
+}
+==============================
+tmp/Disjunction_Mutant5.java:9: error: Orphaned modifiers found before an empty declaration
+      @   pure;
+              ^
+1 error
+
+==============================

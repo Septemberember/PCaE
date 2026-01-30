@@ -1,0 +1,85 @@
+public class AddHalfSelf_Mutant3{
+    //@ ensures (x >= 0) ==> (\result == x + x/2);
+    //@ ensures (x < 0) ==> (\result == x - (-x)/2);
+    public static int addHalfSelf(int x){
+        // Prepare working variables
+        // addNum serves as the delta accumulator
+        int n = x;
+        int addNum = 0;
+        // Initialize and adjust inputs to drive the loop
+        if(x > 0){
+            // If x is positive, negate to ensure the subsequent loop processes negatives
+            n = -x;
+        }
+        // End pre-processing; begin counting parity inside the loop
+        //@ maintaining (x >= 0) ==> (n <= 0 && n >= -x && addNum == (-n)/2);
+        //@ maintaining (x < 0) ==> (n <= 0 && n >= x && addNum == (n - x)/2);
+        //@ maintaining (x == 0) ==> (n == 0 && addNum == 0);
+        //@ decreasing -n;
+        while(n < 0){
+            // Count an even n value by incrementing addNum
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n++;
+        }
+        // Exiting the counting loop; addNum holds the adjustments
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            // Compute final result based on the sign of the original x
+            return x + addNum;
+        }
+    }
+}
+==============================
+tmp/AddHalfSelf_Mutant3.java:15: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method addHalfSelf
+        //@ maintaining (x >= 0) ==> (n <= 0 && n >= -x && addNum == (-n)/2);
+            ^
+1 verification failure
+
+==============================
+public class AddHalfSelf_Mutant3{
+    //@ ensures (x >= 0) ==> (\result == x + x/2);
+    //@ ensures (x < 0) ==> (\result == x - (-x)/2);
+    public static int addHalfSelf(int x){
+        // Prepare working variables
+        // addNum serves as the delta accumulator
+        int n = x;
+        int addNum = 0;
+        // Initialize and adjust inputs to drive the loop
+        if(x > 0){
+            // If x is positive, negate to ensure the subsequent loop processes negatives
+            n = -x;
+        }
+        // End pre-processing; begin counting parity inside the loop
+        //@ maintaining (x > 0) ==> (n < 0 && n > -x && addNum == (-n)/2);  
+        //@ maintaining (x < 0) ==> (n <= 0 && n >= x && addNum == (n - x)/2);
+        //@ maintaining (x == 0) ==> (n == 0 && addNum == 0);
+        //@ decreasing -n;
+        while(n < 0){
+            // Count an even n value by incrementing addNum
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n++;
+        }
+        // Exiting the counting loop; addNum holds the adjustments
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            // Compute final result based on the sign of the original x
+            return x + addNum;
+        }
+    }
+}
+
+==============================
+tmp/AddHalfSelf_Mutant3.java:15: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method addHalfSelf
+        //@ maintaining (x > 0) ==> (n < 0 && n > -x && addNum == (-n)/2);  
+            ^
+1 verification failure
+
+==============================

@@ -1,0 +1,87 @@
+public class MyPower_Original {
+    // Simple utility to compute integer powers iteratively
+    // Keeps multiplication-based result straightforward and efficient
+
+    /*@ public model static \bigint ipow(\bigint base, int exp) {
+      @   return (exp <= 0) ? 1 : (base * ipow(base, exp - 1));
+      @ }
+      @*/
+
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   requires ipow((\bigint)x, n) >= Integer.MIN_VALUE
+      @         && ipow((\bigint)x, n) <= Integer.MAX_VALUE;
+      @   ensures \result == (int)ipow((\bigint)x, n);
+      @   assignable \nothing;
+      @ also
+      @ public normal_behavior
+      @   requires n < 0;
+      @   ensures \result == 1;
+      @   assignable \nothing;
+      @*/
+    public static int power(int x, int n) {
+        int res = 1;
+        // Begin iterative exponentiation: multiply x by itself n times
+        for(int i = 0; i < n; i++){
+	        /*@ maintaining 0 <= i;
+	          @ maintaining (n >= 0) ==> (i <= n);
+	          @ maintaining (n >= 0) ==> (res == (int)ipow((\bigint)x, i));
+	          @ maintaining (n < 0) ==> (i == 0 && res == 1);
+	          @ decreasing (n >= 0 ? (n - i) : 0);
+	          @*/
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Original.java:26: error: Loop specifications must immediately precede a loop statement
+	        /*@ maintaining 0 <= i;
+	            ^
+1 error
+
+==============================
+public class MyPower_Original {
+    // Simple utility to compute integer powers iteratively
+    // Keeps multiplication-based result straightforward and efficient
+
+    /*@ public model static \bigint ipow(\bigint base, int exp) {
+      @   return (exp <= 0) ? 1 : (base * ipow(base, exp - 1));
+      @ }
+      @*/
+
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   requires ipow((\bigint)x, n) >= Integer.MIN_VALUE
+      @         && ipow((\bigint)x, n) <= Integer.MAX_VALUE;
+      @   ensures \result == (int)ipow((\bigint)x, n);
+      @   assignable \nothing;
+      @ also
+      @ public normal_behavior
+      @   requires n < 0;
+      @   ensures \result == 1;
+      @   assignable \nothing;
+      @*/
+    public static int power(int x, int n) {
+        int res = 1;
+        // Begin iterative exponentiation: multiply x by itself n times
+        for(int i = 0; i < n; i++){
+	        /*@ maintaining 0 < i;  
+	          @ maintaining (n >= 0) ==> (i <= n);
+	          @ maintaining (n >= 0) ==> (res == (int)ipow((\bigint)x, i));
+	          @ maintaining (n < 0) ==> (i == 0 && res == 1);
+	          @ decreasing (n >= 0 ? (n - i) : 0);
+	          @*/
+	        res = res * x;
+        }
+        return res;
+    }
+}
+
+==============================
+tmp/MyPower_Original.java:26: error: Loop specifications must immediately precede a loop statement
+	        /*@ maintaining 0 < i;  
+	            ^
+1 error
+
+==============================

@@ -1,0 +1,34 @@
+public class DivisionOverflow_Original {
+
+    // Demonstration: integer division in Java
+    // This class contains a single static method that performs
+    // a straightforward division of nom by denom.
+
+    /**
+     * Performs integer division of nom by denom.
+     * Note: division by zero will throw ArithmeticException.
+     */
+    /*@ public normal_behavior
+      @   requires denom != 0;
+      @   requires !(nom == Integer.MIN_VALUE && denom == -1);
+      @   ensures \result == nom / denom;
+      @
+      @ also
+      @ public exceptional_behavior
+      @   requires denom == 0;
+      @   signals (ArithmeticException) true;
+      @*/
+    public static int division_test_fail_overflow(int nom, int denom) {
+        // The following line computes the quotient of nom divided by denom.
+        int tmp = nom / denom;
+        // Return the computed quotient to the caller.
+        return tmp;
+    }
+}
+==============================
+tmp/DivisionOverflow_Original.java:23: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method division_test_fail_overflow
+        int tmp = nom / denom;
+                      ^
+1 verification failure
+
+==============================

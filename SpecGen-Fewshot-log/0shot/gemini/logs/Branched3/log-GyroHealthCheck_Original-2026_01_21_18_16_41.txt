@@ -1,0 +1,34 @@
+public class GyroHealthCheck_Original {
+    // GyroHealthCheck: compare axis differences and flag high variation
+    /*@ public normal_behavior
+      @   requires x > Integer.MIN_VALUE && y > Integer.MIN_VALUE && z > Integer.MIN_VALUE;
+      @   ensures (\exists int dXY, dYZ, dXZ; 
+      @             dXY == (x - y >= 0 ? x - y : -(x - y)) &&
+      @             dYZ == (y - z >= 0 ? y - z : -(y - z)) &&
+      @             dXZ == (x - z >= 0 ? x - z : -(x - z)) &&
+      @             (\result == ((dXY > 10 || dYZ > 10 || dXZ > 10) ? 1 : 0)));
+      @   assignable \nothing;
+      @*/
+    public static int gyroHealthCheck(int x, int y, int z) {
+        int diffXY = x - y;
+        // Absolute difference for X and Y
+        if (diffXY < 0) diffXY = -diffXY;
+        int diffYZ = y - z;
+        // Absolute difference for Y and Z
+        if (diffYZ < 0) diffYZ = -diffYZ;
+        int diffXZ = x - z;
+        // Absolute difference for X and Z
+        if (diffXZ < 0) diffXZ = -diffXZ;
+        int alarm = 0;
+        // Trigger alarm if any pairwise difference exceeds threshold
+        if (diffXY > 10 || diffYZ > 10 || diffXZ > 10) {
+            alarm = 1;
+        }
+        return alarm;
+        // End of gyroHealthCheck calculations
+    }
+    // End of GyroHealthCheck_Original class
+}
+==============================
+
+==============================

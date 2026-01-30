@@ -1,0 +1,33 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class Disjunction_Mutant5 {
+    /* Utility: combine two booleans into a single outcome. */
+    /* Note: The result is determined by the implementation below. */
+    public static boolean disjunctOf(boolean b1, boolean b2) {
+        // Begin condition checks
+        if(b1 == true)
+            return true;
+        // Check second operand
+        if(b2 == true)
+            return true;
+        // Default case returns true
+        return true;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: ture
+D1: return_value == true
+```
+*end* role assistant
+start role user
+There exist variables which do not belong to input params of the program:ture, please regenerate the FSF, avoiding these variables!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

@@ -1,0 +1,66 @@
+// Divisor game utility
+// Simple parity check: odd numbers yield true in divisorGame
+/* This class provides a minimal example where a number's parity
+   determines the return value of divisorGame. */
+
+/*@ public normal_behavior
+  @   ensures true;
+  @*/
+public class DivisorGame_Mutant2 {
+    /*@ public normal_behavior
+      @   ensures \result <==> (n % 2 != 0);
+      @*/
+    public static boolean divisorGame(int n) {
+        return n % 2 != 0;
+    }
+}
+
+// End of file - parity-based return value showcased
+==============================
+tmp/DivisorGame_Mutant2.java:6: error: Unexpected or misspelled JML token: normal_behavior
+/*@ public normal_behavior
+           ^
+tmp/DivisorGame_Mutant2.java:7: error: Unexpected or misspelled JML token: ensures
+  @   ensures true;
+      ^
+tmp/DivisorGame_Mutant2.java:7: error: Unexpected or misspelled JML token: true
+  @   ensures true;
+              ^
+tmp/DivisorGame_Mutant2.java:7: error: Unexpected or misspelled JML token: 
+  @   ensures true;
+                  ^
+tmp/DivisorGame_Mutant2.java:9: error: repeated modifier
+public class DivisorGame_Mutant2 {
+^
+5 errors
+
+==============================
+// Divisor game utility
+// Simple parity check: odd numbers yield true in divisorGame
+/* This class provides a minimal example where a number's parity
+   determines the return value of divisorGame. */
+
+/*@ public normal_behavior
+ 
+  @*/
+public class DivisorGame_Mutant2 {
+    /*@ public normal_behavior
+      @   ensures \result <==> (n % 2 != 0);
+      @*/
+    public static boolean divisorGame(int n) {
+        return n % 2 != 0;
+    }
+}
+
+// End of file - parity-based return value showcased
+
+==============================
+tmp/DivisorGame_Mutant2.java:6: error: Unexpected or misspelled JML token: normal_behavior
+/*@ public normal_behavior
+           ^
+tmp/DivisorGame_Mutant2.java:9: error: repeated modifier
+public class DivisorGame_Mutant2 {
+^
+2 errors
+
+==============================

@@ -1,0 +1,57 @@
+public class AbsSeq_Mutant3 {
+    // AbsSeq_Mutant3 provides an integer absolute value implementation.
+    // Simple, direct approach using conditional negation.
+    //@ ensures \result >= 0;
+    //@ ensures (num >= 0) ==> (\result == num);
+    //@ ensures (num < 0) ==> (\result == -num);
+    public static int Abs(int num) {
+        // Check for non-zero input to negate.
+        if (num != 0) {
+            // Negate the non-zero input to obtain its absolute value
+            return -num;
+        } else {
+            // Zero or positive input is returned as-is
+            return num;
+        }
+    }
+    // End of Abs method
+}
+==============================
+tmp/AbsSeq_Mutant3.java:11: verify: The prover cannot establish an assertion (Postcondition: tmp/AbsSeq_Mutant3.java:4:) in method Abs
+            return -num;
+            ^
+tmp/AbsSeq_Mutant3.java:4: verify: Associated declaration: tmp/AbsSeq_Mutant3.java:11:
+    //@ ensures \result >= 0;
+        ^
+2 verification failures
+
+==============================
+public class AbsSeq_Mutant3 {
+    // AbsSeq_Mutant3 provides an integer absolute value implementation.
+    // Simple, direct approach using conditional negation.
+    //@ ensures \result > 0;  
+    //@ ensures (num >= 0) ==> (\result == num);
+    //@ ensures (num < 0) ==> (\result == -num);
+    public static int Abs(int num) {
+        // Check for non-zero input to negate.
+        if (num != 0) {
+            // Negate the non-zero input to obtain its absolute value
+            return -num;
+        } else {
+            // Zero or positive input is returned as-is
+            return num;
+        }
+    }
+    // End of Abs method
+}
+
+==============================
+tmp/AbsSeq_Mutant3.java:11: verify: The prover cannot establish an assertion (Postcondition: tmp/AbsSeq_Mutant3.java:4:) in method Abs
+            return -num;
+            ^
+tmp/AbsSeq_Mutant3.java:4: verify: Associated declaration: tmp/AbsSeq_Mutant3.java:11:
+    //@ ensures \result > 0;  
+        ^
+2 verification failures
+
+==============================

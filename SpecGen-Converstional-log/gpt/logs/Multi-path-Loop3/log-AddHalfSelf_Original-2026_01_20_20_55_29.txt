@@ -1,0 +1,153 @@
+public class AddHalfSelf_Original{
+    // Utility: adjusts a value by counting evens up to |x|
+    // The final result is x plus or minus the count depending on sign.
+    // Design note: counts even numbers from |x| down to 1.
+    // The resulting delta is then applied with the sign of x.
+    // Additional commentary for readability
+    // This function is intentionally straightforward: it counts evens
+    // and applies the delta respecting the input sign.
+    //@ requires x != Integer.MIN_VALUE;
+    //@ assignable \nothing;
+    //@ ensures (\let int abs = (x < 0 ? -x : x);
+    //@            \let int delta = (\num_of int k; 1 <= k && k <= abs; k % 2 == 0);
+    //@              (x < 0 ==> \result == x - delta)
+    //@           && (x >= 0 ==> \result == x + delta));
+    public static int addHalfSelf(int x){
+        int n = x;
+        int addNum = 0;
+        // Initialize to original value; used to determine magnitude of adjustment.
+
+        // Normalize to absolute value for negative inputs
+        if(x < 0){
+            n = -x;
+        }
+        // Count even values in the range from |x| down to 1
+        //@ maintaining (\let int abs = (x < 0 ? -x : x); 0 <= n && n <= abs);
+        //@ maintaining (\let int abs = (x < 0 ? -x : x);
+        //@                 addNum == (\num_of int k; n < k && k <= abs; k % 2 == 0));
+        //@ decreases n;
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n--;
+        }
+        // Apply the computed adjustment with proper sign
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+}
+==============================
+tmp/AddHalfSelf_Original.java:12: error: incompatible types: \bigint cannot be converted to int
+    //@            \let int delta = (\num_of int k; 1 <= k && k <= abs; k % 2 == 0);
+                                     ^
+1 error
+
+==============================
+public class AddHalfSelf_Original{
+    // Utility: adjusts a value by counting evens up to |x|
+    // The final result is x plus or minus the count depending on sign.
+    // Design note: counts even numbers from |x| down to 1.
+    // The resulting delta is then applied with the sign of x.
+    // Additional commentary for readability
+    // This function is intentionally straightforward: it counts evens
+    // and applies the delta respecting the input sign.
+    //@ requires x != Integer.MIN_VALUE;
+    //@ assignable \nothing;
+    //@ ensures (\let int abs = (x < 0 ? -x : x);
+    //@            \let \bigint delta = (\num_of int k; 1 <= k && k <= abs; k % 2 == 0);
+    //@              (x < 0 ==> (\bigint)\result == (\bigint)x - delta)
+    //@           && (x >= 0 ==> (\bigint)\result == (\bigint)x + delta));
+    public static int addHalfSelf(int x){
+        int n = x;
+        int addNum = 0;
+        // Initialize to original value; used to determine magnitude of adjustment.
+
+        // Normalize to absolute value for negative inputs
+        if(x < 0){
+            n = -x;
+        }
+        // Count even values in the range from |x| down to 1
+        //@ maintaining (\let int abs = (x < 0 ? -x : x); 0 <= n && n <= abs);
+        //@ maintaining (\let int abs = (x < 0 ? -x : x);
+        //@                0 <= addNum && addNum <= abs
+        //@             && (\bigint)addNum == (\num_of int k; n < k && k <= abs; k % 2 == 0));
+        //@ decreases n;
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n--;
+        }
+        // Apply the computed adjustment with proper sign
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+}
+==============================
+tmp/AddHalfSelf_Original.java:26: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method addHalfSelf
+        //@ maintaining (\let int abs = (x < 0 ? -x : x);
+            ^
+1 verification failure
+
+==============================
+public class AddHalfSelf_Original{
+    // Utility: adjusts a value by counting evens up to |x|
+    // The final result is x plus or minus the count depending on sign.
+    // Design note: counts even numbers from |x| down to 1.
+    // The resulting delta is then applied with the sign of x.
+    // Additional commentary for readability
+    // This function is intentionally straightforward: it counts evens
+    // and applies the delta respecting the input sign.
+    //@ requires x != Integer.MIN_VALUE;
+    //@ assignable \nothing;
+    //@ ensures (\let int abs = (x < 0 ? -x : x);
+    //@            \let \bigint delta = (\num_of int k; 1 <= k && k <= abs; k % 2 == 0);
+    //@              (x < 0 ==> (\bigint)\result == (\bigint)x - delta)
+    //@           && (x >= 0 ==> (\bigint)\result == (\bigint)x + delta));
+    public static int addHalfSelf(int x){
+        int n = x;
+        int addNum = 0;
+        // Initialize to original value; used to determine magnitude of adjustment.
+
+        // Normalize to absolute value for negative inputs
+        if(x < 0){
+            n = -x;
+        }
+        // Count even values in the range from |x| down to 1
+        //@ maintaining (\let int abs = (x < 0 ? -x : x); 0 <= n && n <= abs);
+        //@ maintaining (\let int abs = (x < 0 ? -x : x);  
+        //@                0 <= addNum && addNum <= abs
+        //@             && (\bigint)addNum == (\num_of int k; n < k && k <= abs; k % 2 == 0));
+        //@ decreases n;
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum++;
+            }
+            n--;
+        }
+        // Apply the computed adjustment with proper sign
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+}
+
+==============================
+tmp/AddHalfSelf_Original.java:26: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method addHalfSelf
+        //@ maintaining (\let int abs = (x < 0 ? -x : x);  
+            ^
+1 verification failure
+
+==============================

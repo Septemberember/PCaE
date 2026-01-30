@@ -1,0 +1,22 @@
+public class IsCommonMultiple_Mutant1 {
+
+    // Utility note: isCommonMultiple evaluates a divisibility-based condition for m.
+    // It currently returns true when m is not divisible by either a or b.
+    /*@ public normal_behavior
+      @   requires a != 0 && b != 0;
+      @   assignable \nothing;
+      @   ensures \result <==> (m % a != 0 && m % b != 0);
+      @ also
+      @ public exceptional_behavior
+      @   requires a == 0 || b == 0;
+      @   assignable \nothing;
+      @   signals_only ArithmeticException;
+      @*/
+    public static boolean isCommonMultiple(int a, int b, int m) {
+        // Non-divisibility by both inputs is checked below.
+        return m % a != 0 && m % b != 0;
+    }
+}
+==============================
+TimeoutException
+==============================

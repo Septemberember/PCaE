@@ -1,0 +1,8 @@
+experimentName: Gemini0shot
+model: google/gemini-3-flash-preview
+category: Sequential3
+total number: 63
+success number: 20
+success rate: 31.74%
+failed number: 41
+exception number: 2

@@ -1,0 +1,99 @@
+public class AddHalfSelf_Mutant4{
+    // Adjustment utility for the addHalfSelf method
+    // Computes the final value by adding an even-step based amount.
+    /*@ public normal_behavior
+      @   requires x != Integer.MIN_VALUE; // to avoid overflow in computing -x
+      @   assignable \nothing;
+      @   ensures (\let int ax = (x < 0 ? -x : x);
+      @           \result == (x < 0
+      @                        ? x - (2 * (ax / 2))
+      @                        : x + (2 * (ax / 2))));
+      @*/
+    public static int addHalfSelf(int x){
+        int n = x;
+        // accumulator for total addition
+        int addNum = 0;
+        if(x < 0){
+            n = -x;
+        }
+        /*@ ghost final int origN = n; @*/
+        // Iterate while processing absolute value
+        /*@ maintaining 0 <= n && n <= origN;
+          @ maintaining origN == (x < 0 ? -x : x);
+          @ maintaining addNum == 2 * (\num_of int k; n < k && k <= origN; k % 2 == 0);
+          @ decreasing n;
+          @*/
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum += 2;
+            }
+            // advance to the next number
+            n--;
+        }
+        // Apply the accumulated adjustment based on sign
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+    // End of addHalfSelf logic
+}
+==============================
+tmp/AddHalfSelf_Mutant4.java:23: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method addHalfSelf
+          @ maintaining addNum == 2 * (\num_of int k; n < k && k <= origN; k % 2 == 0);
+            ^
+1 verification failure
+
+==============================
+public class AddHalfSelf_Mutant4{
+    // Adjustment utility for the addHalfSelf method
+    // Computes the final value by adding an even-step based amount.
+    /*@ public normal_behavior
+      @   requires x != Integer.MIN_VALUE; // to avoid overflow in computing -x
+      @   assignable \nothing;
+      @   ensures (\let int ax = (x < 0 ? -x : x);
+      @           \result == (x < 0
+      @                        ? x - (2 * (ax / 2))
+      @                        : x + (2 * (ax / 2))));
+      @*/
+    public static int addHalfSelf(int x){
+        int n = x;
+        // accumulator for total addition
+        int addNum = 0;
+        if(x < 0){
+            n = -x;
+        }
+        /*@ ghost final int origN = n; @*/
+        // Iterate while processing absolute value
+        /*@ maintaining 0 <= n && n <= origN;
+          @ maintaining origN == (x < 0 ? -x : x);
+          @ maintaining addNum == 2 * (\num_of int k; n < k && k < origN; k % 2 == 0);  
+          @ decreasing n;
+          @*/
+        while(n > 0){
+            if(n % 2 == 0){
+                addNum += 2;
+            }
+            // advance to the next number
+            n--;
+        }
+        // Apply the accumulated adjustment based on sign
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+    // End of addHalfSelf logic
+}
+
+==============================
+tmp/AddHalfSelf_Mutant4.java:23: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method addHalfSelf
+          @ maintaining addNum == 2 * (\num_of int k; n < k && k < origN; k % 2 == 0);  
+            ^
+1 verification failure
+
+==============================

@@ -1,0 +1,28 @@
+public class Conjunction_Mutant3 {
+
+ // Utility: simple boolean conjunction
+
+    /*@ public normal_behavior
+      @   ensures (b1 && b2) ==> \result == true;
+      @   ensures !b1 ==> \result == false;
+      @   ensures (b1 && !b2) ==> \result == true;
+      @   signals_only \nothing;
+      @*/
+    public static boolean conjunctOf(boolean b1, boolean b2) {
+        // Short-circuit evaluation: if the first operand is false, the result is false.
+        if(b1 == false)
+            return false;
+        // If the first is true, the result depends on the second operand.
+        if(b2 == false)
+            return true;
+        // Both operands are true; result is true.
+        return true;
+    }
+}
+==============================
+tmp/Conjunction_Mutant3.java:9: error: Signals_only clauses are not permitted in normal specification cases
+      @   signals_only \nothing;
+          ^
+1 error
+
+==============================

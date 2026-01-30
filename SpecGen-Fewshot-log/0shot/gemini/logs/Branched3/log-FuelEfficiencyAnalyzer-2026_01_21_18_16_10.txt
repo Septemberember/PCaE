@@ -1,0 +1,199 @@
+public class FuelEfficiencyAnalyzer {
+
+    /*@ public normal_behavior
+      @   requires fuelUsed != 3 || (2 * (distance + 10) <= 10 && fuelUsed > 10);
+      @   ensures \result == (
+      @     let adjDist = 2 * (distance + 10) in
+      @     let threshold = 10 in
+      @     (adjDist > threshold) ? (
+      @       let amt = fuelUsed - 3 in
+      @       let initialEff = (adjDist < 35 && adjDist > 25) ? 
+      @         (amt < 0 ? (adjDist / 1.0) : ((double)adjDist / amt)) : 
+      @         ((double)(adjDist + 5 - 2) + amt) in
+      @       let valid = (adjDist < 35 && adjDist > 25 && amt < 0) ? false : true in
+      @       let eff = (initialEff > 50) ? (initialEff * 0.9) : (initialEff + 3.0) in
+      @       let finalAdjDist = (adjDist < 35 && adjDist > 25) ? adjDist : (adjDist + 5) in
+      @       (eff * (valid ? 1.2 : 0.8) + finalAdjDist * 0.05)
+      @     ) : (
+      @       let finalAdjDist = adjDist + 20 in
+      @       let valid = (fuelUsed > 10) ? true : false in
+      @       let eff = (fuelUsed > 10) ? (finalAdjDist * 0.5) : (finalAdjDist * 0.3) in
+      @       (eff * (valid ? 1.2 : 0.8) + finalAdjDist * 0.05)
+      @     )
+      @   );
+      @ also
+      @ public exceptional_behavior
+      @   requires (2 * (distance + 10) > 10) && (2 * (distance + 10) < 35 && 2 * (distance + 10) > 25) && (fuelUsed - 3 == 0);
+      @   signals (ArithmeticException) true;
+      @*/
+    public static double analyzeEfficiency(int distance, int fuelUsed) {
+        int adjustedDistance = distance;
+        int threshold = 10;
+        double efficiency = 0.0;
+        boolean valid = true;
+
+        adjustedDistance += 10;
+        adjustedDistance = adjustedDistance * 2;
+
+        if (adjustedDistance > threshold) {
+            int amt = fuelUsed - 3;
+
+            if (adjustedDistance < 35 && adjustedDistance > 25) {
+                if (amt < 0) {
+                    System.out.println("Warning: invalid fuel input.");
+                    amt = 1;
+                    valid = false;
+                }
+
+                efficiency = (double) adjustedDistance / amt;
+
+            } else {
+                adjustedDistance += 5;
+                efficiency = (double) (adjustedDistance - 2) + amt;
+            }
+
+            if (efficiency > 50) {
+                efficiency = efficiency * 0.9;
+            } else {
+                efficiency = efficiency + 3.0;
+            }
+
+        } else {
+            adjustedDistance += 20;
+
+            if (fuelUsed > 10) {
+                efficiency = adjustedDistance * 0.5;
+            } else {
+                efficiency = adjustedDistance * 0.3;
+                valid = false;
+            }
+        }
+
+        double correction = valid ? 1.2 : 0.8;
+        double finalValue = efficiency * correction + adjustedDistance * 0.05;
+
+        return finalValue;
+    }
+}
+==============================
+tmp/FuelEfficiencyAnalyzer.java:6: error: ',', ')', or '[' expected
+      @     let adjDist = 2 * (distance + 10) in
+                       ^
+tmp/FuelEfficiencyAnalyzer.java:6: error: illegal start of expression
+      @     let adjDist = 2 * (distance + 10) in
+                        ^
+tmp/FuelEfficiencyAnalyzer.java:6: error: Incorrectly formed or terminated ensures statement near here -- perhaps a missing semicolon
+      @     let adjDist = 2 * (distance + 10) in
+                                             ^
+tmp/FuelEfficiencyAnalyzer.java:7: error: Incorrectly formed or terminated in statement near here
+      @     let threshold = 10 in
+                ^
+tmp/FuelEfficiencyAnalyzer.java:3: error: Misplaced method specifications preceding a in clause (ignored)
+    /*@ public normal_behavior
+               ^
+tmp/FuelEfficiencyAnalyzer.java:6: error: This in clause must directly follow a field declaration
+      @     let adjDist = 2 * (distance + 10) in
+                                              ^
+6 errors
+
+==============================
+public class FuelEfficiencyAnalyzer {
+
+    /*@ public normal_behavior
+      @   requires fuelUsed != 3 || (2 * (distance + 10) <= 10 && fuelUsed > 10);
+      @   ensures \result == (
+      @     let adjDist = 2 * (distance + 10) in
+      @     let threshold = 10 in
+      @     (adjDist > threshold) ? (
+      @       let amt = fuelUsed - 3 in
+      @       let initialEff = (adjDist < 35 && adjDist > 25) ? 
+      @         (amt < 0 ? (adjDist / 1.0) : ((double)adjDist / amt)) : 
+      @         ((double)(adjDist + 5 - 2) + amt) in
+      @       let valid = (adjDist < 35 && adjDist > 25 && amt < 0) ? false : true in
+      @       let eff = (initialEff > 50) ? (initialEff * 0.9) : (initialEff + 3.0) in
+      @       let finalAdjDist = (adjDist < 35 && adjDist > 25) ? adjDist : (adjDist + 5) in
+      @       (eff * (valid ? 1.2 : 0.8) + finalAdjDist * 0.05)
+      @     ) : (
+      @       let finalAdjDist = adjDist + 20 in
+      @       let valid = (fuelUsed > 10) ? true : false in
+      @       let eff = (fuelUsed > 10) ? (finalAdjDist * 0.5) : (finalAdjDist * 0.3) in
+      @       (eff * (valid ? 1.2 : 0.8) + finalAdjDist * 0.05)
+      @     )
+      @   );
+      @ also
+      @ public exceptional_behavior
+      @   requires (2 * (distance + 10) > 10) && (2 * (distance + 10) < 35 && 2 * (distance + 10) > 25) && (fuelUsed - 3 == 0);
+      @   signals (ArithmeticException) true;
+      @*/
+    public static double analyzeEfficiency(int distance, int fuelUsed) {
+        int adjustedDistance = distance;
+        int threshold = 10;
+        double efficiency = 0.0;
+        boolean valid = true;
+
+        adjustedDistance += 10;
+        adjustedDistance = adjustedDistance * 2;
+
+        if (adjustedDistance > threshold) {
+            int amt = fuelUsed - 3;
+
+            if (adjustedDistance < 35 && adjustedDistance > 25) {
+                if (amt < 0) {
+                    System.out.println("Warning: invalid fuel input.");
+                    amt = 1;
+                    valid = false;
+                }
+
+                efficiency = (double) adjustedDistance / amt;
+
+            } else {
+                adjustedDistance += 5;
+                efficiency = (double) (adjustedDistance - 2) + amt;
+            }
+
+            if (efficiency > 50) {
+                efficiency = efficiency * 0.9;
+            } else {
+                efficiency = efficiency + 3.0;
+            }
+
+        } else {
+            adjustedDistance += 20;
+
+            if (fuelUsed > 10) {
+                efficiency = adjustedDistance * 0.5;
+            } else {
+                efficiency = adjustedDistance * 0.3;
+                valid = false;
+            }
+        }
+
+        double correction = valid ? 1.2 : 0.8;
+        double finalValue = efficiency * correction + adjustedDistance * 0.05;
+
+        return finalValue;
+    }
+}
+
+==============================
+tmp/FuelEfficiencyAnalyzer.java:6: error: ',', ')', or '[' expected
+      @     let adjDist = 2 * (distance + 10) in
+                       ^
+tmp/FuelEfficiencyAnalyzer.java:6: error: illegal start of expression
+      @     let adjDist = 2 * (distance + 10) in
+                        ^
+tmp/FuelEfficiencyAnalyzer.java:6: error: Incorrectly formed or terminated ensures statement near here -- perhaps a missing semicolon
+      @     let adjDist = 2 * (distance + 10) in
+                                             ^
+tmp/FuelEfficiencyAnalyzer.java:7: error: Incorrectly formed or terminated in statement near here
+      @     let threshold = 10 in
+                ^
+tmp/FuelEfficiencyAnalyzer.java:3: error: Misplaced method specifications preceding a in clause (ignored)
+    /*@ public normal_behavior
+               ^
+tmp/FuelEfficiencyAnalyzer.java:6: error: This in clause must directly follow a field declaration
+      @     let adjDist = 2 * (distance + 10) in
+                                              ^
+6 errors
+
+==============================

@@ -1,0 +1,8 @@
+experimentName: DeepSeek3Conv
+model: deepseek/deepseek-v3.2
+category: Nested-Loop3
+total number: 35
+success number: 27
+success rate: 77.14%
+failed number: 8
+exception number: 0

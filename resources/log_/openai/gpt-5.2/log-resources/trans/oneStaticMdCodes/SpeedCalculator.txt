@@ -1,0 +1,54 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class SpeedCalculator {
+
+    public static int calculateSpeed(int time) {
+        int[] buffer = new int[6];
+        int MAX_TIME = 50;
+        int MIN_TIME = 5;
+        int offset = 0;
+        int adjustment = 0;
+        if (time < MIN_TIME) {
+            time = MIN_TIME;
+            adjustment = adjustment - 10;
+        } else {
+            adjustment = adjustment + 5;
+        }
+        if (time > MAX_TIME) {
+            time = MAX_TIME;
+            adjustment = adjustment * 2;
+        }
+        int speed = 100 - time * 2;
+        if (speed >= 10 && speed <= 24) {
+            offset = speed / 4;
+        } else {
+            offset = speed % 6;
+        }
+        buffer[offset] = speed + adjustment;
+        return speed;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+/// T1:
+T1: time < 5
+D1: return_value == 90
+
+T2: time == 38
+D2: Exception
+
+T3: time >= 50
+D3: return_value == 0
+
+T4: time >= 5 && time <= 49 && time != 38
+D4: return_value == 100 - time * 2
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

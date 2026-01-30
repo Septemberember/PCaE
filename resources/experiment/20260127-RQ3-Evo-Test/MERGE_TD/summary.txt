@@ -1,0 +1,8 @@
+experimentName: 20260127-RQ3-Evo-Test
+model: openai/gpt-5.2
+category: MERGE_TD
+total number: 38
+success number: 38
+success rate: 100.0%
+failed number: 0
+exception number: 0

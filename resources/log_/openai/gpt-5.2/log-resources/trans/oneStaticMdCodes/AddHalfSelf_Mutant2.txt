@@ -1,0 +1,54 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class AddHalfSelf_Mutant2{
+    // AddHalfSelf: computes a small adjustment based on the number of set bits in |x|
+
+    public static int addHalfSelf(int x){
+        // Read original input
+        int n = x;
+        // Accumulator for the count of 1-bits in the magnitude
+        int addNum = 0;
+        if(x < 0){
+            n = -x;
+        }
+
+        // Count set bits in the magnitude of n
+        while(n > 0){
+            // If the least significant bit is 1, count it
+            if(n % 2 == 1){
+                addNum++;
+            }
+            // Move to the next magnitude value
+            n--;
+        }
+
+        // Apply the accumulated offset with correct sign
+        if(x < 0){
+            return x - addNum;
+        }
+        else{
+            return x + addNum;
+        }
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+/// T1:
+T1: x % 2 == 0
+D1: return_value == (3 * x) / 2
+
+T2: x % 2 != 0 && x > 0
+D2: return_value == (3 * x + 1) / 2
+
+T3: x % 2 != 0 && x < 0
+D3: return_value == (3 * x - 1) / 2
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--partially verified!
+Current conversation round is: [1]
+*end* role remark

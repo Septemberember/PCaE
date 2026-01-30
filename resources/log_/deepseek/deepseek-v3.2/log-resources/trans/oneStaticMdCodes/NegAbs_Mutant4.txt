@@ -1,0 +1,32 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class NegAbs_Mutant4 {
+    
+    // Absolute value computation without using Math.abs
+    public static int negAbs(int num) {
+        // If the input is positive, return it unchanged
+        if (num > 0)
+            return num;
+        // For zero or negative input, negate to obtain the absolute value
+        else
+            return -num;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: num > 0
+D1: return_value == num
+
+T2: num <= 0
+D2: return_value == -num
+```
+
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

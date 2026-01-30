@@ -1,0 +1,252 @@
+public class PassPillowBranch_Mutant3 {
+    // PassPillowBranch_Mutant3: simple arithmetic to model pillow passing
+    // This mutant variant preserves the original logic
+
+    //@ requires n > 1 && time >= 0;
+    //@ ensures 1 <= \result && \result <= n;
+    //@ ensures \result == (time % ((n - 1) * 2) < n) ? (time % ((n - 1) * 2) + 1) : (n * 2 - (time % ((n - 1) * 2)) - 2);
+    public static int passPillow(int n, int time) {
+        time = time % ((n - 1) * 2);
+        // Normalize the time into the two-phase cycle
+        if (time < n) {
+            return time + 1;
+        }
+        // In the second half of the cycle
+        return n * 2 - time - 2;
+    }
+    // End of PassPillowBranch_Mutant3
+}
+==============================
+tmp/PassPillowBranch_Mutant3.java:7: error: incomparable types: int and boolean
+    //@ ensures \result == (time % ((n - 1) * 2) < n) ? (time % ((n - 1) * 2) + 1) : (n * 2 - (time % ((n - 1) * 2)) - 2);
+                        ^
+tmp/PassPillowBranch_Mutant3.java:7: error: incompatible types: int cannot be converted to boolean
+    //@ ensures \result == (time % ((n - 1) * 2) < n) ? (time % ((n - 1) * 2) + 1) : (n * 2 - (time % ((n - 1) * 2)) - 2);
+                                                      ^
+2 errors
+
+==============================
+public class PassPillowBranch_Mutant3 {
+    // PassPillowBranch_Mutant3: simple arithmetic to model pillow passing
+    // This mutant variant preserves the original logic
+
+    //@ requires n > 1 && time >= 0;
+    //@ ensures 1 <= \result && \result <= n;
+    //@ ensures (time % ((n - 1) * 2) < n) ==> \result == (time % ((n - 1) * 2)) + 1;
+    //@ ensures (time % ((n - 1) * 2) >= n) ==> \result == n * 2 - (time % ((n - 1) * 2)) - 2;
+    public static int passPillow(int n, int time) {
+        time = time % ((n - 1) * 2);
+        // Normalize the time into the two-phase cycle
+        if (time < n) {
+            return time + 1;
+        }
+        // In the second half of the cycle
+        return n * 2 - time - 2;
+    }
+    // End of PassPillowBranch_Mutant3
+}
+==============================
+tmp/PassPillowBranch_Mutant3.java:9: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static int passPillow(int n, int time) {
+                      ^
+1 verification failure
+
+==============================
+public class PassPillowBranch_Mutant3 {
+    // PassPillowBranch_Mutant3: simple arithmetic to model pillow passing
+    // This mutant variant preserves the original logic
+
+    //@ requires n > 1 && time >= 0;
+    //@ ensures 1 <= \result && \result <= n;
+    //@ ensures \result == (time % ((n - 1) * 2) < n ? (time % ((n - 1) * 2) + 1) : (n * 2 - (time % ((n - 1) * 2)) - 2));
+    public static int passPillow(int n, int time) {
+        time = time % ((n - 1) * 2);
+        // Normalize the time into the two-phase cycle
+        if (time < n) {
+            return time + 1;
+        }
+        // In the second half of the cycle
+        return n * 2 - time - 2;
+    }
+    // End of PassPillowBranch_Mutant3
+}
+==============================
+tmp/PassPillowBranch_Mutant3.java:8: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static int passPillow(int n, int time) {
+                      ^
+1 verification failure
+
+==============================
+public class PassPillowBranch_Mutant3 {
+    // PassPillowBranch_Mutant3: simple arithmetic to model pillow passing
+    // This mutant variant preserves the original logic
+
+    //@ requires n > 1 && time >= 0;
+    //@ ensures 1 <= \result && \result <= n;
+    //@ ensures (\forall int i; 0 <= i && i < n; \result != i);
+    //@ ensures \result == (time % ((n - 1) * 2) < n ? (time % ((n - 1) * 2) + 1) : (n * 2 - (time % ((n - 1) * 2)) - 2));
+    public static int passPillow(int n, int time) {
+        time = time % ((n - 1) * 2);
+        // Normalize the time into the two-phase cycle
+        if (time < n) {
+            return time + 1;
+        }
+        // In the second half of the cycle
+        return n * 2 - time - 2;
+    }
+    // End of PassPillowBranch_Mutant3
+}
+==============================
+tmp/PassPillowBranch_Mutant3.java:9: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static int passPillow(int n, int time) {
+                      ^
+1 verification failure
+
+==============================
+public class PassPillowBranch_Mutant3 {
+    // PassPillowBranch_Mutant3: simple arithmetic to model pillow passing
+    // This mutant variant preserves the original logic
+
+    //@ requires n > 1 && time >= 0;
+    //@ ensures 1 <= \result && \result <= n;
+    //@ ensures \result == (time % ((n - 1) * 2) < n ? (time % ((n - 1) * 2) + 1) : (n * 2 - (time % ((n - 1) * 2)) - 2));
+    //@ assignable \strictly_nothing;
+    public static int passPillow(int n, int time) {
+        //@ assume n > 1 && time >= 0;
+        time = time % ((n - 1) * 2);
+        // Normalize the time into the two-phase cycle
+        if (time < n) {
+            return time + 1;
+        }
+        // In the second half of the cycle
+        return n * 2 - time - 2;
+    }
+    // End of PassPillowBranch_Mutant3
+}
+==============================
+tmp/PassPillowBranch_Mutant3.java:8: error: This backslash token is unknown: \strictly_nothing
+    //@ assignable \strictly_nothing;
+                   ^
+tmp/PassPillowBranch_Mutant3.java:8: error: Use \nothing to denote an empty list of locations in an assignable clause
+    //@ assignable \strictly_nothing;
+                                    ^
+2 errors
+
+==============================
+public class PassPillowBranch_Mutant3 {
+    // PassPillowBranch_Mutant3: simple arithmetic to model pillow passing
+    // This mutant variant preserves the original logic
+
+    //@ requires n > 1 && time >= 0;
+    //@ ensures 1 <= \result && \result <= n;
+    //@ ensures \result == (time % ((n - 1) * 2) < n ? (time % ((n - 1) * 2) + 1) : (n * 2 - (time % ((n - 1) * 2)) - 2));
+    //@ assignable \nothing;
+    public static int passPillow(int n, int time) {
+        //@ assume n > 1 && time >= 0;
+        time = time % ((n - 1) * 2);
+        // Normalize the time into the two-phase cycle
+        if (time < n) {
+            return time + 1;
+        }
+        // In the second half of the cycle
+        return n * 2 - time - 2;
+    }
+    // End of PassPillowBranch_Mutant3
+}
+==============================
+tmp/PassPillowBranch_Mutant3.java:9: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static int passPillow(int n, int time) {
+                      ^
+1 verification failure
+
+==============================
+public class PassPillowBranch_Mutant3 {
+    // PassPillowBranch_Mutant3: simple arithmetic to model pillow passing
+    // This mutant variant preserves the original logic
+
+    //@ requires n > 1 && time >= 0;
+    //@ ensures 1 <= \result && \result <= n;
+    //@ ensures \result == (time % ((n - 1) * 2) < n ? (time % ((n - 1) * 2) + 1) : (n * 2 - (time % ((n - 1) * 2)) - 2));
+    //@ assignable \nothing;
+    //@ also
+    //@ signals (Exception) false;
+    public static int passPillow(int n, int time) {
+        //@ assume n > 1 && time >= 0;
+        time = time % ((n - 1) * 2);
+        // Normalize the time into the two-phase cycle
+        if (time < n) {
+            return time + 1;
+        }
+        // In the second half of the cycle
+        return n * 2 - time - 2;
+    }
+    // End of PassPillowBranch_Mutant3
+}
+==============================
+tmp/PassPillowBranch_Mutant3.java:11: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static int passPillow(int n, int time) {
+                      ^
+1 verification failure
+
+==============================
+public class PassPillowBranch_Mutant3 {
+    // PassPillowBranch_Mutant3: simple arithmetic to model pillow passing
+    // This mutant variant preserves the original logic
+
+    //@ requires n > 1 && time >= 0;
+    //@ ensures 1 <= \result && \result <= n;
+    //@ assignable \nothing;
+    public static int passPillow(int n, int time) {
+        //@ assume n > 1 && time >= 0;
+        time = time % ((n - 1) * 2);
+        // Normalize the time into the two-phase cycle
+        if (time < n) {
+            //@ assert time >= 0 && time < n;
+            //@ assert \result == time + 1;
+            return time + 1;
+        }
+        // In the second half of the cycle
+        //@ assert time >= n && time < (n - 1) * 2;
+        //@ assert \result == n * 2 - time - 2;
+        return n * 2 - time - 2;
+    }
+    // End of PassPillowBranch_Mutant3
+}
+==============================
+tmp/PassPillowBranch_Mutant3.java:14: error: A \result expression may not be in a assert clause
+            //@ assert \result == time + 1;
+                        ^
+tmp/PassPillowBranch_Mutant3.java:19: error: A \result expression may not be in a assert clause
+        //@ assert \result == n * 2 - time - 2;
+                    ^
+2 errors
+
+==============================
+public class PassPillowBranch_Mutant3 {
+    // PassPillowBranch_Mutant3: simple arithmetic to model pillow passing
+    // This mutant variant preserves the original logic
+
+    //@ requires n > 1 && time >= 0;
+    //@ ensures 1 <= \result && \result <= n;
+    //@ assignable \nothing;
+    public static int passPillow(int n, int time) {
+        //@ assume n > 1 && time >= 0;
+        time = time % ((n - 1) * 2);
+        // Normalize the time into the two-phase cycle
+        if (time < n) {
+            //@ assert time >= 0 && time < n;
+            int result = time + 1;
+            //@ assert result >= 1 && result <= n;
+            return result;
+        }
+        // In the second half of the cycle
+        //@ assert time >= n && time < (n - 1) * 2;
+        int result = n * 2 - time - 2;
+        //@ assert result >= 1 && result <= n;
+        return result;
+    }
+    // End of PassPillowBranch_Mutant3
+}
+==============================
+
+==============================

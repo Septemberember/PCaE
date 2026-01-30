@@ -1,0 +1,8 @@
+experimentName: GPT520Shot
+model: openai/gpt-5.2
+category: Sequential3
+total number: 63
+success number: 55
+success rate: 87.3%
+failed number: 8
+exception number: 0

@@ -1,0 +1,378 @@
+public class MetricsCalculator_2 {
+    //@ ensures \result == (value % 10 + 1) / ((iteration % 10) + 1) + ((iteration % 10) + 1) + adjustment + reduction;
+    public static double computeScore( int limit) {
+        int value = limit - 100;
+        int result = 0;
+        int iteration = 17;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = value * -1;
+            polarity = polarity * -1;
+        }
+        value = (value % 10) + 1;
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ maintaining limit >= 0;
+        //@ decreases limit;
+        while (limit > 0) {
+            limit = limit - value;
+            iteration = iteration - 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = (iteration % 10) + 1;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator_2.java:2: error: cannot find symbol
+    //@ ensures \result == (value % 10 + 1) / ((iteration % 10) + 1) + ((iteration % 10) + 1) + adjustment + reduction;
+                            ^
+  symbol:   variable value
+  location: class MetricsCalculator_2
+tmp/MetricsCalculator_2.java:2: error: cannot find symbol
+    //@ ensures \result == (value % 10 + 1) / ((iteration % 10) + 1) + ((iteration % 10) + 1) + adjustment + reduction;
+                                                ^
+  symbol:   variable iteration
+  location: class MetricsCalculator_2
+tmp/MetricsCalculator_2.java:2: error: cannot find symbol
+    //@ ensures \result == (value % 10 + 1) / ((iteration % 10) + 1) + ((iteration % 10) + 1) + adjustment + reduction;
+                                                                         ^
+  symbol:   variable iteration
+  location: class MetricsCalculator_2
+tmp/MetricsCalculator_2.java:2: error: cannot find symbol
+    //@ ensures \result == (value % 10 + 1) / ((iteration % 10) + 1) + ((iteration % 10) + 1) + adjustment + reduction;
+                                                                                                ^
+  symbol:   variable adjustment
+  location: class MetricsCalculator_2
+tmp/MetricsCalculator_2.java:2: error: cannot find symbol
+    //@ ensures \result == (value % 10 + 1) / ((iteration % 10) + 1) + ((iteration % 10) + 1) + adjustment + reduction;
+                                                                                                             ^
+  symbol:   variable reduction
+  location: class MetricsCalculator_2
+5 errors
+
+==============================
+public class MetricsCalculator_2 {
+    //@ ensures true;
+    public static double computeScore( int limit) {
+        int value = limit - 100;
+        int result = 0;
+        int iteration = 17;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = value * -1;
+            polarity = polarity * -1;
+        }
+        value = (value % 10) + 1;
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ maintaining limit >= 0;
+        //@ decreases limit;
+        while (limit > 0) {
+            limit = limit - value;
+            iteration = iteration - 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = (iteration % 10) + 1;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator_2.java:32: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method computeScore
+        result = value / iteration;
+                       ^
+1 verification failure
+
+==============================
+public class MetricsCalculator_2 {
+    //@ ensures true;
+    public static double computeScore( int limit) {
+        int value = limit - 100;
+        int result = 0;
+        int iteration = 17;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = value * -1;
+            polarity = polarity * -1;
+        }
+        value = (value % 10) + 1;
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ maintaining limit >= 0;
+        //@ decreases limit;
+        while (limit > 0) {
+            limit = limit - value;
+            iteration = iteration - 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        //@ assume iteration != 0;
+        iteration = (iteration % 10) + 1;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator_2.java:33: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method computeScore
+        result = value / iteration;
+                       ^
+1 verification failure
+
+==============================
+public class MetricsCalculator_2 {
+    //@ ensures true;
+    public static double computeScore( int limit) {
+        int value = limit - 100;
+        int result = 0;
+        int iteration = 17;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = value * -1;
+            polarity = polarity * -1;
+        }
+        value = (value % 10) + 1;
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ maintaining limit >= 0;
+        //@ decreases limit;
+        while (limit > 0) {
+            limit = limit - value;
+            iteration = iteration - 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        //@ assume iteration != 0;
+        iteration = (iteration % 10) + 1;
+        //@ assert iteration >= 1 && iteration <= 10;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator_2.java:33: verify: The prover cannot establish an assertion (Assert) in method computeScore
+        //@ assert iteration >= 1 && iteration <= 10;
+            ^
+1 verification failure
+
+==============================
+public class MetricsCalculator_2 {
+    //@ ensures true;
+    public static double computeScore( int limit) {
+        int value = limit - 100;
+        int result = 0;
+        int iteration = 17;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = value * -1;
+            polarity = polarity * -1;
+        }
+        value = (value % 10) + 1;
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ maintaining limit >= 0;
+        //@ decreases limit;
+        while (limit > 0) {
+            limit = limit - value;
+            iteration = iteration - 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = (iteration % 10) + 1;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator_2.java:32: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method computeScore
+        result = value / iteration;
+                       ^
+1 verification failure
+
+==============================
+public class MetricsCalculator_2 {
+    //@ ensures true;
+    public static double computeScore( int limit) {
+        int value = limit - 100;
+        int result = 0;
+        int iteration = 17;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = value * -1;
+            polarity = polarity * -1;
+        }
+        value = (value % 10) + 1;
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ maintaining limit >= 0;
+        //@ decreases limit;
+        while (limit > 0) {
+            limit = limit - value;
+            iteration = iteration - 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = (iteration % 10) + 1;
+        //@ assume iteration != 0;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator_2.java:22: verify: The prover cannot establish an assertion (LoopInvariant) in method computeScore
+        //@ maintaining limit >= 0;
+            ^
+1 verification failure
+
+==============================
+public class MetricsCalculator_2 {
+    //@ ensures true;
+    public static double computeScore( int limit) {
+        int value = limit - 100;
+        int result = 0;
+        int iteration = 17;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = value * -1;
+            polarity = polarity * -1;
+        }
+        value = (value % 10) + 1;
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ maintaining limit > 0;  
+        //@ decreases limit;
+        while (limit > 0) {
+            limit = limit - value;
+            iteration = iteration - 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = (iteration % 10) + 1;
+        //@ assume iteration != 0;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+
+==============================
+tmp/MetricsCalculator_2.java:22: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method computeScore
+        //@ maintaining limit > 0;  
+            ^
+1 verification failure
+
+==============================

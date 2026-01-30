@@ -1,0 +1,39 @@
+public class TO_BASE {
+    //@ spec_public
+    public static String to_base(int b) {
+        //@ requires b >= 1 && b <= 36;
+        //@ ensures \result != null;
+        //@ ensures b == 1 ==> \result.equals("0");
+        //@ ensures b > 1 ==> (\forall int k; 0 <= k && k < \result.length(); 
+        //@                      \result.charAt(k) >= '0' && \result.charAt(k) <= '9' || 
+        //@                      \result.charAt(k) >= 'A' && \result.charAt(k) <= 'Z');
+        int num = (b + 200) / 3;
+        String result = "";
+        //@ spec_public
+        String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int i;
+        if(b == 1){
+            return "0";
+        }
+        //@ maintaining num >= 0;
+        //@ maintaining result != null;
+        //@ maintaining (\forall int k; 0 <= k && k < result.length(); 
+        //@                 result.charAt(k) >= '0' && result.charAt(k) <= '9' || 
+        //@                 result.charAt(k) >= 'A' && result.charAt(k) <= 'Z');
+        //@ decreases num;
+        while (num > 0) {
+            i = num % b;
+            num = num / b;
+            result = result + String.valueOf(alphabet.charAt(i));
+        }
+
+        return result;
+    }
+}
+==============================
+tmp/TO_BASE.java:12: error: This JML modifier is not allowed for a local variable declaration
+        //@ spec_public
+            ^
+1 error
+
+==============================

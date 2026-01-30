@@ -1,0 +1,8 @@
+experimentName: GPT520Shot
+model: openai/gpt-5.2
+category: Multi-path-Loop3
+total number: 31
+success number: 17
+success rate: 54.83%
+failed number: 13
+exception number: 1

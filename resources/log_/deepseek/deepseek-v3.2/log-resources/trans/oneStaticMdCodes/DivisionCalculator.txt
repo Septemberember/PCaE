@@ -1,0 +1,77 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class DivisionCalculator {
+
+    public static double calculateRatio(int numerator, int denominator) {
+        int sum = 0;
+        int diff = 0;
+        int product = 1;
+        int counter = 0;
+        double ratio = 0;
+        for (int i = 0; i < 5; i++) {
+            sum = sum + i;
+            diff = diff - i;
+            product =  product * (i + 1);
+            counter = counter + 1;
+        }
+        if(denominator <= 0){
+            denominator = 1;
+        }
+        if(numerator < counter || denominator > 7) {
+            numerator = numerator + diff * counter;
+        }else{
+            denominator = numerator - denominator;
+            ratio = (double) numerator / denominator;
+        }
+
+        double adjustment = 0.0;
+        for (int j = 0; j < 3; j++) {
+            adjustment += j * 0.1;
+        }
+
+        double result = ratio + adjustment + sum - diff + product - counter + numerator;
+
+        boolean valid = result > 0;
+        if (valid) {
+            System.out.println("Computation successful.");
+        } else {
+            System.out.println("Computation result is non-positive.");
+        }
+
+        int check = 1;
+        while (check < 4) {
+            result += check * 2;
+            check++;
+        }
+        return result;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: denominator == 0
+D1: Exception
+
+T2: denominator != 0 && denominator > 0 && (numerator < counter || denominator > 7)
+D2: return_value == ((double) (numerator + diff * counter)) / 1 + 0.3 + 10 + 0 + 120 - 5 + (numerator + diff * counter)
+
+T3: denominator != 0 && denominator > 0 && numerator >= counter && denominator <= 7
+D3: return_value == ((double) numerator) / (numerator - denominator) + 0.3 + 10 + 0 + 120 - 5 + numerator
+
+T4: denominator != 0 && denominator <= 0 && (numerator < counter || 1 > 7)
+D4: return_value == ((double) (numerator + diff * counter)) / 1 + 0.3 + 10 + 0 + 120 - 5 + (numerator + diff * counter)
+
+T5: denominator != 0 && denominator <= 0 && numerator >= counter && 1 <= 7
+D5: return_value == ((double) numerator) / (numerator - 1) + 0.3 + 10 + 0 + 120 - 5 + numerator
+```
+*end* role assistant
+start role user
+There exist variables which do not belong to input params of the program:counter, please regenerate the FSF, avoiding these variables!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

@@ -1,0 +1,191 @@
+public class MetricsCalculator_2 {
+    /*@ public normal_behavior
+      @   requires limit > 0;
+      @   ensures \result == ((((Math.abs(limit - 100) % 10) + 1) / (((17 - \old(\num_of_iterations)) % 10) + 1)) 
+      @                      + (((17 - \old(\num_of_iterations)) % 10) + 1) 
+      @                      + (((\old(limit) - 100 + 1) - (\old(limit) + 2)) + \old(\sum_of_shifts)) 
+      @                      + ((((Math.abs(limit - 100) % 10) + 1) / (((17 - \old(\num_of_iterations)) % 10) + 1)) + (\old(limit) - 100) - \old(limit)));
+      @   assignable \nothing;
+      @*/
+    public static double computeScore( int limit) {
+        int value = limit - 100;
+        int result = 0;
+        int iteration = 17;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = value * -1;
+            polarity = polarity * -1;
+        }
+        value = (value % 10) + 1;
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ ghost int initialLimit = limit;
+        //@ ghost int initialShift = shift;
+        //@ ghost int initialAdjustment = adjustment;
+        //@ ghost int initialIteration = iteration;
+        //@ maintaining limit <= initialLimit;
+        //@ maintaining iteration <= initialIteration;
+        //@ maintaining value > 0;
+        //@ decreases limit;
+        while (limit > 0) {
+            limit = limit - value;
+            iteration = iteration - 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+        }
+
+        iteration = (iteration % 10) + 1;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator_2.java:4: error: This backslash token is unknown: \num_of_iterations
+      @   ensures \result == ((((Math.abs(limit - 100) % 10) + 1) / (((17 - \old(\num_of_iterations)) % 10) + 1)) 
+                                                                                 ^
+tmp/MetricsCalculator_2.java:5: error: This backslash token is unknown: \num_of_iterations
+      @                      + (((17 - \old(\num_of_iterations)) % 10) + 1) 
+                                            ^
+tmp/MetricsCalculator_2.java:6: error: This backslash token is unknown: \sum_of_shifts
+      @                      + (((\old(limit) - 100 + 1) - (\old(limit) + 2)) + \old(\sum_of_shifts)) 
+                                                                                     ^
+tmp/MetricsCalculator_2.java:7: error: This backslash token is unknown: \num_of_iterations
+      @                      + ((((Math.abs(limit - 100) % 10) + 1) / (((17 - \old(\num_of_iterations)) % 10) + 1)) + (\old(limit) - 100) - \old(limit)));
+                                                                                   ^
+4 errors
+
+==============================
+public class MetricsCalculator_2 {
+    /*@ public normal_behavior
+      @   requires limit > 0;
+      @   ensures true;
+      @*/
+    public static double computeScore( int limit) {
+        int value = limit - 100;
+        int result = 0;
+        int iteration = 17;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = value * -1;
+            polarity = polarity * -1;
+        }
+        value = (value % 10) + 1;
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ ghost int loop_count = 0;
+        //@ ghost int sum_shift = 0;
+        //@ maintaining limit <= originalLimit;
+        //@ maintaining value > 0;
+        //@ maintaining adjustment == (offsetValue - offsetLimit) + sum_shift;
+        //@ maintaining iteration == 17 - loop_count;
+        //@ decreases limit > 0 ? limit : 0;
+        while (limit > 0) {
+            //@ ghost int old_shift = shift;
+            limit = limit - value;
+            iteration = iteration - 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+            //@ set loop_count = loop_count + 1;
+            //@ set sum_shift = sum_shift + old_shift;
+        }
+
+        iteration = (iteration % 10) + 1;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+tmp/MetricsCalculator_2.java:43: verify: The prover cannot establish an assertion (PossiblyDivideByZero) in method computeScore
+        result = value / iteration;
+                       ^
+1 verification failure
+
+==============================
+public class MetricsCalculator_2 {
+    /*@ public normal_behavior
+      @   requires limit > 0;
+      @   ensures true;
+      @*/
+    public static double computeScore( int limit) {
+        int value = limit - 100;
+        int result = 0;
+        int iteration = 17;
+        int offsetValue = value + 1;
+        int offsetLimit = limit + 2;
+        int polarity = 1;
+        int originalValue = value;
+        int originalLimit = limit;
+        int adjustment = offsetValue - offsetLimit;
+
+        if (value < 0) {
+            value = value * -1;
+            polarity = polarity * -1;
+        }
+        value = (value % 10) + 1;
+        int validation = value + polarity;
+        int shift = validation % 3;
+
+        //@ ghost int loop_count = 0;
+        //@ ghost int sum_shift = 0;
+        //@ maintaining limit <= originalLimit;
+        //@ maintaining value > 0 && value <= 10;
+        //@ maintaining adjustment == (offsetValue - offsetLimit) + sum_shift;
+        //@ maintaining iteration == 17 - loop_count;
+        //@ decreases limit > 0 ? limit : 0;
+        while (limit > 0) {
+            //@ ghost int old_shift = shift;
+            limit = limit - value;
+            iteration = iteration - 1;
+            adjustment = adjustment + shift;
+            shift = shift + 1;
+            //@ set loop_count = loop_count + 1;
+            //@ set sum_shift = sum_shift + old_shift;
+        }
+
+        //@ assume (iteration % 10) + 1 != 0;
+        iteration = (iteration % 10) + 1;
+        result = value / iteration;
+
+        int blended = result + originalValue;
+        int reduction = blended - originalLimit;
+
+        result = result + iteration;
+        result = result + adjustment;
+        result = result + reduction;
+
+        return result;
+    }
+}
+==============================
+
+==============================

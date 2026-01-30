@@ -1,0 +1,2 @@
+total_tokens=3586
+prompt_tokens=3072

@@ -1,0 +1,289 @@
+public class MultiSumRatio {
+    //@ requires x + ((\old(y) < 0) ? -\old(y) : \old(y)) != 0;
+    //@ assignable \nothing;
+    /*@ ensures (\exists int yAbs, int factorStart, int k, int fEnd;
+      @            yAbs == ((\old(y) < 0) ? -\old(y) : \old(y)) &&
+      @            factorStart == 1 + (yAbs * (yAbs - 1)) / 2 &&
+      @            k >= 0 &&
+      @            fEnd == factorStart / (\product int t; 0 <= t && t < k; 10) &&
+      @            1 <= fEnd && fEnd <= 10 &&
+      @            (k == 0 ==> factorStart <= 10) &&
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+      @*/
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining 0 <= n && n <= y;
+            //@ maintaining sum == x + (y - n);
+            //@ maintaining factor == 1 + ((y - 1 + n) * (y - n)) / 2;
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining y <= 0;
+            //@ maintaining 0 <= n && n <= -y;
+            //@ maintaining sum == x - ((-y) - n);
+            //@ maintaining factor == 1 + (((-y) - 1 + n) * ((-y) - n)) / 2;
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        int tmpFactor = 0;
+        //@ maintaining tmpFactor >= 0;
+        //@ maintaining factor > 0;
+        //@ maintaining factor * (\product int t; 0 <= t && t < tmpFactor; 10) == 1 + (y * (y - 1)) / 2;
+        //@ decreases factor;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+==============================
+tmp/MultiSumRatio.java:4: error: <identifier> expected
+    /*@ ensures (\exists int yAbs, int factorStart, int k, int fEnd;
+                                  ^
+tmp/MultiSumRatio.java:4: error: Expected a semicolon to separate the parts of a JML quantified expression
+    /*@ ensures (\exists int yAbs, int factorStart, int k, int fEnd;
+                                   ^
+tmp/MultiSumRatio.java:5: error: Incorrectly formed or terminated ensures statement near here
+      @            yAbs == ((\old(y) < 0) ? -\old(y) : \old(y)) &&
+                                                              ^
+tmp/MultiSumRatio.java:8: error: illegal start of type
+      @            fEnd == factorStart / (\product int t; 0 <= t && t < k; 10) &&
+                                                          ^
+tmp/MultiSumRatio.java:8: error: <identifier> expected
+      @            fEnd == factorStart / (\product int t; 0 <= t && t < k; 10) &&
+                                                                ^
+tmp/MultiSumRatio.java:8: error: > expected
+      @            fEnd == factorStart / (\product int t; 0 <= t && t < k; 10) &&
+                                                                         ^
+tmp/MultiSumRatio.java:8: error: illegal start of type
+      @            fEnd == factorStart / (\product int t; 0 <= t && t < k; 10) &&
+                                                                           ^
+tmp/MultiSumRatio.java:9: error: <identifier> expected
+      @            1 <= fEnd && fEnd <= 10 &&
+                            ^
+tmp/MultiSumRatio.java:9: error: <identifier> expected
+      @            1 <= fEnd && fEnd <= 10 &&
+                                    ^
+tmp/MultiSumRatio.java:10: error: <identifier> expected
+      @            (k == 0 ==> factorStart <= 10) &&
+                     ^
+tmp/MultiSumRatio.java:10: error: <identifier> expected
+      @            (k == 0 ==> factorStart <= 10) &&
+                                          ^
+tmp/MultiSumRatio.java:11: error: <identifier> expected
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                     ^
+tmp/MultiSumRatio.java:11: error: <identifier> expected
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                          ^
+tmp/MultiSumRatio.java:11: error: Token \product is not a type
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                              ^
+tmp/MultiSumRatio.java:11: error: ';' expected
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                                      ^
+tmp/MultiSumRatio.java:11: error: illegal start of type
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                                              ^
+tmp/MultiSumRatio.java:11: error: <identifier> expected
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                                                    ^
+tmp/MultiSumRatio.java:11: error: illegal start of type
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                                                            ^
+tmp/MultiSumRatio.java:11: error: <identifier> expected
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                                                              ^
+tmp/MultiSumRatio.java:11: error: illegal start of type
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                                                                     ^
+tmp/MultiSumRatio.java:12: error: Token \result is not a type
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+                   ^
+tmp/MultiSumRatio.java:12: error: ';' expected
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+                          ^
+tmp/MultiSumRatio.java:12: error: <identifier> expected
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+                                  ^
+tmp/MultiSumRatio.java:12: error: <identifier> expected
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+                                         ^
+tmp/MultiSumRatio.java:12: error: <identifier> expected
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+                                               ^
+tmp/MultiSumRatio.java:12: error: <identifier> expected
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+                                                      ^
+tmp/MultiSumRatio.java:12: error: <identifier> expected
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+                                                            ^
+27 errors
+
+==============================
+public class MultiSumRatio {
+    //@ requires x + ((\old(y) < 0) ? -\old(y) : \old(y)) != 0;
+    //@ assignable \nothing;
+    /*@ ensures (\forall int yAbs, int factorStart, int k, int fEnd;  
+      @            yAbs == ((\old(y) < 0) ? -\old(y) : \old(y)) &&
+      @            factorStart == 1 + (yAbs * (yAbs - 1)) / 2 &&
+      @            k >= 0 &&
+      @            fEnd == factorStart / (\product int t; 0 <= t && t < k; 10) &&
+      @            1 <= fEnd && fEnd <= 10 &&
+      @            (k == 0 ==> factorStart <= 10) &&
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+      @*/
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            //@ maintaining 0 <= n && n <= y;
+            //@ maintaining sum == x + (y - n);
+            //@ maintaining factor == 1 + ((y - 1 + n) * (y - n)) / 2;
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            //@ maintaining y <= 0;
+            //@ maintaining 0 <= n && n <= -y;
+            //@ maintaining sum == x - ((-y) - n);
+            //@ maintaining factor == 1 + (((-y) - 1 + n) * ((-y) - n)) / 2;
+            //@ decreases n;
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        int tmpFactor = 0;
+        //@ maintaining tmpFactor >= 0;
+        //@ maintaining factor > 0;
+        //@ maintaining factor * (\product int t; 0 <= t && t < tmpFactor; 10) == 1 + (y * (y - 1)) / 2;
+        //@ decreases factor;
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+
+==============================
+tmp/MultiSumRatio.java:4: error: <identifier> expected
+    /*@ ensures (\forall int yAbs, int factorStart, int k, int fEnd;  
+                                  ^
+tmp/MultiSumRatio.java:4: error: Expected a semicolon to separate the parts of a JML quantified expression
+    /*@ ensures (\forall int yAbs, int factorStart, int k, int fEnd;  
+                                   ^
+tmp/MultiSumRatio.java:5: error: Incorrectly formed or terminated ensures statement near here
+      @            yAbs == ((\old(y) < 0) ? -\old(y) : \old(y)) &&
+                                                              ^
+tmp/MultiSumRatio.java:8: error: illegal start of type
+      @            fEnd == factorStart / (\product int t; 0 <= t && t < k; 10) &&
+                                                          ^
+tmp/MultiSumRatio.java:8: error: <identifier> expected
+      @            fEnd == factorStart / (\product int t; 0 <= t && t < k; 10) &&
+                                                                ^
+tmp/MultiSumRatio.java:8: error: > expected
+      @            fEnd == factorStart / (\product int t; 0 <= t && t < k; 10) &&
+                                                                         ^
+tmp/MultiSumRatio.java:8: error: illegal start of type
+      @            fEnd == factorStart / (\product int t; 0 <= t && t < k; 10) &&
+                                                                           ^
+tmp/MultiSumRatio.java:9: error: <identifier> expected
+      @            1 <= fEnd && fEnd <= 10 &&
+                            ^
+tmp/MultiSumRatio.java:9: error: <identifier> expected
+      @            1 <= fEnd && fEnd <= 10 &&
+                                    ^
+tmp/MultiSumRatio.java:10: error: <identifier> expected
+      @            (k == 0 ==> factorStart <= 10) &&
+                     ^
+tmp/MultiSumRatio.java:10: error: <identifier> expected
+      @            (k == 0 ==> factorStart <= 10) &&
+                                          ^
+tmp/MultiSumRatio.java:11: error: <identifier> expected
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                     ^
+tmp/MultiSumRatio.java:11: error: <identifier> expected
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                          ^
+tmp/MultiSumRatio.java:11: error: Token \product is not a type
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                              ^
+tmp/MultiSumRatio.java:11: error: ';' expected
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                                      ^
+tmp/MultiSumRatio.java:11: error: illegal start of type
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                                              ^
+tmp/MultiSumRatio.java:11: error: <identifier> expected
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                                                    ^
+tmp/MultiSumRatio.java:11: error: illegal start of type
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                                                            ^
+tmp/MultiSumRatio.java:11: error: <identifier> expected
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                                                              ^
+tmp/MultiSumRatio.java:11: error: illegal start of type
+      @            (k > 0 ==> (factorStart / (\product int t; 0 <= t && t < (k - 1); 10)) > 10) &&
+                                                                                     ^
+tmp/MultiSumRatio.java:12: error: Token \result is not a type
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+                   ^
+tmp/MultiSumRatio.java:12: error: ';' expected
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+                          ^
+tmp/MultiSumRatio.java:12: error: <identifier> expected
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+                                  ^
+tmp/MultiSumRatio.java:12: error: <identifier> expected
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+                                         ^
+tmp/MultiSumRatio.java:12: error: <identifier> expected
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+                                               ^
+tmp/MultiSumRatio.java:12: error: <identifier> expected
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+                                                      ^
+tmp/MultiSumRatio.java:12: error: <identifier> expected
+      @            \result == (((x * yAbs) / (x + yAbs)) * k));
+                                                            ^
+27 errors
+
+==============================

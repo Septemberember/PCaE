@@ -1,0 +1,74 @@
+public class MultiSumRatio {
+    /*@ public normal_behavior
+      @   requires sum != 0;
+      @   ensures \result == ((x * y) / (x + (y >= 0 ? y : -y))) * (\old(y) >= 0 || \old(y) < 0 ? (\num_of int i; 10 < i && i <= (1 + (y >= 0 ? (y*(y-1))/2 : ((-y)*(-y-1))/2)); i = i / 10) : 0);
+      @   assignable \nothing;
+      @   // Note: Simplified ensures to focus on the functional logic and division safety.
+      @   signals (ArithmeticException) sum == 0;
+      @*/
+    public static int multiSumRatio(int x, int y) {
+        int sum = x;
+        int ratio = 0;
+        int factor = 1;
+        if(y < 0){
+            y = -y;
+        }
+        if (y > 0) {
+            int n = y;
+            /*@ maintaining n >= 0 && n <= \old(y >= 0 ? y : -y);
+              @ maintaining sum == x + (\old(y >= 0 ? y : -y) - n);
+              @ maintaining factor == 1 + ((\old(y >= 0 ? y : -y)*(\old(y >= 0 ? y : -y)-1))/2 - (n*(n-1))/2);
+              @ decreasing n;
+              @*/
+            while (n > 0) {
+                sum = sum + 1;
+                n = n - 1;
+                factor += n;
+            }
+        } else {
+            int n = -y;
+            /*@ maintaining n >= 0;
+              @ maintaining sum == x - (\old(-y) - n);
+              @ decreasing n;
+              @*/
+            while (n > 0) {
+                sum = sum - 1;
+                n = n - 1;
+                factor += n;
+            }
+        }
+        int tmpFactor = 0;
+        /*@ maintaining factor >= 0;
+          @ maintaining tmpFactor >= 0;
+          @ decreasing factor;
+          @*/
+        while(factor > 10){
+            tmpFactor++;
+            factor /= 10;
+        }
+        int multi = x * y;
+        ratio = multi / sum;
+        ratio = ratio * tmpFactor;
+        return ratio;
+    }
+}
+==============================
+tmp/MultiSumRatio.java:3: error: cannot find symbol
+      @   requires sum != 0;
+                   ^
+  symbol:   variable sum
+  location: class MultiSumRatio
+tmp/MultiSumRatio.java:4: error: incompatible types: int cannot be converted to boolean
+      @   ensures \result == ((x * y) / (x + (y >= 0 ? y : -y))) * (\old(y) >= 0 || \old(y) < 0 ? (\num_of int i; 10 < i && i <= (1 + (y >= 0 ? (y*(y-1))/2 : ((-y)*(-y-1))/2)); i = i / 10) : 0);
+                                                                                                                                                                                   ^
+tmp/MultiSumRatio.java:7: error: cannot find symbol
+      @   signals (ArithmeticException) sum == 0;
+                                        ^
+  symbol:   variable sum
+  location: class MultiSumRatio
+tmp/MultiSumRatio.java:7: error: Signals clauses are not permitted in normal specification cases
+      @   signals (ArithmeticException) sum == 0;
+          ^
+4 errors
+
+==============================

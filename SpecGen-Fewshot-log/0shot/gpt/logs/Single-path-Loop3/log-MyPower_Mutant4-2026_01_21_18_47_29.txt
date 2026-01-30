@@ -1,0 +1,67 @@
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    /*@ public normal_behavior
+      @   // The method performs (n+1) multiplications when n >= 0; for n < 0 the loop is skipped.
+      @   // This matches the mathematical product over the index range 0..n (empty if n < 0).
+      @   requires (\product int k; 0 <= k && k <= n; (\bigint)x) <= Integer.MAX_VALUE
+      @         && (\product int k; 0 <= k && k <= n; (\bigint)x) >= Integer.MIN_VALUE;
+      @   assignable \nothing;
+      @   ensures \result == (int)(\product int k; 0 <= k && k <= n; (\bigint)x);
+      @*/
+    public static int power(int x, int n) {
+        int res = 1;
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        /*@ maintaining 0 <= i;
+	          @ maintaining (n >= 0) ==> i <= n + 1;
+	          @ maintaining res == (int)(\product int k; 0 <= k && k < i; (\bigint)x);
+	          @*/
+	        res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Mutant4.java:18: error: Loop specifications must immediately precede a loop statement
+	        /*@ maintaining 0 <= i;
+	            ^
+1 error
+
+==============================
+public class MyPower_Mutant4 {
+    /**
+     * Computes x raised to the power of n, using iterative multiplication.
+     * Note: The current loop runs from i = 0 to i <= n, which yields n+1 multiplications.
+     */
+    /*@ public normal_behavior
+      @   // The method performs (n+1) multiplications when n >= 0; for n < 0 the loop is skipped.
+      @   // This matches the mathematical product over the index range 0..n (empty if n < 0).
+      @   requires (\product int k; 0 <= k && k <= n; (\bigint)x) <= Integer.MAX_VALUE
+      @         && (\product int k; 0 <= k && k <= n; (\bigint)x) >= Integer.MIN_VALUE;
+      @   assignable \nothing;
+      @   ensures \result == (int)(\product int k; 0 <= k && k <= n; (\bigint)x);
+      @*/
+    public static int power(int x, int n) {
+        int res = 1;
+        for(int i = 0; i <= n; i++){
+	        // Each iteration multiplies the accumulator by x
+	        /*@ maintaining 0 < i;  
+	          @ maintaining (n >= 0) ==> i <= n + 1;
+	          @ maintaining res == (int)(\product int k; 0 <= k && k < i; (\bigint)x);
+	          @*/
+	        res = res * x;
+        }
+        return res;
+    }
+}
+
+==============================
+tmp/MyPower_Mutant4.java:18: error: Loop specifications must immediately precede a loop statement
+	        /*@ maintaining 0 < i;  
+	            ^
+1 error
+
+==============================

@@ -1,0 +1,20 @@
+public class AbsSeq_Mutant2 {
+    // AbsSeq_Mutant2: helper for absolute value computation
+
+    //@ ensures \result >= 0;
+    //@ ensures \result == (num < 0 ? -num : num);
+    //@ ensures \result == Math.abs(num);
+    public static int Abs(int num) {
+        // Compute absolute value: negate when negative
+        if (num < 0) {
+            // Flip sign for negative values
+            return num * -1;
+        } else {
+            // Positive or zero remains unchanged
+            return num;
+        }
+    }
+}
+==============================
+
+==============================

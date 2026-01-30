@@ -1,0 +1,55 @@
+public class SmallestEvenMulBranch_Original {
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures (n % 2 == 0) ==> (\result == n);
+      @   ensures (n % 2 != 0) ==> (\result == 2 * n);
+      @   ensures \result % 2 == 0;
+      @   ensures \result % n == 0;
+      @   ensures (\forall int i; 1 <= i && i < \result; i % 2 != 0 || i % n != 0);
+      @*/
+    public static int smallestEvenMultiple(int n) {
+        if (n % 2 == 0) {
+            return n;
+        }
+        return 2 * n;
+    }
+}
+==============================
+tmp/SmallestEvenMulBranch_Original.java:8: verify: The prover cannot establish an assertion (UndefinedDivideByZero) in method smallestEvenMultiple
+      @   ensures \result % n == 0;
+                          ^
+tmp/SmallestEvenMulBranch_Original.java:13: verify: Associated method exit
+            return n;
+            ^
+2 verification failures
+
+==============================
+public class SmallestEvenMulBranch_Original {
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures (n % 2 == 0) ==> (\result == n);
+      @   ensures (n % 2 != 0) ==> (\result == 2 * n);
+      @   ensures \result % 2 == 0;
+      @   ensures \result % n == 0;  
+      @   ensures (\forall int i; 1 <= i && i < \result; i % 2 != 0 || i % n != 0);
+      @*/
+    public static int smallestEvenMultiple(int n) {
+        if (n % 2 == 0) {
+            return n;
+        }
+        return 2 * n;
+    }
+}
+
+==============================
+tmp/SmallestEvenMulBranch_Original.java:8: verify: The prover cannot establish an assertion (UndefinedDivideByZero) in method smallestEvenMultiple
+      @   ensures \result % n == 0;  
+                          ^
+tmp/SmallestEvenMulBranch_Original.java:13: verify: Associated method exit
+            return n;
+            ^
+2 verification failures
+
+==============================

@@ -1,0 +1,21 @@
+public class CanWinNim_Mutant1 {
+
+    // Note: This class demonstrates a simple Nim check logic.
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures \result <==> (n % 4 == 0);
+      @   assignable \nothing;
+      @   pure;
+      @*/
+    public static boolean canWinNim(int n) {
+        // The decision is based on whether n is a multiple of 4.
+        return n % 4 == 0;   // Change != to ==
+    }
+}
+==============================
+tmp/CanWinNim_Mutant1.java:8: error: Orphaned modifiers found before an empty declaration
+      @   pure;
+              ^
+1 error
+
+==============================

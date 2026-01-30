@@ -1,0 +1,57 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class ResourceAllocator {
+    public static int allocateResources(int request) {
+        int resourcePools[] = new int[6];
+
+        int MAX_REQUEST = 35;
+        int MIN_REQUEST = 8;
+
+        int poolIndex = 0;
+        int overhead = 0;
+
+        if (request < MIN_REQUEST) {
+            request = MIN_REQUEST;
+            overhead = overhead - 4;
+        } else {
+            overhead = overhead + 2;
+        }
+
+        if (request > MAX_REQUEST) {
+            request = MAX_REQUEST;
+            overhead = overhead * 2;
+        }
+
+        int allocated = request * 2 - 10;
+
+        if (allocated >= 12 && allocated < 20) {
+            poolIndex = allocated / 3;
+        } else {
+            poolIndex = allocated % 6;
+        }
+
+        resourcePools[poolIndex] = allocated + overhead;
+        return allocated;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: request < 8
+D1: allocated == 6
+
+T2: 8 <= request && request <= 35
+D2: allocated == request * 2 - 10
+
+T3: request > 35
+D3: allocated == 60
+```
+**Note:** The `overhead` and `resourcePools[poolIndex]` assignments are internal computations that do not affect the return value `allocated`, which is the only observable output of the program. The FSF only describes the relationship between input `request` and output `allocated`.
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

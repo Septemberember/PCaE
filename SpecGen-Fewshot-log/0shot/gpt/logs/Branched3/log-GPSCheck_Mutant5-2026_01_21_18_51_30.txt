@@ -1,0 +1,24 @@
+public class GPSCheck_Mutant5 {
+    // GPSCheck_Mutant5: Evaluates alarm level based on satellites and signal strength.
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   assignable \nothing;
+      @   ensures (\result == 2) <==> (satellites < 4 && signalStrength < 20);
+      @   ensures (\result == 0) <==> !(satellites < 4 && signalStrength < 20);
+      @   ensures (\result == 0 || \result == 2);
+      @*/
+    public static int GPSCheck(int satellites, int signalStrength) {
+        // Determine alarm value with simple threshold rules
+        int alarm = 0;
+        // If there are fewer than 4 satellites and the signal is weak, raise alarm
+        if (satellites < 4 && signalStrength < 20) {
+            alarm = 2;
+        }
+        // Default: no alarm unless conditions are met
+        return alarm;
+    }
+}
+==============================
+
+==============================

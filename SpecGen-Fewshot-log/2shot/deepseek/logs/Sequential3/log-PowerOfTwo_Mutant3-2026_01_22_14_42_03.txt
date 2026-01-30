@@ -1,0 +1,36 @@
+public class PowerOfTwo_Mutant3 {
+ // Utility: power-of-two check utility class
+
+    //@ ensures \result == (n > 1 && (n & (n - 1)) == 0);
+    //@ ensures \result ==> (\exists int k; 0 <= k && k < 31; n == (1 << k));
+    //@ ensures !\result ==> !(\exists int k; 0 <= k && k < 31; n == (1 << k));
+    public static boolean isPowerOfTwo(int n) {
+        // Fast check using bitwise trick
+        return n > 1 && (n & (n - 1)) == 0;
+    }
+}
+==============================
+tmp/PowerOfTwo_Mutant3.java:9: verify: The prover cannot establish an assertion (Postcondition: tmp/PowerOfTwo_Mutant3.java:6:) in method isPowerOfTwo
+        return n > 1 && (n & (n - 1)) == 0;
+        ^
+tmp/PowerOfTwo_Mutant3.java:6: verify: Associated declaration: tmp/PowerOfTwo_Mutant3.java:9:
+    //@ ensures !\result ==> !(\exists int k; 0 <= k && k < 31; n == (1 << k));
+        ^
+2 verification failures
+
+==============================
+public class PowerOfTwo_Mutant3 {
+ // Utility: power-of-two check utility class
+
+    //@ ensures \result == (n > 1 && (n & (n - 1)) == 0);
+    //@ ensures \result ==> (\exists int k; 0 <= k && k < 31; n == (1 << k));
+    //@ ensures !\result ==> !(\exists int k; 0 < k && k < 31; n == (1 << k));  
+    public static boolean isPowerOfTwo(int n) {
+        // Fast check using bitwise trick
+        return n > 1 && (n & (n - 1)) == 0;
+    }
+}
+
+==============================
+
+==============================

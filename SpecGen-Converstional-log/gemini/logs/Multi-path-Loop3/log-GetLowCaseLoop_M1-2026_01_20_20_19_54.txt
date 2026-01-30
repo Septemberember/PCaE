@@ -1,0 +1,91 @@
+public class GetLowCaseLoop_M1 {
+
+    // Utility holder for methods related to low-case character calculation
+
+    // This class provides a helper to derive a low-case character via a backward loop
+    // The algorithm searches from 'z' down to 'f' to find a target associated with input c
+
+    //@ ensures ('F' <= c && c <= 'Z') ==> \result == (char)(c - 'A' + 'a');
+    //@ ensures (c < 'F' || c > 'Z') ==> \result == 0;
+    public static char getLowCase(char c) {
+
+        // Start from the logical upper bound 'z'
+        char t = 'z';
+
+        // Iterate downward to search for the matching lowercase target derived from c
+        //@ maintaining t >= 'f' - 1 && t <= 'z';
+        //@ maintaining (c >= 'F' && c <= 'Z') ==> (t >= c - 'A' + 'a');
+        //@ maintaining (\forall char k; t < k && k <= 'z'; k != c - 'A' + 'a');
+        //@ decreases t;
+        while(t >= 'f' && t != c - 'A' + 'a') {
+
+            // If the input is outside the uppercase A-Z range, signal with 0
+            if(c < 'F' || c > 'Z') {
+                return 0;
+            }
+
+            // Move to the previous character in the sequence
+            t--;
+        }
+
+        // Return the matching lowercase candidate
+        return t;
+    }
+
+}
+==============================
+tmp/GetLowCaseLoop_M1.java:32: verify: The prover cannot establish an assertion (Postcondition: tmp/GetLowCaseLoop_M1.java:9:) in method getLowCase
+        return t;
+        ^
+tmp/GetLowCaseLoop_M1.java:9: verify: Associated declaration: tmp/GetLowCaseLoop_M1.java:32:
+    //@ ensures (c < 'F' || c > 'Z') ==> \result == 0;
+        ^
+2 verification failures
+
+==============================
+public class GetLowCaseLoop_M1 {
+
+    // Utility holder for methods related to low-case character calculation
+
+    // This class provides a helper to derive a low-case character via a backward loop
+    // The algorithm searches from 'z' down to 'f' to find a target associated with input c
+
+    //@ ensures ('F' <= c && c <= 'Z') ==> \result == (char)(c - 'A' + 'a');
+    //@ ensures (c < 'F' || c > 'Z') ==> \result == 0;  
+    public static char getLowCase(char c) {
+
+        // Start from the logical upper bound 'z'
+        char t = 'z';
+
+        // Iterate downward to search for the matching lowercase target derived from c
+        //@ maintaining t >= 'f' - 1 && t <= 'z';
+        //@ maintaining (c >= 'F' && c <= 'Z') ==> (t >= c - 'A' + 'a');
+        //@ maintaining (\forall char k; t < k && k <= 'z'; k != c - 'A' + 'a');
+        //@ decreases t;
+        while(t >= 'f' && t != c - 'A' + 'a') {
+
+            // If the input is outside the uppercase A-Z range, signal with 0
+            if(c < 'F' || c > 'Z') {
+                return 0;
+            }
+
+            // Move to the previous character in the sequence
+            t--;
+        }
+
+        // Return the matching lowercase candidate
+        return t;
+    }
+
+}
+
+==============================
+tmp/GetLowCaseLoop_M1.java:32: verify: The prover cannot establish an assertion (Postcondition: tmp/GetLowCaseLoop_M1.java:9:) in method getLowCase
+        return t;
+        ^
+tmp/GetLowCaseLoop_M1.java:9: verify: Associated declaration: tmp/GetLowCaseLoop_M1.java:32:
+    //@ ensures (c < 'F' || c > 'Z') ==> \result == 0;  
+        ^
+2 verification failures
+
+==============================

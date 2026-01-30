@@ -1,0 +1,18 @@
+public class SmallestEvenMul_Original {
+    // This simple utility computes the smallest even multiple of n
+    /* Helper note: result is n if even, otherwise 2*n. */
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures \result == (n % 2 == 0 ? n : 2 * n);
+      @   ensures \result % 2 == 0;
+      @   ensures (n == 0) ==> (\result == 0);
+      @   ensures (n != 0) ==> (\result % n == 0);
+      @*/
+    public static int smallestEvenMultiple(int n) {
+        return n % 2 == 0 ? n : 2 * n;
+    }
+}
+==============================
+
+==============================

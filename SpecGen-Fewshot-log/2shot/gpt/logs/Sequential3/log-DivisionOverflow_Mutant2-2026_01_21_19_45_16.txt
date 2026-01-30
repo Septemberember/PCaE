@@ -1,0 +1,19 @@
+public class DivisionOverflow_Mutant2 {
+    /*@ public normal_behavior
+      @   requires denom != -1;                      // avoid division by zero: (denom+1) != 0
+      @   requires !(nom == Integer.MIN_VALUE && denom == 0); // avoid overflow in Java int division by -1: (denom+1) == -1
+      @   assignable \nothing;
+      @   ensures \result == nom / (denom + 1);
+      @*/
+    public static int division_test_fail_overflow(int nom, int denom) {
+        int tmp = nom / (denom+1); // modifying denom by adding 1
+        return tmp;
+    }
+}
+==============================
+tmp/DivisionOverflow_Mutant2.java:8: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static int division_test_fail_overflow(int nom, int denom) {
+                      ^
+1 verification failure
+
+==============================

@@ -1,0 +1,91 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class CompressionRatio {
+    public static String calculateRatio(int fileSize) {
+        String ratioStr = null;
+        int level = 0;
+        int overhead = 0;
+
+        if (fileSize < 50) {
+            fileSize = 50;
+            overhead = overhead - 3;
+            overhead *= fileSize / 10;
+        } else {
+            overhead = overhead + 1;
+            overhead *= fileSize / 100;
+        }
+
+        if (fileSize > 400) {
+            fileSize = 400;
+            overhead = overhead + 5;
+            overhead *= fileSize / 100;
+        }
+
+        if(overhead > 80){
+            overhead = overhead > 100 ? 100 : overhead;
+            overhead = overhead / 10;
+        }else{
+            overhead = overhead < 10 ? 10 : overhead;
+            overhead = overhead / 10;
+        }
+
+        int ratio = fileSize / 4 + 30;
+
+        if (ratio >= 45 && ratio <= 70) {
+            level = (ratio - 45) / 5;
+            if(level < 5) {
+                ratioStr = new String("ratio:" + ratio);
+            }
+        } else {
+            level = 5 + (ratio % 5);
+            ratioStr = new String("ratio:" + ratio);
+        }
+        ratioStr.trim();
+        ratioStr = ratioStr + " level:" + level + " overhead:" + overhead;
+        return ratioStr;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: fileSize < 40
+D1: return_value == "ratio:42 level:7 overhead:1"
+
+T2: fileSize >= 40 && fileSize < 50
+D2: return_value == "ratio:42 level:7 overhead:0"
+
+T3: fileSize >= 50 && fileSize <= 60
+D3: return_value == "ratio:42 level:7 overhead:1"
+
+T4: fileSize > 60 && fileSize < 80
+D4: return_value == "ratio:" + (fileSize / 4 + 30) + " level:" + (fileSize / 4 + 30 % 5 + 5) + " overhead:1"
+
+T5: fileSize >= 80 && fileSize < 100
+D5: return_value == "ratio:" + (fileSize / 4 + 30) + " level:" + (fileSize / 4 - 15) / 5 + " overhead:1"
+
+T6: fileSize >= 100 && fileSize <= 160
+D6: return_value == "ratio:" + (fileSize / 4 + 30) + " level:" + (fileSize / 4 - 15) / 5 + " overhead:" + (fileSize / 100 / 10)
+
+T7: fileSize > 160 && fileSize <= 400
+D7: return_value == "ratio:" + (fileSize / 4 + 30) + " level:" + (fileSize / 4 + 30 % 5 + 5) + " overhead:" + (fileSize / 100 / 10)
+
+T8: fileSize > 400 && (fileSize / 100 + 5) * 4 > 80 && (fileSize / 100 + 5) * 4 <= 100
+D8: return_value == "ratio:130 level:5 overhead:" + ((fileSize / 100 + 5) * 4 / 10)
+
+T9: fileSize > 400 && (fileSize / 100 + 5) * 4 > 100
+D9: return_value == "ratio:130 level:5 overhead:10"
+
+T10: fileSize > 400 && (fileSize / 100 + 5) * 4 <= 80
+D10: return_value == "ratio:130 level:5 overhead:" + ((fileSize / 100 + 5) * 4 < 10 ? 1 : (fileSize / 100 + 5) * 4 / 10)
+```
+*end* role assistant
+start role user
+Some errors occurred while verifyingT: fileSize < 40	D: return_value == "ratio:42 level:7 overhead:1", , please regenerate the FSF!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

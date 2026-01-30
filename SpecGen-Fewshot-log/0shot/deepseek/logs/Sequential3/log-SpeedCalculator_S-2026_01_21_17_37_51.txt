@@ -1,0 +1,121 @@
+public class SpeedCalculator_S {
+    //@ spec_public
+    public static int calculateSpeed(int time) {
+        //@ maintaining 0 <= \index && \index < buffer.length;
+        int buffer[] = new int[6];
+        //@ spec_public
+        int MAX_TIME = 50;
+        //@ spec_public
+        int MIN_TIME = 5;
+        
+        //@ spec_public
+        int offset = 0;
+        //@ spec_public
+        int adjustment = 0;
+
+        /*@ ensures time < MIN_TIME ==> (time == MIN_TIME && adjustment == \old(adjustment) - 10);
+          @ ensures time >= MIN_TIME ==> adjustment == \old(adjustment) + 5;
+          @*/
+        if (time < MIN_TIME) {
+            time = MIN_TIME;
+            adjustment = adjustment - 10;
+        } else {
+            adjustment = adjustment + 5;
+        }
+
+        /*@ ensures time > MAX_TIME ==> (time == MAX_TIME && adjustment == \old(adjustment) * 2);
+          @ ensures time <= MAX_TIME ==> adjustment == \old(adjustment);
+          @*/
+        if (time > MAX_TIME) {
+            time = MAX_TIME;
+            adjustment = adjustment * 2;
+        }
+
+        //@ ensures \result == 100 - time * 2;
+        int speed = 100 - time * 2;
+
+        /*@ ensures (speed >= 10 && speed < 24) ==> offset == speed / 4;
+          @ ensures !(speed >= 10 && speed < 24) ==> offset == speed % 6;
+          @*/
+        if (speed >= 10 && speed < 24) {
+            offset = speed / 4;
+        } else {
+            offset = speed % 6;
+        }
+        
+        //@ ensures 0 <= offset && offset < buffer.length;
+        buffer[offset] = speed + adjustment;
+        return speed;
+    }
+}
+==============================
+tmp/SpeedCalculator_S.java:5: error: variable declaration not allowed here
+        int buffer[] = new int[6];
+            ^
+tmp/SpeedCalculator_S.java:4: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining 0 <= \index && \index < buffer.length;
+            ^
+2 errors
+
+==============================
+public class SpeedCalculator_S {
+    //@ spec_public
+    public static int calculateSpeed(int time) {
+        //@ maintaining 0 < \index && \index < buffer.length;  
+        int buffer[] = new int[6];
+        //@ spec_public
+        int MAX_TIME = 50;
+        //@ spec_public
+        int MIN_TIME = 5;
+        
+        //@ spec_public
+        int offset = 0;
+        //@ spec_public
+        int adjustment = 0;
+
+        /*@ ensures time < MIN_TIME ==> (time == MIN_TIME && adjustment == \old(adjustment) - 10);
+          @ ensures time >= MIN_TIME ==> adjustment == \old(adjustment) + 5;
+          @*/
+        if (time < MIN_TIME) {
+            time = MIN_TIME;
+            adjustment = adjustment - 10;
+        } else {
+            adjustment = adjustment + 5;
+        }
+
+        /*@ ensures time > MAX_TIME ==> (time == MAX_TIME && adjustment == \old(adjustment) * 2);
+          @ ensures time <= MAX_TIME ==> adjustment == \old(adjustment);
+          @*/
+        if (time > MAX_TIME) {
+            time = MAX_TIME;
+            adjustment = adjustment * 2;
+        }
+
+        //@ ensures \result == 100 - time * 2;
+        int speed = 100 - time * 2;
+
+        /*@ ensures (speed >= 10 && speed < 24) ==> offset == speed / 4;
+          @ ensures !(speed >= 10 && speed < 24) ==> offset == speed % 6;
+          @*/
+        if (speed >= 10 && speed < 24) {
+            offset = speed / 4;
+        } else {
+            offset = speed % 6;
+        }
+        
+        //@ ensures 0 <= offset && offset < buffer.length;
+        buffer[offset] = speed + adjustment;
+        return speed;
+    }
+}
+
+==============================
+tmp/SpeedCalculator_S.java:5: error: variable declaration not allowed here
+        int buffer[] = new int[6];
+            ^
+tmp/SpeedCalculator_S.java:4: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining 0 < \index && \index < buffer.length;  
+            ^
+2 errors
+
+==============================

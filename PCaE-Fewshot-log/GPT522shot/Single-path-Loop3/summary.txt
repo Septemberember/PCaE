@@ -1,0 +1,8 @@
+experimentName: GPT522shot
+model: openai/gpt-5.2
+category: Single-path-Loop3
+total number: 21
+success number: 16
+success rate: 76.19%
+failed number: 5
+exception number: 0

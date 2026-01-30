@@ -1,0 +1,100 @@
+public class FuelEfficiencyAnalyzer_S {
+
+    /*@ ensures
+      @   \let int ad1 = (distance + 10) * 2;
+      @   \let boolean gt = (ad1 > 100);
+      @   \result ==
+      @     (gt
+      @       ? ( // adjustedDistance > threshold branch
+      @           \let int amt0 = (fuelUsed - 3);
+      @           \let boolean valid0 = (amt0 > 0);
+      @           \let int amt = (valid0 ? amt0 : 1);
+      @           \let boolean even = ((ad1 % 2) == 0);
+      @           \let int ad2 = (even ? ad1 : (ad1 + 5));
+      @           \let double eff0 = (even
+      @                               ? ((double)ad1) / amt
+      @                               : ((double)(ad2 - 2)) + amt);
+      @           \let double eff1 = (eff0 > 50.0 ? eff0 * 0.9 : eff0 + 3.0);
+      @           \let double correction = (valid0 ? 1.2 : 0.8);
+      @           (eff1 * correction + ((double)ad2) * 0.05)
+      @         )
+      @       : ( // adjustedDistance <= threshold branch
+      @           \let int ad2 = ad1 + 20;
+      @           \let boolean valid0 = (fuelUsed > 10);
+      @           \let double eff0 = (valid0 ? ((double)ad2) * 0.5 : ((double)ad2) * 0.3);
+      @           \let double correction = (valid0 ? 1.2 : 0.8);
+      @           (eff0 * correction + ((double)ad2) * 0.05)
+      @         )
+      @     );
+      @*/
+    public static double analyzeEfficiency(int distance, int fuelUsed) {
+        int adjustedDistance = distance;
+        int threshold = 100;
+        double efficiency = 0.0;
+        boolean valid = true;
+
+        adjustedDistance += 10;
+        adjustedDistance = adjustedDistance * 2;
+
+        if (adjustedDistance > threshold) {
+            int amt = fuelUsed - 3;
+
+            if (amt <= 0) {
+                System.out.println("Warning: invalid fuel input.");
+                amt = 1;
+                valid = false;
+            }
+
+            if (adjustedDistance % 2 == 0) {
+                efficiency = (double) adjustedDistance / amt;
+            } else {
+                adjustedDistance += 5;
+                efficiency = (double) (adjustedDistance - 2) + amt;
+            }
+
+            if (efficiency > 50) {
+                efficiency = efficiency * 0.9;
+            } else {
+                efficiency = efficiency + 3.0;
+            }
+
+        } else {
+            adjustedDistance += 20;
+
+            if (fuelUsed > 10) {
+                efficiency = adjustedDistance * 0.5;
+            } else {
+                efficiency = adjustedDistance * 0.3;
+                valid = false;
+            }
+        }
+        double correction = valid ? 1.2 : 0.8;
+        double finalValue = efficiency * correction + adjustedDistance * 0.05;
+
+        return finalValue;
+    }
+}
+==============================
+tmp/FuelEfficiencyAnalyzer_S.java:15: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @                               ? ((double)ad1) / amt
+                                         ^
+  Reason: Unknown type tag DOUBLE
+tmp/FuelEfficiencyAnalyzer_S.java:19: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @           (eff1 * correction + ((double)ad2) * 0.05)
+                                        ^
+  Reason: Unknown type tag DOUBLE
+tmp/FuelEfficiencyAnalyzer_S.java:24: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @           \let double eff0 = (valid0 ? ((double)ad2) * 0.5 : ((double)ad2) * 0.3);
+                                                ^
+  Reason: Unknown type tag DOUBLE
+tmp/FuelEfficiencyAnalyzer_S.java:24: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @           \let double eff0 = (valid0 ? ((double)ad2) * 0.5 : ((double)ad2) * 0.3);
+                                                                      ^
+  Reason: Unknown type tag DOUBLE
+tmp/FuelEfficiencyAnalyzer_S.java:26: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @           (eff0 * correction + ((double)ad2) * 0.05)
+                                        ^
+  Reason: Unknown type tag DOUBLE
+5 errors
+
+==============================

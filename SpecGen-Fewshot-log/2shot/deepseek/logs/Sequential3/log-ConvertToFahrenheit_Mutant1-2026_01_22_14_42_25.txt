@@ -1,0 +1,14 @@
+public class ConvertToFahrenheit_Mutant1 {
+
+    // Temperature conversion utility
+    /*@ public normal_behavior
+      @   requires Double.MIN_VALUE <= celsius * 1.80 - 32.00 && celsius * 1.80 - 32.00 <= Double.MAX_VALUE;
+      @   ensures \result == celsius * 1.80 - 32.00;
+      @*/
+    public static double convertTemperature(double celsius) {
+        return celsius * 1.80 - 32.00;
+    }
+}
+==============================
+
+==============================

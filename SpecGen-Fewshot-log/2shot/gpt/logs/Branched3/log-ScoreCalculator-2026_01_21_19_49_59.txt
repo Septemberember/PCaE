@@ -1,0 +1,58 @@
+public class ScoreCalculator {
+    //@ ensures \result ==
+    //@   (\let int bs0 = (baseScore < 5 ? 5 : baseScore);
+    //@    \let int mult0 = (baseScore < 5 ? (0 - 3) : (0 + 1));
+    //@    \let int bs1 = (bs0 > 40 ? 40 : bs0);
+    //@    \let int mult1 = (bs0 > 40 ? (mult0 + 5) : mult0);
+    //@    \let int bonus0 = bs1 * 2 - 15;
+    //@    \let int bonus1 = (bonus0 > 34 ? (bonus0 * 3 - 21) : bonus0);
+    //@    (bonus1 >= 13 && bonus1 <= 21)
+    //@      ? (\let int bonus2 = (bonus1 - 8) * mult1 + bs1;
+    //@         \let int bonus3 = (bonus2 > 45 ? 45 : bonus2);
+    //@         bonus3)
+    //@      : ((bonus1 % 5) + mult1 * 5)
+    //@   );
+    public static int calculateBonus(int baseScore) {
+        int bonusBrackets[] = new int[5];
+        int bracket = 0;
+        int multiplier = 0;
+
+        if (baseScore < 5) {
+            baseScore = 5;
+            multiplier = multiplier - 3;
+        } else {
+            multiplier = multiplier + 1;
+        }
+
+        if (baseScore > 40) {
+            baseScore = 40;
+            multiplier = multiplier + 5;
+        }
+
+        int bonus = baseScore * 2 - 15;
+
+        if(bonus > 34){
+            bonus = bonus * 3 - 21;
+        }
+
+        if (bonus >= 13 && bonus <= 21) {
+            bracket = bonus / 4;
+            bonus = (bonus - 8) * multiplier;
+            bonus += baseScore;
+            bonus = bonus > 45 ? 45 : bonus;
+            bonusBrackets[bracket] = bonus + multiplier;
+        } else {
+            bracket = bonus % 5;
+            bonus = bracket + multiplier * 5;
+        }
+
+        return bonus;
+    }
+}
+==============================
+tmp/ScoreCalculator.java:43: verify: The prover cannot establish an assertion (PossiblyTooLargeIndex) in method calculateBonus
+            bonusBrackets[bracket] = bonus + multiplier;
+                         ^
+1 verification failure
+
+==============================

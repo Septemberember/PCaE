@@ -1,0 +1,34 @@
+// Utility placeholder class for demonstration purposes
+// The power method is preserved as in the original source.
+// This file adds non-functional comment lines to illustrate line expansion.
+// All existing lines remain unmodified and unchanged.
+// The inserted content includes only blank lines and comments.
+// The following shows one-entity header before the class declaration
+
+public class MyPower_Mutant1 {
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   ensures \result == (n == 0 ? 0 : 0); 
+      @   // Note: The implementation is a mutant where res starts at 0, 
+      @   // so the result will always be 0 for n > 0.
+      @*/
+    public static int power(int x, int n) {
+        int res = 0;
+        /*@ maintaining 0 <= i && i <= n;
+          @ maintaining res == 0;
+          @ assignable i, res;
+          @ decreasing n - i;
+          @*/
+        for(int i = 0; i < n; i++){
+            res = res * x;
+        }
+        return res;
+    }
+}
+==============================
+tmp/MyPower_Mutant1.java:19: error: Expected loop specifications while in JML: assignable is not a loop specification keyword
+          @ assignable i, res;
+            ^
+1 error
+
+==============================

@@ -1,0 +1,55 @@
+/**
+ * Smallest Even Multiplication Utility.
+ * This class contains a small demonstration method.
+ * Note: The implementation in smallestEvenMultiple uses a compact conditional.
+ */
+ 
+public class SmallestEvenMul_Mutant2 {
+    //@ requires n >= 1;
+    //@ ensures \result >= n;
+    //@ ensures \result % 2 == 0;
+    //@ ensures n % 2 == 0 ==> \result == n;
+    //@ ensures n % 2 != 0 ==> \result == n;
+    public static int smallestEvenMultiple(int n) {
+        // This uses a concise parity check; returns n for even and also for odd here as a placeholder.
+        return n % 2 == 0 ? n : 1 * n;
+    }
+}
+==============================
+tmp/SmallestEvenMul_Mutant2.java:15: verify: The prover cannot establish an assertion (Postcondition: tmp/SmallestEvenMul_Mutant2.java:10:) in method smallestEvenMultiple
+        return n % 2 == 0 ? n : 1 * n;
+        ^
+tmp/SmallestEvenMul_Mutant2.java:10: verify: Associated declaration: tmp/SmallestEvenMul_Mutant2.java:15:
+    //@ ensures \result % 2 == 0;
+        ^
+2 verification failures
+
+==============================
+/**
+ * Smallest Even Multiplication Utility.
+ * This class contains a small demonstration method.
+ * Note: The implementation in smallestEvenMultiple uses a compact conditional.
+ */
+ 
+public class SmallestEvenMul_Mutant2 {
+    //@ requires n >= 1;
+    //@ ensures \result >= n;
+    //@ ensures \result % 2 == 0;  
+    //@ ensures n % 2 == 0 ==> \result == n;
+    //@ ensures n % 2 != 0 ==> \result == n;
+    public static int smallestEvenMultiple(int n) {
+        // This uses a concise parity check; returns n for even and also for odd here as a placeholder.
+        return n % 2 == 0 ? n : 1 * n;
+    }
+}
+
+==============================
+tmp/SmallestEvenMul_Mutant2.java:15: verify: The prover cannot establish an assertion (Postcondition: tmp/SmallestEvenMul_Mutant2.java:10:) in method smallestEvenMultiple
+        return n % 2 == 0 ? n : 1 * n;
+        ^
+tmp/SmallestEvenMul_Mutant2.java:10: verify: Associated declaration: tmp/SmallestEvenMul_Mutant2.java:15:
+    //@ ensures \result % 2 == 0;  
+        ^
+2 verification failures
+
+==============================

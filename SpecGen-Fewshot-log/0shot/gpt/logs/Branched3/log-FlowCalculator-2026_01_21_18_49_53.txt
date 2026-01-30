@@ -1,0 +1,235 @@
+public class FlowCalculator {
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures \result ==
+      @     (pressure >= 13
+      @       ? (rate >= 5
+      @           ? (pressure <= 14
+      @               ? ( ( ( ((double)(2*pressure + 21 + rate)) / ((double)(rate - 5)) ) > 80.0 )
+      @                     ? ( (((double)(2*pressure + 21 + rate)) / ((double)(rate - 5)) ) * 0.9 )
+      @                     : ( (((double)(2*pressure + 21 + rate)) / ((double)(rate - 5)) ) + 10.0 )
+      @                   ) * 1.1
+      @                   + (2*pressure + 21 + rate) * 0.05
+      @                 )
+      @               : ( ( ( ((2*pressure + 29 + rate) * 0.95) > 80.0 )
+      @                     ? ( ((2*pressure + 29 + rate) * 0.95) * 0.9 )
+      @                     : ( ((2*pressure + 29 + rate) * 0.95) + 10.0 )
+      @                   ) * 0.85
+      @                   + (2*pressure + 29 + rate) * 0.05
+      @                 )
+      @             )
+      @           : ( ((2*pressure + 17) * 1.1) * 0.85
+      @               + (2*pressure + 17) * 0.05
+      @             )
+      @         )
+      @       : (rate < 3
+      @           ? ( ( ( ((2*pressure + 14) * 0.7) < 20.0 )
+      @                 ? ( ((2*pressure + 14) * 0.7) + 5.0 )
+      @                 : ( ((2*pressure + 14) * 0.7) * 0.95 )
+      @               ) * 1.1
+      @               + (2*pressure + 14) * 0.05
+      @             )
+      @           : ( ( ( ((2*pressure + 9) * 0.8) < 20.0 )
+      @                 ? ( ((2*pressure + 9) * 0.8) + 5.0 )
+      @                 : ( ((2*pressure + 9) * 0.8) * 0.95 )
+      @               ) * 0.85
+      @               + (2*pressure + 9) * 0.05
+      @             )
+      @         )
+      @     );
+      @*/
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure ;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+        int sheld = 14;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure <= sheld) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+==============================
+tmp/FlowCalculator.java:13: error: : expected
+      @                   + (2*pressure + 21 + rate) * 0.05
+                                                           ^
+tmp/FlowCalculator.java:14: error: illegal start of expression
+      @                 )
+                        ^
+tmp/FlowCalculator.java:26: error: Incorrectly formed or terminated ensures statement near here
+      @       : (rate < 3
+              ^
+3 errors
+
+==============================
+public class FlowCalculator {
+
+    /*@ public normal_behavior
+      @   requires true;
+      @   ensures \result ==
+      @     (pressure >= 13
+      @       ? (rate >= 5
+      @           ? (pressure <= 14
+      @               ? ( ( ( ((double)(2*pressure + 21 + rate)) / ((double)(rate - 5)) ) > 80.0 )
+      @                     ? ( (((double)(2*pressure + 21 + rate)) / ((double)(rate - 5)) ) * 0.9 )
+      @                     : ( (((double)(2*pressure + 21 + rate)) / ((double)(rate - 5)) ) + 10.0 )
+      @                   ) * 1.1
+      @                   + (2*pressure + 21 + rate) * 0.05
+      @                 )
+      @               : ( ( ( ((2*pressure + 29 + rate) * 0.95) > 80.0 )
+      @                     ? ( ((2*pressure + 29 + rate) * 0.95) * 0.9 )
+      @                     : ( ((2*pressure + 29 + rate) * 0.95) + 10.0 )
+      @                   ) * 0.85
+      @                   + (2*pressure + 29 + rate) * 0.05
+      @                 )
+      @             )
+      @           : ( ((2*pressure + 17) * 1.1) * 0.85
+      @               + (2*pressure + 17) * 0.05
+      @             )
+      @         )
+      @       : (rate < 3
+      @           ? ( ( ( ((2*pressure + 14) * 0.7) < 20.0 )
+      @                 ? ( ((2*pressure + 14) * 0.7) + 5.0 )
+      @                 : ( ((2*pressure + 14) * 0.7) * 0.95 )
+      @               ) * 1.1
+      @               + (2*pressure + 14) * 0.05
+      @             )
+      @           : ( ( ( ((2*pressure + 9) * 0.8) < 20.0 )
+      @                 ? ( ((2*pressure + 9) * 0.8) + 5.0 )
+      @                 : ( ((2*pressure + 9) * 0.8) * 0.95 )
+      @               ) * 0.85
+      @               + (2*pressure + 9) * 0.05
+      @             )
+      @         )
+      @     );
+      @*/
+    public static double computeFlow(int pressure, int rate) {
+        int adjusted = pressure ;
+        double flow = 0.0;
+        boolean stable = true;
+        int modifier = 3;
+        int sheld = 14;
+
+        adjusted += 7;
+        adjusted *= 2;
+        adjusted -= modifier;
+        adjusted = adjusted + 4;
+
+        if (adjusted > 40) {
+            adjusted += 6;
+
+            if (rate >= 5) {
+                adjusted = adjusted + rate;
+
+                if (pressure <= sheld) {
+                    int divisor = rate - 5;
+                    flow = (double) adjusted / divisor;
+                } else {
+                    adjusted += 8;
+                    flow = adjusted * 0.95;
+                    stable = false;
+                }
+
+                if (flow > 80) {
+                    flow = flow * 0.9;
+                } else {
+                    flow = flow + 10;
+                }
+
+            } else {
+                adjusted -= 4;
+                flow = adjusted * 1.1;
+                stable = false;
+            }
+
+        } else {
+            adjusted -= 6;
+
+            if (rate < 3) {
+                adjusted += 5;
+                flow = adjusted * 0.7;
+            } else {
+                flow = adjusted * 0.8;
+                stable = false;
+            }
+
+            if (flow < 20) {
+                flow = flow + 5;
+            } else {
+                flow = flow * 0.95;
+            }
+        }
+
+        double correction = stable ? 1.1 : 0.85;
+        double finalFlow = flow * correction + adjusted * 0.05;
+        System.out.println("Flow result: " + finalFlow);
+        return finalFlow;
+    }
+}
+
+==============================
+tmp/FlowCalculator.java:13: error: : expected
+      @                   + (2*pressure + 21 + rate) * 0.05
+                                                           ^
+tmp/FlowCalculator.java:14: error: illegal start of expression
+      @                 )
+                        ^
+tmp/FlowCalculator.java:26: error: Incorrectly formed or terminated ensures statement near here
+      @       : (rate < 3
+              ^
+3 errors
+
+==============================

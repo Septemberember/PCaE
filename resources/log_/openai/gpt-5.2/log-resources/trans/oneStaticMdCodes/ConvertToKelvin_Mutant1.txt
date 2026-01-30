@@ -1,0 +1,29 @@
+start role user
+Please generate an FSF for the program below:
+```
+public class ConvertToKelvin_Mutant1 {
+
+    // Provides a simple Celsius to Kelvin conversion using a fixed offset
+    // Important: this implementation uses 273.00 as the offset constant
+
+    public static double convertTemperature(double celsius) {
+        // Inline calculation adds the fixed offset
+        return celsius + 273.00; // Modified constant
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: ture
+D1: return_value == celsius + 273.00
+```
+*end* role assistant
+start role user
+There exist variables which do not belong to input params of the program:ture, please regenerate the FSF, avoiding these variables!
+*end* role user
+start role remark
+Validation FAIL--Conversation rounds number is over the maxRounds
+Current conversation round is: [1]
+*end* role remark

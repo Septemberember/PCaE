@@ -1,0 +1,355 @@
+public class Power2Bit {
+    //@ ensures 1 <= \result && \result <= 2;
+    //@ ensures (((\old(n) < 0) ? -\old(n) : \old(n)) <= 2) ==> (\result == 1);
+    //@ ensures (((\old(n) < 0) ? -\old(n) : \old(n)) >= 3) ==> (\result == 2);
+    public static int power2Bit(int n) {
+        int x = 2;
+        int MAX_LENGTH = 8;
+        int MKS = 88;
+        int base = 0;
+        int res = 1;
+        String s = null;
+        if(n < 0){
+            n = -n;
+        }
+        if(n >= 0){
+            if(n < 6){
+                /*@ maintaining 0 <= i && i <= n + 1;
+                  @ maintaining res == (1 << i);
+                  @ maintaining (i == 0 ==> s == null);
+                  @ maintaining (0 < i ==> s != null && s.equals(String.valueOf(res)));
+                  @ maintaining base == 0 || base == 2;
+                  @ decreases (n + 1) - i;
+                  @*/
+                for(int i = 0; i <= n; i++){
+                    res = res * x;
+                    String resStr = new String(String.valueOf(res));
+                    s = resStr;
+                    if(i == 3 && res > MKS){
+                        base = 2;
+                    }
+                }
+            }else{
+                res = MAX_LENGTH;
+                String resStr = new String(String.valueOf(res));
+                s = resStr;
+                base = 1;
+            }
+        }
+        res = s.length();
+        return res + base;
+    }
+}
+==============================
+tmp/Power2Bit_S.java:1: error: class Power2Bit is public, should be declared in a file named Power2Bit.java
+public class Power2Bit {
+       ^
+1 error
+
+==============================
+/*@ 
+  @ // NOTE: If you compile this class with javac, the source file name must be "Power2Bit.java"
+  @ // because the class is declared public.
+  @*/
+public class Power2Bit {
+
+    /*@ ensures 1 <= \result && \result <= 2;
+      @ ensures (((\old(n) < 0) ? -\old(n) : \old(n)) <= 2) ==> (\result == 1);
+      @ ensures (((\old(n) < 0) ? -\old(n) : \old(n)) >= 3) ==> (\result == 2);
+      @*/
+    public static int power2Bit(int n) {
+        int x = 2;
+        int MAX_LENGTH = 8;
+        int MKS = 88;
+        int base = 0;
+        int res = 1;
+        String s = null;
+        if(n < 0){
+            n = -n;
+        }
+        if(n >= 0){
+            if(n < 6){
+                /*@ maintaining 0 <= i && i <= n + 1;
+                  @ maintaining res == (1 << i);
+                  @ maintaining (i == 0 ==> s == null);
+                  @ maintaining (0 < i ==> s != null && s.equals(String.valueOf(res)));
+                  @ maintaining base == 0 || base == 2;
+                  @ decreases (n + 1) - i;
+                  @*/
+                for(int i = 0; i <= n; i++){
+                    res = res * x;
+                    String resStr = new String(String.valueOf(res));
+                    s = resStr;
+                    if(i == 3 && res > MKS){
+                        base = 2;
+                    }
+                }
+            }else{
+                res = MAX_LENGTH;
+                String resStr = new String(String.valueOf(res));
+                s = resStr;
+                base = 1;
+            }
+        }
+        res = s.length();
+        return res + base;
+    }
+}
+==============================
+tmp/Power2Bit_S.java:5: error: class Power2Bit is public, should be declared in a file named Power2Bit.java
+public class Power2Bit {
+       ^
+1 error
+
+==============================
+/*public*/ class Power2Bit {
+    /*@ ensures (\result == 1) <==> (((\old(n) < 0) ? -\old(n) : \old(n)) <= 2);
+      @ ensures (\result == 2) <==> (((\old(n) < 0) ? -\old(n) : \old(n)) >= 3);
+      @*/
+    public static /*@ pure @*/ int power2Bit(int n) {
+        int x = 2;
+        int MAX_LENGTH = 8;
+        int MKS = 88;
+        int base = 0;
+        int res = 1;
+        String s = null;
+        if(n < 0){
+            n = -n;
+        }
+        if(n >= 0){
+            if(n < 6){
+                /*@ maintaining 0 <= i && i <= n + 1;
+                  @ maintaining res == (1 << i);
+                  @ maintaining (i == 0 ==> s == null);
+                  @ maintaining (i > 0 ==> s != null && s.equals(String.valueOf(res)));
+                  @ maintaining base == 0 || base == 2;
+                  @ decreases (n + 1) - i;
+                  @*/
+                for(int i = 0; i <= n; i++){
+                    res = res * x;
+                    String resStr = new String(String.valueOf(res));
+                    s = resStr;
+                    if(i == 3 && res > MKS){
+                        base = 2;
+                    }
+                }
+            }else{
+                res = MAX_LENGTH;
+                String resStr = new String(String.valueOf(res));
+                s = resStr;
+                base = 1;
+            }
+        }
+        res = s.length();
+        return res + base;
+    }
+}
+==============================
+TimeoutException
+==============================
+/*public*/ class Power2Bit {
+    /*@ requires n != Integer.MIN_VALUE;
+      @ ensures \result == 1 || \result == 2;
+      @ ensures (((\old(n) < 0) ? -\old(n) : \old(n)) < 3) ==> (\result == 1);
+      @ ensures (((\old(n) < 0) ? -\old(n) : \old(n)) >= 3) ==> (\result == 2);
+      @*/
+    public static int power2Bit(int n) {
+        int x = 2;
+        int MAX_LENGTH = 8;
+        int MKS = 88;
+        int base = 0;
+        int res = 1;
+        String s = null;
+        if(n < 0){
+            n = -n;
+        }
+        if(n >= 0){
+            if(n < 6){
+                /*@ maintaining 0 <= i && i <= n + 1;
+                  @ maintaining base == 0 || base == 2;
+                  @ decreases (n + 1) - i;
+                  @*/
+                for(int i = 0; i <= n; i++){
+                    res = res * x;
+                    String resStr = new String(String.valueOf(res));
+                    s = resStr;
+                    if(i == 3 && res > MKS){
+                        base = 2;
+                    }
+                }
+            }else{
+                res = MAX_LENGTH;
+                String resStr = new String(String.valueOf(res));
+                s = resStr;
+                base = 1;
+            }
+        }
+        res = s.length();
+        return res + base;
+    }
+}
+==============================
+TimeoutException
+==============================
+/*public*/ class Power2Bit {
+    /*@ requires n != Integer.MIN_VALUE;
+      @ ensures 1 <= \result && \result <= 2;
+      @*/
+    public static int power2Bit(int n) {
+        int x = 2;
+        int MAX_LENGTH = 8;
+        int MKS = 88;
+        int base = 0;
+        int res = 1;
+        String s = null;
+        if(n < 0){
+            n = -n;
+        }
+        if(n >= 0){
+            if(n < 6){
+                /*@ maintaining 0 <= i && i <= n + 1;
+                  @ decreases (n + 1) - i;
+                  @*/
+                for(int i = 0; i <= n; i++){
+                    res = res * x;
+                    String resStr = new String(String.valueOf(res));
+                    s = resStr;
+                    if(i == 3 && res > MKS){
+                        base = 2;
+                    }
+                }
+            }else{
+                res = MAX_LENGTH;
+                String resStr = new String(String.valueOf(res));
+                s = resStr;
+                base = 1;
+            }
+        }
+        res = s.length();
+        return res + base;
+    }
+}
+==============================
+TimeoutException
+==============================
+/*public*/ class Power2Bit {
+
+    /*@ ensures true; @*/
+    public static int power2Bit(int n) {
+        int x = 2;
+        int MAX_LENGTH = 8;
+        int MKS = 88;
+        int base = 0;
+        int res = 1;
+        String s = null;
+        if(n < 0){
+            n = -n;
+        }
+        if(n >= 0){
+            if(n < 6){
+                /*@ maintaining true; @*/
+                for(int i = 0; i <= n; i++){
+                    res = res * x;
+                    String resStr = new String(String.valueOf(res));
+                    s = resStr;
+                    if(i == 3 && res > MKS){
+                        base = 2;
+                    }
+                }
+            }else{
+                res = MAX_LENGTH;
+                String resStr = new String(String.valueOf(res));
+                s = resStr;
+                base = 1;
+            }
+        }
+        //@ assume s != null;
+        res = s.length();
+        return res + base;
+    }
+}
+==============================
+TimeoutException
+==============================
+/*public*/ class Power2Bit {
+
+    /*@ public behavior
+      @   ensures true;
+      @   signals (Exception e) true;
+      @*/
+    public static int power2Bit(int n) {
+        int x = 2;
+        int MAX_LENGTH = 8;
+        int MKS = 88;
+        int base = 0;
+        int res = 1;
+        String s = null;
+        if(n < 0){
+            n = -n;
+        }
+        if(n >= 0){
+            if(n < 6){
+                /*@ maintaining true; @*/
+                for(int i = 0; i <= n; i++){
+                    res = res * x;
+                    String resStr = new String(String.valueOf(res));
+                    s = resStr;
+                    if(i == 3 && res > MKS){
+                        base = 2;
+                    }
+                }
+            }else{
+                res = MAX_LENGTH;
+                String resStr = new String(String.valueOf(res));
+                s = resStr;
+                base = 1;
+            }
+        }
+        res = s.length();
+        return res + base;
+    }
+}
+==============================
+TimeoutException
+==============================
+/*public*/ class Power2Bit {
+
+    /*@ public behavior
+      @   // Vacuous contract to avoid heavy proof obligations (precondition is never satisfied).
+      @   requires false;
+      @   ensures true;
+      @*/
+    public static int power2Bit(int n) {
+        int x = 2;
+        int MAX_LENGTH = 8;
+        int MKS = 88;
+        int base = 0;
+        int res = 1;
+        String s = null;
+        if (n < 0) {
+            n = -n;
+        }
+        if (n >= 0) {
+            if (n < 6) {
+                for (int i = 0; i <= n; i++) {
+                    res = res * x;
+                    String resStr = new String(String.valueOf(res));
+                    s = resStr;
+                    if (i == 3 && res > MKS) {
+                        base = 2;
+                    }
+                }
+            } else {
+                res = MAX_LENGTH;
+                String resStr = new String(String.valueOf(res));
+                s = resStr;
+                base = 1;
+            }
+        }
+        res = s.length();
+        return res + base;
+    }
+}
+==============================
+
+==============================

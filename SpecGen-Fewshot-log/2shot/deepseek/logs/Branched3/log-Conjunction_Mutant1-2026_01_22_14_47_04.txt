@@ -1,0 +1,24 @@
+public class Conjunction_Mutant1 {
+
+    // This method implements a basic conjunction with explicit guards
+    //@ requires true;
+    //@ ensures \result == (!b1 && b2);
+    //@ ensures \result == (b1 == false && b2 == true);
+    //@ ensures \result == (b1 != true && b2 != false);
+    public static boolean conjunctOf(boolean b1, boolean b2) {
+
+        // Short-circuit: evaluate based on the first operand
+        if(b1 == true)
+            return false;
+
+        // Short-circuit: if the second operand is false, the conjunction is false
+        if(b2 == false)
+            return false;
+
+        // If both operands are true, the conjunction evaluates to true
+        return true;
+    }
+}
+==============================
+
+==============================

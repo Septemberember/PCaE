@@ -1,0 +1,107 @@
+public class AltitudeController_Original {
+
+    // Entry point for altitude control calculation
+    /*@ 
+      @ ensures -5 <= \result && \result <= 5;
+      @ ensures (\let int error = targetHeight - currentHeight;
+      @          \let int absError = (error < 0 ? -error : error);
+      @            (absError > 30 ==> \result == (error > 0 ? 5 : -5))
+      @         && (absError <= 30 && absError > 20 ==> \result == (error > 0 ? 3 : -3))
+      @         && (absError <= 20 && absError > 10 ==> \result == (error > 0 ? 2 : -2))
+      @         && (absError <= 10 ==> \result == error)
+      @        );
+      @*/
+    public static int altitudeController(int currentHeight,int targetHeight) {
+
+        // Compute the error between target and current height
+        int error = targetHeight - currentHeight;
+
+        // Initialize storage for the absolute error
+        int absError = 0;
+
+        // Take absolute value of error
+        absError = error < 0 ? -error : error;
+
+        // Prepare control signal variable
+        int controlSignal = 0;
+
+        // Determine coarse control based on error magnitude
+        if (absError > 30) {
+            // Strong negative or positive error
+            controlSignal = error > 0 ? 5 : -5;
+        } else if (absError > 20) {
+            // Moderate error
+            controlSignal = error > 0 ? 3 : -3;
+        } else if (absError > 10) {
+            // Small error
+            controlSignal = error > 0 ? 2 : -2;
+        } else {
+            controlSignal = error;
+        }
+        return controlSignal;
+    }
+}
+==============================
+tmp/AltitudeController_Original.java:41: verify: The prover cannot establish an assertion (Postcondition: tmp/AltitudeController_Original.java:5:) in method altitudeController
+        return controlSignal;
+        ^
+tmp/AltitudeController_Original.java:5: verify: Associated declaration: tmp/AltitudeController_Original.java:41:
+      @ ensures -5 <= \result && \result <= 5;
+        ^
+2 verification failures
+
+==============================
+public class AltitudeController_Original {
+
+    // Entry point for altitude control calculation
+    /*@ 
+      @ ensures -5 < \result && \result < 5;  
+      @ ensures (\let int error = targetHeight - currentHeight;
+      @          \let int absError = (error < 0 ? -error : error);
+      @            (absError > 30 ==> \result == (error > 0 ? 5 : -5))
+      @         && (absError <= 30 && absError > 20 ==> \result == (error > 0 ? 3 : -3))
+      @         && (absError <= 20 && absError > 10 ==> \result == (error > 0 ? 2 : -2))
+      @         && (absError <= 10 ==> \result == error)
+      @        );
+      @*/
+    public static int altitudeController(int currentHeight,int targetHeight) {
+
+        // Compute the error between target and current height
+        int error = targetHeight - currentHeight;
+
+        // Initialize storage for the absolute error
+        int absError = 0;
+
+        // Take absolute value of error
+        absError = error < 0 ? -error : error;
+
+        // Prepare control signal variable
+        int controlSignal = 0;
+
+        // Determine coarse control based on error magnitude
+        if (absError > 30) {
+            // Strong negative or positive error
+            controlSignal = error > 0 ? 5 : -5;
+        } else if (absError > 20) {
+            // Moderate error
+            controlSignal = error > 0 ? 3 : -3;
+        } else if (absError > 10) {
+            // Small error
+            controlSignal = error > 0 ? 2 : -2;
+        } else {
+            controlSignal = error;
+        }
+        return controlSignal;
+    }
+}
+
+==============================
+tmp/AltitudeController_Original.java:41: verify: The prover cannot establish an assertion (Postcondition: tmp/AltitudeController_Original.java:5:) in method altitudeController
+        return controlSignal;
+        ^
+tmp/AltitudeController_Original.java:5: verify: Associated declaration: tmp/AltitudeController_Original.java:41:
+      @ ensures -5 < \result && \result < 5;  
+        ^
+2 verification failures
+
+==============================

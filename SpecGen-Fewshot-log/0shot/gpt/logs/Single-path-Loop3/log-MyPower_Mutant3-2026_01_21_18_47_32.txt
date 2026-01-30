@@ -1,0 +1,61 @@
+public class MyPower_Mutant3 {
+    /*@ public normal_behavior
+      @   ensures (n >= 0 ==> \result == 1 + n * x)
+      @        && (n < 0  ==> \result == 1);
+      @   assignable \nothing;
+      @*/
+    public static int power(int x, int n) {
+        // Initialize accumulator for iterative computation.
+        int res = 1;
+        // Start with a neutral value for addition-based accumulation.
+        for(int i = 0; i < n; i++) /*@ 
+                                     @ maintaining (n >= 0 ==> (0 <= i && i <= n && res == 1 + i * x))
+                                     @         && (n < 0  ==> (i == 0 && res == 1));
+                                     @ decreasing (n >= 0 ? n - i : 0);
+                                     @*/ {
+	        // Iteratively apply the operation n times.
+	        res = res + x;
+        }
+        // Finalize and return the computed value.
+        return res;
+        // End of method.
+    }
+}
+==============================
+tmp/MyPower_Mutant3.java:12: error: Loop specifications must immediately precede a loop statement
+                                     @ maintaining (n >= 0 ==> (0 <= i && i <= n && res == 1 + i * x))
+                                       ^
+1 error
+
+==============================
+public class MyPower_Mutant3 {
+    /*@ public normal_behavior
+      @   ensures (n >= 0 ==> \result == 1 + n * x)
+      @        && (n < 0  ==> \result == 1);
+      @   assignable \nothing;
+      @*/
+    public static int power(int x, int n) {
+        // Initialize accumulator for iterative computation.
+        int res = 1;
+        // Start with a neutral value for addition-based accumulation.
+        for(int i = 0; i < n; i++) /*@ 
+                                     @ maintaining (n > 0 ==> (0 < i && i < n && res == 1 + i * x))  
+                                     @         && (n < 0  ==> (i == 0 && res == 1));
+                                     @ decreasing (n >= 0 ? n - i : 0);
+                                     @*/ {
+	        // Iteratively apply the operation n times.
+	        res = res + x;
+        }
+        // Finalize and return the computed value.
+        return res;
+        // End of method.
+    }
+}
+
+==============================
+tmp/MyPower_Mutant3.java:12: error: Loop specifications must immediately precede a loop statement
+                                     @ maintaining (n > 0 ==> (0 < i && i < n && res == 1 + i * x))  
+                                       ^
+1 error
+
+==============================

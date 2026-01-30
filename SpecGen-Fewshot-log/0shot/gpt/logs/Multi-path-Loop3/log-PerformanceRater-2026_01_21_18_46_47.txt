@@ -1,0 +1,100 @@
+public class PerformanceRater {
+    /*@ public behavior
+      @   requires true;
+      @
+      @   // Early exits:
+      @   ensures (sales > 2000 * 10) ==> (\result == sales + 2000 * 10);
+      @   ensures (sales <= 2000 * 10 && sales < 120) ==> (\result == 2000);
+      @   ensures (sales <= 2000 * 10 && sales >= 120 && sales > 10000)
+      @           ==> (\result == 2000 + 800 + (sales - 10000) / 100);
+      @
+      @   // Main computation (sales in [120..10000]) has a NullPointerException corner case:
+      @   // for sales in [120..124], rating == 0 and the code sets performance = null
+      @   // and then later executes performance.length().
+      @
+      @   // Special case: rating == 2  <==> sales/125 == 2  <==> sales in [250..374]
+      @   // In this range, the code computes a constant bonus and performance length 2,
+      @   // thus factor/2 == 1 and the result is 2508.0.
+      @   ensures (sales >= 250 && sales <= 374) ==> (\result == 2508.0);
+      @
+      @   // For all remaining normal-termination cases within [125..10000] excluding [250..374],
+      @   // the executed 'else' branch (paired with "if (rating == 2)") determines 'bonus'.
+      @   ensures (sales >= 125 && sales <= 10000 && !(sales >= 250 && sales <= 374))
+      @           ==> \result ==
+      @               (2000
+      @                + ((sales * 800) / 1000
+      @                   + ((((sales * 800) / 1000) > 1000) ? (64 * 5) : 0)))
+      @               * (double)((String.valueOf((sales / 125) * 2) + "9").length() / 2);
+      @ also
+      @   public exceptional_behavior
+      @     requires sales >= 120 && sales <= 124;
+      @     signals_only NullPointerException;
+      @*/
+    public static double calculateBonus(int sales) {
+        int attendance = 64;
+        int bonusLevels[] = new int[4];
+        int factor = 0;
+        String performance = null;
+        bonusLevels[0] = 100;
+        bonusLevels[1] = 300;
+        bonusLevels[2] = 500;
+        bonusLevels[3] = 800;
+
+        int baseSalary = 2000;
+        int penalty = 0;
+        int rating = 0;
+
+        if(sales > baseSalary * 10){
+            return sales + baseSalary * 10;
+        }
+
+        if (sales < 0 || sales < 120) {
+            return baseSalary;
+        }
+
+        if (sales > 10000) {
+            return baseSalary + bonusLevels[3] + (sales - 10000) / 100;
+        }
+
+        rating = sales / 125;
+
+        performance = new String(String.valueOf(rating * 2) + 9);
+
+        if (attendance < 80) {
+            penalty = (100 - attendance) * 10;
+        }
+        int bonus = 0;
+        if (rating == 0) {
+            bonus = bonusLevels[0] - penalty;
+            bonus =  Math.max(bonus, 0);
+            performance = null;
+            System.out.println("bonus is " + bonus);
+        }
+        if (rating == 1) {
+            bonus = bonusLevels[1] - penalty / 2;
+            bonus =  bonus + (sales % 100);
+            System.out.println("bonus is " + bonus);
+        }
+        if (rating == 2) {
+            bonus = bonusLevels[2] - penalty / 3;
+            bonus = bonus + (attendance * 2);
+            System.out.println("bonus is " + bonus);
+        } else {
+            bonus = sales * bonusLevels[3] / 1000;
+            if (bonus > 1000) {
+                bonus = bonus + attendance * 5;
+            }
+            System.out.println("bonus is " + bonus);
+        }
+        factor = performance.length();
+
+        return (baseSalary + bonus) * (double)(factor / 2);
+    }
+}
+==============================
+tmp/PerformanceRater.java:33: verify: Validity is unknown - time or memory limit reached: : Aborted proof: timeout
+    public static double calculateBonus(int sales) {
+                         ^
+1 verification failure
+
+==============================

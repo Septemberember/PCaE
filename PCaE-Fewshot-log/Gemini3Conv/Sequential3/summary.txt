@@ -1,0 +1,8 @@
+experimentName: Gemini3Conv
+model: google/gemini-3-flash-preview
+category: Sequential3
+total number: 63
+success number: 63
+success rate: 100.0%
+failed number: 0
+exception number: 0

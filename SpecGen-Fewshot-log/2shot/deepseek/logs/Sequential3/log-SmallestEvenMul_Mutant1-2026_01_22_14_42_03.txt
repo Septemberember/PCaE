@@ -1,0 +1,53 @@
+public class SmallestEvenMul_Mutant1 {
+    // Utility: compute the smallest even multiple for a given positive integer.
+    // If n is odd, return n; otherwise return 2 * n.
+    // This simple parity check ensures correct behavior for all integers.
+    // The expression uses a ternary operator to select the appropriate multiple.
+    // The algorithm is O(1) time and uses only basic arithmetic.
+
+    //@ requires n > 0;
+    //@ ensures \result > 0;
+    //@ ensures \result % 2 == 0;
+    //@ ensures n % 2 != 0 ==> \result == n;
+    //@ ensures n % 2 == 0 ==> \result == 2 * n;
+    public static int smallestEvenMultiple(int n) {
+        return n % 2 != 0 ? n : 2 * n;
+    }
+}
+==============================
+tmp/SmallestEvenMul_Mutant1.java:14: verify: The prover cannot establish an assertion (Postcondition: tmp/SmallestEvenMul_Mutant1.java:10:) in method smallestEvenMultiple
+        return n % 2 != 0 ? n : 2 * n;
+        ^
+tmp/SmallestEvenMul_Mutant1.java:10: verify: Associated declaration: tmp/SmallestEvenMul_Mutant1.java:14:
+    //@ ensures \result % 2 == 0;
+        ^
+2 verification failures
+
+==============================
+public class SmallestEvenMul_Mutant1 {
+    // Utility: compute the smallest even multiple for a given positive integer.
+    // If n is odd, return n; otherwise return 2 * n.
+    // This simple parity check ensures correct behavior for all integers.
+    // The expression uses a ternary operator to select the appropriate multiple.
+    // The algorithm is O(1) time and uses only basic arithmetic.
+
+    //@ requires n > 0;
+    //@ ensures \result > 0;
+    //@ ensures \result % 2 == 0;  
+    //@ ensures n % 2 != 0 ==> \result == n;
+    //@ ensures n % 2 == 0 ==> \result == 2 * n;
+    public static int smallestEvenMultiple(int n) {
+        return n % 2 != 0 ? n : 2 * n;
+    }
+}
+
+==============================
+tmp/SmallestEvenMul_Mutant1.java:14: verify: The prover cannot establish an assertion (Postcondition: tmp/SmallestEvenMul_Mutant1.java:10:) in method smallestEvenMultiple
+        return n % 2 != 0 ? n : 2 * n;
+        ^
+tmp/SmallestEvenMul_Mutant1.java:10: verify: Associated declaration: tmp/SmallestEvenMul_Mutant1.java:14:
+    //@ ensures \result % 2 == 0;  
+        ^
+2 verification failures
+
+==============================

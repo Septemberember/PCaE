@@ -1,0 +1,45 @@
+public class SpeedCalculator {
+
+    /*@ public normal_behavior
+      @   // The code computes an index "offset" into a fresh int[6].
+      @   // When the computed speed is 24, the branch "offset = speed / 4" yields 6,
+      @   // causing buffer[offset] to throw ArrayIndexOutOfBoundsException.
+      @   requires (\let int t = (time < 5 ? 5 : (time > 50 ? 50 : time));
+      @              (100 - 2*t) != 24);
+      @   ensures  (\let int t = (time < 5 ? 5 : (time > 50 ? 50 : time));
+      @              \result == 100 - 2*t);
+      @ also
+      @ public exceptional_behavior
+      @   requires (\let int t = (time < 5 ? 5 : (time > 50 ? 50 : time));
+      @              (100 - 2*t) == 24);
+      @   signals_only ArrayIndexOutOfBoundsException;
+      @*/
+    public static int calculateSpeed(int time) {
+        int[] buffer = new int[6];
+        int MAX_TIME = 50;
+        int MIN_TIME = 5;
+        int offset = 0;
+        int adjustment = 0;
+        if (time < MIN_TIME) {
+            time = MIN_TIME;
+            adjustment = adjustment - 10;
+        } else {
+            adjustment = adjustment + 5;
+        }
+        if (time > MAX_TIME) {
+            time = MAX_TIME;
+            adjustment = adjustment * 2;
+        }
+        int speed = 100 - time * 2;
+        if (speed >= 10 && speed <= 24) {
+            offset = speed / 4;
+        } else {
+            offset = speed % 6;
+        }
+        buffer[offset] = speed + adjustment;
+        return speed;
+    }
+}
+==============================
+
+==============================

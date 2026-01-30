@@ -1,0 +1,93 @@
+import java.util.*;
+public class MixCollectSum_2 {
+    //@ requires x >= 0;
+    //@ ensures \result == (\sum int i; 0 <= i && i < list.size(); list.get(i));
+    //@ ensures \result >= 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        //@ maintaining x >= 0 && x <= \old(x);
+        //@ maintaining sum == 0;
+        //@ maintaining times == 0;
+        //@ maintaining tmp == 10;
+        //@ maintaining (\forall int i; 0 <= i && i < list.size(); list.get(i) >= 0);
+        //@ decreases x - 1000;
+        if(x > 3000){
+            x = 3000;
+        }
+        //@ maintaining x >= 0 && x <= \old(x);
+        //@ maintaining (\forall int i; 0 <= i && i < list.size(); list.get(i) == \old(x) - 100*(i+1));
+        //@ maintaining list.size() == (\old(x) - x) / 100;
+        //@ decreases x - 1000;
+        while(x >= 1000){
+           if(x == 1000){
+               sum = tmp / x;
+           }
+           x = x - 100;
+           list.add(x);
+        }
+        //@ maintaining sum == (\sum int i; 0 <= i && i < \index; list.get(i));
+        //@ maintaining \index >= 0 && \index <= list.size();
+        //@ decreases list.size() - \index;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+==============================
+tmp/MixCollectSum_2.java:11: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining x >= 0 && x <= \old(x);
+            ^
+1 error
+
+==============================
+import java.util.*;
+public class MixCollectSum_2 {
+    //@ requires x >= 0;
+    //@ ensures \result == (\sum int i; 0 <= i && i < list.size(); list.get(i));
+    //@ ensures \result >= 0;
+    public static double mixSum(int x) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int sum = 0;
+        int times = 0;
+        int tmp = 10;
+        //@ maintaining x > 0 && x < \old(x);  
+        //@ maintaining sum == 0;
+        //@ maintaining times == 0;
+        //@ maintaining tmp == 10;
+        //@ maintaining (\forall int i; 0 <= i && i < list.size(); list.get(i) >= 0);
+        //@ decreases x - 1000;
+        if(x > 3000){
+            x = 3000;
+        }
+        //@ maintaining x >= 0 && x <= \old(x);
+        //@ maintaining (\forall int i; 0 <= i && i < list.size(); list.get(i) == \old(x) - 100*(i+1));
+        //@ maintaining list.size() == (\old(x) - x) / 100;
+        //@ decreases x - 1000;
+        while(x >= 1000){
+           if(x == 1000){
+               sum = tmp / x;
+           }
+           x = x - 100;
+           list.add(x);
+        }
+        //@ maintaining sum == (\sum int i; 0 <= i && i < \index; list.get(i));
+        //@ maintaining \index >= 0 && \index <= list.size();
+        //@ decreases list.size() - \index;
+        for(int i : list){
+            sum = sum + i;
+        }
+        return sum;
+    }
+}
+
+==============================
+tmp/MixCollectSum_2.java:11: error: Loop specifications must immediately precede a loop statement
+        //@ maintaining x > 0 && x < \old(x);  
+            ^
+1 error
+
+==============================

@@ -1,0 +1,63 @@
+public class WaterFee_Original {
+    // WaterFee_Original: a simple tiered water fee calculator.
+    // It computes a running total fee from an input amount of tons.
+    // The algorithm uses fixed increments per tier.
+
+    /*@ public normal_behavior
+      @   requires tons >= 0;
+      @   assignable \nothing;
+      @   ensures \result >= 0;
+      @   ensures \result
+      @        == (tons <= 10
+      @              ? 3 * tons
+      @              : (tons <= 30
+      @                    ? (4 * tons - 10)
+      @                    : (5 * tons - 40)));
+      @*/
+    /*@ pure @*/ public static int calcWaterFee(int tons) {
+        // Start with the provided amount of tons and a running total.
+        // The calculation uses a tiered pricing structure based on remaining tons.
+        int n = tons;
+        // Initialize the running fee counter.
+        int fee = 0;
+
+        /*@ maintaining 0 <= n && n <= tons;
+          @ maintaining fee >= 0;
+          @ maintaining fee
+          @        == ((tons <= 10
+          @                 ? 3 * tons
+          @                 : (tons <= 30
+          @                       ? (4 * tons - 10)
+          @                       : (5 * tons - 40)))
+          @            - (n <= 10
+          @                 ? 3 * n
+          @                 : (n <= 30
+          @                       ? (4 * n - 10)
+          @                       : (5 * n - 40))));
+          @ decreasing n;
+          @*/
+        while (n > 0) {
+            // Determine the tier for the current remaining ton
+            if (n > 30) {
+                // Tier 1: more than 30 tons
+                fee += 5;
+            } else if (n > 10) {
+                // Tier 2: 11 to 30 tons
+                fee += 4;
+            } else {
+                // Tier 3: 10 or fewer tons
+                fee += 3;
+            }
+            n--;
+        }
+
+        // End of loop. Return the accumulated fee.
+        return fee;
+    }
+
+    // End of calcWaterFee method
+}
+// End of WaterFee_Original class
+==============================
+
+==============================

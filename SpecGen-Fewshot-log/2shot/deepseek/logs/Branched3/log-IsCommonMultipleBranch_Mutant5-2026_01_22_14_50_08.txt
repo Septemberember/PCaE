@@ -1,0 +1,59 @@
+public class IsCommonMultipleBranch_Mutant5 {
+    // Utility: determine if m is a common multiple of a and b using simple divisibility checks.
+    //@ requires a != 0 && b != 0;
+    //@ ensures \result == (m % a == 0 && m % b == 0);
+    public static boolean isCommonMultiple(int a, int b, int m) {
+        // Check if m is divisible by a; if not, return false
+        if (m % a != 0) {
+            return false;
+        }
+
+        // Check if m is divisible by b; if not, return false
+        if (m % b != 0) {
+            return false;
+        }
+
+        // If both divisibility checks pass, m is a common multiple of a and b
+        return false;
+    }
+}
+==============================
+tmp/IsCommonMultipleBranch_Mutant5.java:17: verify: The prover cannot establish an assertion (Postcondition: tmp/IsCommonMultipleBranch_Mutant5.java:4:) in method isCommonMultiple
+        return false;
+        ^
+tmp/IsCommonMultipleBranch_Mutant5.java:4: verify: Associated declaration: tmp/IsCommonMultipleBranch_Mutant5.java:17:
+    //@ ensures \result == (m % a == 0 && m % b == 0);
+        ^
+2 verification failures
+
+==============================
+public class IsCommonMultipleBranch_Mutant5 {
+    // Utility: determine if m is a common multiple of a and b using simple divisibility checks.
+    //@ requires a != 0 && b != 0;
+    //@ ensures \result == (m % a == 0 && m % b == 0);  
+    public static boolean isCommonMultiple(int a, int b, int m) {
+        // Check if m is divisible by a; if not, return false
+        if (m % a != 0) {
+            return false;
+        }
+
+        // Check if m is divisible by b; if not, return false
+        if (m % b != 0) {
+            return false;
+        }
+
+        // If both divisibility checks pass, m is a common multiple of a and b
+        return false;
+    }
+}
+
+==============================
+tmp/IsCommonMultipleBranch_Mutant5.java:17: verify: The prover cannot establish an assertion (Postcondition: tmp/IsCommonMultipleBranch_Mutant5.java:4:) in method isCommonMultiple
+        return false;
+        ^
+tmp/IsCommonMultipleBranch_Mutant5.java:4: verify: Associated declaration: tmp/IsCommonMultipleBranch_Mutant5.java:17:
+    //@ ensures \result == (m % a == 0 && m % b == 0);  
+        ^
+2 verification failures
+
+==============================

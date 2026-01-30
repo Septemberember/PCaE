@@ -1,0 +1,35 @@
+start role user
+Please generate an FSF for the program below:
+```
+ 
+// Demo: small method returning 100 through nested loops
+public class Return100Nested_Mutant4 {
+    // Execute a simple accumulation to reach 100 using nested loops
+    public static int return100 () {
+        // Start with initial value
+        int res = 1;
+        // Outer loop iterates ten times
+        for(int i = 0; i < 10; i++) {
+            // Inner loop iterates ten times for each outer iteration
+            for(int j = 0; j < 10; j++) {
+                // Increment result to reflect total count
+                res = res + 1;
+            }
+        }
+        // Return the accumulated value
+        return res;
+    }
+}
+
+```
+*end* role user
+start role assistant
+```
+T1: true
+D1: return_value == 101
+```
+*end* role assistant
+start role remark
+Validation SUCCESS--totally verified!
+Current conversation round is: [1]
+*end* role remark

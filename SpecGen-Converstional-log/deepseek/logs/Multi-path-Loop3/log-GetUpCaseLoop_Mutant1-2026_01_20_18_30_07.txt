@@ -1,0 +1,61 @@
+public class GetUpCaseLoop_Mutant1 {
+	/**
+	 * Converts a character in the range 'a'..'f' to its uppercase counterpart 'A'..'F'.
+	 * For inputs outside the range, the function yields 0.
+	 */
+	// The original logic uses a decrementing loop starting from 'F' to reach the target.
+
+    //@ requires true;
+    //@ ensures (c >= 'a' && c <= 'f') ==> \result == (char)(c - 'a' + 'A');
+    //@ ensures (c < 'a' || c > 'f') ==> \result == 0;
+    public static char getUpCase(char c) {
+        if(c < 'a' || c > 'f') {
+            return 0;
+        }
+        char t = 'F';
+        //@ maintaining t >= 'A' && t <= 'F';
+        //@ decreases t - 'A';
+        while(t >= 'A' && t != c - 'a' + 'A') {
+            t--;
+        }
+        return t;
+    }
+}
+==============================
+tmp/GetUpCaseLoop_Mutant1.java:16: verify: The prover cannot establish an assertion (LoopInvariant) in method getUpCase
+        //@ maintaining t >= 'A' && t <= 'F';
+            ^
+1 verification failure
+
+==============================
+public class GetUpCaseLoop_Mutant1 {
+	/**
+	 * Converts a character in the range 'a'..'f' to its uppercase counterpart 'A'..'F'.
+	 * For inputs outside the range, the function yields 0.
+	 */
+	// The original logic uses a decrementing loop starting from 'F' to reach the target.
+
+    //@ requires true;
+    //@ ensures (c >= 'a' && c <= 'f') ==> \result == (char)(c - 'a' + 'A');
+    //@ ensures (c < 'a' || c > 'f') ==> \result == 0;
+    public static char getUpCase(char c) {
+        if(c < 'a' || c > 'f') {
+            return 0;
+        }
+        char t = 'F';
+        //@ maintaining t > 'A' && t < 'F';  
+        //@ decreases t - 'A';
+        while(t >= 'A' && t != c - 'a' + 'A') {
+            t--;
+        }
+        return t;
+    }
+}
+
+==============================
+tmp/GetUpCaseLoop_Mutant1.java:16: verify: The prover cannot establish an assertion (LoopInvariantBeforeLoop) in method getUpCase
+        //@ maintaining t > 'A' && t < 'F';  
+            ^
+1 verification failure
+
+==============================

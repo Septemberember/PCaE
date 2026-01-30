@@ -1,0 +1,450 @@
+public class FuelEfficiencyAnalyzer_S {
+
+    //@ requires ((Integer.MIN_VALUE - 20) / 2) - 10 <= distance && distance <= ((Integer.MAX_VALUE - 20) / 2) - 10;
+    //@ requires Integer.MIN_VALUE + 3 <= fuelUsed && fuelUsed <= Integer.MAX_VALUE;
+    //@ ensures \result == spec_analyzeEfficiency(distance, fuelUsed);
+    public static double analyzeEfficiency(int distance, int fuelUsed) {
+        int adjustedDistance = distance;
+        int threshold = 100;
+        double efficiency = 0.0;
+        boolean valid = true;
+
+        adjustedDistance += 10;
+        adjustedDistance = adjustedDistance * 2;
+
+        if (adjustedDistance > threshold) {
+            int amt = fuelUsed - 3;
+
+            if (amt <= 0) {
+                System.out.println("Warning: invalid fuel input.");
+                amt = 1;
+                valid = false;
+            }
+
+            if (adjustedDistance % 2 == 0) {
+                efficiency = (double) adjustedDistance / amt;
+            } else {
+                adjustedDistance += 5;
+                efficiency = (double) (adjustedDistance - 2) + amt;
+            }
+
+            if (efficiency > 50) {
+                efficiency = efficiency * 0.9;
+            } else {
+                efficiency = efficiency + 3.0;
+            }
+
+        } else {
+            adjustedDistance += 20;
+
+            if (fuelUsed > 10) {
+                efficiency = adjustedDistance * 0.5;
+            } else {
+                efficiency = adjustedDistance * 0.3;
+                valid = false;
+            }
+        }
+        double correction = valid ? 1.2 : 0.8;
+        double finalValue = efficiency * correction + adjustedDistance * 0.05;
+
+        return finalValue;
+    }
+
+    /*@ public model static pure double spec_analyzeEfficiency(int distance, int fuelUsed) {
+          int adjustedDistance = distance;
+          int threshold = 100;
+          double efficiency = 0.0;
+          boolean valid = true;
+
+          adjustedDistance += 10;
+          adjustedDistance = adjustedDistance * 2;
+
+          if (adjustedDistance > threshold) {
+              int amt = fuelUsed - 3;
+
+              if (amt <= 0) {
+                  amt = 1;
+                  valid = false;
+              }
+
+              if (adjustedDistance % 2 == 0) {
+                  efficiency = (double) adjustedDistance / amt;
+              } else {
+                  adjustedDistance += 5;
+                  efficiency = (double) (adjustedDistance - 2) + amt;
+              }
+
+              if (efficiency > 50) {
+                  efficiency = efficiency * 0.9;
+              } else {
+                  efficiency = efficiency + 3.0;
+              }
+          } else {
+              adjustedDistance += 20;
+
+              if (fuelUsed > 10) {
+                  efficiency = adjustedDistance * 0.5;
+              } else {
+                  efficiency = adjustedDistance * 0.3;
+                  valid = false;
+              }
+          }
+
+          double correction = valid ? 1.2 : 0.8;
+          double finalValue = efficiency * correction + adjustedDistance * 0.05;
+          return finalValue;
+      } @*/
+}
+==============================
+TimeoutException
+==============================
+public class FuelEfficiencyAnalyzer_S {
+
+    /*@ public normal_behavior
+      @   requires -1073741824 <= distance && distance <= 1073741803;
+      @   requires Integer.MIN_VALUE + 3 <= fuelUsed && fuelUsed <= Integer.MAX_VALUE;
+      @   ensures !Double.isNaN(\result) && !Double.isInfinite(\result);
+      @   ensures
+      @     (\let int d1 = (distance + 10) * 2;
+      @      \let boolean big = d1 > 100;
+      @      \result ==
+      @        (big ?
+      @          (\let int amt0 = fuelUsed - 3;
+      @           \let boolean valid = amt0 > 0;
+      @           \let int amt = valid ? amt0 : 1;
+      @           \let boolean even = (d1 % 2) == 0;
+      @           \let int d2 = even ? d1 : (d1 + 5);
+      @           \let double eff0 = even ? ((double)d1) / amt
+      @                                  : ((double)(d2 - 2)) + amt;
+      @           \let double eff = (eff0 > 50.0) ? (eff0 * 0.9) : (eff0 + 3.0);
+      @           \let double correction = valid ? 1.2 : 0.8;
+      @           (eff * correction + d2 * 0.05))
+      @        :
+      @          (\let int d2 = d1 + 20;
+      @           \let boolean valid = fuelUsed > 10;
+      @           \let double eff = valid ? (d2 * 0.5) : (d2 * 0.3);
+      @           \let double correction = valid ? 1.2 : 0.8;
+      @           (eff * correction + d2 * 0.05)))
+      @     );
+      @*/
+    public static double analyzeEfficiency(int distance, int fuelUsed) {
+        int adjustedDistance = distance;
+        int threshold = 100;
+        double efficiency = 0.0;
+        boolean valid = true;
+
+        adjustedDistance += 10;
+        adjustedDistance = adjustedDistance * 2;
+
+        if (adjustedDistance > threshold) {
+            int amt = fuelUsed - 3;
+
+            if (amt <= 0) {
+                System.out.println("Warning: invalid fuel input.");
+                amt = 1;
+                valid = false;
+            }
+
+            if (adjustedDistance % 2 == 0) {
+                efficiency = (double) adjustedDistance / amt;
+            } else {
+                adjustedDistance += 5;
+                efficiency = (double) (adjustedDistance - 2) + amt;
+            }
+
+            if (efficiency > 50) {
+                efficiency = efficiency * 0.9;
+            } else {
+                efficiency = efficiency + 3.0;
+            }
+
+        } else {
+            adjustedDistance += 20;
+
+            if (fuelUsed > 10) {
+                efficiency = adjustedDistance * 0.5;
+            } else {
+                efficiency = adjustedDistance * 0.3;
+                valid = false;
+            }
+        }
+        double correction = valid ? 1.2 : 0.8;
+        double finalValue = efficiency * correction + adjustedDistance * 0.05;
+
+        return finalValue;
+    }
+}
+==============================
+tmp/FuelEfficiencyAnalyzer_S.java:17: error: A catastrophic JML internal error occurred.  Please report the bug with as much information as you can.
+      @           \let double eff0 = even ? ((double)d1) / amt
+                                             ^
+  Reason: Unknown type tag DOUBLE
+1 error
+
+==============================
+public class FuelEfficiencyAnalyzer_S {
+
+    /*@ public normal_behavior
+      @   requires -1073741824 <= distance && distance <= 1073741803;
+      @   requires Integer.MIN_VALUE + 3 <= fuelUsed && fuelUsed <= Integer.MAX_VALUE;
+      @   ensures
+      @     (\let int d1 = (distance + 10) * 2;
+      @      \let boolean big = d1 > 100;
+      @      (\real)\result ==
+      @        (big
+      @         ?
+      @           (\let int amt0 = fuelUsed - 3;
+      @            \let boolean valid = amt0 > 0;
+      @            \let int amt = valid ? amt0 : 1;
+      @            \let boolean even = (d1 % 2) == 0;
+      @            \let int d2 = even ? d1 : (d1 + 5);
+      @            \let \real eff0 =
+      @                 (even
+      @                  ? ((\real)d1) / amt
+      @                  : ((\real)(d2 - 2)) + amt);
+      @            \let \real eff = (eff0 > 50) ? (eff0 * (9.0/10.0)) : (eff0 + 3);
+      @            \let \real correction = valid ? (6.0/5.0) : (4.0/5.0);
+      @            (eff * correction + ((\real)d2) * (1.0/20.0)))
+      @         :
+      @           (\let int d2 = d1 + 20;
+      @            \let boolean valid = fuelUsed > 10;
+      @            \let \real eff = valid ? (((\real)d2) * (1.0/2.0)) : (((\real)d2) * (3.0/10.0));
+      @            \let \real correction = valid ? (6.0/5.0) : (4.0/5.0);
+      @            (eff * correction + ((\real)d2) * (1.0/20.0))))
+      @     );
+      @*/
+    public static double analyzeEfficiency(int distance, int fuelUsed) {
+        int adjustedDistance = distance;
+        int threshold = 100;
+        double efficiency = 0.0;
+        boolean valid = true;
+
+        adjustedDistance += 10;
+        adjustedDistance = adjustedDistance * 2;
+
+        if (adjustedDistance > threshold) {
+            int amt = fuelUsed - 3;
+
+            if (amt <= 0) {
+                System.out.println("Warning: invalid fuel input.");
+                amt = 1;
+                valid = false;
+            }
+
+            if (adjustedDistance % 2 == 0) {
+                efficiency = (double) adjustedDistance / amt;
+            } else {
+                adjustedDistance += 5;
+                efficiency = (double) (adjustedDistance - 2) + amt;
+            }
+
+            if (efficiency > 50) {
+                efficiency = efficiency * 0.9;
+            } else {
+                efficiency = efficiency + 3.0;
+            }
+
+        } else {
+            adjustedDistance += 20;
+
+            if (fuelUsed > 10) {
+                efficiency = adjustedDistance * 0.5;
+            } else {
+                efficiency = adjustedDistance * 0.3;
+                valid = false;
+            }
+        }
+        double correction = valid ? 1.2 : 0.8;
+        double finalValue = efficiency * correction + adjustedDistance * 0.05;
+
+        return finalValue;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class FuelEfficiencyAnalyzer_S {
+
+    /*@ public normal_behavior
+      @   // Prevent int overflows in:
+      @   //   adjustedDistance = (distance + 10) * 2;
+      @   //   and (in the odd case) adjustedDistance += 5;
+      @   requires -1073741834 <= distance && distance <= 1073741811;
+      @
+      @   // Prevent int overflow in: fuelUsed - 3
+      @   requires Integer.MIN_VALUE + 3 <= fuelUsed && fuelUsed <= Integer.MAX_VALUE;
+      @
+      @   // Basic sanity of the returned double
+      @   ensures !Double.isNaN(\result) && !Double.isInfinite(\result);
+      @
+      @   // Fully specified (exact) result for the "adjustedDistance <= 100" branch:
+      @   //   adjustedDistance = (distance + 10) * 2;
+      @   //   adjustedDistance += 20;
+      @   //   if (fuelUsed > 10) finalValue = adjustedDistance * 0.65;
+      @   //   else              finalValue = adjustedDistance * 0.29;
+      @   ensures (((distance + 10) * 2) <= 100 && fuelUsed > 10)
+      @            ==> \result == (((distance + 10) * 2 + 20) * 0.65);
+      @   ensures (((distance + 10) * 2) <= 100 && fuelUsed <= 10)
+      @            ==> \result == (((distance + 10) * 2 + 20) * 0.29);
+      @*/
+    public static double analyzeEfficiency(int distance, int fuelUsed) {
+        int adjustedDistance = distance;
+        int threshold = 100;
+        double efficiency = 0.0;
+        boolean valid = true;
+
+        adjustedDistance += 10;
+        adjustedDistance = adjustedDistance * 2;
+
+        if (adjustedDistance > threshold) {
+            int amt = fuelUsed - 3;
+
+            if (amt <= 0) {
+                System.out.println("Warning: invalid fuel input.");
+                amt = 1;
+                valid = false;
+            }
+
+            if (adjustedDistance % 2 == 0) {
+                efficiency = (double) adjustedDistance / amt;
+            } else {
+                adjustedDistance += 5;
+                efficiency = (double) (adjustedDistance - 2) + amt;
+            }
+
+            if (efficiency > 50) {
+                efficiency = efficiency * 0.9;
+            } else {
+                efficiency = efficiency + 3.0;
+            }
+
+        } else {
+            adjustedDistance += 20;
+
+            if (fuelUsed > 10) {
+                efficiency = adjustedDistance * 0.5;
+            } else {
+                efficiency = adjustedDistance * 0.3;
+                valid = false;
+            }
+        }
+        double correction = valid ? 1.2 : 0.8;
+        double finalValue = efficiency * correction + adjustedDistance * 0.05;
+
+        return finalValue;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class FuelEfficiencyAnalyzer_S {
+
+    /*@ public normal_behavior
+      @   ensures !Double.isNaN(\result);
+      @   ensures !Double.isInfinite(\result);
+      @*/
+    public static double analyzeEfficiency(int distance, int fuelUsed) {
+        int adjustedDistance = distance;
+        int threshold = 100;
+        double efficiency = 0.0;
+        boolean valid = true;
+
+        adjustedDistance += 10;
+        adjustedDistance = adjustedDistance * 2;
+
+        if (adjustedDistance > threshold) {
+            int amt = fuelUsed - 3;
+
+            if (amt <= 0) {
+                System.out.println("Warning: invalid fuel input.");
+                amt = 1;
+                valid = false;
+            }
+
+            if (adjustedDistance % 2 == 0) {
+                efficiency = (double) adjustedDistance / amt;
+            } else {
+                adjustedDistance += 5;
+                efficiency = (double) (adjustedDistance - 2) + amt;
+            }
+
+            if (efficiency > 50) {
+                efficiency = efficiency * 0.9;
+            } else {
+                efficiency = efficiency + 3.0;
+            }
+
+        } else {
+            adjustedDistance += 20;
+
+            if (fuelUsed > 10) {
+                efficiency = adjustedDistance * 0.5;
+            } else {
+                efficiency = adjustedDistance * 0.3;
+                valid = false;
+            }
+        }
+        double correction = valid ? 1.2 : 0.8;
+        double finalValue = efficiency * correction + adjustedDistance * 0.05;
+
+        return finalValue;
+    }
+}
+==============================
+TimeoutException
+==============================
+public class FuelEfficiencyAnalyzer_S {
+
+    /*@ public normal_behavior
+      @   ensures true;
+      @*/
+    public static double analyzeEfficiency(int distance, int fuelUsed) {
+        int adjustedDistance = distance;
+        int threshold = 100;
+        double efficiency = 0.0;
+        boolean valid = true;
+
+        adjustedDistance += 10;
+        adjustedDistance = adjustedDistance * 2;
+
+        if (adjustedDistance > threshold) {
+            int amt = fuelUsed - 3;
+
+            if (amt <= 0) {
+                System.out.println("Warning: invalid fuel input.");
+                amt = 1;
+                valid = false;
+            }
+
+            if (adjustedDistance % 2 == 0) {
+                efficiency = (double) adjustedDistance / amt;
+            } else {
+                adjustedDistance += 5;
+                efficiency = (double) (adjustedDistance - 2) + amt;
+            }
+
+            if (efficiency > 50) {
+                efficiency = efficiency * 0.9;
+            } else {
+                efficiency = efficiency + 3.0;
+            }
+
+        } else {
+            adjustedDistance += 20;
+
+            if (fuelUsed > 10) {
+                efficiency = adjustedDistance * 0.5;
+            } else {
+                efficiency = adjustedDistance * 0.3;
+                valid = false;
+            }
+        }
+        double correction = valid ? 1.2 : 0.8;
+        double finalValue = efficiency * correction + adjustedDistance * 0.05;
+
+        return finalValue;
+    }
+}
+==============================
+
+==============================
