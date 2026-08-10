@@ -112,3 +112,13 @@ If you have modified the source code and want to package your own executable JAR
 mvn clean package -DskipTests
 
 ```
+
+# Quick Start
+
+In the video link below, we demonstrate how to run a simple example using SG4PM. Please watch the video to learn about the basic workflow and major features supported by SG4PM.
+
+Follow the SG4PM guide below to configure the environment, run your own programs, and inspect the generated FSF specifications and verification results.
+
+## Demo Video
+
+[Click to view the demo video](https://www.youtube.com/watch?v=3B471sUkNFo)
