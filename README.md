@@ -1,29 +1,39 @@
-# Official implementation of PCaE
- [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
- [![Release](https://img.shields.io/github/v/release/Septemberember/PCaE.svg)](https://github.com/Septemberember/PCaE/releases)
- [![Python 3.9](https://img.shields.io/badge/python-3.9-green.svg)](https://www.python.org/downloads/release/python-390/)
-[![Java 17+](https://img.shields.io/badge/Java-17%2B-blue.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+# Official Implementation of SG4PM
 
 # Introduction
 
 ## 📝 Background
 
-Program comprehension and evolution are critical for software maintenance, yet ensuring functional correctness remains a challenge. Current methods face two major bottlenecks:
+Formal specifications play an important role in program comprehension, verification, and maintenance. However, manually constructing precise specifications is costly, while automatically generated specifications may be incomplete or difficult to verify, especially for programs containing loops.
 
-* **Manual Effort:** Traditional formal verification relies on **loop invariants**, which are costly to derive and difficult for LLMs to automate.
-* **Verification Gap:** Standard testing can detect bugs but cannot formally prove that a program satisfies its specification across all paths.
+Existing LLM-based specification generation approaches still face two major challenges:
 
-**PCaE** bridges this gap by introducing:
+- **Loop-Invariant Dependency:** Conventional formal verification usually requires correct **loop invariants** for programs containing loops. Generating such invariants is difficult and error-prone, even with large language models (LLMs).
+- **Specification Completeness:** A generated specification may pass verification while describing only part of the program behavior, for example, by covering only a subset of the input space or imposing insufficient constraints on program outputs.
 
-* **FSF (Functional Scenario Form):** A concise specification that focuses on input-output relationships rather than complex internal loop logic.
-* **TBFV (Testing-Based Formal Verification):** A method that integrates Hoare logic with testing to provide formal proofs **without requiring loop invariants**.
+**SG4PM (Specification Generation for Program Maintenance)** addresses these challenges by combining LLMs with **Functional Scenario Form (FSF)** and **Testing-Based Formal Verification (TBFV)**.
 
-This framework allows LLMs to accurately explain code (comprehension) and update implementation (evolution) while maintaining rigorous correctness.
+SG4PM provides the following core capabilities:
+
+- **FSF Generation:** LLMs automatically generate Functional Scenario Form specifications from Java programs. An FSF represents program functionality as a set of input-output functional scenarios \((T_i, D_i)\).
+- **FSF Validation:** The generated FSF is automatically checked for **mutual exclusion** and **specification completeness**, preventing overlapping or incomplete functional scenarios.
+- **TBFV-Based Consistency Verification:** TBFV combines specification-based testing with Hoare-logic reasoning to verify the consistency between program code and its FSF **without requiring loop invariants**.
+- **Verifier-Guided Refinement:** When validation or verification fails, diagnostic information is returned to the LLM to guide iterative refinement of the generated FSF.
+- **FSF-Driven Program Maintenance:** Users can modify an FSF to express changed functional requirements. The modified FSF then guides the LLM to update the original program, after which TBFV verifies whether the updated implementation is consistent with the modified specification.
+
+Through this workflow, SG4PM connects **specification generation, formal verification, and program maintenance** within a unified verifier-guided framework.
 
 ---
 
-
 # 🚀 Quick Start
+
+In the video link below, we demonstrate how to run a simple example using SG4PM. Please watch the video to learn about the specification generation, FSF validation, and TBFV-based verification workflow supported by SG4PM.
+
+Follow the SG4PM guide below to configure the environment, run your own programs, and inspect the generated specifications and verification results.
+
+## 🎥 Demo Video
+
+[Click to view the demo video](https://www.youtube.com/watch?v=3B471sUkNFo)
 
 ### 1. Download & Extract
 
@@ -32,20 +42,22 @@ Download `PCaE-release.zip` from [Releases](https://github.com/Septemberember/PC
 ```text
 .
 ├── PCaE-1.0.jar        # Executable Fat JAR
-└── resources/          # Resources folder (Must be in the same directory as the JAR)
-
+└── resources/          # Resources folder (must be in the same directory as the JAR)
 ```
 
 ### 2. Setup Environment
 
-* **Java 17+**: Ensure Java 17 or higher is installed. Verify by running `java -version`.
-* **Python 3.9**: Required for the Z3 SMT solver. Install the dependency via:
-```bash
-pip install z3-solver
+- **Java 17+**: Ensure Java 17 or higher is installed. Verify by running:
 
+```bash
+java -version
 ```
 
+- **Python 3.9+**: Required for the Z3 SMT solver. Install the dependency via:
 
+```bash
+pip install z3-solver
+```
 
 ### 3. Configure API Key
 
@@ -55,7 +67,6 @@ Navigate to `resources/config/` and edit your preferred model configuration file
 [name]=openai/gpt-5.2
 [url]=https://openrouter.ai/api/v1/chat/completions
 [apikey]=your_real_openrouter_key_here
-
 ```
 
 > [!TIP]
@@ -69,26 +80,62 @@ Run the following command in your terminal from the project root:
 
 ```bash
 java -cp PCaE-1.0.jar org.pcae.verification.FSFGenerator --inputDir resources/dataset --model gpt-5.2 --maxRounds 3 --experimentName Demo_Run
-
 ```
+
+The main parameters are:
+
+- `--inputDir`: Directory containing the Java programs to be analyzed.
+- `--model`: LLM configuration used for FSF generation.
+- `--maxRounds`: Maximum number of verifier-guided interaction rounds.
+- `--experimentName`: Name of the output directory for the current run.
 
 ### 5. Check Results
 
 All outputs will be generated in a folder named `Demo_Run`.
 
-* **FSF files**: Functional specifications (Functional Scenario Forms) generated by the LLM.
-* **Verification Logs**: Detailed TBFV proofs and consistency checks ensuring the code matches the FSF.
+- **FSF Files:** Functional Scenario Form specifications generated by the LLM.
+- **Validation Results:** Results of FSF mutual-exclusion and specification-completeness checking.
+- **Verification Logs:** Detailed TBFV verification information and consistency checks between the Java program and the generated FSF.
+- **Intermediate Results:** Execution and interaction information generated during verifier-guided refinement.
+
+A successfully verified FSF provides an explicit representation of the functional behavior of the corresponding program and can subsequently be modified to support program maintenance.
 
 ---
 
-## 💻 Development & IDE Setup
+# 🔧 FSF-Driven Program Maintenance
+
+SG4PM supports program maintenance through explicit modification of verified FSF specifications.
+
+A user can modify the testing condition \(T\) and/or definition condition \(D\) of selected functional scenarios to represent changed requirements. SG4PM then uses the modified FSF together with the original program to guide the LLM in generating an updated implementation.
+
+The maintenance workflow is:
+
+```text
+Verified FSF
+    ↓
+Modify T and/or D
+    ↓
+Validate Modified FSF
+    ↓
+LLM-based Program Update
+    ↓
+TBFV Verification
+    ↓
+Functionally Consistent Updated Program
+```
+
+TBFV is applied again after code modification to verify that the updated program is consistent with the modified FSF.
+
+---
+
+# 💻 Development & IDE Setup
 
 If you prefer to run or modify the code using **IntelliJ IDEA**:
 
 ### 1. Project Initialization
 
-* Open the `PCaE` folder as a **Maven project**.
-* Maven will automatically resolve all dependencies defined in the `pom.xml`.
+- Open the `PCaE` folder as a **Maven project**.
+- Maven will automatically resolve all dependencies defined in the `pom.xml`.
 
 ### 2. Configure Run Arguments
 
@@ -97,12 +144,10 @@ To pass parameters to the `FSFGenerator`:
 1. Navigate to `src/main/java/org/pcae/verification/FSFGenerator.java`.
 2. Right-click and select **Modify Run Configuration...**.
 3. In the **Program arguments** box, enter your desired flags:
+
 ```text
 --inputDir resources/dataset --model gpt-5.2 --maxRounds 3 --experimentName IDE_Test
-
 ```
-
-
 
 ### 3. Build from Source (Optional)
 
@@ -110,8 +155,8 @@ If you have modified the source code and want to package your own executable JAR
 
 ```bash
 mvn clean package -DskipTests
-
 ```
+
 
 # Quick Start
 
